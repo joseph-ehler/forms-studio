@@ -1,111 +1,153 @@
 /**
- * Ultra God-Tier Wizard: Data Source Types
+ * Canonical Data Source Types
  * 
- * Type definitions for B-3 Data Source Registry.
+ * Discriminated union with 'kind' discriminant for type-safe narrowing.
  * 
- * Phase B-3: Data Source Registry
+ * @packageDocumentation
  */
 
-import type { DataSourceConfig } from '../flow-schema'
+export type BackoffKind = 'exponential' | 'linear' | 'fixed';
 
-// ============================================================================
-// EVALUATION CONTEXT
-// ============================================================================
-
-export interface EvalContext {
-  ctx: Record<string, any>
-  fields: Record<string, FieldState>
-  flags?: Record<string, any>
+export interface RetryConfig {
+  retries?: number;             // 0-5
+  backoff?: BackoffKind;        // default: exponential
+  baseMs?: number;              // default: 300
+  maxMs?: number;               // default: 5000
+  onRetryEventName?: string;    // analytics hook name
 }
 
-export interface FieldState {
-  value: any
-  valid: boolean
-  error?: string
-  validating?: boolean
+export interface CacheConfig {
+  ttlMs?: number;               // 1000..604800000
+  key?: string;                 // template "vin:{{fields.vin.value}}"
+  staleWhileRevalidate?: boolean;
 }
 
-// ============================================================================
-// FETCH RESULTS
-// ============================================================================
+export interface PrivacyConfig {
+  classification?: 'PUBLIC' | 'OPERATIONAL' | 'PSEUDONYMIZED' | 'SENSITIVE';
+  allowInAI?: boolean;          // default false
+  doNotTrain?: boolean;
+  needsConsent?: boolean;
+  maskInLogs?: boolean;
+}
 
-export interface FetchResult {
-  success: boolean
-  data?: any
-  error?: {
-    code: string
-    message: string
-    details?: any
-  }
-  meta: {
-    durationMs: number
-    attempt: number
-    cacheHit: boolean
-    source: string
-  }
+export interface AnalyticsConfig {
+  namespace?: string;           // e.g., "forms-studio"
+  flow?: string;                // e.g., "vehicle-onboarding"
+  onStart?: string;             // ds_start
+  onSuccess?: string;           // ds_success
+  onFail?: string;              // ds_fail
+  onCacheHit?: string;          // ds_cache_hit
+}
+
+export type TemplateObject = Record<string, unknown>;
+export type HeadersTemplate = Record<string, string>;
+
+// ---- Variants ----------------------------------------------------
+
+export interface HttpGetDef {
+  kind: 'http.get';
+  url: string;                  // supports templates
+  headers?: HeadersTemplate;    // supports templates
+  timeoutMs?: number;           // 1000..30000
+  idempotent?: true;            // always true for GET
+  cache?: CacheConfig;
+  retry?: RetryConfig;
+  privacy?: PrivacyConfig;
+  analytics?: AnalyticsConfig;
+  // mapResponse writes into context from response data
+  mapResponse?: TemplateObject; // ex: { "vehicle.make": "{{data.make}}" }
+}
+
+export interface HttpPostDef {
+  kind: 'http.post';
+  url: string;
+  headers?: HeadersTemplate;
+  timeoutMs?: number;
+  // for safe retries, at least one must be set:
+  idempotent?: boolean;         // explicit guarantee from server
+  dedupeKey?: string;           // template: "vin:{{fields.vin.value}}"
+  cache?: CacheConfig;
+  retry?: RetryConfig;
+  privacy?: PrivacyConfig;
+  analytics?: AnalyticsConfig;
+  // Request mapping + response mapping
+  mapRequest?: TemplateObject;  // ex: { "vin": "{{fields.vin.value}}" }
+  mapResponse?: TemplateObject; // ex: { "vehicle.make": "{{data.make}}" }
+}
+
+export interface ComputedDef {
+  kind: 'computed';
+  compute: string;              // expression string (ctx-aware)
+  cache?: CacheConfig;
+  privacy?: PrivacyConfig;
+  analytics?: AnalyticsConfig;
+  mapResponse?: TemplateObject; // ex: { "flags.highMileage": "{{data}}" }
+}
+
+export interface ChainDef {
+  kind: 'chain';
+  steps: string[];              // ordered names of other sources
+  cache?: CacheConfig;
+  privacy?: PrivacyConfig;
+  analytics?: AnalyticsConfig;
+  mapResponse?: TemplateObject; // ex: { "form": "{{merge(data[0], data[1])}}" }
+}
+
+// ---- Union + Registry --------------------------------------------
+
+export type DataSourceDef = HttpGetDef | HttpPostDef | ComputedDef | ChainDef;
+
+// Named variant (with name field for manager)
+export type NamedDataSourceDef = DataSourceDef & { name: string };
+
+// Legacy: Support both 'kind' and 'type' during migration
+export type DataSourceDefWithType = DataSourceDef & { type?: string };
+
+// name → def lookup
+export type DataSourceRegistry = Record<string, DataSourceDef>;
+
+// fetch options from runtime
+export interface FetchOptions {
+  signal?: AbortSignal;         // cancel on navigation
+  force?: boolean;              // bypass cache
+  silent?: boolean;             // no logs/toasts
+  traceId?: string;             // trace correlation
+}
+
+// minimal context shape; your manager resolves templates against this
+export interface ExecutionContext {
+  ctx: Record<string, any>;
+  fields: Record<string, { value: any; valid?: boolean; error?: string; validating?: boolean }>;
+  data?: Record<string, any>;
+}
+
+// Legacy type aliases for compatibility
+export type EvalContext = ExecutionContext;
+
+// Fetch result types
+export interface FetchResult<T = any> {
+  data: T;
+  cached?: boolean;
+  cacheMeta?: CacheMeta;
+  duration?: number;
+  retries?: number;
 }
 
 export interface CacheMeta {
-  key: string
-  ageMs: number
-  ttlMs: number
-  createdAt: number
+  key: string;
+  age: number;
+  stale?: boolean;
+  ttl: number;
 }
 
-// ============================================================================
-// FETCH OPTIONS
-// ============================================================================
-
-export interface FetchOptions {
-  traceId?: string
-  silent?: boolean // Suppress logs/toasts
-  force?: boolean // Bypass cache
-  signal?: AbortSignal // Abort signal for cancellation
-}
-
-// ============================================================================
-// DATA SOURCE DEFINITION
-// ============================================================================
-
-export interface DataSourceDef extends DataSourceConfig {
-  name: string
-}
-
-// ============================================================================
-// ANALYTICS EVENTS
-// ============================================================================
-
+// Event types
 export type DataSourceEvent =
-  | { type: 'ds_start'; flowId: string; source: string; traceId?: string }
-  | { type: 'ds_cache_hit'; flowId: string; source: string; key: string; ageMs: number }
-  | { type: 'ds_success'; flowId: string; source: string; durationMs: number; status: number }
-  | { type: 'ds_fail'; flowId: string; source: string; durationMs: number; code: string }
-  | { type: 'ds_retry'; flowId: string; source: string; attempt: number; delayMs: number }
-
-// ============================================================================
-// PRIVACY ENFORCEMENT
-// ============================================================================
-
-export interface PrivacyViolation {
-  field: string
-  reason: string
-  classification: string
-  suggestion: string
-}
-
-// ============================================================================
-// CIRCUIT BREAKER
-// ============================================================================
-
-export interface CircuitBreakerState {
-  state: 'closed' | 'open' | 'half-open'
-  failures: number
-  lastFailureTime?: number
-  nextAttemptTime?: number
-}
-
-export interface CircuitBreakerConfig {
-  failureThreshold: number // Open after N failures
-  timeoutMs: number // How long to stay open
-  successThreshold: number // Half-open -> closed after N successes
-}
+  | { type: 'fetch-start'; source: string }
+  | { type: 'fetch-success'; source: string; duration: number; cached: boolean }
+  | { type: 'fetch-error'; source: string; error: string }
+  | { type: 'retry'; source: string; attempt: number; delay: number }
+  | { type: 'cache-hit'; source: string }
+  | { type: 'cache-miss'; source: string }
+  | { type: 'breaker-open'; source: string }
+  | { type: 'breaker-half-open'; source: string }
+  | { type: 'breaker-closed'; source: string };

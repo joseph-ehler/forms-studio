@@ -24,7 +24,7 @@ import { resolveTemplate, resolveTemplateObject, applyMapResponse } from './temp
 import { DataSourceCache, globalCache } from './cache'
 import { getCircuitBreaker } from './circuit-breaker'
 import { checkPrivacyViolations, allowlistHeaders, maskForLogs } from './privacy-enforcer'
-import { evaluateExpression } from '../expression-engine'
+import { evaluateExpression } from '@intelligence-studio/wizard-core'
 import { DataSourceError, DataSourceErrorCode, classifyError } from './errors'
 import { validateURL } from './url-validator'
 import { executeWithRetry } from './retry'
