@@ -35,6 +35,15 @@
   ],
   "author": "Intelligence Studio",
   "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/joseph-ehler/forms-studio.git",
+    "directory": "packages/datasources"
+  },
+  "homepage": "https://github.com/joseph-ehler/forms-studio#readme",
+  "bugs": {
+    "url": "https://github.com/joseph-ehler/forms-studio/issues"
+  },
   "peerDependencies": {
     "zod": "^3.22.0"
   },
