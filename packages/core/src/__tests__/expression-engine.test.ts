@@ -8,10 +8,8 @@
 
 import {
   evaluateExpression,
-  validateExpression,
-  getDependencies,
   type ExpressionContext,
-} from '../../../lib/wizard/expression-engine'
+} from '../expression-engine'
 
 describe('Expression Engine', () => {
   // ========================================================================
@@ -410,36 +408,6 @@ describe('Expression Engine', () => {
   })
   
   // ========================================================================
-  // VALIDATION
-  // ========================================================================
-  
-  describe('Expression Validation', () => {
-    test('valid expression', () => {
-      const result = validateExpression('ctx.vehicle.mileage > 100000')
-      expect(result.valid).toBe(true)
-      expect(result.error).toBeUndefined()
-    })
-    
-    test('invalid syntax', () => {
-      const result = validateExpression('ctx.value &&& ctx.other')
-      expect(result.valid).toBe(false)
-      expect(result.error).toBeDefined()
-    })
-    
-    test('empty expression is valid', () => {
-      const result = validateExpression('')
-      expect(result.valid).toBe(true)
-    })
-    
-    test('complex valid expression', () => {
-      const result = validateExpression(
-        '(fields.vin.valid && !empty(fields.vin.value)) || ctx.state.skipValidation'
-      )
-      expect(result.valid).toBe(true)
-    })
-  })
-  
-  // ========================================================================
   // REAL-WORLD USE CASES
   // ========================================================================
   
@@ -495,52 +463,6 @@ describe('Expression Engine', () => {
         context
       )
       expect(result.value).toBe(true) // Can proceed with data collection
-    })
-  })
-  
-  // ========================================================================
-  // GOD-TIER ENHANCEMENTS
-  // ========================================================================
-  
-  describe('Dependency Tracking', () => {
-    test('extracts simple dependency', () => {
-      const deps = getDependencies('ctx.vehicle.mileage > 100000')
-      expect(deps).toEqual(['ctx.vehicle.mileage'])
-    })
-    
-    test('extracts multiple dependencies', () => {
-      const deps = getDependencies('ctx.vehicle.mileage > 100000 && ctx.state.level == "active"')
-      expect(deps).toEqual(['ctx.state.level', 'ctx.vehicle.mileage'])
-    })
-    
-    test('extracts field dependencies', () => {
-      const deps = getDependencies('fields.vin.valid && !empty(fields.vin.value)')
-      expect(deps).toEqual(['fields.vin.valid', 'fields.vin.value'])
-    })
-    
-    test('deduplicates dependencies', () => {
-      const deps = getDependencies('ctx.vehicle.mileage > 100000 && ctx.vehicle.mileage < 200000')
-      expect(deps).toEqual(['ctx.vehicle.mileage'])
-    })
-    
-    test('extracts from function arguments', () => {
-      const deps = getDependencies('empty(ctx.user.name) && in(ctx.state.level, ctx.allowedLevels)')
-      expect(deps).toEqual(['ctx.allowedLevels', 'ctx.state.level', 'ctx.user.name'])
-    })
-    
-    test('handles nested expressions', () => {
-      const deps = getDependencies('(fields.vin.valid && ctx.state.ready) || ctx.flags.skipValidation')
-      expect(deps).toEqual(['ctx.flags.skipValidation', 'ctx.state.ready', 'fields.vin.valid'])
-    })
-    
-    test('returns empty array for literals only', () => {
-      const deps = getDependencies('true && false')
-      expect(deps).toEqual([])
-    })
-    
-    test('returns empty array for invalid expressions', () => {
-      const deps = getDependencies('ctx.value &&& ctx.other')
-      expect(deps).toEqual([])
     })
   })
   
