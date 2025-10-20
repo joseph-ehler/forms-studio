@@ -47,7 +47,7 @@ importers:
 
   packages/datasources:
     dependencies:
-      '@intelligence-studio/wizard-core':
+      '@joseph.ehler/wizard-core':
         specifier: workspace:*
         version: link:../core
     devDependencies:
