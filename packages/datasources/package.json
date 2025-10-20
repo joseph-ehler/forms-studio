@@ -1,5 +1,5 @@
 {
-  "name": "@intelligence-studio/wizard-datasources",
+  "name": "@joseph.ehler/wizard-datasources",
   "version": "0.1.0",
   "description": "Data source manager with SSRF protection, retries, circuit breakers, caching",
   "type": "module",
@@ -48,7 +48,7 @@
     "zod": "^3.22.0"
   },
   "dependencies": {
-    "@intelligence-studio/wizard-core": "workspace:*"
+    "@joseph.ehler/wizard-core": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^20.11.0",
