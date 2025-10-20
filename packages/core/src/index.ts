@@ -22,16 +22,15 @@ export {
   FieldSchema,
   ValidationLogicSchema,
   DataSourceSchema,
-  type FlowDef,
-  type ChapterDef,
-  type StepDef,
-  type FieldDef,
-  type ValidationLogic,
-  type DataSourceDef,
+  type FlowConfig,
+  type ChapterConfig,
+  type StepConfig,
+  type FieldConfig,
+  type PrivacyConfig,
+  type DataSourceConfig,
 } from './flow-schema'
 
 export {
   validateFlow,
   type ValidationResult,
-  type ValidationIssue,
 } from './flow-validator'
