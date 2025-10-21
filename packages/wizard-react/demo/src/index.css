@@ -139,19 +139,37 @@ button[aria-pressed="true"],
 .rdp-table {
   width: 100%;
   border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.rdp-head {
+  border: 0;
+}
+
+.rdp-head_row,
+.rdp-row {
+  display: table-row;
 }
 
 .rdp-head_cell {
+  display: table-cell;
   text-align: center;
   font-size: 0.875rem;
   font-weight: 500;
   color: #6b7280;
-  padding: 0.5rem 0;
+  padding: 0.5rem;
+  vertical-align: middle;
+}
+
+.rdp-tbody {
+  border: 0;
 }
 
 .rdp-cell {
+  display: table-cell;
   text-align: center;
   padding: 2px;
+  vertical-align: middle;
 }
 
 .rdp-day {
