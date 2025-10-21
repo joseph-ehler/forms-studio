@@ -39,8 +39,9 @@ export default function Demo() {
             <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full font-medium">32 Fields</span>
             <span className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full font-medium">21 Components</span>
             <span className="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full font-medium">🎛️ JSON Control</span>
-            <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full font-medium">🚀 NEW: Unified Overlays</span>
+            <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full font-medium">✅ Phase 3b Complete!</span>
             <span className="px-3 py-1 bg-orange-100 text-orange-700 rounded-full font-medium">Mobile-First 📱</span>
+            <span className="px-3 py-1 bg-pink-100 text-pink-700 rounded-full font-medium">📅 Date/Time Unified</span>
           </div>
         </div>
 
@@ -717,12 +718,12 @@ export default function Demo() {
           {/* NEW: Unified Overlay System Showcase */}
           <FormCard variant="filled" padding="lg">
             <FormSection
-              title="🚀 NEW: Unified Overlay System (Phase 2)"
+              title="🚀 NEW: Unified Overlay System (Phase 3b Complete!)"
               description="Mobile-first overlays with consistent UX across all picker fields"
               divider="bottom"
             >
-              <FormMessage type="success" title="Phase 2 Complete! ✅">
-                <strong>SelectField & MultiSelectField</strong> now use the unified overlay primitives with mobile-first responsive design!
+              <FormMessage type="success" title="Phase 3b Complete! 🎉">
+                <strong>5 Fields Unified:</strong> SelectField, MultiSelectField, DateField, TimeField, DateRangeField all use unified overlay primitives!
               </FormMessage>
 
               <div className="space-y-6">
@@ -835,9 +836,77 @@ export default function Demo() {
 }`}</FormCode>
                 </div>
 
-                {/* Next: Phase 3 */}
-                <FormMessage type="info" title="Next: Phase 3 Rollout">
-                  Apply unified overlay to: <strong>DateField, TimeField, DateRangeField, PhoneField, AddressField, ColorField, TagInputField</strong>
+                {/* Phase 3b: Date/Time/Range Showcase */}
+                <div className="bg-purple-50 border border-purple-200 rounded-lg p-4 mt-6">
+                  <h4 className="text-sm font-semibold text-purple-900 mb-2">📅 Phase 3b: Date/Time/Range Fields</h4>
+                  <ul className="text-xs text-purple-700 space-y-1 ml-4">
+                    <li>• <strong>DateField:</strong> Calendar picker with Clear/Done footer</li>
+                    <li>• <strong>TimeField:</strong> Scrollable time list with PickerList/PickerOption</li>
+                    <li>• <strong>DateRangeField:</strong> Dual calendar + presets + footer</li>
+                    <li>• <strong>Height Calc:</strong> Explicit math prevents footer cut-off forever!</li>
+                    <li>• <strong>Mobile:</strong> Bottom sheet with touch-friendly 48px targets</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h4 className="text-sm font-semibold mb-2 mt-6">DateField (Calendar Picker)</h4>
+                  <DateField
+                    name="date_unified"
+                    label="Select Date (Unified Overlay)"
+                    description="Mobile: Sheet with footer | Desktop: Popover with fixed footer | Footer never gets cut off!"
+                    control={control}
+                    errors={errors}
+                    json={{}}
+                  />
+                  <p className="text-xs text-gray-500 mt-2">
+                    <strong>Try it!</strong> Calendar + Clear/Done buttons | Footer always visible
+                  </p>
+                </div>
+
+                <FormDivider />
+
+                <div>
+                  <h4 className="text-sm font-semibold mb-2">TimeField (Scrollable List)</h4>
+                  <TimeField
+                    name="time_unified"
+                    label="Select Time (PickerList)"
+                    description="Replaced Headless UI Listbox with PickerList | closeOnSelect: true"
+                    control={control}
+                    errors={errors}
+                    json={{
+                      step: 30,
+                      format: '12'
+                    }}
+                  />
+                  <p className="text-xs text-gray-500 mt-2">
+                    <strong>Features:</strong> Scrollable intervals | 12/24hr format | Auto-closes
+                  </p>
+                </div>
+
+                <FormDivider />
+
+                <div>
+                  <h4 className="text-sm font-semibold mb-2">DateRangeField (Dual Calendar)</h4>
+                  <DateRangeField
+                    name="daterange_unified"
+                    label="Select Date Range (Presets + Dual Calendar)"
+                    description="Mobile: Single month + horizontal presets | Desktop: Dual months + sidebar presets"
+                    control={control}
+                    errors={errors}
+                    json={{
+                      presets: ['Today', 'This Week', 'This Month', 'Last 30 Days']
+                    }}
+                  />
+                  <p className="text-xs text-gray-500 mt-2">
+                    <strong>Features:</strong> Quick presets | Range highlighting | Clear/Done footer
+                  </p>
+                </div>
+
+                <FormDivider />
+
+                {/* Next: Phase 3c */}
+                <FormMessage type="info" title="Next: Phase 3c & 3d">
+                  <strong>Coming Soon:</strong> PhoneField, AddressField (Phase 3c) • ColorField, TagInputField (Phase 3d)
                 </FormMessage>
               </div>
             </FormSection>
@@ -861,10 +930,10 @@ export default function Demo() {
           <p className="font-semibold">Built with @joseph.ehler/wizard-react v0.3.0</p>
           <p className="mt-1">32 Fields • 21 Components • 🚀 Unified Overlay System • Mobile-First 📱</p>
           <p className="mt-2 text-xs">
-            <span className="text-blue-600">~293 KB ESM</span> • 
+            <span className="text-blue-600">~317 KB ESM</span> • 
             <span className="text-purple-600 ml-2">Floating UI</span> • 
             <span className="text-indigo-600 ml-2">5 Typography Variants</span> • 
-            <span className="text-green-600 ml-2">Phase 2 Complete ✅</span>
+            <span className="text-green-600 ml-2">Phase 3b Complete ✅</span>
           </p>
         </div>
 
