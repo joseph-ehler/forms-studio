@@ -306,24 +306,24 @@ export const DateRangeField: React.FC<FieldComponentProps> = ({
                       offset={6}
                       strategy="fixed"
                       sameWidth={false}
-                      maxHeight={maxContentHeight + footerHeight + 16}
-                      collision={{ flip: true, shift: true, size: true }}
+                      maxHeight={600}
+                      collision={{ flip: true, shift: true, size: false }}
                     >
                       {({ refs, floatingStyles, isPositioned }) => (
                         <div
                           ref={refs.setFloating}
-                          style={floatingStyles}
+                          style={{ ...floatingStyles, maxHeight: '90vh', height: 'auto' }}
                           id={`${name}-dialog`}
                           role="dialog"
                           aria-labelledby={`${name}-label`}
-                          className="z-50 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden"
+                          className="z-50 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 flex flex-col"
                         >
-                          {/* Content with Presets + Calendar */}
+                          {/* Content with Presets + Calendar - Scrollable */}
                           <div
                             ref={contentRef}
-                            className={getOverlayContentClasses().content}
+                            className="flex-1 overflow-y-auto"
                             style={{
-                              maxHeight: `${heights.contentMaxHeight}px`,
+                              maxHeight: 'calc(90vh - 60px)', // Viewport - footer
                             }}
                           >
                             <div className="p-4 flex gap-4">
@@ -358,8 +358,8 @@ export const DateRangeField: React.FC<FieldComponentProps> = ({
                             </div>
                           </div>
 
-                          {/* Footer */}
-                          <div className="shrink-0 border-t border-gray-200 p-3">
+                          {/* Footer - Fixed at bottom */}
+                          <div className="shrink-0 border-t border-gray-200 p-3 bg-white">
                             <div className="flex justify-end gap-2">
                               <button
                                 type="button"
