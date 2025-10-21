@@ -1,6 +1,6 @@
 {
   "name": "@joseph.ehler/wizard-react",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "React runtime for Forms Studio: render any JSON field type with RHF + Zod",
   "type": "module",
   "main": "./dist/index.cjs",
