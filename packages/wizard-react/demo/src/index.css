@@ -118,7 +118,7 @@ button[aria-pressed="true"],
 .rdp .custom-selected-date,
 .custom-selected-date button,
 .rdp .custom-selected-date button {
-  background-color: rgb(37 99 235) !important; /* EXACT same as range */
+  background-color: #2563eb !important; /* EXACT same as range */
   color: #fff !important;
   border-radius: 50% !important;
   font-weight: 700 !important;
