@@ -123,6 +123,7 @@ button[aria-pressed="true"],
   border-radius: 50% !important;
   font-weight: 700 !important;
   border: none !important;
+  opacity: 1 !important;
 }
 
 .custom-selected-date:hover,
@@ -196,8 +197,8 @@ button[aria-pressed="true"],
 }
 
 /* HOVER: Blue ring on unselected days only */
-.rdp .rdp-day:not(.rdp-day_range_start):not(.rdp-day_range_end):not(.rdp-day_range_middle):not(.rdp-day_selected):not(.rdp-day_disabled):hover {
-  outline: 2px solid rgb(59 130 246) !important;
+.rdp .rdp-day:not(.rdp-day_range_start):not(.rdp-day_range_end):not(.rdp-day_range_middle):not(.rdp-day_selected):not(.rdp-day_disabled):not(.custom-selected-date):hover {
+  outline: 2px solid rgb(59, 130, 246) !important;
   outline-offset: -2px !important;
   border-radius: 50% !important;
 }
