@@ -121,6 +121,9 @@ export const OverlaySheet: React.FC<OverlaySheetProps> = ({
         aria-label={ariaLabel}
         aria-labelledby={ariaLabelledBy}
         onClick={(e) => e.stopPropagation()}
+        onMouseDown={(e) => e.stopPropagation()}
+        onMouseUp={(e) => e.stopPropagation()}
+        onTouchEnd={(e) => e.stopPropagation()}
         className="fixed bottom-0 left-0 right-0 z-50 bg-white rounded-t-2xl shadow-2xl transition-transform duration-300 ease-out flex flex-col"
         style={{
           maxHeight: `min(${maxHeight}px, 90vh)`,
