@@ -172,10 +172,10 @@ export const DateRangeField: React.FC<FieldComponentProps> = ({
 
           const { isMobile } = useDeviceType()
           const heights = calculateOverlayHeights({
-            maxHeight: 560,
+            maxHeight: isMobile ? 560 : 500,
             hasSearch: false,
             hasFooter: true,
-            footerHeight: 48,
+            footerHeight: isMobile ? 48 : 56,
           })
 
           // Common DayPicker props with hover preview
@@ -299,7 +299,7 @@ export const DateRangeField: React.FC<FieldComponentProps> = ({
                       offset={6}
                       strategy="fixed"
                       sameWidth={false}
-                      maxHeight={560}
+                      maxHeight={500}
                       collision={{ flip: true, shift: true, size: true }}
                     >
                       {({ refs, floatingStyles, isPositioned }) => (
