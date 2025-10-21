@@ -98,14 +98,15 @@ button[data-selected="true"],
 
 /* Airbnb-style date range picker - With live hover preview */
 
-/* 1. Reset all default styles */
+/* 1. Reset and base styles */
 .rdp-day {
   background-color: transparent !important;
 }
 
-/* 2. Middle range days - Light blue fill, NO circles */
+/* 2. MIDDLE RANGE DAYS - Light blue rectangular fill */
 .rdp-day_range_middle {
   background-color: rgb(219 234 254) !important; /* blue-100 */
+  border-radius: 0 !important;
 }
 
 .rdp-day_range_middle button {
@@ -115,12 +116,13 @@ button[data-selected="true"],
 }
 
 .rdp-day_range_middle button:hover {
-  background-color: rgb(191 219 254) !important; /* blue-200 */
+  background-color: rgba(191 219 254, 0.5) !important; /* blue-200 */
 }
 
-/* 3. Start date - Filled circle ONLY, background only extends to the RIGHT */
+/* 3. START DATE - Filled circle + right-extending light fill */
 .rdp-day_range_start:not(.rdp-day_range_end) {
   background: linear-gradient(to right, transparent 50%, rgb(219 234 254) 50%) !important;
+  border-radius: 0 !important;
 }
 
 .rdp-day_range_start button {
@@ -131,9 +133,10 @@ button[data-selected="true"],
   z-index: 1 !important;
 }
 
-/* 4. End date - Filled circle ONLY, background only extends to the LEFT */
-.rdp-day_range_end:not(.rdp-day_range_end) {
+/* 4. END DATE - Filled circle + left-extending light fill */
+.rdp-day_range_end:not(.rdp-day_range_start) {
   background: linear-gradient(to left, transparent 50%, rgb(219 234 254) 50%) !important;
+  border-radius: 0 !important;
 }
 
 .rdp-day_range_end button {
@@ -144,7 +147,7 @@ button[data-selected="true"],
   z-index: 1 !important;
 }
 
-/* 5. Single day (start = end) - Just filled circle, NO background */
+/* 5. Single day (start = end) - Just filled circle */
 .rdp-day_range_start.rdp-day_range_end {
   background-color: transparent !important;
 }
@@ -155,37 +158,36 @@ button[data-selected="true"],
   border-radius: 50% !important;
 }
 
-/* 6. Hover states */
+/* 6. HOVER RING - Blue outline on ANY hovered day */
+.rdp-day:not(.rdp-day_disabled) button:hover {
+  outline: 2px solid rgb(59 130 246) !important; /* blue-500 ring */
+  outline-offset: -2px !important;
+  border-radius: 50% !important;
+  background-color: rgba(255, 255, 255, 0.9) !important;
+}
+
+/* 7. Override hover for selected start/end (keep filled, add darker shade) */
 .rdp-day_range_start button:hover,
 .rdp-day_range_end button:hover {
   background-color: rgb(29 78 216) !important; /* blue-700 darker */
   color: white !important;
-  border: none !important;
+  outline: none !important;
 }
 
-/* 7. Hover preview for unselected dates - outlined circle */
-.rdp button:not([disabled]):hover {
-  border: 2px solid rgb(37 99 235) !important;
-  background-color: white !important;
-  color: rgb(17 24 39) !important;
-  border-radius: 50% !important;
-}
-
-/* 8. Remove outline hover from range days */
-.rdp-day_range_start button:hover,
-.rdp-day_range_end button:hover,
+/* 8. Override hover for middle range (keep transparent, slight darken) */
 .rdp-day_range_middle button:hover {
-  border: none !important;
+  background-color: rgba(191 219 254, 0.5) !important;
+  outline: none !important;
 }
 
-/* 9. AIRBNB PREVIEW - Border ring on the candidate end day (hovered edge) */
-.rdp-preview:not(.rdp-day_selected) button {
-  outline: 2px solid rgb(59 130 246) !important; /* blue-500 ring */
+/* 9. PREVIEW - Border ring on candidate end during hover preview */
+.rdp-day_preview button {
+  outline: 2px solid rgb(59 130 246) !important;
   outline-offset: -2px !important;
   border-radius: 50% !important;
 }
 
-/* 10. Preview span - Softly tint the span between from..hover during preview */
+/* 10. Preview span background (soft tint) */
 .rdp-day_preview {
-  background-color: rgba(59, 130, 246, 0.08) !important; /* blue @ 8% */
+  background-color: rgba(59, 130, 246, 0.08) !important;
 }
