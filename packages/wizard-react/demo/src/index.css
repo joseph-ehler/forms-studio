@@ -182,13 +182,15 @@ body :not(.rdp-root) button[aria-pressed="true"] {
    
    CRITICAL: Style the BUTTON inside the selected cell!
 ================================================================= */
-.rdp-root [role="gridcell"] > [aria-pressed="true"],
-.rdp-root .fs-selected button,
-.rdp-root .fs-selected .rdp-day_button,
-.rdp-root .rdp-selected button,
-.rdp-root .rdp-selected .rdp-day_button,
-.rdp-root .rdp-day_selected button,
-.rdp-root .rdp-day_selected .rdp-day_button,
+/* Single date mode - aria-pressed */
+.rdp-root [role="gridcell"] > [aria-pressed="true"]:not([aria-selected="true"]) {
+  background-color: rgb(37, 99, 235) !important;
+  color: #ffffff !important;
+  font-weight: 500 !important;
+  border: none !important;
+}
+
+/* Range mode - ONLY start and end, NOT middle */
 .rdp-root .rdp-day_range_start button,
 .rdp-root .rdp-day_range_start .rdp-day_button,
 .rdp-root .rdp-day_range_end button,
@@ -196,7 +198,19 @@ body :not(.rdp-root) button[aria-pressed="true"] {
 .rdp-root .fs-range-start button,
 .rdp-root .fs-range-start .rdp-day_button,
 .rdp-root .fs-range-end button,
-.rdp-root .fs-range-end .rdp-day_button {
+.rdp-root .fs-range-end .rdp-day_button,
+.rdp-root td.rdp-day_range_start button.rdp-day_button,
+.rdp-root td.rdp-day_range_end button.rdp-day_button {
+  background-color: rgb(37, 99, 235) !important;
+  color: #ffffff !important;
+  font-weight: 500 !important;
+  border: none !important;
+}
+
+/* Custom classes for single date (NOT range) */
+.rdp-root .fs-selected:not(.fs-range-start):not(.fs-range-end):not(.fs-range-mid) button,
+.rdp-root .rdp-selected:not(.rdp-day_range_start):not(.rdp-day_range_end):not(.rdp-day_range_middle) button,
+.rdp-root .rdp-day_selected:not(.rdp-day_range_start):not(.rdp-day_range_end):not(.rdp-day_range_middle) button {
   background-color: rgb(37, 99, 235) !important;
   color: #ffffff !important;
   font-weight: 500 !important;
@@ -221,13 +235,15 @@ body :not(.rdp-root) button[aria-pressed="true"] {
    HOVER ON SELECTED - Darker blue (rgb(29, 78, 216))
    No ring, just darker background - target BUTTON inside
 ================================================================= */
-.rdp-root [role="gridcell"] > [aria-pressed="true"]:hover,
-.rdp-root .fs-selected:hover button,
-.rdp-root .fs-selected:hover .rdp-day_button,
-.rdp-root .rdp-selected:hover button,
-.rdp-root .rdp-selected:hover .rdp-day_button,
-.rdp-root .rdp-day_selected:hover button,
-.rdp-root .rdp-day_selected:hover .rdp-day_button,
+/* Hover on single selected date */
+.rdp-root [role="gridcell"] > [aria-pressed="true"]:not([aria-selected="true"]):hover {
+  background-color: rgb(29, 78, 216) !important;
+  color: #ffffff !important;
+  border: none !important;
+  outline: none !important;
+}
+
+/* Hover on range START and END only */
 .rdp-root .rdp-day_range_start:hover button,
 .rdp-root .rdp-day_range_start:hover .rdp-day_button,
 .rdp-root .rdp-day_range_end:hover button,
@@ -242,11 +258,11 @@ body :not(.rdp-root) button[aria-pressed="true"] {
   outline: none !important;
 }
 
-/* Middle range dates stay transparent on hover */
-.rdp-root .rdp-day_range_middle:not(.rdp-day_range_start):not(.rdp-day_range_end):hover button,
-.rdp-root .fs-range-mid:not(.fs-range-start):not(.fs-range-end):hover button {
-  background-color: transparent !important;
-  color: rgb(17, 24, 39) !important;
+/* Hover on custom single selected (NOT range) */
+.rdp-root .fs-selected:not(.fs-range-start):not(.fs-range-end):not(.fs-range-mid):hover button,
+.rdp-root .rdp-selected:not(.rdp-day_range_start):not(.rdp-day_range_end):not(.rdp-day_range_middle):hover button {
+  background-color: rgb(29, 78, 216) !important;
+  color: #ffffff !important;
 }
 
 /* =================================================================
@@ -257,13 +273,21 @@ body :not(.rdp-root) button[aria-pressed="true"] {
    
    Excludes ALL selected states using :not() selectors
 ================================================================= */
-.rdp-root [role="gridcell"] > *:not([aria-pressed="true"]):not([aria-selected="true"]):not([aria-disabled="true"]):not(.fs-selected):not(.rdp-selected):not(.rdp-day_selected):not(.rdp-day_range_start):not(.rdp-day_range_end):not(.fs-range-start):not(.fs-range-end):not(.fs-disabled):not(.rdp-day_disabled):hover,
-.rdp-root .fs-day:not(.fs-selected):not(.rdp-selected):not(.fs-range-start):not(.fs-range-end):not(.fs-disabled):hover,
-.rdp-root .rdp-day:not([aria-pressed="true"]):not([aria-selected="true"]):not(.rdp-selected):not(.rdp-day_selected):not(.rdp-day_range_start):not(.rdp-day_range_end):not(.rdp-day_disabled):not([aria-disabled="true"]):hover {
+.rdp-root [role="gridcell"] > *:not([aria-pressed="true"]):not([aria-selected="true"]):not([aria-disabled="true"]):not(.fs-selected):not(.rdp-selected):not(.rdp-day_selected):not(.rdp-day_range_start):not(.rdp-day_range_middle):not(.rdp-day_range_end):not(.fs-range-start):not(.fs-range-mid):not(.fs-range-end):not(.fs-disabled):not(.rdp-day_disabled):hover,
+.rdp-root .fs-day:not(.fs-selected):not(.rdp-selected):not(.fs-range-start):not(.fs-range-mid):not(.fs-range-end):not(.fs-disabled):hover,
+.rdp-root .rdp-day:not([aria-pressed="true"]):not([aria-selected="true"]):not(.rdp-selected):not(.rdp-day_selected):not(.rdp-day_range_start):not(.rdp-day_range_middle):not(.rdp-day_range_end):not(.rdp-day_disabled):not([aria-disabled="true"]):hover {
   border: 2px solid rgb(59, 130, 246) !important;
   border-radius: 50% !important;
   box-sizing: border-box !important;
   background-color: transparent !important;
+}
+
+/* Middle range dates should NOT get hover ring, they already have the band */
+.rdp-root .rdp-day_range_middle:hover,
+.rdp-root .fs-range-mid:hover,
+.rdp-root [data-day-range="middle"]:hover {
+  border: none !important;
+  outline: none !important;
 }
 
 /* =================================================================
