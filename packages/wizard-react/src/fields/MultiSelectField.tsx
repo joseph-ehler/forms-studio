@@ -303,27 +303,40 @@ export const MultiSelectField: React.FC<FieldComponentProps> = ({
                         maxHeight={ui.maxHeight ?? 560}
                         collision={ui.collision ?? { flip: true, shift: true, size: true }}
                       >
-                        {({ refs, floatingStyles }) => (
-                          <div
-                            ref={refs.setFloating}
-                            style={floatingStyles}
-                            className="z-50 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden"
-                          >
-                            {/* Search */}
-                            {allowSearch && (
-                              <PickerSearch 
-                                value={query} 
-                                onChange={setQuery}
-                                placeholder="Search..."
-                              />
-                            )}
-
-                            {/* List */}
-                            <div 
-                              ref={contentRef}
-                              className="overflow-y-auto"
-                              style={{ maxHeight: ui.maxHeight ?? 400 }}
+                        {({ refs, floatingStyles }) => {
+                          const maxHeight = ui.maxHeight ?? 560
+                          const searchHeight = allowSearch ? 60 : 0 // search bar height
+                          const footerHeight = 48 // footer height
+                          const listMaxHeight = maxHeight - searchHeight - footerHeight
+                          
+                          return (
+                            <div
+                              ref={refs.setFloating}
+                              style={{
+                                ...floatingStyles,
+                                maxHeight: `${maxHeight}px`,
+                                display: 'flex',
+                                flexDirection: 'column',
+                              }}
+                              className="z-50 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden"
                             >
+                              {/* Search */}
+                              {allowSearch && (
+                                <div className="flex-shrink-0">
+                                  <PickerSearch 
+                                    value={query} 
+                                    onChange={setQuery}
+                                    placeholder="Search..."
+                                  />
+                                </div>
+                              )}
+
+                              {/* List */}
+                              <div 
+                                ref={contentRef}
+                                className="overflow-y-auto"
+                                style={{ maxHeight: `${listMaxHeight}px` }}
+                              >
                               <PickerList
                                 role="listbox"
                                 aria-label={label ?? name}
@@ -360,7 +373,7 @@ export const MultiSelectField: React.FC<FieldComponentProps> = ({
                             </div>
 
                             {/* Footer */}
-                            <div className="border-t border-gray-200 px-3 py-2 flex justify-between items-center bg-gray-50">
+                            <div className="flex-shrink-0 border-t border-gray-200 px-3 py-2 flex justify-between items-center bg-gray-50">
                               <button
                                 type="button"
                                 onClick={(e) => {
@@ -390,7 +403,8 @@ export const MultiSelectField: React.FC<FieldComponentProps> = ({
                               </div>
                             </div>
                           </div>
-                        )}
+                          )
+                        }}
                       </OverlayPositioner>
                     )
                   )}
