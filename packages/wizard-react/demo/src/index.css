@@ -78,94 +78,82 @@ button:focus,
   outline: none !important;
 }
 
-/* Fix thick borders on chips/buttons when selected (but not inside DayPicker) */
-body :not(.rdp) button[aria-pressed="true"] {
-  border-width: 1px !important;
-}
-
 /* Keep the "thin ring" look globally… */
 body :focus {
   box-shadow: 0 0 0 1px rgb(59 130 246) !important;
   outline: none !important;
 }
 
-/* Isolate DayPicker from global rings/focus */
-.rdp *:focus { box-shadow: none !important; outline: none !important; }
-.rdp .border-2, .rdp .ring-2 { border-width: revert !important; --tw-ring-width: 0 !important; }
-
-/* 2) One surface for day buttons (circular hit area) */
-.rdp .rdp-day,
-.rdp .fs-day {
-  border-radius: 50% !important;
-  border: none !important;
-  position: relative;
+/* --- Guard: don't let global thin-ring clobber calendar --- */
+.rdp *:focus {
+  box-shadow: none !important;
+  outline: none !important;
+}
+/* If you have a global aria-pressed thin border, keep it out of the calendar */
+body :not(.rdp) button[aria-pressed="true"] {
+  border-width: 1px !important;
 }
 
-/* 3) SUPER-SELECTOR: any "selected" state gets the solid blue fill + white text
-      (covers single & range, with or without custom classNames) */
-.rdp .rdp-day[aria-selected="true"],
-.rdp .rdp-day[aria-pressed="true"],
-.rdp .rdp-day_selected,
-.rdp .fs-selected,
-.rdp .fs-range-start,
-.rdp .fs-range-end {
-  background-color: rgb(37, 99, 235) !important; /* blue-600 */
-  color: #fff !important;
-  border-radius: 50% !important;
-  border: none !important;
-  outline: none !important;
+/* --- Every day cell is a circular hit area --- */
+.rdp [role="gridcell"] > * {
+  border-radius: 50% !important;   /* circular */
+  border: none !important;         /* no thin borders leaking through */
   background-clip: padding-box !important;
 }
 
-/* 4) Hover ring ONLY on unselected/unpressed cells */
-.rdp .rdp-day:not([aria-selected="true"]):not([aria-pressed="true"]):not(.fs-range-start):not(.fs-range-end):not(.rdp-day_selected):not(.fs-selected):not(.fs-disabled):hover {
+/* =================================================================
+   FILLED CIRCLE (dark blue) for both SINGLE and RANGE endpoints
+   =================================================================
+   We rely ONLY on ARIA so it works no matter the classNames config.
+   - Single mode uses aria-pressed="true"
+   - Range mode marks endpoints with aria-selected="true"
+-------------------------------------------------------------------*/
+.rdp [role="gridcell"] > [aria-pressed="true"],
+.rdp [role="gridcell"] > [aria-selected="true"] {
+  background-color: rgb(37, 99, 235) !important; /* blue-600 */
+  color: #fff !important;
+}
+
+/* Hover state for selected stays darker (no white flash) */
+.rdp [role="gridcell"] > [aria-pressed="true"]:hover,
+.rdp [role="gridcell"] > [aria-selected="true"]:hover {
+  background-color: rgb(29, 78, 216) !important; /* blue-700 */
+}
+
+/* =================================================================
+   HOVER RING on UNSELECTED days only (single & range)
+   ================================================================= */
+.rdp [role="gridcell"] > *:not([aria-pressed="true"]):not([aria-selected="true"]):not([disabled]):hover {
   outline: 2px solid rgb(59, 130, 246) !important; /* blue-500 */
   outline-offset: -2px !important;
   border-radius: 50% !important;
 }
 
-.rdp .fs-today:not(.fs-selected) {
-  color: rgb(37, 99, 235) !important;
-  font-weight: 700 !important;
-}
-
-/* 5) Range middle band + half-fills (Airbnb look) */
-.rdp .fs-range-mid,
-.rdp .rdp-day_range_middle {
+/* =================================================================
+   RANGE middle band (Airbnb) — keep the soft fill BETWEEN endpoints
+   =================================================================
+   DayPicker adds data attributes we can target robustly.
+-------------------------------------------------------------------*/
+/* Middle span uses a light band (don't draw circle fill) */
+.rdp [data-day-range="middle"] {
   background-color: rgb(219, 234, 254) !important; /* blue-100 */
   color: rgb(17, 24, 39) !important;
 }
 
-/* Start with right-side band if not the same day as end */
-.rdp .fs-range-start:not(.fs-range-end),
-.rdp .rdp-day_range_start:not(.rdp-day_range_end) {
-  background: linear-gradient(to right, transparent 50%, rgb(219, 234, 254) 50%) !important;
+/* Optional: subtle preview band when hovering after first click */
+.rdp [data-day-range="preview"] {
+  background-color: rgba(59, 130, 246, 0.08) !important;
 }
-
-/* End with left-side band if not the same day as start */
-.rdp .fs-range-end:not(.fs-range-start),
-.rdp .rdp-day_range_end:not(.rdp-day_range_start) {
-  background: linear-gradient(to left, transparent 50%, rgb(219, 234, 254) 50%) !important;
-}
-
-/* === PREVIEW / HOVER — live border and band between dates === */
-.rdp .fs-preview { 
-  background-color: rgba(59, 130, 246, 0.08) !important; 
-}
-.rdp .fs-preview:hover {
+/* When you hover the preview endpoint, show a ring cue */
+.rdp [data-day-range="preview"]:hover {
   outline: 2px solid rgb(59, 130, 246) !important;
   outline-offset: -2px !important;
+  border-radius: 50% !important;
 }
 
-/* Keep endpoints darker on hover; no white flash */
-.rdp .fs-range-start:hover,
-.rdp .fs-range-end:hover,
-.rdp .rdp-day[aria-selected="true"]:hover,
-.rdp .rdp-day[aria-pressed="true"]:hover,
-.rdp .rdp-day_selected:hover,
-.rdp .fs-selected:hover {
-  background-color: rgb(29, 78, 216) !important; /* blue-700 */
-  color: #fff !important;
-  outline: none !important;
+/* Today accent (when not selected) */
+.rdp [role="gridcell"] > [data-today="true"]:not([aria-pressed="true"]):not([aria-selected="true"]) {
+  color: rgb(37, 99, 235) !important;
+  font-weight: 700 !important;
 }
 
