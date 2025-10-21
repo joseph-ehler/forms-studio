@@ -113,16 +113,16 @@ button[aria-pressed="true"],
 
 /* Date picker color overrides - Default CSS handles structure */
 
-/* SINGLE DATE SELECTION - Custom class we control */
+/* SINGLE DATE SELECTION - EXACT COPY of range styling */
 .custom-selected-date,
 .rdp .custom-selected-date,
 .custom-selected-date button,
 .rdp .custom-selected-date button {
-  background-color: rgb(37 99 235) !important; /* blue-600 */
+  background-color: rgb(37 99 235) !important; /* EXACT same as range */
   color: #fff !important;
+  border-radius: 50% !important;
   font-weight: 700 !important;
   border: none !important;
-  border-radius: 50% !important;
 }
 
 .custom-selected-date:hover,
