@@ -144,7 +144,7 @@ export const DateField: React.FC<FieldComponentProps> = ({
                       aria-labelledby={`${name}-label`}
                     >
                       {/* Calendar Body */}
-                      <div className="px-4 py-6 flex justify-center">
+                      <div className="px-2 py-4 flex justify-center">
                         <DayPicker
                           mode="single"
                           selected={selectedDate}
@@ -212,7 +212,7 @@ export const DateField: React.FC<FieldComponentProps> = ({
                               maxHeight: `${heights.contentMaxHeight}px`,
                             }}
                           >
-                            <div className="p-4 flex justify-center">
+                            <div className="p-2 flex justify-center">
                               <DayPicker
                                 mode="single"
                                 selected={selectedDate}

@@ -216,7 +216,7 @@ export const DateRangeField: React.FC<FieldComponentProps> = ({
                       )}
 
                       {/* Calendar */}
-                      <div className="px-4 py-6 flex justify-center">
+                      <div className="px-2 py-4 flex justify-center">
                         <DayPicker
                           mode="range"
                           selected={{
@@ -285,7 +285,7 @@ export const DateRangeField: React.FC<FieldComponentProps> = ({
                               maxHeight: `${heights.contentMaxHeight}px`,
                             }}
                           >
-                            <div className="p-4 flex gap-4">
+                            <div className="p-2 flex gap-2">
                               {/* Presets Sidebar */}
                               {presets.length > 0 && (
                                 <div className="flex flex-col gap-1 pr-4 border-r border-gray-200">

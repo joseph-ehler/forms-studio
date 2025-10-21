@@ -63,27 +63,21 @@ export const TimeField: React.FC<FieldComponentProps> = ({
   const format24 = format !== '12'
   const defaultValue = (config as any).defaultValue
 
-  // Generate time options based on step
-  const generateTimeOptions = (): string[] => {
-    const options: string[] = []
-    const totalMinutes = 24 * 60
-    
-    for (let minutes = 0; minutes < totalMinutes; minutes += step) {
-      const hours = Math.floor(minutes / 60)
-      const mins = minutes % 60
-      const time24 = `${String(hours).padStart(2, '0')}:${String(mins).padStart(2, '0')}`
-      
-      // Filter by min/max
-      if (min && time24 < min) continue
-      if (max && time24 > max) continue
-      
-      options.push(time24)
-    }
-    
-    return options
+  // Generate hour and minute options
+  const generateHours = (): number[] => {
+    return format24 ? Array.from({ length: 24 }, (_, i) => i) : Array.from({ length: 12 }, (_, i) => i + 1)
   }
 
-  const timeOptions = generateTimeOptions()
+  const generateMinutes = (): number[] => {
+    const minutes: number[] = []
+    for (let i = 0; i < 60; i += step) {
+      minutes.push(i)
+    }
+    return minutes
+  }
+
+  const hours = generateHours()
+  const minutes = generateMinutes()
 
   // Format time for display
   const formatTimeDisplay = (time24: string): string => {
@@ -113,17 +107,34 @@ export const TimeField: React.FC<FieldComponentProps> = ({
         control={control}
         defaultValue={defaultValue}
         render={({ field }) => {
-          const { isMobile } = useDeviceType()
-          const heights = calculateOverlayHeights({
-            maxHeight: 560,
-            hasSearch: false,
-            hasFooter: false,
-          })
+          // Parse current time value
+          const parseTime = (time24: string) => {
+            if (!time24) return { hour: format24 ? 0 : 12, minute: 0, period: 'AM' }
+            const [h, m] = time24.split(':').map(Number)
+            return {
+              hour: format24 ? h : (h % 12 || 12),
+              minute: m,
+              period: h >= 12 ? 'PM' : 'AM'
+            }
+          }
+
+          const currentTime = parseTime(field.value)
+          const [selectedHour, setSelectedHour] = React.useState(currentTime.hour)
+          const [selectedMinute, setSelectedMinute] = React.useState(currentTime.minute)
+          const [selectedPeriod, setSelectedPeriod] = React.useState<'AM' | 'PM'>(currentTime.period as 'AM' | 'PM')
+
+          const updateFieldValue = (hour: number, minute: number, period: 'AM' | 'PM') => {
+            let hour24 = hour
+            if (!format24) {
+              if (period === 'PM' && hour !== 12) hour24 = hour + 12
+              if (period === 'AM' && hour === 12) hour24 = 0
+            }
+            const time24 = `${String(hour24).padStart(2, '0')}:${String(minute).padStart(2, '0')}`
+            field.onChange(time24)
+          }
 
           return (
-            <OverlayPickerCore
-              closeOnSelect={true}
-            >
+            <OverlayPickerCore closeOnSelect={false}>
               {({ isOpen, open, close, triggerRef, contentRef }) => (
                 <>
                   {/* Trigger Button */}
@@ -138,59 +149,17 @@ export const TimeField: React.FC<FieldComponentProps> = ({
                       {field.value ? formatTimeDisplay(field.value) : placeholder || 'Select time...'}
                     </span>
                     <svg
-                      className={`h-5 w-5 text-gray-400 transition-transform ${isOpen ? 'rotate-180' : ''}`}
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
+                      className="h-5 w-5 text-gray-400"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
                     >
-                      <path
-                        fillRule="evenodd"
-                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                        clipRule="evenodd"
-                      />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                   </button>
 
-                  {/* Mobile Sheet */}
-                  {isMobile && isOpen && (
-                    <OverlaySheet
-                      open={isOpen}
-                      onClose={() => close('outside')}
-                      maxHeight={560}
-                      aria-labelledby={`${name}-label`}
-                    >
-                      <div ref={contentRef}>
-                        <PickerList
-                          role="listbox"
-                          aria-label={label ?? name}
-                        >
-                          {timeOptions.length === 0 ? (
-                            <PickerEmptyState message="No times available" />
-                          ) : (
-                            timeOptions.map((time) => {
-                              const isSelected = time === field.value
-                              return (
-                                <PickerOption
-                                  key={time}
-                                  value={time}
-                                  selected={isSelected}
-                                  disabled={disabled}
-                                  onClick={() => {
-                                    field.onChange(time)
-                                    close('select')
-                                  }}
-                                >
-                                  {formatTimeDisplay(time)}
-                                </PickerOption>
-                              )
-                            })
-                          )}
-                        </PickerList>
-                      </div>
-                    </OverlaySheet>
-                  )}
-
-                  {/* Desktop Popover */}
-                  {!isMobile && isOpen && (
+                  {/* Mobile & Desktop: Same compact picker */}
+                  {isOpen && (
                     <OverlayPositioner
                       open={isOpen}
                       anchor={triggerRef.current}
@@ -198,48 +167,84 @@ export const TimeField: React.FC<FieldComponentProps> = ({
                       offset={6}
                       strategy="fixed"
                       sameWidth={true}
-                      maxHeight={560}
+                      maxHeight={400}
                       collision={{ flip: true, shift: true, size: true }}
                     >
-                      {({ refs, floatingStyles, isPositioned }) => (
+                      {({ refs, floatingStyles }) => (
                         <div
                           ref={refs.setFloating}
                           style={floatingStyles}
-                          className="z-50 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden"
+                          className="z-50 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 p-4"
                         >
-                          <div
-                            ref={contentRef}
-                            className={getOverlayContentClasses().content}
-                            style={{
-                              maxHeight: `${heights.contentMaxHeight}px`,
-                            }}
-                          >
-                            <PickerList
-                              role="listbox"
-                              aria-label={label ?? name}
-                            >
-                              {timeOptions.length === 0 ? (
-                                <PickerEmptyState message="No times available" />
-                              ) : (
-                                timeOptions.map((time) => {
-                                  const isSelected = time === field.value
-                                  return (
-                                    <PickerOption
-                                      key={time}
-                                      value={time}
-                                      selected={isSelected}
-                                      disabled={disabled}
-                                      onClick={() => {
-                                        field.onChange(time)
-                                        close('select')
-                                      }}
-                                    >
-                                      {formatTimeDisplay(time)}
-                                    </PickerOption>
-                                  )
-                                })
+                          <div ref={contentRef} className="space-y-4">
+                            {/* Time Selectors */}
+                            <div className="flex items-center gap-2">
+                              {/* Hour */}
+                              <div className="flex-1">
+                                <label className="block text-xs font-medium text-gray-700 mb-1">Hour</label>
+                                <select
+                                  value={selectedHour}
+                                  onChange={(e) => {
+                                    const h = Number(e.target.value)
+                                    setSelectedHour(h)
+                                    updateFieldValue(h, selectedMinute, selectedPeriod)
+                                  }}
+                                  className="w-full rounded-md border border-gray-300 px-3 py-2 text-base focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                >
+                                  {hours.map(h => (
+                                    <option key={h} value={h}>{String(h).padStart(2, '0')}</option>
+                                  ))}
+                                </select>
+                              </div>
+
+                              <div className="text-2xl font-bold text-gray-400 pt-6">:</div>
+
+                              {/* Minute */}
+                              <div className="flex-1">
+                                <label className="block text-xs font-medium text-gray-700 mb-1">Minute</label>
+                                <select
+                                  value={selectedMinute}
+                                  onChange={(e) => {
+                                    const m = Number(e.target.value)
+                                    setSelectedMinute(m)
+                                    updateFieldValue(selectedHour, m, selectedPeriod)
+                                  }}
+                                  className="w-full rounded-md border border-gray-300 px-3 py-2 text-base focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                >
+                                  {minutes.map(m => (
+                                    <option key={m} value={m}>{String(m).padStart(2, '0')}</option>
+                                  ))}
+                                </select>
+                              </div>
+
+                              {/* AM/PM for 12-hour */}
+                              {!format24 && (
+                                <div className="flex-1">
+                                  <label className="block text-xs font-medium text-gray-700 mb-1">Period</label>
+                                  <select
+                                    value={selectedPeriod}
+                                    onChange={(e) => {
+                                      const p = e.target.value as 'AM' | 'PM'
+                                      setSelectedPeriod(p)
+                                      updateFieldValue(selectedHour, selectedMinute, p)
+                                    }}
+                                    className="w-full rounded-md border border-gray-300 px-3 py-2 text-base focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                  >
+                                    <option value="AM">AM</option>
+                                    <option value="PM">PM</option>
+                                  </select>
+                                </div>
                               )}
-                            </PickerList>
+                            </div>
+
+                            {/* Done Button */}
+                            <button
+                              type="button"
+                              onClick={() => close('select')}
+                              className="w-full min-h-[44px] px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors font-medium"
+                            >
+                              Done
+                            </button>
                           </div>
                         </div>
                       )}
