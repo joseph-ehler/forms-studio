@@ -113,25 +113,36 @@ button[aria-pressed="true"],
 
 /* Date picker styles - Single date + Range selection */
 
-/* SINGLE DATE SELECTION - v9 button classes */
+/* DayPicker v9 base styling - NO defaults imported */
+.rdp {
+  --rdp-cell-size: 44px;
+  --rdp-accent-color: #2563eb;
+}
+
+.rdp-day {
+  width: var(--rdp-cell-size);
+  height: var(--rdp-cell-size);
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+/* SINGLE DATE SELECTION */
 .rdp .rdp-day_selected {
-  background-color: rgb(37 99 235) !important; /* blue-600 */
-  color: #fff !important;
-  border-radius: 50% !important;
-  border: none !important;
-  font-weight: 700 !important;
-}
-
-/* Hover selected day */
-.rdp .rdp-day_selected:hover {
-  background-color: rgb(29 78 216) !important; /* blue-700 */
-  color: #fff !important;
-}
-
-/* Today indicator (unselected) */
-.rdp .rdp-day_today {
+  background-color: #2563eb;
+  color: #fff;
   font-weight: 700;
-  color: rgb(37 99 235) !important;
+}
+
+.rdp .rdp-day_selected:hover {
+  background-color: #1d4ed8;
+}
+
+/* Today indicator */
+.rdp .rdp-day_today:not(.rdp-day_selected) {
+  font-weight: 700;
+  color: #2563eb;
 }
 
 /* Airbnb-style date RANGE picker - AGGRESSIVE SPECIFICITY */
@@ -218,16 +229,4 @@ button[aria-pressed="true"],
   background-color: rgba(59, 130, 246, 0.08) !important;
 }
 
-/* FORCE DARK BLUE - NUCLEAR OVERRIDE */
-.force-dark-blue,
-.rdp .force-dark-blue,
-button.force-dark-blue {
-  background-color: #2563eb !important;
-  color: #ffffff !important;
-  font-weight: 700 !important;
-  border-radius: 50% !important;
-  border: none !important;
-  outline: none !important;
-  box-shadow: none !important;
-}
 

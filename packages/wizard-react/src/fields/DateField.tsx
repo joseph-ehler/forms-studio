@@ -23,7 +23,6 @@ import { mergeFieldConfig } from './utils/field-json-config'
 import { getAriaProps, getLabelProps, getDescriptionProps } from './utils/a11y-helpers'
 import { DayPicker } from 'react-day-picker'
 import { format, isValid } from 'date-fns'
-import 'react-day-picker/dist/style.css'
 import { OverlayPickerCore, OverlaySheet, OverlayPositioner, calculateOverlayHeights, getOverlayContentClasses } from '../components/overlay'
 import { useDeviceType } from '../hooks/useDeviceType'
 
@@ -177,20 +176,6 @@ export const DateField: React.FC<FieldComponentProps> = ({
                               borderRadius: '50%',
                             }
                           }}
-                          modifiersStyles={{
-                            selected: {
-                              backgroundColor: '#2563eb',
-                              color: '#ffffff',
-                              fontWeight: 700,
-                              borderRadius: '50%',
-                              border: 'none',
-                              outline: 'none',
-                              boxShadow: 'none',
-                            }
-                          }}
-                          modifiersClassNames={{
-                            selected: 'force-dark-blue'
-                          }}
                         />
                       </div>
 
@@ -262,20 +247,6 @@ export const DateField: React.FC<FieldComponentProps> = ({
                                   day_button: {
                                     borderRadius: '50%',
                                   }
-                                }}
-                                modifiersStyles={{
-                                  selected: {
-                                    backgroundColor: '#2563eb',
-                                    color: '#ffffff',
-                                    fontWeight: 700,
-                                    borderRadius: '50%',
-                                    border: 'none',
-                                    outline: 'none',
-                                    boxShadow: 'none',
-                                  }
-                                }}
-                                modifiersClassNames={{
-                                  selected: 'force-dark-blue'
                                 }}
                               />
                             </div>
