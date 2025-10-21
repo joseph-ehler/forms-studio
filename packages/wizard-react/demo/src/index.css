@@ -98,26 +98,27 @@ button[data-selected="true"],
 
 /* Date picker styles - Single date + Range selection */
 
-/* SINGLE DATE SELECTION - Blue filled circle */
+/* SINGLE DATE SELECTION - Exact same styling as range circles */
 .rdp-day_selected:not(.rdp-day_range_start):not(.rdp-day_range_end),
 .rdp .rdp-day_selected:not(.rdp-day_range_start):not(.rdp-day_range_end) {
   background-color: transparent !important;
+  border-radius: 0 !important;
 }
 
 .rdp-day_selected:not(.rdp-day_range_start):not(.rdp-day_range_end) button,
-.rdp .rdp-day_selected:not(.rdp-day_range_start):not(.rdp-day_range_end) button,
-.rdp-day_selected:not(.rdp-day_range_start):not(.rdp-day_range_end) .rdp-day_button,
-.rdp .rdp-day_selected:not(.rdp-day_range_start):not(.rdp-day_range_end) .rdp-day_button {
+.rdp .rdp-day_selected:not(.rdp-day_range_start):not(.rdp-day_range_end) button {
   background-color: rgb(37 99 235) !important; /* blue-600 */
   color: white !important;
   border-radius: 50% !important;
+  position: relative !important;
+  z-index: 1 !important;
 }
 
 .rdp-day_selected:not(.rdp-day_range_start):not(.rdp-day_range_end) button:hover,
-.rdp .rdp-day_selected:not(.rdp-day_range_start):not(.rdp-day_range_end) button:hover,
-.rdp-day_selected:not(.rdp-day_range_start):not(.rdp-day_range_end) .rdp-day_button:hover,
-.rdp .rdp-day_selected:not(.rdp-day_range_start):not(.rdp-day_range_end) .rdp-day_button:hover {
+.rdp .rdp-day_selected:not(.rdp-day_range_start):not(.rdp-day_range_end) button:hover {
   background-color: rgb(29 78 216) !important; /* blue-700 */
+  color: white !important;
+  outline: none !important;
 }
 
 /* Today indicator */
