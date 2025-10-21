@@ -23,6 +23,7 @@ import { mergeFieldConfig } from './utils/field-json-config'
 import { getAriaProps, getLabelProps, getDescriptionProps } from './utils/a11y-helpers'
 import { DayPicker } from 'react-day-picker'
 import { format, isValid } from 'date-fns'
+import 'react-day-picker/dist/style.css'
 import { OverlayPickerCore, OverlaySheet, OverlayPositioner, calculateOverlayHeights, getOverlayContentClasses } from '../components/overlay'
 import { useDeviceType } from '../hooks/useDeviceType'
 
