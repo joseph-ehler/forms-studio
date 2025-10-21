@@ -94,9 +94,22 @@ body :focus {
 ================================================================= */
 
 /* --- Guard: don't let global thin-ring clobber calendar --- */
-.rdp-root *:focus {
+.rdp-root *:focus,
+.rdp-root *:focus-visible {
   box-shadow: none !important;
   outline: none !important;
+  border: none !important;
+}
+
+/* Selected buttons should never show focus ring */
+.rdp-root .rdp-selected button:focus,
+.rdp-root .fs-selected button:focus,
+.rdp-root .rdp-day_selected button:focus,
+.rdp-root button[aria-pressed="true"]:focus,
+.rdp-root button[aria-selected="true"]:focus {
+  box-shadow: none !important;
+  outline: none !important;
+  border: none !important;
 }
 
 /* If you have a global aria-pressed thin border, keep it out of the calendar */
@@ -134,7 +147,6 @@ body :not(.rdp-root) button[aria-pressed="true"] {
    CRITICAL: Style the BUTTON inside the selected cell!
 ================================================================= */
 .rdp-root [role="gridcell"] > [aria-pressed="true"],
-.rdp-root [role="gridcell"] > [aria-selected="true"],
 .rdp-root .fs-selected button,
 .rdp-root .fs-selected .rdp-day_button,
 .rdp-root .rdp-selected button,
@@ -155,12 +167,18 @@ body :not(.rdp-root) button[aria-pressed="true"] {
   border: none !important;
 }
 
+/* IMPORTANT: Don't apply to middle range dates */
+.rdp-root .rdp-day_range_middle:not(.rdp-day_range_start):not(.rdp-day_range_end) button,
+.rdp-root .fs-range-mid:not(.fs-range-start):not(.fs-range-end) button {
+  background-color: transparent !important;
+  color: rgb(17, 24, 39) !important;
+}
+
 /* =================================================================
    HOVER ON SELECTED - Darker blue (rgb(29, 78, 216))
    No ring, just darker background - target BUTTON inside
 ================================================================= */
 .rdp-root [role="gridcell"] > [aria-pressed="true"]:hover,
-.rdp-root [role="gridcell"] > [aria-selected="true"]:hover,
 .rdp-root .fs-selected:hover button,
 .rdp-root .fs-selected:hover .rdp-day_button,
 .rdp-root .rdp-selected:hover button,
@@ -179,6 +197,13 @@ body :not(.rdp-root) button[aria-pressed="true"] {
   color: #ffffff !important;
   border: none !important;
   outline: none !important;
+}
+
+/* Middle range dates stay transparent on hover */
+.rdp-root .rdp-day_range_middle:not(.rdp-day_range_start):not(.rdp-day_range_end):hover button,
+.rdp-root .fs-range-mid:not(.fs-range-start):not(.fs-range-end):hover button {
+  background-color: transparent !important;
+  color: rgb(17, 24, 39) !important;
 }
 
 /* =================================================================
@@ -200,35 +225,54 @@ body :not(.rdp-root) button[aria-pressed="true"] {
 
 /* =================================================================
    RANGE MIDDLE BAND - Light blue between endpoints
+   Apply to CELL since it needs to span the full width
 ================================================================= */
 .rdp-root [data-day-range="middle"],
 .rdp-root .rdp-day_range_middle,
 .rdp-root .fs-range-mid {
   background-color: rgb(219, 234, 254) !important;
+}
+
+/* Middle range buttons should be transparent (band is on cell) */
+.rdp-root [data-day-range="middle"] button,
+.rdp-root .rdp-day_range_middle button,
+.rdp-root .fs-range-mid button {
+  background-color: transparent !important;
   color: rgb(17, 24, 39) !important;
-  border-radius: 0 !important;
+  border: none !important;
 }
 
 /* =================================================================
    RANGE GRADIENTS - Half-circle fills for start/end
+   Apply to CELL to create the Airbnb connected look
 ================================================================= */
 .rdp-root .rdp-day_range_start:not(.rdp-day_range_end),
 .rdp-root .fs-range-start:not(.fs-range-end) {
   background: linear-gradient(to right, rgb(37, 99, 235) 50%, rgb(219, 234, 254) 50%) !important;
-  border-radius: 50% 0 0 50% !important;
 }
 
 .rdp-root .rdp-day_range_end:not(.rdp-day_range_start),
 .rdp-root .fs-range-end:not(.fs-range-start) {
   background: linear-gradient(to left, rgb(37, 99, 235) 50%, rgb(219, 234, 254) 50%) !important;
-  border-radius: 0 50% 50% 0 !important;
 }
 
-/* Single day range (start and end on same day) */
-.rdp-root .rdp-day_range_start.rdp-day_range_end,
-.rdp-root .fs-range-start.fs-range-end {
+/* Style the BUTTON inside range start/end for the circle */
+.rdp-root .rdp-day_range_start button,
+.rdp-root .fs-range-start button {
+  border-radius: 50% !important;
+}
+
+.rdp-root .rdp-day_range_end button,
+.rdp-root .fs-range-end button {
+  border-radius: 50% !important;
+}
+
+/* Single day range (start and end on same day) - on button */
+.rdp-root .rdp-day_range_start.rdp-day_range_end button,
+.rdp-root .fs-range-start.fs-range-end button {
   background: rgb(37, 99, 235) !important;
   border-radius: 50% !important;
+  color: #fff !important;
 }
 
 /* =================================================================
