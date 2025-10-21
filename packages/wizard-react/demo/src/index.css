@@ -273,8 +273,8 @@ body :not(.rdp-root) button[aria-pressed="true"] {
    
    Excludes ALL selected states using :not() selectors
 ================================================================= */
-/* ONLY style the BUTTON on hover, not the cell */
-.rdp-root button.rdp-day_button:not([aria-pressed="true"]):not([aria-selected="true"]):not([aria-disabled="true"]):hover {
+/* ONLY style UNSELECTED buttons on hover - exclude ALL selected states */
+.rdp-root td:not(.rdp-day_range_start):not(.rdp-day_range_middle):not(.rdp-day_range_end):not(.rdp-selected):not(.fs-selected):not(.rdp-day_selected) button.rdp-day_button:not([aria-pressed="true"]):not([aria-selected="true"]):not([aria-disabled="true"]):hover {
   border: 2px solid rgb(59, 130, 246) !important;
   border-radius: 50% !important;
   box-sizing: border-box !important;
