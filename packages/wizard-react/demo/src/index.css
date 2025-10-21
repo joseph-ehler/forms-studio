@@ -113,23 +113,34 @@ button[aria-pressed="true"],
 
 /* Date picker color overrides - Default CSS handles structure */
 
-/* SINGLE DATE SELECTION - EXACT SAME PATTERN AS RANGE */
-.rdp .rdp-day_selected,
-.rdp-day_selected,
-.rdp .rdp-day_selected button,
-.rdp-day_selected button {
-  background-color: rgb(37 99 235) !important; /* blue-600 SAME AS RANGE */
+/* SINGLE DATE SELECTION - Custom class we control */
+.custom-selected-date,
+.rdp .custom-selected-date,
+.custom-selected-date button,
+.rdp .custom-selected-date button {
+  background-color: rgb(37 99 235) !important; /* blue-600 */
   color: #fff !important;
   font-weight: 700 !important;
   border: none !important;
 }
 
-.rdp .rdp-day_selected:hover,
-.rdp-day_selected:hover,
-.rdp .rdp-day_selected button:hover,
-.rdp-day_selected button:hover {
+.custom-selected-date:hover,
+.rdp .custom-selected-date:hover,
+.custom-selected-date button:hover,
+.rdp .custom-selected-date button:hover {
   background-color: rgb(29 78 216) !important; /* blue-700 */
   color: #fff !important;
+  border: none !important;
+}
+
+/* Fallback for default class */
+.rdp .rdp-day_selected,
+.rdp-day_selected,
+.rdp .rdp-day_selected button,
+.rdp-day_selected button {
+  background-color: rgb(37 99 235) !important;
+  color: #fff !important;
+  font-weight: 700 !important;
   border: none !important;
 }
 

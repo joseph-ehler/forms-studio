@@ -169,6 +169,9 @@ export const DateField: React.FC<FieldComponentProps> = ({
                             ...(minDate ? [{ before: minDate }] : []),
                             ...(maxDate ? [{ after: maxDate }] : []),
                           ]}
+                          modifiersClassNames={{
+                            selected: 'custom-selected-date'
+                          }}
                         />
                       </div>
 
@@ -233,6 +236,9 @@ export const DateField: React.FC<FieldComponentProps> = ({
                                   ...(minDate ? [{ before: minDate }] : []),
                                   ...(maxDate ? [{ after: maxDate }] : []),
                                 ]}
+                                modifiersClassNames={{
+                                  selected: 'custom-selected-date'
+                                }}
                               />
                             </div>
                           </div>
