@@ -170,7 +170,20 @@ export const DateField: React.FC<FieldComponentProps> = ({
                             ...(maxDate ? [{ after: maxDate }] : []),
                           ]}
                           styles={{
-                            day_button: { borderRadius: '50%' }
+                            day: {
+                              borderRadius: '50%',
+                            },
+                            day_button: {
+                              borderRadius: '50%',
+                            }
+                          }}
+                          modifiersStyles={{
+                            selected: {
+                              backgroundColor: '#2563eb',
+                              color: '#ffffff',
+                              fontWeight: 700,
+                              borderRadius: '50%',
+                            }
                           }}
                         />
                       </div>
@@ -237,7 +250,20 @@ export const DateField: React.FC<FieldComponentProps> = ({
                                   ...(maxDate ? [{ after: maxDate }] : []),
                                 ]}
                                 styles={{
-                                  day_button: { borderRadius: '50%' }
+                                  day: {
+                                    borderRadius: '50%',
+                                  },
+                                  day_button: {
+                                    borderRadius: '50%',
+                                  }
+                                }}
+                                modifiersStyles={{
+                                  selected: {
+                                    backgroundColor: '#2563eb',
+                                    color: '#ffffff',
+                                    fontWeight: 700,
+                                    borderRadius: '50%',
+                                  }
                                 }}
                               />
                             </div>
