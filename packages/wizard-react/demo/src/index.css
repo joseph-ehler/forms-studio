@@ -226,3 +226,22 @@ button.rdp-day_selected,
 .rdp-day_preview {
   background-color: rgba(59, 130, 246, 0.08) !important;
 }
+
+/* ========================================
+   DATEFIELD SINGLE SELECTION FIX
+   MUST BE LAST TO OVERRIDE EVERYTHING
+   ======================================== */
+
+/* Reset selected day container */
+.rdp-day_selected {
+  background-color: transparent !important;
+}
+
+/* Force blue filled circle on ALL selected buttons */
+.rdp-day_selected button,
+.rdp-day_selected .rdp-day_button {
+  background-color: rgb(37 99 235) !important;
+  color: white !important;
+  border-radius: 50% !important;
+  border: none !important;
+}
