@@ -145,6 +145,29 @@ body :not(.rdp-root) button[aria-pressed="true"] {
   background-clip: padding-box !important;
   box-sizing: border-box !important;
   transition: all 0.15s ease !important;
+  /* CRITICAL: No outline EVER */
+  outline: none !important;
+  outline-width: 0 !important;
+  outline-style: none !important;
+  box-shadow: none !important;
+}
+
+/* All calendar buttons - no outline on any state */
+.rdp-root button,
+.rdp-root .rdp-day_button {
+  outline: none !important;
+  outline-width: 0 !important;
+  box-shadow: none !important;
+}
+
+.rdp-root button:focus,
+.rdp-root button:focus-visible,
+.rdp-root button:active {
+  outline: none !important;
+  outline-width: 0 !important;
+  outline-style: none !important;
+  box-shadow: none !important;
+  border: none !important;
 }
 
 /* =================================================================
@@ -180,17 +203,18 @@ body :not(.rdp-root) button[aria-pressed="true"] {
   border: none !important;
 }
 
-/* CRITICAL: Middle range dates must NOT have filled buttons - ultra specific */
-.rdp-root .rdp-day_range_middle:not(.rdp-day_range_start):not(.rdp-day_range_end) button,
-.rdp-root .rdp-day_range_middle:not(.rdp-day_range_start):not(.rdp-day_range_end) .rdp-day_button,
-.rdp-root .fs-range-mid:not(.fs-range-start):not(.fs-range-end) button,
-.rdp-root .fs-range-mid:not(.fs-range-start):not(.fs-range-end) .rdp-day_button,
-.rdp-root [data-day-range="middle"]:not([data-day-range="start"]):not([data-day-range="end"]) button,
-.rdp-root [data-day-range="middle"]:not([data-day-range="start"]):not([data-day-range="end"]) .rdp-day_button {
+/* CRITICAL: This rule MUST come after the blue fill rules to override them */
+/* Middle range dates must NOT have filled buttons - maximum specificity */
+.rdp-root td.rdp-day_range_middle:not(.rdp-day_range_start):not(.rdp-day_range_end) button.rdp-day_button,
+.rdp-root td.fs-range-mid:not(.fs-range-start):not(.fs-range-end) button.rdp-day_button,
+.rdp-root [role="gridcell"][data-day-range="middle"] button,
+.rdp-root td[data-day-range="middle"]:not([data-day-range="start"]):not([data-day-range="end"]) button {
   background-color: transparent !important;
   background: transparent !important;
+  background-image: none !important;
   color: rgb(17, 24, 39) !important;
   border: none !important;
+  font-weight: 400 !important;
 }
 
 /* =================================================================
