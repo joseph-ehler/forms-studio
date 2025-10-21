@@ -169,14 +169,6 @@ export const DateField: React.FC<FieldComponentProps> = ({
                             ...(minDate ? [{ before: minDate }] : []),
                             ...(maxDate ? [{ after: maxDate }] : []),
                           ]}
-                          styles={{
-                            day: {
-                              borderRadius: '50%',
-                            },
-                            day_button: {
-                              borderRadius: '50%',
-                            }
-                          }}
                         />
                       </div>
 
@@ -241,14 +233,6 @@ export const DateField: React.FC<FieldComponentProps> = ({
                                   ...(minDate ? [{ before: minDate }] : []),
                                   ...(maxDate ? [{ after: maxDate }] : []),
                                 ]}
-                                styles={{
-                                  day: {
-                                    borderRadius: '50%',
-                                  },
-                                  day_button: {
-                                    borderRadius: '50%',
-                                  }
-                                }}
                               />
                             </div>
                           </div>
