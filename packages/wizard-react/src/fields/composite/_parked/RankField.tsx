@@ -14,8 +14,8 @@
 import React, { useState } from 'react'
 import { Controller } from 'react-hook-form'
 import type { FieldComponentProps } from '../types'
-import { FormStack, FormGrid, Stack } from '../../components'
 import { FormLabel, FormHelperText } from '../../components'
+import { Stack } from '../../components/DSShims'
 import { resolveTypographyDisplay, getTypographyFromJSON } from '../utils/typography-display'
 import { mergeFieldConfig } from '../utils/field-json-config'
 
