@@ -93,35 +93,32 @@ body :focus {
 .rdp *:focus { box-shadow: none !important; outline: none !important; }
 .rdp .border-2, .rdp .ring-2 { border-width: revert !important; --tw-ring-width: 0 !important; }
 
-/* Make every day a circle hit area */
-.rdp .fs-day { 
-  border-radius: 50% !important; 
-  border: none !important; 
-  position: relative; 
+/* 2) One surface for day buttons (circular hit area) */
+.rdp .rdp-day,
+.rdp .fs-day {
+  border-radius: 50% !important;
+  border: none !important;
+  position: relative;
 }
 
-/* === SINGLE DATE (DateField) === */
-/* Fill for single date (aria-pressed) */
-.rdp [aria-pressed="true"]:not(.fs-range-start):not(.fs-range-end) {
+/* 3) SUPER-SELECTOR: any "selected" state gets the solid blue fill + white text
+      (covers single & range, with or without custom classNames) */
+.rdp .rdp-day[aria-selected="true"],
+.rdp .rdp-day[aria-pressed="true"],
+.rdp .rdp-day_selected,
+.rdp .fs-selected,
+.rdp .fs-range-start,
+.rdp .fs-range-end {
   background-color: rgb(37, 99, 235) !important; /* blue-600 */
   color: #fff !important;
   border-radius: 50% !important;
   border: none !important;
   outline: none !important;
+  background-clip: padding-box !important;
 }
 
-/* Fill for range endpoints (and generic selected) */
-.rdp [aria-selected="true"],
-.rdp .fs-range-start,
-.rdp .fs-range-end {
-  background-color: rgb(37, 99, 235) !important;
-  color: #fff !important;
-  border-radius: 50% !important;
-  border: none !important;
-}
-
-/* Hover ring on unselected days (works for both pickers) */
-.rdp .fs-day:not([aria-selected="true"]):not([aria-pressed="true"]):not(.fs-disabled):hover {
+/* 4) Hover ring ONLY on unselected/unpressed cells */
+.rdp .rdp-day:not([aria-selected="true"]):not([aria-pressed="true"]):not(.fs-range-start):not(.fs-range-end):not(.rdp-day_selected):not(.fs-selected):not(.fs-disabled):hover {
   outline: 2px solid rgb(59, 130, 246) !important; /* blue-500 */
   outline-offset: -2px !important;
   border-radius: 50% !important;
@@ -132,26 +129,23 @@ body :focus {
   font-weight: 700 !important;
 }
 
-/* === RANGE (DateRangeField, Airbnb look) === */
-.rdp .fs-range-mid {
+/* 5) Range middle band + half-fills (Airbnb look) */
+.rdp .fs-range-mid,
+.rdp .rdp-day_range_middle {
   background-color: rgb(219, 234, 254) !important; /* blue-100 */
   color: rgb(17, 24, 39) !important;
 }
-.rdp .fs-range-start,
-.rdp .fs-range-end {
-  background-color: rgb(37, 99, 235) !important;   /* blue-600 */
-  color: #fff !important;
-}
-.rdp .fs-range-start:not(.fs-range-end) {
+
+/* Start with right-side band if not the same day as end */
+.rdp .fs-range-start:not(.fs-range-end),
+.rdp .rdp-day_range_start:not(.rdp-day_range_end) {
   background: linear-gradient(to right, transparent 50%, rgb(219, 234, 254) 50%) !important;
 }
-.rdp .fs-range-end:not(.fs-range-start) {
-  background: linear-gradient(to left,  transparent 50%, rgb(219, 234, 254) 50%) !important;
-}
-/* one-day range */
-.rdp .fs-range-start.fs-range-end {
-  background-color: rgb(37, 99, 235) !important;
-  color: #fff !important;
+
+/* End with left-side band if not the same day as start */
+.rdp .fs-range-end:not(.fs-range-start),
+.rdp .rdp-day_range_end:not(.rdp-day_range_start) {
+  background: linear-gradient(to left, transparent 50%, rgb(219, 234, 254) 50%) !important;
 }
 
 /* === PREVIEW / HOVER — live border and band between dates === */
@@ -163,10 +157,15 @@ body :focus {
   outline-offset: -2px !important;
 }
 
-/* Keep endpoints the same dark fill on hover (no white flash) */
+/* Keep endpoints darker on hover; no white flash */
 .rdp .fs-range-start:hover,
-.rdp .fs-range-end:hover {
+.rdp .fs-range-end:hover,
+.rdp .rdp-day[aria-selected="true"]:hover,
+.rdp .rdp-day[aria-pressed="true"]:hover,
+.rdp .rdp-day_selected:hover,
+.rdp .fs-selected:hover {
   background-color: rgb(29, 78, 216) !important; /* blue-700 */
   color: #fff !important;
+  outline: none !important;
 }
 
