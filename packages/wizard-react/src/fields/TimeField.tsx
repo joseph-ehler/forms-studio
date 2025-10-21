@@ -21,8 +21,7 @@ import { FormLabel, FormHelperText } from '../components'
 import { FormStack, FormGrid, Stack } from '../components'
 import { resolveTypographyDisplay, getTypographyFromJSON } from './utils/typography-display'
 import { mergeFieldConfig } from './utils/field-json-config'
-import { OverlayPickerCore, OverlaySheet, OverlayPositioner, calculateOverlayHeights, getOverlayContentClasses } from '../components/overlay'
-import { PickerList, PickerOption, PickerEmptyState } from '../components/picker'
+import { OverlayPickerCore, OverlayPositioner, OverlaySheet } from '../components/overlay'
 import { useDeviceType } from '../hooks/useDeviceType'
 
 export const TimeField: React.FC<FieldComponentProps> = ({
@@ -56,28 +55,9 @@ export const TimeField: React.FC<FieldComponentProps> = ({
     config.typographyVariant || jsonTypography.variant
   )
   
-  const min = (config as any).min
-  const max = (config as any).max
-  const step = (config as any).step ?? 30
   const format = (config as any).format ?? '24'
   const format24 = format !== '12'
   const defaultValue = (config as any).defaultValue
-
-  // Generate hour and minute options
-  const generateHours = (): number[] => {
-    return format24 ? Array.from({ length: 24 }, (_, i) => i) : Array.from({ length: 12 }, (_, i) => i + 1)
-  }
-
-  const generateMinutes = (): number[] => {
-    const minutes: number[] = []
-    for (let i = 0; i < 60; i += step) {
-      minutes.push(i)
-    }
-    return minutes
-  }
-
-  const hours = generateHours()
-  const minutes = generateMinutes()
 
   // Format time for display
   const formatTimeDisplay = (time24: string): string => {
@@ -107,6 +87,8 @@ export const TimeField: React.FC<FieldComponentProps> = ({
         control={control}
         defaultValue={defaultValue}
         render={({ field }) => {
+          const { isMobile } = useDeviceType()
+          
           // Parse current time value
           const parseTime = (time24: string) => {
             if (!time24) return { hour: 0, minute: 0 }
@@ -136,46 +118,117 @@ export const TimeField: React.FC<FieldComponentProps> = ({
             field.onChange(time24)
           }
 
-          const handleHourInput = (value: string) => {
-            const num = parseInt(value) || 0
-            const max = use24Hour ? 23 : 23
-            const clamped = Math.max(0, Math.min(max, num))
-            updateFieldValue(clamped, minute)
-          }
-
-          const handleMinuteInput = (value: string) => {
-            const num = parseInt(value) || 0
-            const clamped = Math.max(0, Math.min(59, num))
-            updateFieldValue(hour, clamped)
-          }
-
-          const incrementHour = () => {
-            const max = use24Hour ? 23 : 23
-            const newHour = hour >= max ? 0 : hour + 1
-            updateFieldValue(newHour, minute)
-          }
-
-          const decrementHour = () => {
-            const max = use24Hour ? 23 : 23
-            const newHour = hour <= 0 ? max : hour - 1
-            updateFieldValue(newHour, minute)
-          }
-
-          const incrementMinute = () => {
-            const newMinute = minute + step >= 60 ? 0 : minute + step
-            updateFieldValue(hour, newMinute)
-          }
-
-          const decrementMinute = () => {
-            const newMinute = minute - step < 0 ? 60 - step : minute - step
-            updateFieldValue(hour, newMinute)
-          }
-
           const setPeriod = (isPM: boolean) => {
             const currentIsPM = hour >= 12
             if (isPM === currentIsPM) return
             const newHour = isPM ? (hour < 12 ? hour + 12 : hour) : (hour >= 12 ? hour - 12 : hour)
             updateFieldValue(newHour, minute)
+          }
+
+          // Wheel Picker Component
+          const WheelPicker = ({ value, onChange, max, label }: { value: number; onChange: (v: number) => void; max: number; label: string }) => {
+            const [isDragging, setIsDragging] = React.useState(false)
+            const [startY, setStartY] = React.useState(0)
+            const [scrollOffset, setScrollOffset] = React.useState(0)
+            const containerRef = React.useRef<HTMLDivElement>(null)
+
+            const itemHeight = 48
+            const visibleItems = 5
+            const centerIndex = Math.floor(visibleItems / 2)
+
+            const getVisibleNumbers = () => {
+              const numbers: number[] = []
+              for (let i = -centerIndex; i <= centerIndex; i++) {
+                let num = value + i
+                // Infinite loop
+                while (num < 0) num += (max + 1)
+                while (num > max) num -= (max + 1)
+                numbers.push(num)
+              }
+              return numbers
+            }
+
+            const handlePointerDown = (e: React.PointerEvent) => {
+              setIsDragging(true)
+              setStartY(e.clientY)
+              setScrollOffset(0)
+              e.currentTarget.setPointerCapture(e.pointerId)
+            }
+
+            const handlePointerMove = (e: React.PointerEvent) => {
+              if (!isDragging) return
+              const deltaY = e.clientY - startY
+              setScrollOffset(deltaY)
+              
+              // Update value based on scroll
+              const steps = Math.round(-deltaY / itemHeight)
+              if (steps !== 0) {
+                let newValue = value + steps
+                while (newValue < 0) newValue += (max + 1)
+                while (newValue > max) newValue -= (max + 1)
+                onChange(newValue)
+                setStartY(e.clientY)
+                setScrollOffset(0)
+              }
+            }
+
+            const handlePointerUp = (e: React.PointerEvent) => {
+              setIsDragging(false)
+              setScrollOffset(0)
+              e.currentTarget.releasePointerCapture(e.pointerId)
+            }
+
+            const numbers = getVisibleNumbers()
+
+            return (
+              <div className="flex flex-col items-center">
+                <div className="text-xs font-medium text-gray-500 mb-2">{label}</div>
+                <div
+                  ref={containerRef}
+                  className="relative h-60 w-20 overflow-hidden cursor-grab active:cursor-grabbing select-none"
+                  onPointerDown={handlePointerDown}
+                  onPointerMove={handlePointerMove}
+                  onPointerUp={handlePointerUp}
+                  onPointerCancel={handlePointerUp}
+                >
+                  {/* Top fade */}
+                  <div className="absolute top-0 left-0 right-0 h-16 bg-gradient-to-b from-white to-transparent z-10 pointer-events-none" />
+                  
+                  {/* Numbers */}
+                  <div className="absolute inset-0 flex flex-col items-center justify-center">
+                    {numbers.map((num, idx) => {
+                      const distance = Math.abs(idx - centerIndex)
+                      const opacity = distance === 0 ? 1 : distance === 1 ? 0.4 : 0.15
+                      const scale = distance === 0 ? 1 : 0.75
+                      const translateY = (idx - centerIndex) * itemHeight + scrollOffset
+
+                      return (
+                        <div
+                          key={`${num}-${idx}`}
+                          className="absolute flex items-center justify-center w-full transition-opacity"
+                          style={{
+                            height: `${itemHeight}px`,
+                            transform: `translateY(${translateY}px) scale(${scale})`,
+                            opacity,
+                            pointerEvents: 'none',
+                          }}
+                        >
+                          <span className="text-3xl font-bold text-gray-900">
+                            {String(num).padStart(2, '0')}
+                          </span>
+                        </div>
+                      )
+                    })}
+                  </div>
+
+                  {/* Selection indicator */}
+                  <div className="absolute top-1/2 left-0 right-0 h-12 -translate-y-1/2 border-y-2 border-blue-500 pointer-events-none" />
+                  
+                  {/* Bottom fade */}
+                  <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-white to-transparent z-10 pointer-events-none" />
+                </div>
+              </div>
+            )
           }
 
           return (
@@ -203,16 +256,100 @@ export const TimeField: React.FC<FieldComponentProps> = ({
                     </svg>
                   </button>
 
-                  {/* Time Picker Popover */}
-                  {isOpen && (
+                  {/* Mobile Sheet */}
+                  {isMobile && isOpen && (
+                    <OverlaySheet
+                      open={isOpen}
+                      onClose={() => close('outside')}
+                      maxHeight={560}
+                      aria-labelledby={`${name}-label`}
+                    >
+                      <div ref={contentRef} className="p-4 space-y-4">
+                        {/* Format Toggle */}
+                        <div className="flex items-center justify-between pb-2 border-b border-gray-200">
+                          <span className="text-sm font-medium text-gray-700">Time Format</span>
+                          <button
+                            type="button"
+                            onClick={() => setUse24Hour(!use24Hour)}
+                            className="flex items-center gap-2 px-3 py-1 rounded-md bg-gray-100 hover:bg-gray-200 text-sm font-medium text-gray-700 transition-colors"
+                          >
+                            {use24Hour ? '24hr' : '12hr'}
+                            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+                            </svg>
+                          </button>
+                        </div>
+
+                        {/* Wheel Pickers */}
+                        <div className="flex items-center justify-center gap-2">
+                          <WheelPicker
+                            value={use24Hour ? hour : getDisplayHour(hour)}
+                            onChange={(v) => {
+                              const newHour = use24Hour ? v : (getPeriod(hour) === 'PM' ? (v === 12 ? 12 : v + 12) : (v === 12 ? 0 : v))
+                              updateFieldValue(newHour, minute)
+                            }}
+                            max={use24Hour ? 23 : 12}
+                            label="Hour"
+                          />
+                          <div className="text-4xl font-bold text-gray-400 mt-6">:</div>
+                          <WheelPicker
+                            value={minute}
+                            onChange={(v) => updateFieldValue(hour, v)}
+                            max={59}
+                            label="Minute"
+                          />
+                          {!use24Hour && (
+                            <div className="flex flex-col items-center mt-6 ml-2">
+                              <div className="inline-flex flex-col rounded-md shadow-sm border border-gray-300" role="group">
+                                <button
+                                  type="button"
+                                  onClick={() => setPeriod(false)}
+                                  className={`px-4 py-3 text-sm font-medium rounded-t-md transition-colors ${
+                                    getPeriod(hour) === 'AM'
+                                      ? 'bg-blue-600 text-white'
+                                      : 'bg-white text-gray-700 hover:bg-gray-50'
+                                  }`}
+                                >
+                                  AM
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => setPeriod(true)}
+                                  className={`px-4 py-3 text-sm font-medium rounded-b-md border-t transition-colors ${
+                                    getPeriod(hour) === 'PM'
+                                      ? 'bg-blue-600 text-white border-blue-600'
+                                      : 'bg-white text-gray-700 hover:bg-gray-50 border-gray-300'
+                                  }`}
+                                >
+                                  PM
+                                </button>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Done Button */}
+                        <button
+                          type="button"
+                          onClick={() => close('select')}
+                          className="w-full min-h-[48px] px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors font-medium"
+                        >
+                          Done
+                        </button>
+                      </div>
+                    </OverlaySheet>
+                  )}
+
+                  {/* Desktop Popover */}
+                  {!isMobile && isOpen && (
                     <OverlayPositioner
                       open={isOpen}
                       anchor={triggerRef.current}
                       placement="bottom-start"
                       offset={6}
                       strategy="fixed"
-                      sameWidth={true}
-                      maxHeight={400}
+                      sameWidth={false}
+                      maxHeight={500}
                       collision={{ flip: true, shift: true, size: true }}
                     >
                       {({ refs, floatingStyles }) => (
@@ -237,109 +374,59 @@ export const TimeField: React.FC<FieldComponentProps> = ({
                               </button>
                             </div>
 
-                            {/* Time Inputs with Steppers */}
-                            <div className="flex items-center justify-center gap-1">
-                              {/* Hour Input with Steppers */}
-                              <div className="flex flex-col items-center">
-                                <button
-                                  type="button"
-                                  onClick={incrementHour}
-                                  className="p-2 hover:bg-gray-100 rounded-md transition-colors"
-                                >
-                                  <svg className="h-5 w-5 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fillRule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clipRule="evenodd" />
-                                  </svg>
-                                </button>
-                                <input
-                                  type="text"
-                                  inputMode="numeric"
-                                  value={String(getDisplayHour(hour)).padStart(2, '0')}
-                                  onChange={(e) => handleHourInput(e.target.value)}
-                                  onBlur={(e) => handleHourInput(e.target.value)}
-                                  className="w-16 text-4xl font-bold text-gray-900 text-center border-2 border-gray-200 rounded-md focus:border-blue-500 focus:outline-none my-2"
-                                  maxLength={2}
-                                />
-                                <button
-                                  type="button"
-                                  onClick={decrementHour}
-                                  className="p-2 hover:bg-gray-100 rounded-md transition-colors"
-                                >
-                                  <svg className="h-5 w-5 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-                                  </svg>
-                                </button>
-                              </div>
-
-                              {/* Colon */}
-                              <div className="text-4xl font-bold text-gray-400 mx-1 mb-6">:</div>
-
-                              {/* Minute Input with Steppers */}
-                              <div className="flex flex-col items-center">
-                                <button
-                                  type="button"
-                                  onClick={incrementMinute}
-                                  className="p-2 hover:bg-gray-100 rounded-md transition-colors"
-                                >
-                                  <svg className="h-5 w-5 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fillRule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clipRule="evenodd" />
-                                  </svg>
-                                </button>
-                                <input
-                                  type="text"
-                                  inputMode="numeric"
-                                  value={String(minute).padStart(2, '0')}
-                                  onChange={(e) => handleMinuteInput(e.target.value)}
-                                  onBlur={(e) => handleMinuteInput(e.target.value)}
-                                  className="w-16 text-4xl font-bold text-gray-900 text-center border-2 border-gray-200 rounded-md focus:border-blue-500 focus:outline-none my-2"
-                                  maxLength={2}
-                                />
-                                <button
-                                  type="button"
-                                  onClick={decrementMinute}
-                                  className="p-2 hover:bg-gray-100 rounded-md transition-colors"
-                                >
-                                  <svg className="h-5 w-5 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-                                  </svg>
-                                </button>
-                              </div>
-                            </div>
-
-                            {/* AM/PM Segmented Control (12hr only) */}
-                            {!use24Hour && (
-                              <div className="flex items-center justify-center mt-2">
-                                <div className="inline-flex rounded-md shadow-sm border border-gray-300" role="group">
-                                  <button
-                                    type="button"
-                                    onClick={() => setPeriod(false)}
-                                    className={`px-6 py-2 text-sm font-medium rounded-l-md transition-colors ${
-                                      getPeriod(hour) === 'AM'
-                                        ? 'bg-blue-600 text-white'
-                                        : 'bg-white text-gray-700 hover:bg-gray-50'
-                                    }`}
-                                  >
-                                    AM
-                                  </button>
-                                  <button
-                                    type="button"
-                                    onClick={() => setPeriod(true)}
-                                    className={`px-6 py-2 text-sm font-medium rounded-r-md border-l transition-colors ${
-                                      getPeriod(hour) === 'PM'
-                                        ? 'bg-blue-600 text-white border-blue-600'
-                                        : 'bg-white text-gray-700 hover:bg-gray-50 border-gray-300'
-                                    }`}
-                                  >
-                                    PM
-                                  </button>
+                            {/* Wheel Pickers */}
+                            <div className="flex items-center justify-center gap-2">
+                              <WheelPicker
+                                value={use24Hour ? hour : getDisplayHour(hour)}
+                                onChange={(v) => {
+                                  const newHour = use24Hour ? v : (getPeriod(hour) === 'PM' ? (v === 12 ? 12 : v + 12) : (v === 12 ? 0 : v))
+                                  updateFieldValue(newHour, minute)
+                                }}
+                                max={use24Hour ? 23 : 12}
+                                label="Hour"
+                              />
+                              <div className="text-4xl font-bold text-gray-400 mt-6">:</div>
+                              <WheelPicker
+                                value={minute}
+                                onChange={(v) => updateFieldValue(hour, v)}
+                                max={59}
+                                label="Minute"
+                              />
+                              {!use24Hour && (
+                                <div className="flex flex-col items-center mt-6 ml-2">
+                                  <div className="inline-flex flex-col rounded-md shadow-sm border border-gray-300" role="group">
+                                    <button
+                                      type="button"
+                                      onClick={() => setPeriod(false)}
+                                      className={`px-4 py-3 text-sm font-medium rounded-t-md transition-colors ${
+                                        getPeriod(hour) === 'AM'
+                                          ? 'bg-blue-600 text-white'
+                                          : 'bg-white text-gray-700 hover:bg-gray-50'
+                                      }`}
+                                    >
+                                      AM
+                                    </button>
+                                    <button
+                                      type="button"
+                                      onClick={() => setPeriod(true)}
+                                      className={`px-4 py-3 text-sm font-medium rounded-b-md border-t transition-colors ${
+                                        getPeriod(hour) === 'PM'
+                                          ? 'bg-blue-600 text-white border-blue-600'
+                                          : 'bg-white text-gray-700 hover:bg-gray-50 border-gray-300'
+                                      }`}
+                                    >
+                                      PM
+                                    </button>
+                                  </div>
                                 </div>
-                              </div>
-                            )}
+                              )}
+                            </div>
 
                             {/* Done Button */}
                             <button
                               type="button"
                               onClick={() => close('select')}
-                              className="w-full min-h-[44px] px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors font-medium"
+                              className="w-full min-h-[48px] px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors font-medium"
                             >
                               Done
                             </button>
@@ -355,21 +442,6 @@ export const TimeField: React.FC<FieldComponentProps> = ({
         }}
       />
 
-      {/* Time format hint */}
-      {(min || max || format === '12') && (
-        <p className="text-xs text-gray-400">
-          {format === '12' && 'Format: 12-hour (AM/PM)'}
-          {format === '24' && 'Format: 24-hour'}
-          {(min || max) && ` • `}
-          {min && max
-            ? `Range: ${formatTimeDisplay(min)} - ${formatTimeDisplay(max)}`
-            : min
-            ? `Earliest: ${formatTimeDisplay(min)}`
-            : max
-            ? `Latest: ${formatTimeDisplay(max)}`
-            : ''}
-        </p>
-      )}
 
       {typography.showError && errors?.[name]?.message && (
         <FormHelperText variant="error">
