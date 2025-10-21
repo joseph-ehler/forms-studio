@@ -306,26 +306,35 @@ export const DateRangeField: React.FC<FieldComponentProps> = ({
                       offset={6}
                       strategy="fixed"
                       sameWidth={false}
-                      maxHeight={600}
-                      collision={{ flip: true, shift: true, size: false }}
+                      maxHeight={550}
+                      collision={{ flip: true, shift: true, size: true }}
                     >
-                      {({ refs, floatingStyles, isPositioned }) => (
-                        <div
-                          ref={refs.setFloating}
-                          style={{ ...floatingStyles, maxHeight: '90vh', height: 'auto' }}
-                          id={`${name}-dialog`}
-                          role="dialog"
-                          aria-labelledby={`${name}-label`}
-                          className="z-50 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 flex flex-col"
-                        >
-                          {/* Content with Presets + Calendar - Scrollable */}
+                      {({ refs, floatingStyles, isPositioned }) => {
+                        // Extract maxHeight from floatingStyles if set by size middleware
+                        const containerMaxHeight = floatingStyles.maxHeight 
+                          ? (typeof floatingStyles.maxHeight === 'string' 
+                              ? parseInt(floatingStyles.maxHeight) 
+                              : floatingStyles.maxHeight)
+                          : 550
+                        const contentMaxHeight = containerMaxHeight - 60 // Reserve 60px for footer
+                        
+                        return (
                           <div
-                            ref={contentRef}
-                            className="flex-1 overflow-y-auto"
-                            style={{
-                              maxHeight: 'calc(90vh - 60px)', // Viewport - footer
-                            }}
+                            ref={refs.setFloating}
+                            style={floatingStyles}
+                            id={`${name}-dialog`}
+                            role="dialog"
+                            aria-labelledby={`${name}-label`}
+                            className="z-50 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 flex flex-col"
                           >
+                            {/* Content with Presets + Calendar - Scrollable */}
+                            <div
+                              ref={contentRef}
+                              className="flex-1 overflow-y-auto overscroll-contain"
+                              style={{
+                                maxHeight: `${contentMaxHeight}px`,
+                              }}
+                            >
                             <div className="p-4 flex gap-4">
                               {/* Presets Sidebar */}
                               {presets.length > 0 && (
@@ -380,7 +389,8 @@ export const DateRangeField: React.FC<FieldComponentProps> = ({
                             </div>
                           </div>
                         </div>
-                      )}
+                        )
+                      }}
                     </OverlayPositioner>
                   )}
                 </>
