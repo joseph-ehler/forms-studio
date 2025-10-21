@@ -174,8 +174,8 @@ export const DateField: React.FC<FieldComponentProps> = ({
                           }}
                           modifiersStyles={{
                             selected: {
-                              backgroundColor: 'rgb(37 99 235)',
-                              color: 'white',
+                              backgroundColor: '#2563eb',
+                              color: '#ffffff',
                               borderRadius: '50%',
                               fontWeight: 'normal'
                             }
@@ -252,8 +252,8 @@ export const DateField: React.FC<FieldComponentProps> = ({
                                 }}
                                 modifiersStyles={{
                                   selected: {
-                                    backgroundColor: 'rgb(37 99 235)',
-                                    color: 'white',
+                                    backgroundColor: '#2563eb',
+                                    color: '#ffffff',
                                     borderRadius: '50%',
                                     fontWeight: 'normal'
                                   }
