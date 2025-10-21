@@ -232,16 +232,22 @@ button.rdp-day_selected,
    MUST BE LAST TO OVERRIDE EVERYTHING
    ======================================== */
 
-/* Reset selected day container */
-.rdp-day_selected {
+/* Reset selected day container - MAXIMUM SPECIFICITY */
+.rdp .rdp-month .rdp-day_selected,
+.rdp-months .rdp-month .rdp-day_selected,
+div.rdp-day_selected {
   background-color: transparent !important;
 }
 
-/* Force blue filled circle on ALL selected buttons */
-.rdp-day_selected button,
-.rdp-day_selected .rdp-day_button {
+/* Force blue filled circle - NUCLEAR SPECIFICITY */
+.rdp .rdp-month .rdp-day_selected button,
+.rdp-months .rdp-month .rdp-day_selected button,
+div.rdp-day_selected button,
+.rdp-day_selected button.rdp-button_reset {
   background-color: rgb(37 99 235) !important;
   color: white !important;
   border-radius: 50% !important;
   border: none !important;
+  width: 40px !important;
+  height: 40px !important;
 }
