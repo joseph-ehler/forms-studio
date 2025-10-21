@@ -143,11 +143,9 @@ export const DateField: React.FC<FieldComponentProps> = ({
                       maxHeight={560}
                       aria-labelledby={`${name}-label`}
                     >
+                      <div onClick={(e) => e.stopPropagation()}>
                       {/* Calendar Body */}
-                      <div 
-                        className="px-4 py-6 flex justify-center"
-                        onClick={(e) => e.stopPropagation()}
-                      >
+                      <div className="px-4 py-6 flex justify-center">
                         <DayPicker
                           mode="single"
                           selected={selectedDate}
@@ -185,6 +183,7 @@ export const DateField: React.FC<FieldComponentProps> = ({
                             Done
                           </button>
                         </div>
+                      </div>
                       </div>
                     </OverlaySheet>
                   )}
