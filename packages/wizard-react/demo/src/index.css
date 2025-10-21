@@ -115,16 +115,22 @@ button[aria-pressed="true"],
 
 /* SINGLE DATE SELECTION - EXACT SAME PATTERN AS RANGE */
 .rdp .rdp-day_selected,
-.rdp-day_selected {
+.rdp-day_selected,
+.rdp .rdp-day_selected button,
+.rdp-day_selected button {
   background-color: rgb(37 99 235) !important; /* blue-600 SAME AS RANGE */
   color: #fff !important;
   font-weight: 700 !important;
+  border: none !important;
 }
 
 .rdp .rdp-day_selected:hover,
-.rdp-day_selected:hover {
+.rdp-day_selected:hover,
+.rdp .rdp-day_selected button:hover,
+.rdp-day_selected button:hover {
   background-color: rgb(29 78 216) !important; /* blue-700 */
   color: #fff !important;
+  border: none !important;
 }
 
 /* Airbnb-style date RANGE picker - AGGRESSIVE SPECIFICITY */
