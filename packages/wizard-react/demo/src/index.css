@@ -94,22 +94,22 @@ body :focus {
 ================================================================= */
 
 /* --- Guard: don't let global thin-ring clobber calendar --- */
-.rdp *:focus {
+.rdp-root *:focus {
   box-shadow: none !important;
   outline: none !important;
 }
 
 /* If you have a global aria-pressed thin border, keep it out of the calendar */
-body :not(.rdp) button[aria-pressed="true"] {
+body :not(.rdp-root) button[aria-pressed="true"] {
   border-width: 1px !important;
 }
 
 /* =================================================================
    BASE CIRCLE STYLING - All day buttons must be circles
 ================================================================= */
-.rdp [role="gridcell"] > *,
-.rdp .fs-day,
-.rdp .rdp-day {
+.rdp-root [role="gridcell"] > *,
+.rdp-root .fs-day,
+.rdp-root .rdp-day {
   border-radius: 50% !important;
   border: none !important;
   width: 40px !important;
@@ -135,22 +135,22 @@ body :not(.rdp) button[aria-pressed="true"] {
    
    CRITICAL: Style the BUTTON inside the selected cell!
 ================================================================= */
-.rdp [role="gridcell"] > [aria-pressed="true"],
-.rdp [role="gridcell"] > [aria-selected="true"],
-.rdp .fs-selected button,
-.rdp .fs-selected .rdp-day_button,
-.rdp .rdp-selected button,
-.rdp .rdp-selected .rdp-day_button,
-.rdp .rdp-day_selected button,
-.rdp .rdp-day_selected .rdp-day_button,
-.rdp .rdp-day_range_start button,
-.rdp .rdp-day_range_start .rdp-day_button,
-.rdp .rdp-day_range_end button,
-.rdp .rdp-day_range_end .rdp-day_button,
-.rdp .fs-range-start button,
-.rdp .fs-range-start .rdp-day_button,
-.rdp .fs-range-end button,
-.rdp .fs-range-end .rdp-day_button {
+.rdp-root [role="gridcell"] > [aria-pressed="true"],
+.rdp-root [role="gridcell"] > [aria-selected="true"],
+.rdp-root .fs-selected button,
+.rdp-root .fs-selected .rdp-day_button,
+.rdp-root .rdp-selected button,
+.rdp-root .rdp-selected .rdp-day_button,
+.rdp-root .rdp-day_selected button,
+.rdp-root .rdp-day_selected .rdp-day_button,
+.rdp-root .rdp-day_range_start button,
+.rdp-root .rdp-day_range_start .rdp-day_button,
+.rdp-root .rdp-day_range_end button,
+.rdp-root .rdp-day_range_end .rdp-day_button,
+.rdp-root .fs-range-start button,
+.rdp-root .fs-range-start .rdp-day_button,
+.rdp-root .fs-range-end button,
+.rdp-root .fs-range-end .rdp-day_button {
   background-color: rgb(37, 99, 235) !important;
   color: #ffffff !important;
   font-weight: 500 !important;
@@ -161,22 +161,22 @@ body :not(.rdp) button[aria-pressed="true"] {
    HOVER ON SELECTED - Darker blue (rgb(29, 78, 216))
    No ring, just darker background - target BUTTON inside
 ================================================================= */
-.rdp [role="gridcell"] > [aria-pressed="true"]:hover,
-.rdp [role="gridcell"] > [aria-selected="true"]:hover,
-.rdp .fs-selected:hover button,
-.rdp .fs-selected:hover .rdp-day_button,
-.rdp .rdp-selected:hover button,
-.rdp .rdp-selected:hover .rdp-day_button,
-.rdp .rdp-day_selected:hover button,
-.rdp .rdp-day_selected:hover .rdp-day_button,
-.rdp .rdp-day_range_start:hover button,
-.rdp .rdp-day_range_start:hover .rdp-day_button,
-.rdp .rdp-day_range_end:hover button,
-.rdp .rdp-day_range_end:hover .rdp-day_button,
-.rdp .fs-range-start:hover button,
-.rdp .fs-range-start:hover .rdp-day_button,
-.rdp .fs-range-end:hover button,
-.rdp .fs-range-end:hover .rdp-day_button {
+.rdp-root [role="gridcell"] > [aria-pressed="true"]:hover,
+.rdp-root [role="gridcell"] > [aria-selected="true"]:hover,
+.rdp-root .fs-selected:hover button,
+.rdp-root .fs-selected:hover .rdp-day_button,
+.rdp-root .rdp-selected:hover button,
+.rdp-root .rdp-selected:hover .rdp-day_button,
+.rdp-root .rdp-day_selected:hover button,
+.rdp-root .rdp-day_selected:hover .rdp-day_button,
+.rdp-root .rdp-day_range_start:hover button,
+.rdp-root .rdp-day_range_start:hover .rdp-day_button,
+.rdp-root .rdp-day_range_end:hover button,
+.rdp-root .rdp-day_range_end:hover .rdp-day_button,
+.rdp-root .fs-range-start:hover button,
+.rdp-root .fs-range-start:hover .rdp-day_button,
+.rdp-root .fs-range-end:hover button,
+.rdp-root .fs-range-end:hover .rdp-day_button {
   background-color: rgb(29, 78, 216) !important;
   color: #ffffff !important;
   border: none !important;
@@ -191,9 +191,9 @@ body :not(.rdp) button[aria-pressed="true"] {
    
    Excludes ALL selected states using :not() selectors
 ================================================================= */
-.rdp [role="gridcell"] > *:not([aria-pressed="true"]):not([aria-selected="true"]):not([aria-disabled="true"]):not(.fs-selected):not(.rdp-selected):not(.rdp-day_selected):not(.rdp-day_range_start):not(.rdp-day_range_end):not(.fs-range-start):not(.fs-range-end):not(.fs-disabled):not(.rdp-day_disabled):hover,
-.rdp .fs-day:not(.fs-selected):not(.rdp-selected):not(.fs-range-start):not(.fs-range-end):not(.fs-disabled):hover,
-.rdp .rdp-day:not([aria-pressed="true"]):not([aria-selected="true"]):not(.rdp-selected):not(.rdp-day_selected):not(.rdp-day_range_start):not(.rdp-day_range_end):not(.rdp-day_disabled):not([aria-disabled="true"]):hover {
+.rdp-root [role="gridcell"] > *:not([aria-pressed="true"]):not([aria-selected="true"]):not([aria-disabled="true"]):not(.fs-selected):not(.rdp-selected):not(.rdp-day_selected):not(.rdp-day_range_start):not(.rdp-day_range_end):not(.fs-range-start):not(.fs-range-end):not(.fs-disabled):not(.rdp-day_disabled):hover,
+.rdp-root .fs-day:not(.fs-selected):not(.rdp-selected):not(.fs-range-start):not(.fs-range-end):not(.fs-disabled):hover,
+.rdp-root .rdp-day:not([aria-pressed="true"]):not([aria-selected="true"]):not(.rdp-selected):not(.rdp-day_selected):not(.rdp-day_range_start):not(.rdp-day_range_end):not(.rdp-day_disabled):not([aria-disabled="true"]):hover {
   border: 2px solid rgb(59, 130, 246) !important;
   border-radius: 50% !important;
   box-sizing: border-box !important;
@@ -203,9 +203,9 @@ body :not(.rdp) button[aria-pressed="true"] {
 /* =================================================================
    RANGE MIDDLE BAND - Light blue between endpoints
 ================================================================= */
-.rdp [data-day-range="middle"],
-.rdp .rdp-day_range_middle,
-.rdp .fs-range-mid {
+.rdp-root [data-day-range="middle"],
+.rdp-root .rdp-day_range_middle,
+.rdp-root .fs-range-mid {
   background-color: rgb(219, 234, 254) !important;
   color: rgb(17, 24, 39) !important;
   border-radius: 0 !important;
@@ -214,21 +214,21 @@ body :not(.rdp) button[aria-pressed="true"] {
 /* =================================================================
    RANGE GRADIENTS - Half-circle fills for start/end
 ================================================================= */
-.rdp .rdp-day_range_start:not(.rdp-day_range_end),
-.rdp .fs-range-start:not(.fs-range-end) {
+.rdp-root .rdp-day_range_start:not(.rdp-day_range_end),
+.rdp-root .fs-range-start:not(.fs-range-end) {
   background: linear-gradient(to right, rgb(37, 99, 235) 50%, rgb(219, 234, 254) 50%) !important;
   border-radius: 50% 0 0 50% !important;
 }
 
-.rdp .rdp-day_range_end:not(.rdp-day_range_start),
-.rdp .fs-range-end:not(.fs-range-start) {
+.rdp-root .rdp-day_range_end:not(.rdp-day_range_start),
+.rdp-root .fs-range-end:not(.fs-range-start) {
   background: linear-gradient(to left, rgb(37, 99, 235) 50%, rgb(219, 234, 254) 50%) !important;
   border-radius: 0 50% 50% 0 !important;
 }
 
 /* Single day range (start and end on same day) */
-.rdp .rdp-day_range_start.rdp-day_range_end,
-.rdp .fs-range-start.fs-range-end {
+.rdp-root .rdp-day_range_start.rdp-day_range_end,
+.rdp-root .fs-range-start.fs-range-end {
   background: rgb(37, 99, 235) !important;
   border-radius: 50% !important;
 }
@@ -236,14 +236,14 @@ body :not(.rdp) button[aria-pressed="true"] {
 /* =================================================================
    PREVIEW STATE - Hover during range selection
 ================================================================= */
-.rdp [data-day-range="preview"],
-.rdp .fs-preview {
+.rdp-root [data-day-range="preview"],
+.rdp-root .fs-preview {
   background-color: rgba(59, 130, 246, 0.08) !important;
   border-radius: 0 !important;
 }
 
-.rdp [data-day-range="preview"]:hover,
-.rdp .fs-preview:hover {
+.rdp-root [data-day-range="preview"]:hover,
+.rdp-root .fs-preview:hover {
   border: 2px solid rgb(59, 130, 246) !important;
   border-radius: 50% !important;
   box-sizing: border-box !important;
@@ -252,9 +252,9 @@ body :not(.rdp) button[aria-pressed="true"] {
 /* =================================================================
    TODAY INDICATOR - Blue text when not selected
 ================================================================= */
-.rdp [role="gridcell"] > [data-today="true"]:not([aria-pressed="true"]):not([aria-selected="true"]),
-.rdp .fs-today:not(.fs-selected):not(.fs-range-start):not(.fs-range-end),
-.rdp .rdp-day_today:not(.rdp-day_selected):not(.rdp-day_range_start):not(.rdp-day_range_end) {
+.rdp-root [role="gridcell"] > [data-today="true"]:not([aria-pressed="true"]):not([aria-selected="true"]),
+.rdp-root .fs-today:not(.fs-selected):not(.fs-range-start):not(.fs-range-end),
+.rdp-root .rdp-day_today:not(.rdp-day_selected):not(.rdp-day_range_start):not(.rdp-day_range_end) {
   color: rgb(37, 99, 235) !important;
   font-weight: 700 !important;
 }
@@ -262,19 +262,18 @@ body :not(.rdp) button[aria-pressed="true"] {
 /* =================================================================
    DISABLED STATE - Gray out and prevent interaction
 ================================================================= */
-.rdp [role="gridcell"] > [aria-disabled="true"],
-.rdp .fs-disabled,
-.rdp .rdp-day_disabled {
+.rdp-root [role="gridcell"] > [aria-disabled="true"],
+.rdp-root .fs-disabled,
+.rdp-root .rdp-day_disabled {
   color: rgb(209, 213, 219) !important;
   cursor: not-allowed !important;
   opacity: 0.5 !important;
 }
 
-.rdp [role="gridcell"] > [aria-disabled="true"]:hover,
-.rdp .fs-disabled:hover,
-.rdp .rdp-day_disabled:hover {
+.rdp-root [role="gridcell"] > [aria-disabled="true"]:hover,
+.rdp-root .fs-disabled:hover,
+.rdp-root .rdp-day_disabled:hover {
   border: none !important;
   background-color: transparent !important;
   outline: none !important;
 }
-
