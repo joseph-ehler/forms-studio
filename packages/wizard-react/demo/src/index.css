@@ -84,77 +84,178 @@ body :focus {
   outline: none !important;
 }
 
+/* =================================================================
+   DAYPICKER CALENDAR STYLING - COMPLETE FIX
+   =================================================================
+   This handles BOTH:
+   1. ARIA attributes (works with any classNames config)
+   2. Custom fs-* classes (your DateField implementation)
+   3. Default rdp-* classes (DateRangeField or any other usage)
+================================================================= */
+
 /* --- Guard: don't let global thin-ring clobber calendar --- */
 .rdp *:focus {
   box-shadow: none !important;
   outline: none !important;
 }
+
 /* If you have a global aria-pressed thin border, keep it out of the calendar */
 body :not(.rdp) button[aria-pressed="true"] {
   border-width: 1px !important;
 }
 
-/* --- Every day cell is a circular hit area --- */
-.rdp [role="gridcell"] > * {
-  border-radius: 50% !important;   /* circular */
-  border: 0;                       /* reset borders (hover will override) */
+/* =================================================================
+   BASE CIRCLE STYLING - All day buttons must be circles
+================================================================= */
+.rdp [role="gridcell"] > *,
+.rdp .fs-day,
+.rdp .rdp-day {
+  border-radius: 50% !important;
+  border: none !important;
+  width: 40px !important;
+  height: 40px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
   background-clip: padding-box !important;
   box-sizing: border-box !important;
+  position: relative !important;
+  transition: all 0.15s ease !important;
 }
 
 /* =================================================================
-   FILLED CIRCLE (dark blue) for both SINGLE and RANGE endpoints
-   =================================================================
-   We rely ONLY on ARIA so it works no matter the classNames config.
-   - Single mode uses aria-pressed="true"
-   - Range mode marks endpoints with aria-selected="true"
--------------------------------------------------------------------*/
+   SELECTED STATE - Dark blue fill (rgb(37, 99, 235))
+   
+   Covers ALL possible selected indicators:
+   - aria-pressed="true" (single date mode)
+   - aria-selected="true" (range endpoints)
+   - .fs-selected (custom class for DateField)
+   - .rdp-day_selected (default DayPicker class)
+   - .rdp-day_range_start / .rdp-day_range_end (range classes)
+================================================================= */
 .rdp [role="gridcell"] > [aria-pressed="true"],
-.rdp [role="gridcell"] > [aria-selected="true"] {
-  background-color: rgb(37, 99, 235) !important; /* blue-600 */
-  color: #fff !important;
+.rdp [role="gridcell"] > [aria-selected="true"],
+.rdp .fs-selected,
+.rdp .rdp-day_selected,
+.rdp .rdp-day_range_start,
+.rdp .rdp-day_range_end,
+.rdp .fs-range-start,
+.rdp .fs-range-end {
+  background-color: rgb(37, 99, 235) !important;
+  color: #ffffff !important;
+  font-weight: 500 !important;
 }
 
-/* Hover state for selected stays darker (no white flash) */
+/* =================================================================
+   HOVER ON SELECTED - Darker blue (rgb(29, 78, 216))
+   No ring, just darker background
+================================================================= */
 .rdp [role="gridcell"] > [aria-pressed="true"]:hover,
-.rdp [role="gridcell"] > [aria-selected="true"]:hover {
-  background-color: rgb(29, 78, 216) !important; /* blue-700 */
+.rdp [role="gridcell"] > [aria-selected="true"]:hover,
+.rdp .fs-selected:hover,
+.rdp .rdp-day_selected:hover,
+.rdp .rdp-day_range_start:hover,
+.rdp .rdp-day_range_end:hover,
+.rdp .fs-range-start:hover,
+.rdp .fs-range-end:hover {
+  background-color: rgb(29, 78, 216) !important;
+  color: #ffffff !important;
+  border: none !important;
+  outline: none !important;
 }
 
-/* --- HOVER RING on UNSELECTED days (ARIA-only, works with any classNames) --- */
-/* Use border instead of outline/box-shadow to avoid conflicts with focus rules */
-.rdp [role="gridcell"] > *:not([aria-selected="true"]):not([aria-pressed="true"]):not([aria-disabled="true"]):hover {
-  border: 2px solid rgb(59, 130, 246) !important;      /* blue-500 */
+/* =================================================================
+   HOVER RING - Blue ring on UNSELECTED days only
+   
+   THE CRITICAL FIX: This uses border instead of outline to avoid
+   conflicts with your global focus styles.
+   
+   Excludes ALL selected states using :not() selectors
+================================================================= */
+.rdp [role="gridcell"] > *:not([aria-pressed="true"]):not([aria-selected="true"]):not([aria-disabled="true"]):not(.fs-selected):not(.rdp-day_selected):not(.rdp-day_range_start):not(.rdp-day_range_end):not(.fs-range-start):not(.fs-range-end):not(.fs-disabled):not(.rdp-day_disabled):hover,
+.rdp .fs-day:not(.fs-selected):not(.fs-range-start):not(.fs-range-end):not(.fs-disabled):hover,
+.rdp .rdp-day:not([aria-pressed="true"]):not([aria-selected="true"]):not(.rdp-day_selected):not(.rdp-day_range_start):not(.rdp-day_range_end):not(.rdp-day_disabled):not([aria-disabled="true"]):hover {
+  border: 2px solid rgb(59, 130, 246) !important;
   border-radius: 50% !important;
-  /* Adjust for border so size stays the same */
+  box-sizing: border-box !important;
+  background-color: transparent !important;
+}
+
+/* =================================================================
+   RANGE MIDDLE BAND - Light blue between endpoints
+================================================================= */
+.rdp [data-day-range="middle"],
+.rdp .rdp-day_range_middle,
+.rdp .fs-range-mid {
+  background-color: rgb(219, 234, 254) !important;
+  color: rgb(17, 24, 39) !important;
+  border-radius: 0 !important;
+}
+
+/* =================================================================
+   RANGE GRADIENTS - Half-circle fills for start/end
+================================================================= */
+.rdp .rdp-day_range_start:not(.rdp-day_range_end),
+.rdp .fs-range-start:not(.fs-range-end) {
+  background: linear-gradient(to right, rgb(37, 99, 235) 50%, rgb(219, 234, 254) 50%) !important;
+  border-radius: 50% 0 0 50% !important;
+}
+
+.rdp .rdp-day_range_end:not(.rdp-day_range_start),
+.rdp .fs-range-end:not(.fs-range-start) {
+  background: linear-gradient(to left, rgb(37, 99, 235) 50%, rgb(219, 234, 254) 50%) !important;
+  border-radius: 0 50% 50% 0 !important;
+}
+
+/* Single day range (start and end on same day) */
+.rdp .rdp-day_range_start.rdp-day_range_end,
+.rdp .fs-range-start.fs-range-end {
+  background: rgb(37, 99, 235) !important;
+  border-radius: 50% !important;
+}
+
+/* =================================================================
+   PREVIEW STATE - Hover during range selection
+================================================================= */
+.rdp [data-day-range="preview"],
+.rdp .fs-preview {
+  background-color: rgba(59, 130, 246, 0.08) !important;
+  border-radius: 0 !important;
+}
+
+.rdp [data-day-range="preview"]:hover,
+.rdp .fs-preview:hover {
+  border: 2px solid rgb(59, 130, 246) !important;
+  border-radius: 50% !important;
   box-sizing: border-box !important;
 }
 
 /* =================================================================
-   RANGE middle band (Airbnb) — keep the soft fill BETWEEN endpoints
-   =================================================================
-   DayPicker adds data attributes we can target robustly.
--------------------------------------------------------------------*/
-/* Middle span uses a light band (don't draw circle fill) */
-.rdp [data-day-range="middle"] {
-  background-color: rgb(219, 234, 254) !important; /* blue-100 */
-  color: rgb(17, 24, 39) !important;
-}
-
-/* Optional: subtle preview band when hovering after first click */
-.rdp [data-day-range="preview"] {
-  background-color: rgba(59, 130, 246, 0.08) !important;
-}
-/* When you hover the preview endpoint, show a ring cue */
-.rdp [data-day-range="preview"]:hover {
-  outline: 2px solid rgb(59, 130, 246) !important;
-  outline-offset: -2px !important;
-  border-radius: 50% !important;
-}
-
-/* Today accent (when not selected) */
-.rdp [role="gridcell"] > [data-today="true"]:not([aria-pressed="true"]):not([aria-selected="true"]) {
+   TODAY INDICATOR - Blue text when not selected
+================================================================= */
+.rdp [role="gridcell"] > [data-today="true"]:not([aria-pressed="true"]):not([aria-selected="true"]),
+.rdp .fs-today:not(.fs-selected):not(.fs-range-start):not(.fs-range-end),
+.rdp .rdp-day_today:not(.rdp-day_selected):not(.rdp-day_range_start):not(.rdp-day_range_end) {
   color: rgb(37, 99, 235) !important;
   font-weight: 700 !important;
+}
+
+/* =================================================================
+   DISABLED STATE - Gray out and prevent interaction
+================================================================= */
+.rdp [role="gridcell"] > [aria-disabled="true"],
+.rdp .fs-disabled,
+.rdp .rdp-day_disabled {
+  color: rgb(209, 213, 219) !important;
+  cursor: not-allowed !important;
+  opacity: 0.5 !important;
+}
+
+.rdp [role="gridcell"] > [aria-disabled="true"]:hover,
+.rdp .fs-disabled:hover,
+.rdp .rdp-day_disabled:hover {
+  border: none !important;
+  background-color: transparent !important;
+  outline: none !important;
 }
 
