@@ -810,7 +810,7 @@ export default function Demo() {
                   <ul className="text-xs text-green-700 space-y-1 ml-4">
                     <li>• <strong>DRY:</strong> One overlay system for all picker fields</li>
                     <li>• <strong>Consistent UX:</strong> Same behavior everywhere</li>
-                    <li>• <strong>Mobile-First:</strong> Sheet by default on <768px</li>
+                    <li>• <strong>Mobile-First:</strong> Sheet by default on {'<'}768px</li>
                     <li>• <strong>A11y:</strong> ARIA semantics, keyboard nav, focus trap</li>
                     <li>• <strong>Smaller Bundle:</strong> No Headless UI duplication</li>
                   </ul>

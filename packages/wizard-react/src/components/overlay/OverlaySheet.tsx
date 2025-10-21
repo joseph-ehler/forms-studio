@@ -120,7 +120,7 @@ export const OverlaySheet: React.FC<OverlaySheetProps> = ({
         aria-modal="true"
         aria-label={ariaLabel}
         aria-labelledby={ariaLabelledBy}
-        className="fixed bottom-0 left-0 right-0 z-50 bg-white rounded-t-2xl shadow-2xl transition-transform duration-300 ease-out"
+        className="fixed bottom-0 left-0 right-0 z-50 bg-white rounded-t-2xl shadow-2xl transition-transform duration-300 ease-out flex flex-col"
         style={{
           maxHeight: `min(${maxHeight}px, 90vh)`,
           transform: `translateY(${dragOffset}px)`,
@@ -129,7 +129,7 @@ export const OverlaySheet: React.FC<OverlaySheetProps> = ({
       >
         {/* Drag handle */}
         <div
-          className="flex justify-center py-3 cursor-grab active:cursor-grabbing"
+          className="flex justify-center py-3 cursor-grab active:cursor-grabbing flex-shrink-0"
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
@@ -140,26 +140,19 @@ export const OverlaySheet: React.FC<OverlaySheetProps> = ({
 
         {/* Header (sticky) */}
         {header && (
-          <div className="sticky top-0 z-10 bg-white border-b border-gray-200 px-4 py-3">
+          <div className="flex-shrink-0 bg-white border-b border-gray-200 px-4 py-3">
             {header}
           </div>
         )}
 
         {/* Content (scrollable) */}
-        <div
-          className="overflow-y-auto overscroll-contain"
-          style={{
-            maxHeight: footer
-              ? `calc(min(${maxHeight}px, 90vh) - 120px)` // account for header/footer
-              : `calc(min(${maxHeight}px, 90vh) - 60px)`,
-          }}
-        >
+        <div className="flex-1 overflow-y-auto overscroll-contain min-h-0">
           {children}
         </div>
 
-        {/* Footer (sticky) */}
+        {/* Footer (always visible at bottom) */}
         {footer && (
-          <div className="sticky bottom-0 z-10 bg-white border-t border-gray-200 px-4 py-3">
+          <div className="flex-shrink-0 bg-white border-t border-gray-200 px-4 py-3">
             {footer}
           </div>
         )}

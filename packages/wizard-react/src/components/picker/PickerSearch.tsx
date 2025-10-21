@@ -53,7 +53,11 @@ export const PickerSearch: React.FC<PickerSearchProps> = ({
   }
 
   return (
-    <div className="sticky top-0 z-10 bg-white border-b border-gray-200 px-3 py-2">
+    <div 
+      className="sticky top-0 z-10 bg-white border-b border-gray-200 px-3 py-2"
+      onClick={(e) => e.stopPropagation()}
+      onMouseDown={(e) => e.stopPropagation()}
+    >
       <div className="relative">
         {/* Search icon */}
         <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -79,6 +83,8 @@ export const PickerSearch: React.FC<PickerSearchProps> = ({
           type="text"
           value={localValue}
           onChange={(e) => setLocalValue(e.target.value)}
+          onClick={(e) => e.stopPropagation()}
+          onMouseDown={(e) => e.stopPropagation()}
           placeholder={placeholder}
           className="
             w-full
@@ -101,7 +107,11 @@ export const PickerSearch: React.FC<PickerSearchProps> = ({
         {localValue && (
           <button
             type="button"
-            onClick={handleClear}
+            onClick={(e) => {
+              e.stopPropagation()
+              handleClear()
+            }}
+            onMouseDown={(e) => e.stopPropagation()}
             className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-600"
             aria-label="Clear search"
           >
