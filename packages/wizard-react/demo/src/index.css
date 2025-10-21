@@ -119,11 +119,15 @@ button.rdp-day_selected,
   background-color: #2563eb !important;
   color: #fff !important;
   font-weight: 700 !important;
+  border: none !important;
+  box-shadow: none !important;
 }
 
 button.rdp-day_selected:hover,
 .rdp button.rdp-day_selected:hover {
   background-color: #1d4ed8 !important;
+  border: none !important;
+  box-shadow: none !important;
 }
 
 /* Airbnb-style date RANGE picker - AGGRESSIVE SPECIFICITY */
