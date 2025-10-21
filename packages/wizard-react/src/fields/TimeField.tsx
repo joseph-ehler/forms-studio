@@ -136,14 +136,27 @@ export const TimeField: React.FC<FieldComponentProps> = ({
             field.onChange(time24)
           }
 
+          const handleHourInput = (value: string) => {
+            const num = parseInt(value) || 0
+            const max = use24Hour ? 23 : 23
+            const clamped = Math.max(0, Math.min(max, num))
+            updateFieldValue(clamped, minute)
+          }
+
+          const handleMinuteInput = (value: string) => {
+            const num = parseInt(value) || 0
+            const clamped = Math.max(0, Math.min(59, num))
+            updateFieldValue(hour, clamped)
+          }
+
           const incrementHour = () => {
-            const max = use24Hour ? 23 : 11
+            const max = use24Hour ? 23 : 23
             const newHour = hour >= max ? 0 : hour + 1
             updateFieldValue(newHour, minute)
           }
 
           const decrementHour = () => {
-            const max = use24Hour ? 23 : 11
+            const max = use24Hour ? 23 : 23
             const newHour = hour <= 0 ? max : hour - 1
             updateFieldValue(newHour, minute)
           }
@@ -158,8 +171,10 @@ export const TimeField: React.FC<FieldComponentProps> = ({
             updateFieldValue(hour, newMinute)
           }
 
-          const togglePeriod = () => {
-            const newHour = hour < 12 ? hour + 12 : hour - 12
+          const setPeriod = (isPM: boolean) => {
+            const currentIsPM = hour >= 12
+            if (isPM === currentIsPM) return
+            const newHour = isPM ? (hour < 12 ? hour + 12 : hour) : (hour >= 12 ? hour - 12 : hour)
             updateFieldValue(newHour, minute)
           }
 
@@ -222,9 +237,9 @@ export const TimeField: React.FC<FieldComponentProps> = ({
                               </button>
                             </div>
 
-                            {/* Time Steppers */}
+                            {/* Time Inputs with Steppers */}
                             <div className="flex items-center justify-center gap-1">
-                              {/* Hour Stepper */}
+                              {/* Hour Input with Steppers */}
                               <div className="flex flex-col items-center">
                                 <button
                                   type="button"
@@ -235,9 +250,15 @@ export const TimeField: React.FC<FieldComponentProps> = ({
                                     <path fillRule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clipRule="evenodd" />
                                   </svg>
                                 </button>
-                                <div className="text-4xl font-bold text-gray-900 my-2 min-w-[4rem] text-center">
-                                  {String(getDisplayHour(hour)).padStart(2, '0')}
-                                </div>
+                                <input
+                                  type="text"
+                                  inputMode="numeric"
+                                  value={String(getDisplayHour(hour)).padStart(2, '0')}
+                                  onChange={(e) => handleHourInput(e.target.value)}
+                                  onBlur={(e) => handleHourInput(e.target.value)}
+                                  className="w-16 text-4xl font-bold text-gray-900 text-center border-2 border-gray-200 rounded-md focus:border-blue-500 focus:outline-none my-2"
+                                  maxLength={2}
+                                />
                                 <button
                                   type="button"
                                   onClick={decrementHour}
@@ -252,7 +273,7 @@ export const TimeField: React.FC<FieldComponentProps> = ({
                               {/* Colon */}
                               <div className="text-4xl font-bold text-gray-400 mx-1 mb-6">:</div>
 
-                              {/* Minute Stepper */}
+                              {/* Minute Input with Steppers */}
                               <div className="flex flex-col items-center">
                                 <button
                                   type="button"
@@ -263,9 +284,15 @@ export const TimeField: React.FC<FieldComponentProps> = ({
                                     <path fillRule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clipRule="evenodd" />
                                   </svg>
                                 </button>
-                                <div className="text-4xl font-bold text-gray-900 my-2 min-w-[4rem] text-center">
-                                  {String(minute).padStart(2, '0')}
-                                </div>
+                                <input
+                                  type="text"
+                                  inputMode="numeric"
+                                  value={String(minute).padStart(2, '0')}
+                                  onChange={(e) => handleMinuteInput(e.target.value)}
+                                  onBlur={(e) => handleMinuteInput(e.target.value)}
+                                  className="w-16 text-4xl font-bold text-gray-900 text-center border-2 border-gray-200 rounded-md focus:border-blue-500 focus:outline-none my-2"
+                                  maxLength={2}
+                                />
                                 <button
                                   type="button"
                                   onClick={decrementMinute}
@@ -276,20 +303,37 @@ export const TimeField: React.FC<FieldComponentProps> = ({
                                   </svg>
                                 </button>
                               </div>
+                            </div>
 
-                              {/* AM/PM Toggle (12hr only) */}
-                              {!use24Hour && (
-                                <div className="flex flex-col items-center ml-2">
+                            {/* AM/PM Segmented Control (12hr only) */}
+                            {!use24Hour && (
+                              <div className="flex items-center justify-center mt-2">
+                                <div className="inline-flex rounded-md shadow-sm border border-gray-300" role="group">
                                   <button
                                     type="button"
-                                    onClick={togglePeriod}
-                                    className="px-3 py-2 rounded-md bg-blue-600 hover:bg-blue-700 text-white font-semibold text-lg transition-colors min-w-[3.5rem]"
+                                    onClick={() => setPeriod(false)}
+                                    className={`px-6 py-2 text-sm font-medium rounded-l-md transition-colors ${
+                                      getPeriod(hour) === 'AM'
+                                        ? 'bg-blue-600 text-white'
+                                        : 'bg-white text-gray-700 hover:bg-gray-50'
+                                    }`}
                                   >
-                                    {getPeriod(hour)}
+                                    AM
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => setPeriod(true)}
+                                    className={`px-6 py-2 text-sm font-medium rounded-r-md border-l transition-colors ${
+                                      getPeriod(hour) === 'PM'
+                                        ? 'bg-blue-600 text-white border-blue-600'
+                                        : 'bg-white text-gray-700 hover:bg-gray-50 border-gray-300'
+                                    }`}
+                                  >
+                                    PM
                                   </button>
                                 </div>
-                              )}
-                            </div>
+                              </div>
+                            )}
 
                             {/* Done Button */}
                             <button
