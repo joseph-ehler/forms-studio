@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+/* import DayPicker base exactly once, before our overrides */
+@import "react-day-picker/dist/style.css";
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -101,102 +104,66 @@ button[aria-pressed="true"],
   --tw-ring-width: 1px !important;
 }
 
-/* ================================
-   DayPicker v9 — isolation & reset
-   ================================ */
+/* Isolate DayPicker from global rings/focus */
+.rdp *:focus { box-shadow: none !important; outline: none !important; }
+.rdp .border-2, .rdp .ring-2 { border-width: revert !important; --tw-ring-width: 0 !important; }
 
-/* Keep global focus/ring rules from interfering inside the calendar */
-.rdp *:focus {
-  box-shadow: none !important;
-  outline: none !important;
-}
-.rdp .border-2,
-.rdp .ring-2 {
-  border-width: revert !important;
-  --tw-ring-width: 0 !important;
+/* Make every day a circle hit area */
+.rdp .fs-day { 
+  border-radius: 50% !important; 
+  border: none !important; 
+  position: relative; 
 }
 
-/* Unify day button surface: DayPicker v9 sets state classes on the button itself */
-.rdp .rdp-day {
-  border-radius: 50% !important;      /* circular hit area */
-  border: none !important;            /* kill thin borders that leak through */
-  position: relative;
-}
-
-/* ================================
-   SINGLE DATE (DateField)
-   ================================ */
-
-/* Selected = solid fill */
-.rdp .rdp-day_selected {
+/* === SINGLE DATE (DateField) === */
+.rdp .fs-selected {
   background-color: rgb(37, 99, 235) !important; /* blue-600 */
   color: #fff !important;
 }
-
-/* Hover a non-selected day: show blue outline */
-.rdp .rdp-day:not(.rdp-day_selected):not(.rdp-day_disabled):hover {
-  outline: 2px solid rgb(59, 130, 246) !important; /* blue-500 */
+.rdp .fs-day:not(.fs-selected):not(.fs-disabled):hover {
+  outline: 2px solid rgb(59, 130, 246) !important;  /* blue-500 */
   outline-offset: -2px !important;
 }
-
-/* Today, when not selected, stays accent but does not add borders */
-.rdp .rdp-day_today:not(.rdp-day_selected) {
+.rdp .fs-today:not(.fs-selected) {
   color: rgb(37, 99, 235) !important;
   font-weight: 700 !important;
 }
 
-/* ================================
-   RANGE (DateRangeField, Airbnb style)
-   ================================ */
-
-/* Middle span fill */
-.rdp .rdp-day_range_middle {
+/* === RANGE (DateRangeField, Airbnb look) === */
+.rdp .fs-range-mid {
   background-color: rgb(219, 234, 254) !important; /* blue-100 */
-  color: rgb(17, 24, 39) !important;               /* neutral text */
+  color: rgb(17, 24, 39) !important;
 }
-
-/* Start & end circles — same solid fill as single */
-.rdp .rdp-day_range_start,
-.rdp .rdp-day_range_end {
+.rdp .fs-range-start,
+.rdp .fs-range-end {
   background-color: rgb(37, 99, 235) !important;   /* blue-600 */
   color: #fff !important;
 }
-
-/* Half-fill band behind the start/end cell (Airbnb look) */
-.rdp .rdp-day_range_start:not(.rdp-day_range_end) {
+.rdp .fs-range-start:not(.fs-range-end) {
   background: linear-gradient(to right, transparent 50%, rgb(219, 234, 254) 50%) !important;
-  color: #fff !important;
 }
-.rdp .rdp-day_range_end:not(.rdp-day_range_start) {
+.rdp .fs-range-end:not(.fs-range-start) {
   background: linear-gradient(to left,  transparent 50%, rgb(219, 234, 254) 50%) !important;
-  color: #fff !important;
 }
-
-/* Single-day range (start=end) just uses the solid circle */
-.rdp .rdp-day_range_start.rdp-day_range_end {
+/* one-day range */
+.rdp .fs-range-start.fs-range-end {
   background-color: rgb(37, 99, 235) !important;
   color: #fff !important;
 }
 
-/* ================================
-   HOVER / PREVIEW (range replacement)
-   ================================ */
-
-/* Preview band between fixed date and hovered date */
-.rdp .rdp-day_preview {
-  background-color: rgba(59, 130, 246, 0.08) !important; /* faint blue */
+/* === PREVIEW / HOVER — live border and band between dates === */
+.rdp .fs-preview { 
+  background-color: rgba(59, 130, 246, 0.08) !important; 
 }
-
-/* On the preview end cell, show a blue ring cue */
-.rdp .rdp-day_preview:hover {
+.rdp .fs-preview:hover {
   outline: 2px solid rgb(59, 130, 246) !important;
   outline-offset: -2px !important;
 }
 
-/* Keep start/end on hover as solid blue (no white flash) */
-.rdp .rdp-day_range_start:hover,
-.rdp .rdp-day_range_end:hover,
-.rdp .rdp-day_selected:hover {
+/* keep selected on hover darker, no white flicker */
+.rdp .fs-range-start:hover,
+.rdp .fs-range-end:hover,
+.rdp .fs-selected:hover {
   background-color: rgb(29, 78, 216) !important; /* blue-700 */
   color: #fff !important;
   outline: none !important;

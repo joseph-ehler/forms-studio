@@ -18,7 +18,6 @@ import { Controller } from 'react-hook-form'
 import { OverlayPickerCore, OverlaySheet, OverlayPositioner, calculateOverlayHeights, getOverlayContentClasses } from '../../components/overlay'
 import { useDeviceType } from '../../hooks/useDeviceType'
 import { DayPicker, DateRange } from 'react-day-picker'
-import 'react-day-picker/dist/style.css'
 import { format, parseISO, startOfDay, endOfDay, startOfWeek, endOfWeek, startOfMonth, endOfMonth, startOfYear, endOfYear } from 'date-fns'
 import { FormLabel, FormHelperText } from '../../components'
 import { Stack } from '../../components/DSShims'
@@ -195,7 +194,15 @@ export const DateRangeField: React.FC<FieldComponentProps> = ({
             fromDate: min,
             toDate: max,
             modifiers: previewRange ? { preview: previewRange } : undefined,
-            modifiersClassNames: previewRange ? { preview: 'rdp-preview' } : undefined,
+            classNames: {
+              day: 'fs-day',
+              day_range_start: 'fs-range-start',
+              day_range_end: 'fs-range-end',
+              day_range_middle: 'fs-range-mid',
+              day_today: 'fs-today',
+              day_disabled: 'fs-disabled',
+              day_preview: 'fs-preview',
+            },
           }
 
           return (

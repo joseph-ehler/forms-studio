@@ -23,7 +23,6 @@ import { mergeFieldConfig } from './utils/field-json-config'
 import { getAriaProps, getLabelProps, getDescriptionProps } from './utils/a11y-helpers'
 import { DayPicker } from 'react-day-picker'
 import { format, isValid } from 'date-fns'
-import 'react-day-picker/dist/style.css'
 import { OverlayPickerCore, OverlaySheet, OverlayPositioner, calculateOverlayHeights, getOverlayContentClasses } from '../components/overlay'
 import { useDeviceType } from '../hooks/useDeviceType'
 
@@ -169,6 +168,12 @@ export const DateField: React.FC<FieldComponentProps> = ({
                             ...(minDate ? [{ before: minDate }] : []),
                             ...(maxDate ? [{ after: maxDate }] : []),
                           ]}
+                          classNames={{
+                            day: 'fs-day',
+                            day_selected: 'fs-selected',
+                            day_today: 'fs-today',
+                            day_disabled: 'fs-disabled',
+                          }}
                         />
                       </div>
 
@@ -233,6 +238,12 @@ export const DateField: React.FC<FieldComponentProps> = ({
                                   ...(minDate ? [{ before: minDate }] : []),
                                   ...(maxDate ? [{ after: maxDate }] : []),
                                 ]}
+                                classNames={{
+                                  day: 'fs-day',
+                                  day_selected: 'fs-selected',
+                                  day_today: 'fs-today',
+                                  day_disabled: 'fs-disabled',
+                                }}
                               />
                             </div>
                           </div>
