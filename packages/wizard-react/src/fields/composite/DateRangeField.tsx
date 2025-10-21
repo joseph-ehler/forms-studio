@@ -171,11 +171,18 @@ export const DateRangeField: React.FC<FieldComponentProps> = ({
             : 'Select date range...'
 
           const { isMobile } = useDeviceType()
+          
+          // Calculate heights with proper footer accounting
+          const footerHeight = 56 // Desktop footer with padding
+          const calendarHeight = 320 // Approximate DayPicker height for 2 months
+          const presetsWidth = 140 // Presets sidebar
+          const maxContentHeight = 450 // Safe max to fit in viewport
+          
           const heights = calculateOverlayHeights({
-            maxHeight: isMobile ? 560 : 500,
+            maxHeight: isMobile ? 560 : maxContentHeight,
             hasSearch: false,
             hasFooter: true,
-            footerHeight: isMobile ? 48 : 56,
+            footerHeight: isMobile ? 48 : footerHeight,
           })
 
           // Common DayPicker props with hover preview
@@ -299,7 +306,7 @@ export const DateRangeField: React.FC<FieldComponentProps> = ({
                       offset={6}
                       strategy="fixed"
                       sameWidth={false}
-                      maxHeight={500}
+                      maxHeight={maxContentHeight + footerHeight + 16}
                       collision={{ flip: true, shift: true, size: true }}
                     >
                       {({ refs, floatingStyles, isPositioned }) => (
