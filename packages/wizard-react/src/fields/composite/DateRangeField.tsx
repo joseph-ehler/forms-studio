@@ -216,7 +216,10 @@ export const DateRangeField: React.FC<FieldComponentProps> = ({
                       )}
 
                       {/* Calendar */}
-                      <div className="px-4 py-6 flex justify-center">
+                      <div 
+                        className="px-4 py-6 flex justify-center"
+                        onClick={(e) => e.stopPropagation()}
+                      >
                         <DayPicker
                           mode="range"
                           selected={{
