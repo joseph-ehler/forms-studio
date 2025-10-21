@@ -78,8 +78,8 @@ button:focus,
   outline: none !important;
 }
 
-/* Fix thick borders on chips/buttons when selected */
-button[aria-pressed="true"] {
+/* Fix thick borders on chips/buttons when selected (but not inside DayPicker) */
+body :not(.rdp) button[aria-pressed="true"] {
   border-width: 1px !important;
 }
 
@@ -101,16 +101,27 @@ body :focus {
 }
 
 /* === SINGLE DATE (DateField) === */
-/* Target aria-selected instead of classes for reliable fill */
-.rdp [aria-selected="true"]:not(.fs-range-start):not(.fs-range-end) {
+/* Fill for single date (aria-pressed) */
+.rdp [aria-pressed="true"]:not(.fs-range-start):not(.fs-range-end) {
   background-color: rgb(37, 99, 235) !important; /* blue-600 */
+  color: #fff !important;
+  border-radius: 50% !important;
+  border: none !important;
+  outline: none !important;
+}
+
+/* Fill for range endpoints (and generic selected) */
+.rdp [aria-selected="true"],
+.rdp .fs-range-start,
+.rdp .fs-range-end {
+  background-color: rgb(37, 99, 235) !important;
   color: #fff !important;
   border-radius: 50% !important;
   border: none !important;
 }
 
-/* Non-selected hover ring (works for both single & range middle) */
-.rdp .fs-day:not([aria-selected="true"]):not(.fs-disabled):hover {
+/* Hover ring on unselected days (works for both pickers) */
+.rdp .fs-day:not([aria-selected="true"]):not([aria-pressed="true"]):not(.fs-disabled):hover {
   outline: 2px solid rgb(59, 130, 246) !important; /* blue-500 */
   outline-offset: -2px !important;
   border-radius: 50% !important;
