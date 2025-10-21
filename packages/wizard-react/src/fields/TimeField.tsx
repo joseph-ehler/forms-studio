@@ -109,28 +109,58 @@ export const TimeField: React.FC<FieldComponentProps> = ({
         render={({ field }) => {
           // Parse current time value
           const parseTime = (time24: string) => {
-            if (!time24) return { hour: format24 ? 0 : 12, minute: 0, period: 'AM' }
+            if (!time24) return { hour: 0, minute: 0 }
             const [h, m] = time24.split(':').map(Number)
-            return {
-              hour: format24 ? h : (h % 12 || 12),
-              minute: m,
-              period: h >= 12 ? 'PM' : 'AM'
-            }
+            return { hour: h, minute: m }
           }
 
           const currentTime = parseTime(field.value)
-          const [selectedHour, setSelectedHour] = React.useState(currentTime.hour)
-          const [selectedMinute, setSelectedMinute] = React.useState(currentTime.minute)
-          const [selectedPeriod, setSelectedPeriod] = React.useState<'AM' | 'PM'>(currentTime.period as 'AM' | 'PM')
+          const [use24Hour, setUse24Hour] = React.useState(format24)
+          const [hour, setHour] = React.useState(currentTime.hour)
+          const [minute, setMinute] = React.useState(currentTime.minute)
 
-          const updateFieldValue = (hour: number, minute: number, period: 'AM' | 'PM') => {
-            let hour24 = hour
-            if (!format24) {
-              if (period === 'PM' && hour !== 12) hour24 = hour + 12
-              if (period === 'AM' && hour === 12) hour24 = 0
-            }
-            const time24 = `${String(hour24).padStart(2, '0')}:${String(minute).padStart(2, '0')}`
+          // Convert 24h to display format
+          const getDisplayHour = (h24: number): number => {
+            if (use24Hour) return h24
+            return h24 === 0 ? 12 : h24 > 12 ? h24 - 12 : h24
+          }
+
+          const getPeriod = (h24: number): string => {
+            return h24 >= 12 ? 'PM' : 'AM'
+          }
+
+          const updateFieldValue = (newHour: number, newMinute: number) => {
+            setHour(newHour)
+            setMinute(newMinute)
+            const time24 = `${String(newHour).padStart(2, '0')}:${String(newMinute).padStart(2, '0')}`
             field.onChange(time24)
+          }
+
+          const incrementHour = () => {
+            const max = use24Hour ? 23 : 11
+            const newHour = hour >= max ? 0 : hour + 1
+            updateFieldValue(newHour, minute)
+          }
+
+          const decrementHour = () => {
+            const max = use24Hour ? 23 : 11
+            const newHour = hour <= 0 ? max : hour - 1
+            updateFieldValue(newHour, minute)
+          }
+
+          const incrementMinute = () => {
+            const newMinute = minute + step >= 60 ? 0 : minute + step
+            updateFieldValue(hour, newMinute)
+          }
+
+          const decrementMinute = () => {
+            const newMinute = minute - step < 0 ? 60 - step : minute - step
+            updateFieldValue(hour, newMinute)
+          }
+
+          const togglePeriod = () => {
+            const newHour = hour < 12 ? hour + 12 : hour - 12
+            updateFieldValue(newHour, minute)
           }
 
           return (
@@ -158,7 +188,7 @@ export const TimeField: React.FC<FieldComponentProps> = ({
                     </svg>
                   </button>
 
-                  {/* Mobile & Desktop: Same compact picker */}
+                  {/* Time Picker Popover */}
                   {isOpen && (
                     <OverlayPositioner
                       open={isOpen}
@@ -177,62 +207,86 @@ export const TimeField: React.FC<FieldComponentProps> = ({
                           className="z-50 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 p-4"
                         >
                           <div ref={contentRef} className="space-y-4">
-                            {/* Time Selectors */}
-                            <div className="flex items-center gap-2">
-                              {/* Hour */}
-                              <div className="flex-1">
-                                <label className="block text-xs font-medium text-gray-700 mb-1">Hour</label>
-                                <select
-                                  value={selectedHour}
-                                  onChange={(e) => {
-                                    const h = Number(e.target.value)
-                                    setSelectedHour(h)
-                                    updateFieldValue(h, selectedMinute, selectedPeriod)
-                                  }}
-                                  className="w-full rounded-md border border-gray-300 px-3 py-2 text-base focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                            {/* Format Toggle */}
+                            <div className="flex items-center justify-between pb-2 border-b border-gray-200">
+                              <span className="text-sm font-medium text-gray-700">Time Format</span>
+                              <button
+                                type="button"
+                                onClick={() => setUse24Hour(!use24Hour)}
+                                className="flex items-center gap-2 px-3 py-1 rounded-md bg-gray-100 hover:bg-gray-200 text-sm font-medium text-gray-700 transition-colors"
+                              >
+                                {use24Hour ? '24hr' : '12hr'}
+                                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+                                </svg>
+                              </button>
+                            </div>
+
+                            {/* Time Steppers */}
+                            <div className="flex items-center justify-center gap-1">
+                              {/* Hour Stepper */}
+                              <div className="flex flex-col items-center">
+                                <button
+                                  type="button"
+                                  onClick={incrementHour}
+                                  className="p-2 hover:bg-gray-100 rounded-md transition-colors"
                                 >
-                                  {hours.map(h => (
-                                    <option key={h} value={h}>{String(h).padStart(2, '0')}</option>
-                                  ))}
-                                </select>
+                                  <svg className="h-5 w-5 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fillRule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clipRule="evenodd" />
+                                  </svg>
+                                </button>
+                                <div className="text-4xl font-bold text-gray-900 my-2 min-w-[4rem] text-center">
+                                  {String(getDisplayHour(hour)).padStart(2, '0')}
+                                </div>
+                                <button
+                                  type="button"
+                                  onClick={decrementHour}
+                                  className="p-2 hover:bg-gray-100 rounded-md transition-colors"
+                                >
+                                  <svg className="h-5 w-5 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                                  </svg>
+                                </button>
                               </div>
 
-                              <div className="text-2xl font-bold text-gray-400 pt-6">:</div>
+                              {/* Colon */}
+                              <div className="text-4xl font-bold text-gray-400 mx-1 mb-6">:</div>
 
-                              {/* Minute */}
-                              <div className="flex-1">
-                                <label className="block text-xs font-medium text-gray-700 mb-1">Minute</label>
-                                <select
-                                  value={selectedMinute}
-                                  onChange={(e) => {
-                                    const m = Number(e.target.value)
-                                    setSelectedMinute(m)
-                                    updateFieldValue(selectedHour, m, selectedPeriod)
-                                  }}
-                                  className="w-full rounded-md border border-gray-300 px-3 py-2 text-base focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                              {/* Minute Stepper */}
+                              <div className="flex flex-col items-center">
+                                <button
+                                  type="button"
+                                  onClick={incrementMinute}
+                                  className="p-2 hover:bg-gray-100 rounded-md transition-colors"
                                 >
-                                  {minutes.map(m => (
-                                    <option key={m} value={m}>{String(m).padStart(2, '0')}</option>
-                                  ))}
-                                </select>
+                                  <svg className="h-5 w-5 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fillRule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clipRule="evenodd" />
+                                  </svg>
+                                </button>
+                                <div className="text-4xl font-bold text-gray-900 my-2 min-w-[4rem] text-center">
+                                  {String(minute).padStart(2, '0')}
+                                </div>
+                                <button
+                                  type="button"
+                                  onClick={decrementMinute}
+                                  className="p-2 hover:bg-gray-100 rounded-md transition-colors"
+                                >
+                                  <svg className="h-5 w-5 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                                  </svg>
+                                </button>
                               </div>
 
-                              {/* AM/PM for 12-hour */}
-                              {!format24 && (
-                                <div className="flex-1">
-                                  <label className="block text-xs font-medium text-gray-700 mb-1">Period</label>
-                                  <select
-                                    value={selectedPeriod}
-                                    onChange={(e) => {
-                                      const p = e.target.value as 'AM' | 'PM'
-                                      setSelectedPeriod(p)
-                                      updateFieldValue(selectedHour, selectedMinute, p)
-                                    }}
-                                    className="w-full rounded-md border border-gray-300 px-3 py-2 text-base focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                              {/* AM/PM Toggle (12hr only) */}
+                              {!use24Hour && (
+                                <div className="flex flex-col items-center ml-2">
+                                  <button
+                                    type="button"
+                                    onClick={togglePeriod}
+                                    className="px-3 py-2 rounded-md bg-blue-600 hover:bg-blue-700 text-white font-semibold text-lg transition-colors min-w-[3.5rem]"
                                   >
-                                    <option value="AM">AM</option>
-                                    <option value="PM">PM</option>
-                                  </select>
+                                    {getPeriod(hour)}
+                                  </button>
                                 </div>
                               )}
                             </div>

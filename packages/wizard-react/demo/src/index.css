@@ -96,29 +96,52 @@ button[data-selected="true"],
   --tw-ring-width: 1px !important;
 }
 
-/* Fix react-day-picker range selection styling */
+/* Fix react-day-picker range selection styling - Remove all artifacting */
 .rdp-day_range_start,
 .rdp-day_range_end,
 .rdp-day_range_middle {
   background-color: rgb(37 99 235) !important; /* blue-600 */
   color: white !important;
+  border-radius: 0 !important; /* Remove all rounded corners by default */
 }
 
-.rdp-day_range_start:not(.rdp-day_range_end) {
+/* Override the button inside range days */
+.rdp-day_range_start .rdp-button,
+.rdp-day_range_end .rdp-button,
+.rdp-day_range_middle .rdp-button {
+  background-color: rgb(37 99 235) !important;
+  color: white !important;
+  border-radius: 0 !important;
+}
+
+/* Round only the start edge */
+.rdp-day_range_start:not(.rdp-day_range_end),
+.rdp-day_range_start:not(.rdp-day_range_end) .rdp-button {
+  border-top-left-radius: 0.375rem !important;
+  border-bottom-left-radius: 0.375rem !important;
   border-top-right-radius: 0 !important;
   border-bottom-right-radius: 0 !important;
 }
 
-.rdp-day_range_end:not(.rdp-day_range_start) {
+/* Round only the end edge */
+.rdp-day_range_end:not(.rdp-day_range_start),
+.rdp-day_range_end:not(.rdp-day_range_start) .rdp-button {
+  border-top-right-radius: 0.375rem !important;
+  border-bottom-right-radius: 0.375rem !important;
   border-top-left-radius: 0 !important;
   border-bottom-left-radius: 0 !important;
 }
 
-.rdp-day_range_middle {
-  border-radius: 0 !important;
+/* Single day range (start = end) */
+.rdp-day_range_start.rdp-day_range_end,
+.rdp-day_range_start.rdp-day_range_end .rdp-button {
+  border-radius: 0.375rem !important;
 }
 
-/* Ensure clean edges on range selection */
-.rdp-day_range_start.rdp-day_range_end {
-  border-radius: 0.375rem !important; /* rounded-md */
+/* Remove any weird hover/focus states on range days */
+.rdp-day_range_start .rdp-button:hover,
+.rdp-day_range_end .rdp-button:hover,
+.rdp-day_range_middle .rdp-button:hover {
+  background-color: rgb(29 78 216) !important; /* blue-700 */
+  color: white !important;
 }
