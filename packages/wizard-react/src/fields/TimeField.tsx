@@ -125,60 +125,175 @@ export const TimeField: React.FC<FieldComponentProps> = ({
             updateFieldValue(newHour, minute)
           }
 
-          // Wheel Picker Component
+          // Wheel Picker Component with Momentum Physics
           const WheelPicker = ({ value, onChange, max, label }: { value: number; onChange: (v: number) => void; max: number; label: string }) => {
             const [isDragging, setIsDragging] = React.useState(false)
-            const [startY, setStartY] = React.useState(0)
             const [scrollOffset, setScrollOffset] = React.useState(0)
             const containerRef = React.useRef<HTMLDivElement>(null)
+            
+            // Physics state
+            const velocityRef = React.useRef(0)
+            const lastYRef = React.useRef(0)
+            const lastTimeRef = React.useRef(0)
+            const animationRef = React.useRef<number | null>(null)
+            const momentumRef = React.useRef(false)
 
             const itemHeight = 48
             const visibleItems = 5
             const centerIndex = Math.floor(visibleItems / 2)
+            
+            // Physics constants
+            const friction = 0.95 // Deceleration factor
+            const snapThreshold = 0.5 // Velocity below which we snap
+            const minVelocity = 0.1 // Stop animation below this
+
+            const normalizeValue = (v: number) => {
+              let normalized = v
+              while (normalized < 0) normalized += (max + 1)
+              while (normalized > max) normalized -= (max + 1)
+              return normalized
+            }
 
             const getVisibleNumbers = () => {
               const numbers: number[] = []
-              for (let i = -centerIndex; i <= centerIndex; i++) {
-                let num = value + i
-                // Infinite loop
-                while (num < 0) num += (max + 1)
-                while (num > max) num -= (max + 1)
+              const offset = scrollOffset / itemHeight
+              for (let i = -centerIndex - 2; i <= centerIndex + 2; i++) {
+                let num = Math.round(value - offset + i)
+                num = normalizeValue(num)
                 numbers.push(num)
               }
               return numbers
             }
 
+            // Momentum animation loop
+            const animate = React.useCallback(() => {
+              if (!momentumRef.current) return
+
+              // Apply friction
+              velocityRef.current *= friction
+
+              // Update scroll offset
+              setScrollOffset(prev => prev + velocityRef.current)
+
+              // Check if we should stop
+              if (Math.abs(velocityRef.current) < minVelocity) {
+                momentumRef.current = false
+                
+                // Snap to nearest item
+                setScrollOffset(prev => {
+                  const steps = Math.round(prev / itemHeight)
+                  const targetOffset = steps * itemHeight
+                  
+                  // Update value
+                  const delta = -steps
+                  if (delta !== 0) {
+                    const newValue = normalizeValue(value + delta)
+                    onChange(newValue)
+                  }
+                  
+                  return 0
+                })
+                
+                return
+              }
+
+              // Check if we crossed a threshold
+              setScrollOffset(prev => {
+                if (Math.abs(prev) >= itemHeight) {
+                  const steps = Math.floor(Math.abs(prev) / itemHeight) * Math.sign(prev)
+                  const newValue = normalizeValue(value - steps)
+                  onChange(newValue)
+                  return prev - (steps * itemHeight)
+                }
+                return prev
+              })
+
+              animationRef.current = requestAnimationFrame(animate)
+            }, [value, onChange, max])
+
+            // Start momentum
+            const startMomentum = () => {
+              if (momentumRef.current) return
+              momentumRef.current = true
+              animationRef.current = requestAnimationFrame(animate)
+            }
+
+            // Stop momentum
+            const stopMomentum = () => {
+              momentumRef.current = false
+              if (animationRef.current !== null) {
+                cancelAnimationFrame(animationRef.current)
+                animationRef.current = null
+              }
+            }
+
             const handlePointerDown = (e: React.PointerEvent) => {
+              stopMomentum()
               setIsDragging(true)
-              setStartY(e.clientY)
-              setScrollOffset(0)
+              lastYRef.current = e.clientY
+              lastTimeRef.current = Date.now()
+              velocityRef.current = 0
               e.currentTarget.setPointerCapture(e.pointerId)
             }
 
             const handlePointerMove = (e: React.PointerEvent) => {
               if (!isDragging) return
-              const deltaY = e.clientY - startY
-              setScrollOffset(deltaY)
               
-              // Update value based on scroll
-              const steps = Math.round(-deltaY / itemHeight)
-              if (steps !== 0) {
-                let newValue = value + steps
-                while (newValue < 0) newValue += (max + 1)
-                while (newValue > max) newValue -= (max + 1)
-                onChange(newValue)
-                setStartY(e.clientY)
-                setScrollOffset(0)
+              const currentY = e.clientY
+              const currentTime = Date.now()
+              const deltaY = currentY - lastYRef.current
+              const deltaTime = currentTime - lastTimeRef.current
+              
+              // Calculate velocity
+              if (deltaTime > 0) {
+                velocityRef.current = deltaY / deltaTime * 16 // Scale to ~60fps
               }
+              
+              // Update scroll offset smoothly
+              setScrollOffset(prev => prev + deltaY)
+              
+              // Check if we crossed a threshold during drag
+              setScrollOffset(prev => {
+                if (Math.abs(prev) >= itemHeight) {
+                  const steps = Math.floor(Math.abs(prev) / itemHeight) * Math.sign(prev)
+                  const newValue = normalizeValue(value - steps)
+                  onChange(newValue)
+                  return prev - (steps * itemHeight)
+                }
+                return prev
+              })
+              
+              lastYRef.current = currentY
+              lastTimeRef.current = currentTime
             }
 
             const handlePointerUp = (e: React.PointerEvent) => {
               setIsDragging(false)
-              setScrollOffset(0)
               e.currentTarget.releasePointerCapture(e.pointerId)
+              
+              // Start momentum if velocity is significant
+              if (Math.abs(velocityRef.current) > snapThreshold) {
+                startMomentum()
+              } else {
+                // Snap to nearest
+                const steps = Math.round(scrollOffset / itemHeight)
+                const newValue = normalizeValue(value - steps)
+                if (steps !== 0) {
+                  onChange(newValue)
+                }
+                setScrollOffset(0)
+              }
             }
 
+            // Cleanup
+            React.useEffect(() => {
+              return () => {
+                stopMomentum()
+              }
+            }, [])
+
             const numbers = getVisibleNumbers()
+            const offset = scrollOffset / itemHeight
 
             return (
               <div className="flex flex-col items-center">
@@ -197,20 +312,25 @@ export const TimeField: React.FC<FieldComponentProps> = ({
                   {/* Numbers */}
                   <div className="absolute inset-0 flex flex-col items-center justify-center">
                     {numbers.map((num, idx) => {
-                      const distance = Math.abs(idx - centerIndex)
-                      const opacity = distance === 0 ? 1 : distance === 1 ? 0.4 : 0.15
-                      const scale = distance === 0 ? 1 : 0.75
-                      const translateY = (idx - centerIndex) * itemHeight + scrollOffset
+                      const basePosition = idx - centerIndex - 2
+                      const position = basePosition + offset
+                      const distance = Math.abs(position)
+                      const opacity = distance < 0.5 ? 1 : distance < 1.5 ? 0.4 : distance < 2.5 ? 0.15 : 0.05
+                      const scale = distance < 0.5 ? 1 : 0.75
+                      const translateY = position * itemHeight
+
+                      if (Math.abs(translateY) > 150) return null // Don't render far items
 
                       return (
                         <div
                           key={`${num}-${idx}`}
-                          className="absolute flex items-center justify-center w-full transition-opacity"
+                          className="absolute flex items-center justify-center w-full"
                           style={{
                             height: `${itemHeight}px`,
                             transform: `translateY(${translateY}px) scale(${scale})`,
                             opacity,
                             pointerEvents: 'none',
+                            transition: isDragging || momentumRef.current ? 'none' : 'transform 0.2s ease-out, opacity 0.2s ease-out',
                           }}
                         >
                           <span className="text-3xl font-bold text-gray-900">
