@@ -113,14 +113,17 @@ button[aria-pressed="true"],
 
 /* Date picker color overrides - Default CSS handles structure */
 
-/* SINGLE DATE SELECTION */
-.rdp .rdp-day_selected {
+/* SINGLE DATE SELECTION - target button element directly */
+button.rdp-day_selected,
+.rdp button.rdp-day_selected {
   background-color: #2563eb !important;
   color: #fff !important;
   font-weight: 700 !important;
+  border-radius: 50% !important;
 }
 
-.rdp .rdp-day_selected:hover {
+button.rdp-day_selected:hover,
+.rdp button.rdp-day_selected:hover {
   background-color: #1d4ed8 !important;
 }
 
