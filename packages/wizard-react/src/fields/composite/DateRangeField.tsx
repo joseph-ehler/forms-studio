@@ -239,7 +239,6 @@ export const DateRangeField: React.FC<FieldComponentProps> = ({
                       maxHeight={560}
                       aria-labelledby={`${name}-label`}
                     >
-                      <div onClick={(e) => e.stopPropagation()}>
                       {/* Presets */}
                       {presets.length > 0 && (
                         <div className="px-4 pt-4 pb-2 border-b border-gray-200">
@@ -291,7 +290,6 @@ export const DateRangeField: React.FC<FieldComponentProps> = ({
                             Done
                           </button>
                         </div>
-                      </div>
                       </div>
                     </OverlaySheet>
                   )}
