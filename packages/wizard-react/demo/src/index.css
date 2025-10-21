@@ -98,73 +98,92 @@ button[data-selected="true"],
 
 /* Airbnb-style date range picker - Light fill + Filled/Outlined circles */
 
-/* Range middle days - Light blue fill only */
+/* Reset default react-day-picker range styles */
+.rdp-day_selected,
+.rdp-day_range_start,
+.rdp-day_range_middle,
+.rdp-day_range_end {
+  background-color: transparent !important;
+}
+
+/* Range middle days - Light blue rectangular fill */
 .rdp-day_range_middle {
   background-color: rgb(219 234 254) !important; /* blue-100 */
-  border-radius: 0 !important;
 }
 
-.rdp-day_range_middle .rdp-button {
+.rdp-day_range_middle button {
   background-color: transparent !important;
   color: rgb(17 24 39) !important; /* gray-900 */
-  border-radius: 0 !important;
 }
 
-.rdp-day_range_middle .rdp-button:hover {
+.rdp-day_range_middle button:hover {
   background-color: rgb(191 219 254) !important; /* blue-200 */
+  color: rgb(17 24 39) !important;
 }
 
-/* Start date - Filled circle (left rounded background) */
+/* Start date - Filled blue circle + left-rounded light fill */
 .rdp-day_range_start:not(.rdp-day_range_end) {
-  background-color: rgb(219 234 254) !important; /* blue-100 */
-  border-top-left-radius: 9999px !important; /* Full round on left */
-  border-bottom-left-radius: 9999px !important;
+  background-color: rgb(219 234 254) !important; /* blue-100 extends right */
+  border-top-left-radius: 50% !important;
+  border-bottom-left-radius: 50% !important;
   border-top-right-radius: 0 !important;
   border-bottom-right-radius: 0 !important;
 }
 
-.rdp-day_range_start:not(.rdp-day_range_end) .rdp-button {
+.rdp-day_range_start button {
   background-color: rgb(37 99 235) !important; /* blue-600 filled circle */
   color: white !important;
-  border-radius: 9999px !important;
+  border-radius: 50% !important;
 }
 
-/* End date - Filled circle (right rounded background) */
+.rdp-day_range_start button:hover {
+  background-color: rgb(29 78 216) !important; /* blue-700 */
+  color: white !important;
+}
+
+/* End date - Filled blue circle + right-rounded light fill */
 .rdp-day_range_end:not(.rdp-day_range_start) {
-  background-color: rgb(219 234 254) !important; /* blue-100 */
-  border-top-right-radius: 9999px !important; /* Full round on right */
-  border-bottom-right-radius: 9999px !important;
+  background-color: rgb(219 234 254) !important; /* blue-100 extends left */
+  border-top-right-radius: 50% !important;
+  border-bottom-right-radius: 50% !important;
   border-top-left-radius: 0 !important;
   border-bottom-left-radius: 0 !important;
 }
 
-.rdp-day_range_end:not(.rdp-day_range_start) .rdp-button {
+.rdp-day_range_end button {
   background-color: rgb(37 99 235) !important; /* blue-600 filled circle */
   color: white !important;
-  border-radius: 9999px !important;
+  border-radius: 50% !important;
 }
 
-/* Single day range (start = end) - Filled circle, no background */
+.rdp-day_range_end button:hover {
+  background-color: rgb(29 78 216) !important; /* blue-700 */
+  color: white !important;
+}
+
+/* Single day range (start = end) - Just filled circle, no background */
 .rdp-day_range_start.rdp-day_range_end {
   background-color: transparent !important;
+  border-radius: 0 !important;
 }
 
-.rdp-day_range_start.rdp-day_range_end .rdp-button {
+.rdp-day_range_start.rdp-day_range_end button {
   background-color: rgb(37 99 235) !important; /* blue-600 filled circle */
   color: white !important;
-  border-radius: 9999px !important;
+  border-radius: 50% !important;
 }
 
-/* Hover state for selected start/end - Slightly darker */
-.rdp-day_range_start .rdp-button:hover,
-.rdp-day_range_end .rdp-button:hover {
-  background-color: rgb(29 78 216) !important; /* blue-700 */
-}
-
-/* Hover preview - Outlined circle for unselected dates when range is active */
-.rdp-day:not(.rdp-day_range_start):not(.rdp-day_range_end):not(.rdp-day_range_middle):not(.rdp-day_disabled) .rdp-button:hover {
-  border: 2px solid rgb(37 99 235) !important; /* blue-600 outline */
+/* Hover preview - Blue outlined circle for dates outside range */
+.rdp button:not([disabled]):hover {
+  border: 2px solid rgb(37 99 235) !important;
   background-color: white !important;
   color: rgb(17 24 39) !important;
-  border-radius: 9999px !important;
+  border-radius: 50% !important;
+}
+
+/* Override hover for range days to not show outline */
+.rdp-day_range_start button:hover,
+.rdp-day_range_end button:hover,
+.rdp-day_range_middle button:hover {
+  border: none !important;
 }
