@@ -1,0 +1,10 @@
+/**
+ * Overlay System - Barrel Exports
+ * 
+ * Unified overlay foundation for all picker-style fields.
+ */
+
+export * from './types'
+export * from './OverlayPickerCore'
+export * from './OverlayPositioner'
+export * from './OverlaySheet'

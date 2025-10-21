@@ -1,6 +1,6 @@
 {
   "name": "@joseph-ehler/wizard-react",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "React runtime for Forms Studio: render any JSON field type with RHF + Zod",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -49,6 +49,7 @@
     "zod": "^3.22.0"
   },
   "dependencies": {
+    "@floating-ui/react": "^0.27.16",
     "@headlessui/react": "^2.2.9",
     "@joseph.ehler/wizard-core": "workspace:*",
     "date-fns": "^4.1.0",
