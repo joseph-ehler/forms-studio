@@ -8,7 +8,9 @@
 
 import React, { Fragment, useMemo, useState } from 'react'
 import { Controller } from 'react-hook-form'
-import { Listbox, Transition } from '@headlessui/react'
+import { OverlayPickerCore, OverlaySheet, OverlayPositioner, calculateOverlayHeights, getOverlayContentClasses } from '../../components/overlay'
+import { PickerList, PickerOption, PickerSearch, PickerEmptyState } from '../../components/picker'
+import { useDeviceType } from '../../hooks/useDeviceType'
 
 import type { FieldComponentProps } from '../types'
 import { FormLabel, FormHelperText } from '../../components'
@@ -200,62 +202,147 @@ export const AddressField: React.FC<FieldComponentProps> = ({
 
                 <div className="sm:col-span-3">
                   <label htmlFor={`${name}-state`} className="sr-only">State</label>
-                  <Listbox value={value.state || ''} onChange={(v) => update('state', v)} disabled={disabled}>
-                    {({ open }) => (
-                      <div className="relative">
-                        <Listbox.Button
-                          id={`${name}-state`}
-                          className="relative w-full min-h-[48px] rounded-md border border-gray-300 bg-white px-3 py-2.5 text-left text-base shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:bg-gray-50 flex items-center justify-between"
-                        >
-                          <span className={value.state ? 'text-gray-900 font-medium' : 'text-gray-400'}>
-                            {selectedState ? selectedState.code : 'State'}
-                          </span>
-                          <svg className={`h-4 w-4 text-gray-400 transition-transform ${open ? 'rotate-180' : ''}`} viewBox="0 0 20 20" fill="currentColor">
-                            <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-                          </svg>
-                        </Listbox.Button>
-                        <Transition as={Fragment} leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0" afterLeave={() => setStateSearchQuery('')}>
-                          <Listbox.Options className="absolute z-10 mt-1 max-h-80 w-64 rounded-md bg-white text-base shadow-lg ring-1 ring-black/10 focus:outline-none overflow-hidden">
-                            <div className="sticky top-0 bg-white border-b border-gray-200 p-2">
-                              <div className="relative">
-                                <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                  <svg className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                                  </svg>
-                                </div>
-                                <input type="text" className="w-full rounded-md border border-gray-300 bg-white py-2 pl-10 pr-3 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Type to search states…" value={stateSearchQuery} onChange={(e) => setStateSearchQuery(e.target.value)} onClick={(e) => e.stopPropagation()} />
+                  <OverlayPickerCore closeOnSelect={true}>
+                    {({ isOpen, open, close, triggerRef, contentRef }) => {
+                      const { isMobile } = useDeviceType()
+                      const heights = calculateOverlayHeights({
+                        maxHeight: 560,
+                        hasSearch: true,
+                        hasFooter: false,
+                        searchHeight: 60,
+                      })
+
+                      return (
+                        <div className="relative">
+                          <button
+                            ref={triggerRef as React.RefObject<HTMLButtonElement>}
+                            id={`${name}-state`}
+                            type="button"
+                            onClick={() => isOpen ? close() : open()}
+                            disabled={disabled}
+                            className="relative w-full min-h-[48px] rounded-md border border-gray-300 bg-white px-3 py-2.5 text-left text-base shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:bg-gray-50 flex items-center justify-between"
+                          >
+                            <span className={value.state ? 'text-gray-900 font-medium' : 'text-gray-400'}>
+                              {selectedState ? selectedState.code : 'State'}
+                            </span>
+                            <svg className={`h-4 w-4 text-gray-400 transition-transform ${isOpen ? 'rotate-180' : ''}`} viewBox="0 0 20 20" fill="currentColor">
+                              <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                            </svg>
+                          </button>
+
+                          {/* Mobile Sheet */}
+                          {isMobile && isOpen && (
+                            <OverlaySheet
+                              open={isOpen}
+                              onClose={() => {
+                                close('outside')
+                                setStateSearchQuery('')
+                              }}
+                              maxHeight={560}
+                              aria-labelledby="address-state-picker"
+                            >
+                              <PickerSearch
+                                value={stateSearchQuery}
+                                onChange={setStateSearchQuery}
+                                placeholder="Search states..."
+                                autoFocus
+                              />
+                              <div ref={contentRef}>
+                                <PickerList role="listbox" aria-label="Select state">
+                                  {filteredStates.length === 0 ? (
+                                    <PickerEmptyState message="No states found" />
+                                  ) : (
+                                    filteredStates.map((s) => {
+                                      const isSelected = s.code === value.state
+                                      return (
+                                        <PickerOption
+                                          key={s.code}
+                                          value={s.code}
+                                          selected={isSelected}
+                                          disabled={disabled}
+                                          onClick={() => {
+                                            update('state', s.code)
+                                            close('select')
+                                            setStateSearchQuery('')
+                                          }}
+                                        >
+                                          <div className="flex items-center gap-3">
+                                            <span className="font-mono font-medium">{s.code}</span>
+                                            <span>{s.name}</span>
+                                          </div>
+                                        </PickerOption>
+                                      )
+                                    })
+                                  )}
+                                </PickerList>
                               </div>
-                            </div>
-                            <div className="max-h-60 overflow-auto py-1">
-                              {filteredStates.length === 0 ? (
-                                <div className="py-2 px-4 text-sm text-gray-500">No states found</div>
-                              ) : (
-                                filteredStates.map((s) => (
-                                  <Listbox.Option key={s.code} value={s.code} className={({ active }) => `relative cursor-pointer select-none min-h-[44px] py-2.5 pl-3 pr-9 flex items-center ${active ? 'bg-blue-600 text-white' : 'text-gray-900'}`}>
-                                    {({ selected }) => (
-                                      <>
-                                        <div className="flex items-center gap-3">
-                                          <span className={`font-mono ${selected ? 'font-bold' : 'font-medium'}`}>{s.code}</span>
-                                          <span className={selected ? 'font-medium' : ''}>{s.name}</span>
-                                        </div>
-                                        {selected && (
-                                          <span className="absolute inset-y-0 right-0 flex items-center pr-3">
-                                            <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                                            </svg>
-                                          </span>
-                                        )}
-                                      </>
-                                    )}
-                                  </Listbox.Option>
-                                ))
+                            </OverlaySheet>
+                          )}
+
+                          {/* Desktop Popover */}
+                          {!isMobile && isOpen && (
+                            <OverlayPositioner
+                              open={isOpen}
+                              anchor={triggerRef.current}
+                              placement="bottom-start"
+                              offset={6}
+                              strategy="fixed"
+                              sameWidth={false}
+                              maxHeight={560}
+                              collision={{ flip: true, shift: true, size: true }}
+                            >
+                              {({ refs, floatingStyles }) => (
+                                <div
+                                  ref={refs.setFloating}
+                                  style={{ ...floatingStyles, width: '256px' }}
+                                  className="z-50 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden"
+                                >
+                                  <PickerSearch
+                                    value={stateSearchQuery}
+                                    onChange={setStateSearchQuery}
+                                    placeholder="Search states..."
+                                  />
+                                  <div
+                                    ref={contentRef}
+                                    className={getOverlayContentClasses().content}
+                                    style={{ maxHeight: `${heights.contentMaxHeight}px` }}
+                                  >
+                                    <PickerList role="listbox" aria-label="Select state">
+                                      {filteredStates.length === 0 ? (
+                                        <PickerEmptyState message="No states found" />
+                                      ) : (
+                                        filteredStates.map((s) => {
+                                          const isSelected = s.code === value.state
+                                          return (
+                                            <PickerOption
+                                              key={s.code}
+                                              value={s.code}
+                                              selected={isSelected}
+                                              disabled={disabled}
+                                              onClick={() => {
+                                                update('state', s.code)
+                                                close('select')
+                                                setStateSearchQuery('')
+                                              }}
+                                            >
+                                              <div className="flex items-center gap-3">
+                                                <span className="font-mono font-medium">{s.code}</span>
+                                                <span>{s.name}</span>
+                                              </div>
+                                            </PickerOption>
+                                          )
+                                        })
+                                      )}
+                                    </PickerList>
+                                  </div>
+                                </div>
                               )}
-                            </div>
-                          </Listbox.Options>
-                        </Transition>
-                      </div>
-                    )}
-                  </Listbox>
+                            </OverlayPositioner>
+                          )}
+                        </div>
+                      )
+                    }}
+                  </OverlayPickerCore>
                 </div>
 
                 <div className="sm:col-span-3">
@@ -283,63 +370,148 @@ export const AddressField: React.FC<FieldComponentProps> = ({
               {showCountry && (
                 <div>
                   <label htmlFor={`${name}-country`} className="sr-only">Country</label>
-                  <Listbox value={value.country || defaultCountry} onChange={(v) => update('country', v)} disabled={disabled}>
-                    {({ open }) => (
-                      <div className="relative">
-                        <Listbox.Button
-                          id={`${name}-country`}
-                          className="relative w-full min-h-[48px] rounded-md border border-gray-300 bg-white px-3 py-2.5 text-left text-base shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:bg-gray-50 flex items-center justify-between"
-                        >
-                          <span className="flex items-center gap-2 text-gray-900 font-medium">
-                            {selectedCountry && <span>{selectedCountry.flag}</span>}
-                            {selectedCountry ? selectedCountry.name : 'Country'}
-                          </span>
-                          <svg className={`h-4 w-4 text-gray-400 transition-transform ${open ? 'rotate-180' : ''}`} viewBox="0 0 20 20" fill="currentColor">
-                            <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-                          </svg>
-                        </Listbox.Button>
-                        <Transition as={Fragment} leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0" afterLeave={() => setCountrySearchQuery('')}>
-                          <Listbox.Options className="absolute z-10 mt-1 max-h-80 w-full rounded-md bg-white text-base shadow-lg ring-1 ring-black/10 focus:outline-none overflow-hidden">
-                            <div className="sticky top-0 bg-white border-b border-gray-200 p-2">
-                              <div className="relative">
-                                <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                  <svg className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                                  </svg>
-                                </div>
-                                <input type="text" className="w-full rounded-md border border-gray-300 bg-white py-2 pl-10 pr-3 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Type to search countries…" value={countrySearchQuery} onChange={(e) => setCountrySearchQuery(e.target.value)} onClick={(e) => e.stopPropagation()} />
+                  <OverlayPickerCore closeOnSelect={true}>
+                    {({ isOpen, open, close, triggerRef, contentRef }) => {
+                      const { isMobile } = useDeviceType()
+                      const heights = calculateOverlayHeights({
+                        maxHeight: 560,
+                        hasSearch: true,
+                        hasFooter: false,
+                        searchHeight: 60,
+                      })
+
+                      return (
+                        <div className="relative">
+                          <button
+                            ref={triggerRef as React.RefObject<HTMLButtonElement>}
+                            id={`${name}-country`}
+                            type="button"
+                            onClick={() => isOpen ? close() : open()}
+                            disabled={disabled}
+                            className="relative w-full min-h-[48px] rounded-md border border-gray-300 bg-white px-3 py-2.5 text-left text-base shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:bg-gray-50 flex items-center justify-between"
+                          >
+                            <span className="flex items-center gap-2 text-gray-900 font-medium">
+                              {selectedCountry && <span>{selectedCountry.flag}</span>}
+                              {selectedCountry ? selectedCountry.name : 'Country'}
+                            </span>
+                            <svg className={`h-4 w-4 text-gray-400 transition-transform ${isOpen ? 'rotate-180' : ''}`} viewBox="0 0 20 20" fill="currentColor">
+                              <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                            </svg>
+                          </button>
+
+                          {/* Mobile Sheet */}
+                          {isMobile && isOpen && (
+                            <OverlaySheet
+                              open={isOpen}
+                              onClose={() => {
+                                close('outside')
+                                setCountrySearchQuery('')
+                              }}
+                              maxHeight={560}
+                              aria-labelledby="address-country-picker"
+                            >
+                              <PickerSearch
+                                value={countrySearchQuery}
+                                onChange={setCountrySearchQuery}
+                                placeholder="Search countries..."
+                                autoFocus
+                              />
+                              <div ref={contentRef}>
+                                <PickerList role="listbox" aria-label="Select country">
+                                  {filteredCountries.length === 0 ? (
+                                    <PickerEmptyState message="No countries found" />
+                                  ) : (
+                                    filteredCountries.map((c) => {
+                                      const isSelected = c.code === (value.country || defaultCountry)
+                                      return (
+                                        <PickerOption
+                                          key={c.code}
+                                          value={c.code}
+                                          selected={isSelected}
+                                          disabled={disabled}
+                                          onClick={() => {
+                                            update('country', c.code)
+                                            close('select')
+                                            setCountrySearchQuery('')
+                                          }}
+                                        >
+                                          <div className="flex items-center gap-3 w-full">
+                                            <span className="text-xl">{c.flag}</span>
+                                            <span>{c.name}</span>
+                                          </div>
+                                        </PickerOption>
+                                      )
+                                    })
+                                  )}
+                                </PickerList>
                               </div>
-                            </div>
-                            <div className="max-h-60 overflow-auto py-1">
-                              {filteredCountries.length === 0 ? (
-                                <div className="py-2 px-4 text-sm text-gray-500">No countries found</div>
-                              ) : (
-                                filteredCountries.map((c) => (
-                                  <Listbox.Option key={c.code} value={c.code} className={({ active }) => `relative cursor-pointer select-none min-h-[44px] py-2.5 pl-3 pr-9 flex items-center ${active ? 'bg-blue-600 text-white' : 'text-gray-900'}`}>
-                                    {({ selected }) => (
-                                      <>
-                                        <div className="flex items-center gap-3">
-                                          <span className="text-xl">{c.flag}</span>
-                                          <span className={selected ? 'font-medium' : ''}>{c.name}</span>
-                                        </div>
-                                        {selected && (
-                                          <span className="absolute inset-y-0 right-0 flex items-center pr-3">
-                                            <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                                            </svg>
-                                          </span>
-                                        )}
-                                      </>
-                                    )}
-                                  </Listbox.Option>
-                                ))
+                            </OverlaySheet>
+                          )}
+
+                          {/* Desktop Popover */}
+                          {!isMobile && isOpen && (
+                            <OverlayPositioner
+                              open={isOpen}
+                              anchor={triggerRef.current}
+                              placement="bottom-start"
+                              offset={6}
+                              strategy="fixed"
+                              sameWidth={true}
+                              maxHeight={560}
+                              collision={{ flip: true, shift: true, size: true }}
+                            >
+                              {({ refs, floatingStyles }) => (
+                                <div
+                                  ref={refs.setFloating}
+                                  style={floatingStyles}
+                                  className="z-50 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden"
+                                >
+                                  <PickerSearch
+                                    value={countrySearchQuery}
+                                    onChange={setCountrySearchQuery}
+                                    placeholder="Search countries..."
+                                  />
+                                  <div
+                                    ref={contentRef}
+                                    className={getOverlayContentClasses().content}
+                                    style={{ maxHeight: `${heights.contentMaxHeight}px` }}
+                                  >
+                                    <PickerList role="listbox" aria-label="Select country">
+                                      {filteredCountries.length === 0 ? (
+                                        <PickerEmptyState message="No countries found" />
+                                      ) : (
+                                        filteredCountries.map((c) => {
+                                          const isSelected = c.code === (value.country || defaultCountry)
+                                          return (
+                                            <PickerOption
+                                              key={c.code}
+                                              value={c.code}
+                                              selected={isSelected}
+                                              disabled={disabled}
+                                              onClick={() => {
+                                                update('country', c.code)
+                                                close('select')
+                                                setCountrySearchQuery('')
+                                              }}
+                                            >
+                                              <div className="flex items-center gap-3 w-full">
+                                                <span className="text-xl">{c.flag}</span>
+                                                <span>{c.name}</span>
+                                              </div>
+                                            </PickerOption>
+                                          )
+                                        })
+                                      )}
+                                    </PickerList>
+                                  </div>
+                                </div>
                               )}
-                            </div>
-                          </Listbox.Options>
-                        </Transition>
-                      </div>
-                    )}
-                  </Listbox>
+                            </OverlayPositioner>
+                          )}
+                        </div>
+                      )
+                    }}
+                  </OverlayPickerCore>
                 </div>
               )}
             </Stack>
