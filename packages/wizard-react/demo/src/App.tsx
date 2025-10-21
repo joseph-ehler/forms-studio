@@ -33,14 +33,14 @@ export default function Demo() {
             🎨 Forms Studio - JSON-Driven Design System
           </h1>
           <p className="text-gray-600 mb-4">
-            32 Field Types • 21 Design System Components • JSON-Configurable Typography • Beautiful Popovers
+            32 Field Types • 21 Design System Components • JSON-Configurable Typography • Unified Overlay System 🚀
           </p>
           <div className="flex flex-wrap gap-2 text-xs">
             <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full font-medium">32 Fields</span>
             <span className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full font-medium">21 Components</span>
             <span className="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full font-medium">🎛️ JSON Control</span>
-            <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full font-medium">Popovers ✨</span>
-            <span className="px-3 py-1 bg-orange-100 text-orange-700 rounded-full font-medium">Search 🔍</span>
+            <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full font-medium">🚀 NEW: Unified Overlays</span>
+            <span className="px-3 py-1 bg-orange-100 text-orange-700 rounded-full font-medium">Mobile-First 📱</span>
           </div>
         </div>
 
@@ -714,6 +714,135 @@ export default function Demo() {
             />
           </FormSection>
 
+          {/* NEW: Unified Overlay System Showcase */}
+          <FormCard variant="filled" padding="lg">
+            <FormSection
+              title="🚀 NEW: Unified Overlay System (Phase 2)"
+              description="Mobile-first overlays with consistent UX across all picker fields"
+              divider="bottom"
+            >
+              <FormMessage type="success" title="Phase 2 Complete! ✅">
+                <strong>SelectField & MultiSelectField</strong> now use the unified overlay primitives with mobile-first responsive design!
+              </FormMessage>
+
+              <div className="space-y-6">
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                  <h4 className="text-sm font-semibold text-blue-900 mb-2">✨ What's New:</h4>
+                  <ul className="text-xs text-blue-700 space-y-1 ml-4">
+                    <li>• <strong>Desktop:</strong> Floating UI popover with smart collision detection</li>
+                    <li>• <strong>Mobile:</strong> Full-screen bottom sheet with drag-to-dismiss</li>
+                    <li>• <strong>Tablet:</strong> Half-screen sheet (optimal middle ground)</li>
+                    <li>• <strong>One Component:</strong> Auto-detects device & renders best UI</li>
+                    <li>• <strong>JSON-Configurable:</strong> Control presentation, sameWidth, offset, search, etc.</li>
+                  </ul>
+                </div>
+
+                {/* SelectField with Overlay */}
+                <div>
+                  <h4 className="text-sm font-semibold mb-2">SelectField (Unified Overlay)</h4>
+                  <SelectField
+                    name="select_overlay"
+                    label="Select with New Overlay System"
+                    description="Desktop: Popover | Mobile: Sheet | Auto-detected!"
+                    control={control}
+                    errors={errors}
+                    json={{
+                      options: [
+                        { label: '🚀 Fast', value: 'fast' },
+                        { label: '⚡ Lightning', value: 'lightning' },
+                        { label: '🔥 Blazing', value: 'blazing' },
+                        { label: '💨 Instant', value: 'instant' },
+                      ],
+                      ui: {
+                        search: true,
+                        sameWidth: true,
+                        offset: 6,
+                        closeOnSelect: true,
+                      }
+                    }}
+                  />
+                  <p className="text-xs text-gray-500 mt-2">
+                    <strong>Try it!</strong> Open on desktop vs mobile to see different overlays
+                  </p>
+                </div>
+
+                <FormDivider />
+
+                {/* MultiSelectField with Chips */}
+                <div>
+                  <h4 className="text-sm font-semibold mb-2">MultiSelectField (Chips + Footer)</h4>
+                  <MultiSelectField
+                    name="multi_overlay"
+                    label="Multi-Select with Chips & Footer"
+                    description="Shows chips in trigger | Done/Clear footer | Stays open for multiple selections"
+                    placeholder="Select multiple options..."
+                    control={control}
+                    errors={errors}
+                    json={{
+                      options: [
+                        { label: '⚛️ React', value: 'react' },
+                        { label: '📘 TypeScript', value: 'typescript' },
+                        { label: '🎨 Tailwind', value: 'tailwind' },
+                        { label: '⚡ Vite', value: 'vite' },
+                        { label: '🔥 Firebase', value: 'firebase' },
+                        { label: '🌐 Next.js', value: 'nextjs' },
+                        { label: '📦 Webpack', value: 'webpack' },
+                        { label: '🧪 Jest', value: 'jest' },
+                      ],
+                      ui: {
+                        search: true,
+                        closeOnSelect: false,
+                        maxChipsDisplay: 3,
+                        sameWidth: true,
+                      }
+                    }}
+                  />
+                  <p className="text-xs text-gray-500 mt-2">
+                    <strong>Features:</strong> Click chips to remove | "+N more" badge | Done/Clear buttons
+                  </p>
+                </div>
+
+                <FormDivider />
+
+                {/* Architecture Benefits */}
+                <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                  <h4 className="text-sm font-semibold text-green-900 mb-2">🏗️ Architecture Benefits:</h4>
+                  <ul className="text-xs text-green-700 space-y-1 ml-4">
+                    <li>• <strong>DRY:</strong> One overlay system for all picker fields</li>
+                    <li>• <strong>Consistent UX:</strong> Same behavior everywhere</li>
+                    <li>• <strong>Mobile-First:</strong> Sheet by default on <768px</li>
+                    <li>• <strong>A11y:</strong> ARIA semantics, keyboard nav, focus trap</li>
+                    <li>• <strong>Smaller Bundle:</strong> No Headless UI duplication</li>
+                  </ul>
+                </div>
+
+                {/* JSON Configuration Example */}
+                <div>
+                  <h4 className="text-sm font-semibold mb-2">JSON Configuration:</h4>
+                  <FormCode variant="block">{`{
+  "type": "select",
+  "name": "country",
+  "label": "Country",
+  "options": ["USA", "Canada", "UK"],
+  "ui": {
+    "presentation": "sheet",      // auto | sheet | popover
+    "sameWidth": true,             // match trigger width
+    "offset": 6,                   // pixels from trigger
+    "maxHeight": 560,              // max overlay height
+    "search": true,                // show search bar
+    "closeOnSelect": true          // close after selection
+  }
+}`}</FormCode>
+                </div>
+
+                {/* Next: Phase 3 */}
+                <FormMessage type="info" title="Next: Phase 3 Rollout">
+                  Apply unified overlay to: <strong>DateField, TimeField, DateRangeField, PhoneField, AddressField, ColorField, TagInputField</strong>
+                </FormMessage>
+              </div>
+            </FormSection>
+          </FormCard>
+
           {/* Submit Button using FormActions */}
           <FormActions align="center">
             <FormButton variant="secondary" type="button" size="lg">
@@ -729,13 +858,13 @@ export default function Demo() {
 
         {/* Footer */}
         <div className="mt-8 text-center text-sm text-gray-500">
-          <p className="font-semibold">Built with @joseph.ehler/wizard-react</p>
-          <p className="mt-1">35 Fields • 21 Components • 🎛️ JSON-Configurable Typography • Beautiful Popovers ✨</p>
+          <p className="font-semibold">Built with @joseph.ehler/wizard-react v0.3.0</p>
+          <p className="mt-1">32 Fields • 21 Components • 🚀 Unified Overlay System • Mobile-First 📱</p>
           <p className="mt-2 text-xs">
-            <span className="text-blue-600">~238 KB ESM</span> • 
-            <span className="text-purple-600 ml-2">7 Typography + 14 Layout</span> • 
+            <span className="text-blue-600">~293 KB ESM</span> • 
+            <span className="text-purple-600 ml-2">Floating UI</span> • 
             <span className="text-indigo-600 ml-2">5 Typography Variants</span> • 
-            <span className="text-green-600 ml-2">@headlessui/react</span>
+            <span className="text-green-600 ml-2">Phase 2 Complete ✅</span>
           </p>
         </div>
 
