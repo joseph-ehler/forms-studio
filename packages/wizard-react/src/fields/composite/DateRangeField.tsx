@@ -130,9 +130,18 @@ export const DateRangeField: React.FC<FieldComponentProps> = ({
               return
             }
             
+            // Format dates in local timezone (not UTC) to avoid off-by-one errors
+            const formatLocalDate = (date: Date | undefined) => {
+              if (!date) return undefined
+              const year = date.getFullYear()
+              const month = String(date.getMonth() + 1).padStart(2, '0')
+              const day = String(date.getDate()).padStart(2, '0')
+              return `${year}-${month}-${day}`
+            }
+            
             field.onChange({
-              start: range.from?.toISOString().split('T')[0],
-              end: range.to?.toISOString().split('T')[0]
+              start: formatLocalDate(range.from),
+              end: formatLocalDate(range.to)
             })
           }
 
