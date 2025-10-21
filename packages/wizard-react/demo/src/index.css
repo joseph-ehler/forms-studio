@@ -132,32 +132,47 @@ body :not(.rdp) button[aria-pressed="true"] {
    - .fs-selected (custom class for DateField)
    - .rdp-day_selected (default DayPicker class)
    - .rdp-day_range_start / .rdp-day_range_end (range classes)
+   
+   CRITICAL: Style the BUTTON inside the selected cell!
 ================================================================= */
 .rdp [role="gridcell"] > [aria-pressed="true"],
 .rdp [role="gridcell"] > [aria-selected="true"],
-.rdp .fs-selected,
-.rdp .rdp-day_selected,
-.rdp .rdp-day_range_start,
-.rdp .rdp-day_range_end,
-.rdp .fs-range-start,
-.rdp .fs-range-end {
+.rdp .fs-selected button,
+.rdp .fs-selected .rdp-day_button,
+.rdp .rdp-day_selected button,
+.rdp .rdp-day_selected .rdp-day_button,
+.rdp .rdp-day_range_start button,
+.rdp .rdp-day_range_start .rdp-day_button,
+.rdp .rdp-day_range_end button,
+.rdp .rdp-day_range_end .rdp-day_button,
+.rdp .fs-range-start button,
+.rdp .fs-range-start .rdp-day_button,
+.rdp .fs-range-end button,
+.rdp .fs-range-end .rdp-day_button {
   background-color: rgb(37, 99, 235) !important;
   color: #ffffff !important;
   font-weight: 500 !important;
+  border: none !important;
 }
 
 /* =================================================================
    HOVER ON SELECTED - Darker blue (rgb(29, 78, 216))
-   No ring, just darker background
+   No ring, just darker background - target BUTTON inside
 ================================================================= */
 .rdp [role="gridcell"] > [aria-pressed="true"]:hover,
 .rdp [role="gridcell"] > [aria-selected="true"]:hover,
-.rdp .fs-selected:hover,
-.rdp .rdp-day_selected:hover,
-.rdp .rdp-day_range_start:hover,
-.rdp .rdp-day_range_end:hover,
-.rdp .fs-range-start:hover,
-.rdp .fs-range-end:hover {
+.rdp .fs-selected:hover button,
+.rdp .fs-selected:hover .rdp-day_button,
+.rdp .rdp-day_selected:hover button,
+.rdp .rdp-day_selected:hover .rdp-day_button,
+.rdp .rdp-day_range_start:hover button,
+.rdp .rdp-day_range_start:hover .rdp-day_button,
+.rdp .rdp-day_range_end:hover button,
+.rdp .rdp-day_range_end:hover .rdp-day_button,
+.rdp .fs-range-start:hover button,
+.rdp .fs-range-start:hover .rdp-day_button,
+.rdp .fs-range-end:hover button,
+.rdp .fs-range-end:hover .rdp-day_button {
   background-color: rgb(29, 78, 216) !important;
   color: #ffffff !important;
   border: none !important;
