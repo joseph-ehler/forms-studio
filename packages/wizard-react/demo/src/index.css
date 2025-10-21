@@ -113,7 +113,10 @@ button[aria-pressed="true"],
 
 /* Date picker color overrides - Default CSS handles structure */
 
-/* SINGLE DATE SELECTION - ULTRA specific to beat defaults */
+/* SINGLE DATE SELECTION - Try attribute selector */
+.rdp button[aria-selected="true"],
+.rdp button.rdp-day[aria-selected="true"],
+button.rdp-day[aria-selected="true"],
 .rdp-root button.rdp-day_selected,
 .rdp button.rdp-day.rdp-day_selected,
 button.rdp-day_selected,
@@ -126,6 +129,9 @@ button.rdp-day_selected,
   outline: none !important;
 }
 
+.rdp button[aria-selected="true"]:hover,
+.rdp button.rdp-day[aria-selected="true"]:hover,
+button.rdp-day[aria-selected="true"]:hover,
 .rdp-root button.rdp-day_selected:hover,
 .rdp button.rdp-day.rdp-day_selected:hover,
 button.rdp-day_selected:hover,
