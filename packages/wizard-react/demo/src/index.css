@@ -113,21 +113,28 @@ button[aria-pressed="true"],
 
 /* Date picker color overrides - Default CSS handles structure */
 
-/* SINGLE DATE SELECTION - target button element directly */
+/* SINGLE DATE SELECTION - ULTRA specific to beat defaults */
+.rdp-root button.rdp-day_selected,
+.rdp button.rdp-day.rdp-day_selected,
 button.rdp-day_selected,
 .rdp button.rdp-day_selected {
   background-color: #2563eb !important;
-  color: #fff !important;
+  color: #ffffff !important;
   font-weight: 700 !important;
   border: none !important;
   box-shadow: none !important;
+  outline: none !important;
 }
 
+.rdp-root button.rdp-day_selected:hover,
+.rdp button.rdp-day.rdp-day_selected:hover,
 button.rdp-day_selected:hover,
 .rdp button.rdp-day_selected:hover {
   background-color: #1d4ed8 !important;
+  color: #ffffff !important;
   border: none !important;
   box-shadow: none !important;
+  outline: none !important;
 }
 
 /* Airbnb-style date RANGE picker - AGGRESSIVE SPECIFICITY */
