@@ -2,9 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* import DayPicker base exactly once, before our overrides */
-@import "react-day-picker/dist/style.css";
-
 * {
   box-sizing: border-box;
   margin: 0;
