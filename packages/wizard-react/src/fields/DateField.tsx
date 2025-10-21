@@ -21,10 +21,11 @@ import { FormStack, FormGrid, Stack } from '../components'
 import { resolveTypographyDisplay, getTypographyFromJSON } from './utils/typography-display'
 import { mergeFieldConfig } from './utils/field-json-config'
 import { getAriaProps, getLabelProps, getDescriptionProps } from './utils/a11y-helpers'
-import { Popover, Transition } from '@headlessui/react'
 import { DayPicker } from 'react-day-picker'
 import { format, isValid } from 'date-fns'
 import 'react-day-picker/dist/style.css'
+import { OverlayPickerCore, OverlaySheet, OverlayPositioner, calculateOverlayHeights, getOverlayContentClasses } from '../components/overlay'
+import { useDeviceType } from '../hooks/useDeviceType'
 
 export const DateField: React.FC<FieldComponentProps> = ({
   name,
@@ -94,11 +95,25 @@ export const DateField: React.FC<FieldComponentProps> = ({
             }
           }
 
+          const { isMobile } = useDeviceType()
+          const heights = calculateOverlayHeights({
+            maxHeight: 560,
+            hasSearch: false,
+            hasFooter: true,
+            footerHeight: 48,
+          })
+
           return (
-            <Popover className="relative">
-              {({ open, close }) => (
+            <OverlayPickerCore
+              closeOnSelect={false}
+            >
+              {({ isOpen, open, close, triggerRef, contentRef }) => (
                 <>
-                  <Popover.Button
+                  {/* Trigger Button */}
+                  <button
+                    ref={triggerRef as React.RefObject<HTMLButtonElement>}
+                    type="button"
+                    onClick={() => isOpen ? close() : open()}
                     disabled={disabled}
                     className="w-full min-h-[48px] rounded-md border border-gray-300 bg-white px-3 py-3 text-left text-base shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:bg-gray-50 flex items-center justify-between"
                   >
@@ -118,19 +133,18 @@ export const DateField: React.FC<FieldComponentProps> = ({
                         d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
                       />
                     </svg>
-                  </Popover.Button>
+                  </button>
 
-                  <Transition
-                    as={Fragment}
-                    enter="transition ease-out duration-200"
-                    enterFrom="opacity-0 translate-y-1"
-                    enterTo="opacity-100 translate-y-0"
-                    leave="transition ease-in duration-150"
-                    leaveFrom="opacity-100 translate-y-0"
-                    leaveTo="opacity-0 translate-y-1"
-                  >
-                    <Popover.Panel className="absolute z-10 mt-2 left-0">
-                      <div className="rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 bg-white p-4">
+                  {/* Mobile Sheet */}
+                  {isMobile && isOpen && (
+                    <OverlaySheet
+                      open={isOpen}
+                      onClose={() => close('outside')}
+                      maxHeight={560}
+                      aria-labelledby={`${name}-label`}
+                    >
+                      {/* Calendar Body */}
+                      <div className="px-4 py-6 flex justify-center">
                         <DayPicker
                           mode="single"
                           selected={selectedDate}
@@ -145,32 +159,105 @@ export const DateField: React.FC<FieldComponentProps> = ({
                             today: 'font-bold text-blue-600',
                           }}
                         />
-                        
-                        {/* Action buttons */}
-                        <div className="flex justify-end gap-2 pt-3 border-t border-gray-200 mt-3">
+                      </div>
+
+                      {/* Footer */}
+                      <div className="shrink-0 border-t border-gray-200 p-4">
+                        <div className="flex gap-3">
                           <button
                             type="button"
                             onClick={() => {
                               field.onChange('')
+                              close('select')
                             }}
-                            className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md transition-colors"
+                            className="flex-1 min-h-[48px] px-4 text-base text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
                           >
                             Clear
                           </button>
                           <button
                             type="button"
-                            onClick={() => close()}
-                            className="px-4 py-2 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                            onClick={() => close('select')}
+                            className="flex-1 min-h-[48px] px-4 text-base bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
                           >
                             Done
                           </button>
                         </div>
                       </div>
-                    </Popover.Panel>
-                  </Transition>
+                    </OverlaySheet>
+                  )}
+
+                  {/* Desktop Popover */}
+                  {!isMobile && isOpen && (
+                    <OverlayPositioner
+                      open={isOpen}
+                      anchor={triggerRef.current}
+                      placement="bottom-start"
+                      offset={6}
+                      strategy="fixed"
+                      sameWidth={true}
+                      maxHeight={560}
+                      collision={{ flip: true, shift: true, size: true }}
+                    >
+                      {({ refs, floatingStyles, isPositioned }) => (
+                        <div
+                          ref={refs.setFloating}
+                          style={floatingStyles}
+                          className="z-50 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden"
+                        >
+                          {/* Calendar Body */}
+                          <div
+                            ref={contentRef}
+                            className={getOverlayContentClasses().content}
+                            style={{
+                              maxHeight: `${heights.contentMaxHeight}px`,
+                            }}
+                          >
+                            <div className="p-4 flex justify-center">
+                              <DayPicker
+                                mode="single"
+                                selected={selectedDate}
+                                onSelect={handleDateSelect}
+                                disabled={[
+                                  ...(disabledDates || []),
+                                  ...(minDate ? [{ before: minDate }] : []),
+                                  ...(maxDate ? [{ after: maxDate }] : []),
+                                ]}
+                                modifiersClassNames={{
+                                  selected: 'bg-blue-600 text-white hover:bg-blue-700',
+                                  today: 'font-bold text-blue-600',
+                                }}
+                              />
+                            </div>
+                          </div>
+
+                          {/* Footer */}
+                          <div className="shrink-0 border-t border-gray-200 p-3">
+                            <div className="flex justify-end gap-2">
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  field.onChange('')
+                                }}
+                                className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md transition-colors"
+                              >
+                                Clear
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => close('select')}
+                                className="px-4 py-2 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                              >
+                                Done
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </OverlayPositioner>
+                  )}
                 </>
               )}
-            </Popover>
+            </OverlayPickerCore>
           )
         }}
       />

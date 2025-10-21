@@ -21,7 +21,9 @@ import { FormLabel, FormHelperText } from '../components'
 import { FormStack, FormGrid, Stack } from '../components'
 import { resolveTypographyDisplay, getTypographyFromJSON } from './utils/typography-display'
 import { mergeFieldConfig } from './utils/field-json-config'
-import { Listbox, Transition } from '@headlessui/react'
+import { OverlayPickerCore, OverlaySheet, OverlayPositioner, calculateOverlayHeights, getOverlayContentClasses } from '../components/overlay'
+import { PickerList, PickerOption, PickerEmptyState } from '../components/picker'
+import { useDeviceType } from '../hooks/useDeviceType'
 
 export const TimeField: React.FC<FieldComponentProps> = ({
   name,
@@ -110,80 +112,144 @@ export const TimeField: React.FC<FieldComponentProps> = ({
         name={name}
         control={control}
         defaultValue={defaultValue}
-        render={({ field }) => (
-          <Listbox value={field.value || ''} onChange={field.onChange} disabled={disabled}>
-            {({ open }) => (
-              <div className="relative">
-                <Listbox.Button className="relative w-full min-h-[48px] rounded-md border border-gray-300 bg-white px-3 py-3 text-left text-base shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:bg-gray-50 flex items-center justify-between">
-                  <span className={field.value ? 'text-gray-900' : 'text-gray-400'}>
-                    {field.value ? formatTimeDisplay(field.value) : placeholder || 'Select time...'}
-                  </span>
-                  <svg
-                    className={`h-5 w-5 text-gray-400 transition-transform ${open ? 'rotate-180' : ''}`}
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </Listbox.Button>
+        render={({ field }) => {
+          const { isMobile } = useDeviceType()
+          const heights = calculateOverlayHeights({
+            maxHeight: 560,
+            hasSearch: false,
+            hasFooter: false,
+          })
 
-                <Transition
-                  as={Fragment}
-                  leave="transition ease-in duration-100"
-                  leaveFrom="opacity-100"
-                  leaveTo="opacity-0"
-                >
-                  <Listbox.Options className="absolute z-10 mt-1 max-h-80 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                    {timeOptions.length === 0 ? (
-                      <div className="relative cursor-default select-none py-2 px-4 text-gray-700">
-                        No times available
-                      </div>
-                    ) : (
-                      timeOptions.map((time) => (
-                        <Listbox.Option
-                          key={time}
-                          value={time}
-                          className={({ active }) =>
-                            `relative cursor-pointer select-none min-h-[48px] py-3 pl-10 pr-4 flex items-center ${
-                              active ? 'bg-blue-600 text-white' : 'text-gray-900'
-                            }`
-                          }
+          return (
+            <OverlayPickerCore
+              closeOnSelect={true}
+            >
+              {({ isOpen, open, close, triggerRef, contentRef }) => (
+                <>
+                  {/* Trigger Button */}
+                  <button
+                    ref={triggerRef as React.RefObject<HTMLButtonElement>}
+                    type="button"
+                    onClick={() => isOpen ? close() : open()}
+                    disabled={disabled}
+                    className="relative w-full min-h-[48px] rounded-md border border-gray-300 bg-white px-3 py-3 text-left text-base shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:bg-gray-50 flex items-center justify-between"
+                  >
+                    <span className={field.value ? 'text-gray-900' : 'text-gray-400'}>
+                      {field.value ? formatTimeDisplay(field.value) : placeholder || 'Select time...'}
+                    </span>
+                    <svg
+                      className={`h-5 w-5 text-gray-400 transition-transform ${isOpen ? 'rotate-180' : ''}`}
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </button>
+
+                  {/* Mobile Sheet */}
+                  {isMobile && isOpen && (
+                    <OverlaySheet
+                      open={isOpen}
+                      onClose={() => close('outside')}
+                      maxHeight={560}
+                      aria-labelledby={`${name}-label`}
+                    >
+                      <div ref={contentRef}>
+                        <PickerList
+                          role="listbox"
+                          aria-label={label ?? name}
                         >
-                          {({ selected, active }) => (
-                            <>
-                              <span className={`block truncate ${selected ? 'font-medium' : 'font-normal'}`}>
-                                {formatTimeDisplay(time)}
-                              </span>
-                              {selected && (
-                                <span
-                                  className={`absolute inset-y-0 left-0 flex items-center pl-3 ${
-                                    active ? 'text-white' : 'text-blue-600'
-                                  }`}
+                          {timeOptions.length === 0 ? (
+                            <PickerEmptyState message="No times available" />
+                          ) : (
+                            timeOptions.map((time) => {
+                              const isSelected = time === field.value
+                              return (
+                                <PickerOption
+                                  key={time}
+                                  value={time}
+                                  selected={isSelected}
+                                  disabled={disabled}
+                                  onClick={() => {
+                                    field.onChange(time)
+                                    close('select')
+                                  }}
                                 >
-                                  <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                    <path
-                                      fillRule="evenodd"
-                                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                      clipRule="evenodd"
-                                    />
-                                  </svg>
-                                </span>
-                              )}
-                            </>
+                                  {formatTimeDisplay(time)}
+                                </PickerOption>
+                              )
+                            })
                           )}
-                        </Listbox.Option>
-                      ))
-                    )}
-                  </Listbox.Options>
-                </Transition>
-              </div>
-            )}
-          </Listbox>
-        )}
+                        </PickerList>
+                      </div>
+                    </OverlaySheet>
+                  )}
+
+                  {/* Desktop Popover */}
+                  {!isMobile && isOpen && (
+                    <OverlayPositioner
+                      open={isOpen}
+                      anchor={triggerRef.current}
+                      placement="bottom-start"
+                      offset={6}
+                      strategy="fixed"
+                      sameWidth={true}
+                      maxHeight={560}
+                      collision={{ flip: true, shift: true, size: true }}
+                    >
+                      {({ refs, floatingStyles, isPositioned }) => (
+                        <div
+                          ref={refs.setFloating}
+                          style={floatingStyles}
+                          className="z-50 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden"
+                        >
+                          <div
+                            ref={contentRef}
+                            className={getOverlayContentClasses().content}
+                            style={{
+                              maxHeight: `${heights.contentMaxHeight}px`,
+                            }}
+                          >
+                            <PickerList
+                              role="listbox"
+                              aria-label={label ?? name}
+                            >
+                              {timeOptions.length === 0 ? (
+                                <PickerEmptyState message="No times available" />
+                              ) : (
+                                timeOptions.map((time) => {
+                                  const isSelected = time === field.value
+                                  return (
+                                    <PickerOption
+                                      key={time}
+                                      value={time}
+                                      selected={isSelected}
+                                      disabled={disabled}
+                                      onClick={() => {
+                                        field.onChange(time)
+                                        close('select')
+                                      }}
+                                    >
+                                      {formatTimeDisplay(time)}
+                                    </PickerOption>
+                                  )
+                                })
+                              )}
+                            </PickerList>
+                          </div>
+                        </div>
+                      )}
+                    </OverlayPositioner>
+                  )}
+                </>
+              )}
+            </OverlayPickerCore>
+          )
+        }}
       />
 
       {/* Time format hint */}

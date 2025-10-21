@@ -15,7 +15,8 @@
 
 import React, { Fragment, useState } from 'react'
 import { Controller } from 'react-hook-form'
-import { Popover, Transition } from '@headlessui/react'
+import { OverlayPickerCore, OverlaySheet, OverlayPositioner, calculateOverlayHeights, getOverlayContentClasses } from '../../components/overlay'
+import { useDeviceType } from '../../hooks/useDeviceType'
 import { DayPicker, DateRange } from 'react-day-picker'
 import 'react-day-picker/dist/style.css'
 import { format, parseISO, startOfDay, endOfDay, startOfWeek, endOfWeek, startOfMonth, endOfMonth, startOfYear, endOfYear } from 'date-fns'
@@ -145,11 +146,25 @@ export const DateRangeField: React.FC<FieldComponentProps> = ({
             ? `From ${value.start}`
             : 'Select date range...'
 
+          const { isMobile } = useDeviceType()
+          const heights = calculateOverlayHeights({
+            maxHeight: 560,
+            hasSearch: false,
+            hasFooter: true,
+            footerHeight: 48,
+          })
+
           return (
-            <Popover className="relative">
-              {({ open, close }) => (
+            <OverlayPickerCore
+              closeOnSelect={false}
+            >
+              {({ isOpen, open, close, triggerRef, contentRef }) => (
                 <>
-                  <Popover.Button
+                  {/* Trigger Button */}
+                  <button
+                    ref={triggerRef as React.RefObject<HTMLButtonElement>}
+                    type="button"
+                    onClick={() => isOpen ? close() : open()}
                     disabled={disabled}
                     className="w-full min-h-[48px] rounded-md border border-gray-300 bg-white px-3 py-3 text-left text-base shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:bg-gray-50 flex items-center justify-between"
                   >
@@ -157,7 +172,7 @@ export const DateRangeField: React.FC<FieldComponentProps> = ({
                       {displayValue}
                     </span>
                     <svg
-                      className={`h-5 w-5 text-gray-400 transition-transform ${open ? 'rotate-180' : ''}`}
+                      className={`h-5 w-5 text-gray-400 transition-transform ${isOpen ? 'rotate-180' : ''}`}
                       viewBox="0 0 20 20"
                       fill="currentColor"
                     >
@@ -167,63 +182,156 @@ export const DateRangeField: React.FC<FieldComponentProps> = ({
                         clipRule="evenodd"
                       />
                     </svg>
-                  </Popover.Button>
+                  </button>
 
-                  <Transition
-                    as={Fragment}
-                    enter="transition ease-out duration-200"
-                    enterFrom="opacity-0 translate-y-1"
-                    enterTo="opacity-100 translate-y-0"
-                    leave="transition ease-in duration-150"
-                    leaveFrom="opacity-100 translate-y-0"
-                    leaveTo="opacity-0 translate-y-1"
-                  >
-                    <Popover.Panel className="absolute z-10 mt-2 left-0">
-                      <div className="rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 bg-white p-4">
-                        <div className="flex gap-4">
-                          {/* Presets */}
-                          {presets.length > 0 && (
-                            <div className="flex flex-col gap-1 pr-4 border-r border-gray-200">
-                              <div className="text-xs font-medium text-gray-500 mb-1">
-                                Quick Select
-                              </div>
-                              {presets.map((preset: string) => (
-                                <button
-                                  key={preset}
-                                  type="button"
-                                  onClick={() => {
-                                    handlePreset(preset)
-                                    close()
+                  {/* Mobile Sheet */}
+                  {isMobile && isOpen && (
+                    <OverlaySheet
+                      open={isOpen}
+                      onClose={() => close('outside')}
+                      maxHeight={560}
+                      aria-labelledby={`${name}-label`}
+                    >
+                      {/* Presets */}
+                      {presets.length > 0 && (
+                        <div className="px-4 pt-4 pb-2 border-b border-gray-200">
+                          <div className="text-xs font-medium text-gray-500 mb-2">
+                            Quick Select
+                          </div>
+                          <div className="flex flex-wrap gap-2">
+                            {presets.map((preset: string) => (
+                              <button
+                                key={preset}
+                                type="button"
+                                onClick={() => {
+                                  handlePreset(preset)
+                                }}
+                                className="px-3 py-2 text-sm rounded-md bg-gray-100 hover:bg-gray-200 text-gray-700 transition-colors"
+                              >
+                                {preset}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Calendar */}
+                      <div className="px-4 py-6 flex justify-center">
+                        <DayPicker
+                          mode="range"
+                          selected={{
+                            from: value.start ? new Date(value.start) : undefined,
+                            to: value.end ? new Date(value.end) : undefined
+                          }}
+                          onSelect={handleRangeChange}
+                          numberOfMonths={1}
+                          disabled={disabled ? { before: new Date() } : undefined}
+                          fromDate={min}
+                          toDate={max}
+                          modifiersClassNames={{
+                            selected: 'bg-blue-600 text-white hover:bg-blue-700',
+                            today: 'font-bold text-blue-600',
+                          }}
+                        />
+                      </div>
+
+                      {/* Footer */}
+                      <div className="shrink-0 border-t border-gray-200 p-4">
+                        <div className="flex gap-3">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              field.onChange({})
+                            }}
+                            className="flex-1 min-h-[48px] px-4 text-base text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                          >
+                            Clear
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => close('select')}
+                            className="flex-1 min-h-[48px] px-4 text-base bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                          >
+                            Done
+                          </button>
+                        </div>
+                      </div>
+                    </OverlaySheet>
+                  )}
+
+                  {/* Desktop Popover */}
+                  {!isMobile && isOpen && (
+                    <OverlayPositioner
+                      open={isOpen}
+                      anchor={triggerRef.current}
+                      placement="bottom-start"
+                      offset={6}
+                      strategy="fixed"
+                      sameWidth={false}
+                      maxHeight={560}
+                      collision={{ flip: true, shift: true, size: true }}
+                    >
+                      {({ refs, floatingStyles, isPositioned }) => (
+                        <div
+                          ref={refs.setFloating}
+                          style={floatingStyles}
+                          className="z-50 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden"
+                        >
+                          {/* Content with Presets + Calendar */}
+                          <div
+                            ref={contentRef}
+                            className={getOverlayContentClasses().content}
+                            style={{
+                              maxHeight: `${heights.contentMaxHeight}px`,
+                            }}
+                          >
+                            <div className="p-4 flex gap-4">
+                              {/* Presets Sidebar */}
+                              {presets.length > 0 && (
+                                <div className="flex flex-col gap-1 pr-4 border-r border-gray-200">
+                                  <div className="text-xs font-medium text-gray-500 mb-1">
+                                    Quick Select
+                                  </div>
+                                  {presets.map((preset: string) => (
+                                    <button
+                                      key={preset}
+                                      type="button"
+                                      onClick={() => {
+                                        handlePreset(preset)
+                                      }}
+                                      className="text-left px-3 py-2 text-sm rounded-md hover:bg-gray-100 text-gray-700 whitespace-nowrap transition-colors"
+                                    >
+                                      {preset}
+                                    </button>
+                                  ))}
+                                </div>
+                              )}
+
+                              {/* Dual Calendar */}
+                              <div>
+                                <DayPicker
+                                  mode="range"
+                                  selected={{
+                                    from: value.start ? new Date(value.start) : undefined,
+                                    to: value.end ? new Date(value.end) : undefined
                                   }}
-                                  className="text-left px-3 py-2 text-sm rounded-md hover:bg-gray-100 text-gray-700 whitespace-nowrap transition-colors"
-                                >
-                                  {preset}
-                                </button>
-                              ))}
+                                  onSelect={handleRangeChange}
+                                  numberOfMonths={2}
+                                  disabled={disabled ? { before: new Date() } : undefined}
+                                  fromDate={min}
+                                  toDate={max}
+                                  modifiersClassNames={{
+                                    selected: 'bg-blue-600 text-white hover:bg-blue-700',
+                                    today: 'font-bold text-blue-600',
+                                  }}
+                                />
+                              </div>
                             </div>
-                          )}
+                          </div>
 
-                          {/* Dual Calendar */}
-                          <div>
-                            <DayPicker
-                              mode="range"
-                              selected={{
-                                from: value.start ? new Date(value.start) : undefined,
-                                to: value.end ? new Date(value.end) : undefined
-                              }}
-                              onSelect={handleRangeChange}
-                              numberOfMonths={2}
-                              disabled={disabled ? { before: new Date() } : undefined}
-                              fromDate={min}
-                              toDate={max}
-                              modifiersClassNames={{
-                                selected: 'bg-blue-600 text-white hover:bg-blue-700',
-                                today: 'font-bold text-blue-600',
-                              }}
-                            />
-                            
-                            {/* Action buttons */}
-                            <div className="flex justify-end gap-2 pt-3 border-t border-gray-200 mt-3">
+                          {/* Footer */}
+                          <div className="shrink-0 border-t border-gray-200 p-3">
+                            <div className="flex justify-end gap-2">
                               <button
                                 type="button"
                                 onClick={() => {
@@ -235,7 +343,7 @@ export const DateRangeField: React.FC<FieldComponentProps> = ({
                               </button>
                               <button
                                 type="button"
-                                onClick={() => close()}
+                                onClick={() => close('select')}
                                 className="px-4 py-2 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
                               >
                                 Done
@@ -243,12 +351,12 @@ export const DateRangeField: React.FC<FieldComponentProps> = ({
                             </div>
                           </div>
                         </div>
-                      </div>
-                    </Popover.Panel>
-                  </Transition>
+                      )}
+                    </OverlayPositioner>
+                  )}
                 </>
               )}
-            </Popover>
+            </OverlayPickerCore>
           )
         }}
       />
