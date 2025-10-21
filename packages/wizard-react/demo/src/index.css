@@ -98,20 +98,20 @@ button[data-selected="true"],
 
 /* Date picker styles - Single date + Range selection */
 
-/* SINGLE DATE SELECTION - MATCH RANGE EXACTLY */
-.rdp-day_selected:not(.rdp-day_range_start):not(.rdp-day_range_end),
-.rdp .rdp-day_selected:not(.rdp-day_range_start):not(.rdp-day_range_end) {
+/* SINGLE DATE SELECTION - EXACT COPY OF RANGE CIRCLE STYLING */
+.rdp-day_selected:not(.rdp-day_range_start):not(.rdp-day_range_end) {
   background-color: transparent !important;
 }
 
-.rdp-day_selected:not(.rdp-day_range_start):not(.rdp-day_range_end) button,
-.rdp .rdp-day_selected:not(.rdp-day_range_start):not(.rdp-day_range_end) button {
-  background-color: rgb(37 99 235) !important; /* blue-600 SAME AS RANGE */
+.rdp .rdp-day_selected .rdp-day_button,
+.rdp-day_selected button {
+  background-color: rgb(37 99 235) !important; /* blue-600 */
   color: white !important;
   border-radius: 50% !important;
   position: relative !important;
   z-index: 1 !important;
   font-weight: 600 !important;
+  border: none !important;
 }
 
 .rdp-day_selected:not(.rdp-day_range_start):not(.rdp-day_range_end) button:hover,
