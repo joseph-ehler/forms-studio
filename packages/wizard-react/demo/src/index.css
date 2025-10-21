@@ -96,84 +96,74 @@ button[data-selected="true"],
   --tw-ring-width: 1px !important;
 }
 
-/* Airbnb-style date range picker - Light fill + Filled/Outlined circles */
+/* Airbnb-style date range picker - Clean implementation */
 
-/* Reset default react-day-picker range styles */
-.rdp-day_selected,
-.rdp-day_range_start,
-.rdp-day_range_middle,
-.rdp-day_range_end {
+/* 1. Reset all default styles */
+.rdp-day {
   background-color: transparent !important;
 }
 
-/* Range middle days - Light blue rectangular fill */
+/* 2. Middle range days - Light blue fill, NO circles */
 .rdp-day_range_middle {
   background-color: rgb(219 234 254) !important; /* blue-100 */
 }
 
 .rdp-day_range_middle button {
   background-color: transparent !important;
-  color: rgb(17 24 39) !important; /* gray-900 */
+  color: rgb(17 24 39) !important; /* black text */
+  border-radius: 0 !important;
 }
 
 .rdp-day_range_middle button:hover {
   background-color: rgb(191 219 254) !important; /* blue-200 */
-  color: rgb(17 24 39) !important;
 }
 
-/* Start date - Filled blue circle + left-rounded light fill */
+/* 3. Start date - Filled circle ONLY, background only extends to the RIGHT */
 .rdp-day_range_start:not(.rdp-day_range_end) {
-  background-color: rgb(219 234 254) !important; /* blue-100 extends right */
-  border-top-left-radius: 50% !important;
-  border-bottom-left-radius: 50% !important;
-  border-top-right-radius: 0 !important;
-  border-bottom-right-radius: 0 !important;
+  background: linear-gradient(to right, transparent 50%, rgb(219 234 254) 50%) !important;
 }
 
 .rdp-day_range_start button {
   background-color: rgb(37 99 235) !important; /* blue-600 filled circle */
   color: white !important;
   border-radius: 50% !important;
+  position: relative !important;
+  z-index: 1 !important;
 }
 
-.rdp-day_range_start button:hover {
-  background-color: rgb(29 78 216) !important; /* blue-700 */
-  color: white !important;
-}
-
-/* End date - Filled blue circle + right-rounded light fill */
+/* 4. End date - Filled circle ONLY, background only extends to the LEFT */
 .rdp-day_range_end:not(.rdp-day_range_start) {
-  background-color: rgb(219 234 254) !important; /* blue-100 extends left */
-  border-top-right-radius: 50% !important;
-  border-bottom-right-radius: 50% !important;
-  border-top-left-radius: 0 !important;
-  border-bottom-left-radius: 0 !important;
+  background: linear-gradient(to left, transparent 50%, rgb(219 234 254) 50%) !important;
 }
 
 .rdp-day_range_end button {
   background-color: rgb(37 99 235) !important; /* blue-600 filled circle */
   color: white !important;
   border-radius: 50% !important;
+  position: relative !important;
+  z-index: 1 !important;
 }
 
-.rdp-day_range_end button:hover {
-  background-color: rgb(29 78 216) !important; /* blue-700 */
-  color: white !important;
-}
-
-/* Single day range (start = end) - Just filled circle, no background */
+/* 5. Single day (start = end) - Just filled circle, NO background */
 .rdp-day_range_start.rdp-day_range_end {
   background-color: transparent !important;
-  border-radius: 0 !important;
 }
 
 .rdp-day_range_start.rdp-day_range_end button {
-  background-color: rgb(37 99 235) !important; /* blue-600 filled circle */
+  background-color: rgb(37 99 235) !important;
   color: white !important;
   border-radius: 50% !important;
 }
 
-/* Hover preview - Blue outlined circle for dates outside range */
+/* 6. Hover states */
+.rdp-day_range_start button:hover,
+.rdp-day_range_end button:hover {
+  background-color: rgb(29 78 216) !important; /* blue-700 darker */
+  color: white !important;
+  border: none !important;
+}
+
+/* 7. Hover preview for unselected dates - outlined circle */
 .rdp button:not([disabled]):hover {
   border: 2px solid rgb(37 99 235) !important;
   background-color: white !important;
@@ -181,7 +171,7 @@ button[data-selected="true"],
   border-radius: 50% !important;
 }
 
-/* Override hover for range days to not show outline */
+/* 8. Remove outline hover from range days */
 .rdp-day_range_start button:hover,
 .rdp-day_range_end button:hover,
 .rdp-day_range_middle button:hover {
