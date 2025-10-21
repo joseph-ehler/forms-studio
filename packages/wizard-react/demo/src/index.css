@@ -101,133 +101,104 @@ button[aria-pressed="true"],
   --tw-ring-width: 1px !important;
 }
 
-/* Don't nerf borders/rings inside DayPicker */
-.rdp .border-2,
-.rdp .ring-2,
-.rdp :focus {
-  border-width: revert !important;
-  --tw-ring-width: revert !important;
+/* ================================
+   DayPicker v9 — isolation & reset
+   ================================ */
+
+/* Keep global focus/ring rules from interfering inside the calendar */
+.rdp *:focus {
   box-shadow: none !important;
   outline: none !important;
 }
+.rdp .border-2,
+.rdp .ring-2 {
+  border-width: revert !important;
+  --tw-ring-width: 0 !important;
+}
 
-/* Date picker color overrides - Default CSS handles structure */
+/* Unify day button surface: DayPicker v9 sets state classes on the button itself */
+.rdp .rdp-day {
+  border-radius: 50% !important;      /* circular hit area */
+  border: none !important;            /* kill thin borders that leak through */
+  position: relative;
+}
 
-/* SINGLE DATE SELECTION - EXACT COPY of range styling */
-.custom-selected-date,
-.rdp .custom-selected-date,
-.custom-selected-date button,
-.rdp .custom-selected-date button {
+/* ================================
+   SINGLE DATE (DateField)
+   ================================ */
+
+/* Selected = solid fill */
+.rdp .rdp-day_selected {
   background-color: rgb(37, 99, 235) !important; /* blue-600 */
-  color: rgb(255, 255, 255) !important;
-  border-radius: 50% !important;
-  font-weight: 700 !important;
-  border: none !important;
-  opacity: 1 !important;
-}
-
-.custom-selected-date:hover,
-.rdp .custom-selected-date:hover,
-.custom-selected-date button:hover,
-.rdp .custom-selected-date button:hover {
-  background-color: rgb(29 78 216) !important; /* blue-700 */
   color: #fff !important;
-  border: none !important;
 }
 
-/* Fallback for default class */
-.rdp .rdp-day_selected,
-.rdp-day_selected,
-.rdp .rdp-day_selected button,
-.rdp-day_selected button {
-  background-color: rgb(37 99 235) !important;
-  color: #fff !important;
+/* Hover a non-selected day: show blue outline */
+.rdp .rdp-day:not(.rdp-day_selected):not(.rdp-day_disabled):hover {
+  outline: 2px solid rgb(59, 130, 246) !important; /* blue-500 */
+  outline-offset: -2px !important;
+}
+
+/* Today, when not selected, stays accent but does not add borders */
+.rdp .rdp-day_today:not(.rdp-day_selected) {
+  color: rgb(37, 99, 235) !important;
   font-weight: 700 !important;
-  border: none !important;
 }
 
-/* Airbnb-style date RANGE picker - AGGRESSIVE SPECIFICITY */
+/* ================================
+   RANGE (DateRangeField, Airbnb style)
+   ================================ */
 
-/* CRITICAL: Range middle days - MUST show light blue fill */
-.rdp .rdp-day_range_middle,
-.rdp-day_range_middle {
-  background-color: rgb(219 234 254) !important; /* blue-100 */
+/* Middle span fill */
+.rdp .rdp-day_range_middle {
+  background-color: rgb(219, 234, 254) !important; /* blue-100 */
+  color: rgb(17, 24, 39) !important;               /* neutral text */
 }
 
-.rdp .rdp-day_range_middle .rdp-day_button,
-.rdp-day_range_middle button {
-  background-color: transparent !important;
-  color: rgb(17 24 39) !important; /* black text */
-}
-
-/* Start date - filled circle + right-side light fill */
-.rdp .rdp-day_range_start:not(.rdp-day_range_end),
-.rdp-day_range_start:not(.rdp-day_range_end) {
-  background: linear-gradient(to right, transparent 50%, rgb(219 234 254) 50%) !important;
-}
-
+/* Start & end circles — same solid fill as single */
 .rdp .rdp-day_range_start,
-.rdp-day_range_start {
-  background-color: rgb(37, 99, 235) !important; /* blue-600 */
-  color: rgb(255, 255, 255) !important;
-  border-radius: 50% !important;
-  font-weight: 700 !important;
+.rdp .rdp-day_range_end {
+  background-color: rgb(37, 99, 235) !important;   /* blue-600 */
+  color: #fff !important;
 }
 
-/* End date - filled circle + left-side light fill */
-.rdp .rdp-day_range_end:not(.rdp-day_range_start),
-.rdp-day_range_end:not(.rdp-day_range_start) {
-  background: linear-gradient(to left, transparent 50%, rgb(219 234 254) 50%) !important;
+/* Half-fill band behind the start/end cell (Airbnb look) */
+.rdp .rdp-day_range_start:not(.rdp-day_range_end) {
+  background: linear-gradient(to right, transparent 50%, rgb(219, 234, 254) 50%) !important;
+  color: #fff !important;
+}
+.rdp .rdp-day_range_end:not(.rdp-day_range_start) {
+  background: linear-gradient(to left,  transparent 50%, rgb(219, 234, 254) 50%) !important;
+  color: #fff !important;
 }
 
-.rdp .rdp-day_range_end,
-.rdp-day_range_end {
-  background-color: rgb(37, 99, 235) !important; /* blue-600 */
-  color: rgb(255, 255, 255) !important;
-  border-radius: 50% !important;
-  font-weight: 700 !important;
-}
-
-/* Single day range */
+/* Single-day range (start=end) just uses the solid circle */
 .rdp .rdp-day_range_start.rdp-day_range_end {
-  background-color: rgb(37, 99, 235) !important; /* blue-600 */
-  color: rgb(255, 255, 255) !important;
-  border-radius: 50% !important;
-  font-weight: 700 !important;
+  background-color: rgb(37, 99, 235) !important;
+  color: #fff !important;
 }
 
-/* HOVER: Blue ring on unselected days only */
-.rdp .rdp-day:not(.rdp-day_range_start):not(.rdp-day_range_end):not(.rdp-day_range_middle):not(.rdp-day_selected):not(.rdp-day_disabled):not(.custom-selected-date):hover {
+/* ================================
+   HOVER / PREVIEW (range replacement)
+   ================================ */
+
+/* Preview band between fixed date and hovered date */
+.rdp .rdp-day_preview {
+  background-color: rgba(59, 130, 246, 0.08) !important; /* faint blue */
+}
+
+/* On the preview end cell, show a blue ring cue */
+.rdp .rdp-day_preview:hover {
   outline: 2px solid rgb(59, 130, 246) !important;
   outline-offset: -2px !important;
-  border-radius: 50% !important;
 }
 
-/* HOVER: Selected start/end/single stay blue (darker) */
+/* Keep start/end on hover as solid blue (no white flash) */
 .rdp .rdp-day_range_start:hover,
-.rdp .rdp-day_range_end:hover {
-  background-color: rgb(29 78 216) !important; /* blue-700 */
+.rdp .rdp-day_range_end:hover,
+.rdp .rdp-day_selected:hover {
+  background-color: rgb(29, 78, 216) !important; /* blue-700 */
   color: #fff !important;
-}
-
-/* HOVER: Middle range days stay transparent */
-.rdp .rdp-day_range_middle:hover {
-  background-color: transparent !important;
-  color: rgb(17 24 39) !important;
   outline: none !important;
 }
-
-/* Preview ring on hover */
-.rdp .rdp-day_preview:hover {
-  outline: 2px solid rgb(59 130 246) !important;
-  outline-offset: -2px !important;
-  border-radius: 50% !important;
-}
-
-/* Preview span */
-.rdp .rdp-day_preview,
-.rdp-day_preview {
-  background-color: rgba(59, 130, 246, 0.08) !important;
-}
-
 
