@@ -137,6 +137,7 @@ export const TimeField: React.FC<FieldComponentProps> = ({
             const lastTimeRef = React.useRef(0)
             const animationRef = React.useRef<number | null>(null)
             const momentumRef = React.useRef(false)
+            const scrollOffsetRef = React.useRef(0)
 
             const itemHeight = 48
             const visibleItems = 5
@@ -173,40 +174,36 @@ export const TimeField: React.FC<FieldComponentProps> = ({
               velocityRef.current *= friction
 
               // Update scroll offset
-              setScrollOffset(prev => prev + velocityRef.current)
+              scrollOffsetRef.current += velocityRef.current
+              setScrollOffset(scrollOffsetRef.current)
 
               // Check if we should stop
               if (Math.abs(velocityRef.current) < minVelocity) {
                 momentumRef.current = false
                 
                 // Snap to nearest item
-                setScrollOffset(prev => {
-                  const steps = Math.round(prev / itemHeight)
-                  const targetOffset = steps * itemHeight
-                  
-                  // Update value
-                  const delta = -steps
-                  if (delta !== 0) {
-                    const newValue = normalizeValue(value + delta)
-                    onChange(newValue)
-                  }
-                  
-                  return 0
-                })
+                const offsetSteps = -scrollOffsetRef.current / itemHeight
+                const targetValue = value + offsetSteps
+                const snappedValue = Math.round(targetValue)
+                const finalValue = normalizeValue(snappedValue)
+                onChange(finalValue)
+                scrollOffsetRef.current = 0
+                setScrollOffset(0)
                 
                 return
               }
 
-              // Check if we crossed a threshold
-              setScrollOffset(prev => {
-                if (Math.abs(prev) >= itemHeight) {
-                  const steps = Math.floor(Math.abs(prev) / itemHeight) * Math.sign(prev)
-                  const newValue = normalizeValue(value - steps)
-                  onChange(newValue)
-                  return prev - (steps * itemHeight)
-                }
-                return prev
-              })
+              // Check if we crossed a threshold during momentum
+              const currentOffset = -scrollOffsetRef.current / itemHeight
+              const steps = Math.floor(Math.abs(currentOffset))
+              
+              if (steps >= 1) {
+                const direction = currentOffset > 0 ? 1 : -1
+                const newValue = normalizeValue(value + (direction * steps))
+                onChange(newValue)
+                scrollOffsetRef.current = scrollOffsetRef.current + (direction * steps * itemHeight)
+                setScrollOffset(scrollOffsetRef.current)
+              }
 
               animationRef.current = requestAnimationFrame(animate)
             }, [value, onChange, max])
@@ -250,7 +247,8 @@ export const TimeField: React.FC<FieldComponentProps> = ({
               }
               
               // Update scroll offset smoothly (no value changes during drag)
-              setScrollOffset(prev => prev + deltaY)
+              scrollOffsetRef.current += deltaY
+              setScrollOffset(scrollOffsetRef.current)
               
               lastYRef.current = currentY
               lastTimeRef.current = currentTime
@@ -260,17 +258,17 @@ export const TimeField: React.FC<FieldComponentProps> = ({
               setIsDragging(false)
               e.currentTarget.releasePointerCapture(e.pointerId)
               
-              // Calculate where we are now based on scroll offset
-              const offsetSteps = scrollOffset / itemHeight
-              
               // Start momentum if velocity is significant
               if (Math.abs(velocityRef.current) > snapThreshold) {
                 startMomentum()
               } else {
-                // Snap to nearest
-                const roundedSteps = Math.round(offsetSteps)
-                const newValue = normalizeValue(value - roundedSteps)
-                onChange(newValue)
+                // Snap to nearest - figure out which number is visually closest to center
+                const offsetSteps = -scrollOffsetRef.current / itemHeight // Negative because dragging down = scroll up
+                const targetValue = value + offsetSteps
+                const snappedValue = Math.round(targetValue)
+                const finalValue = normalizeValue(snappedValue)
+                onChange(finalValue)
+                scrollOffsetRef.current = 0
                 setScrollOffset(0)
               }
             }
