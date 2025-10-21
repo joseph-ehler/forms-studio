@@ -169,13 +169,9 @@ export const DateField: React.FC<FieldComponentProps> = ({
                             ...(minDate ? [{ before: minDate }] : []),
                             ...(maxDate ? [{ after: maxDate }] : []),
                           ]}
-                          modifiersClassNames={{
-                            selected: 'rdp-day_selected_custom'
-                          }}
                           styles={{
                             day_button: { borderRadius: '50%' }
                           }}
-                          className="date-picker-single"
                         />
                       </div>
 
@@ -240,13 +236,9 @@ export const DateField: React.FC<FieldComponentProps> = ({
                                   ...(minDate ? [{ before: minDate }] : []),
                                   ...(maxDate ? [{ after: maxDate }] : []),
                                 ]}
-                                modifiersClassNames={{
-                                  selected: 'rdp-day_selected_custom'
-                                }}
                                 styles={{
                                   day_button: { borderRadius: '50%' }
                                 }}
-                                className="date-picker-single"
                               />
                             </div>
                           </div>

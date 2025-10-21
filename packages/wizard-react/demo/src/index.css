@@ -98,25 +98,20 @@ button[data-selected="true"],
 
 /* Date picker styles - Single date + Range selection */
 
-/* SINGLE DATE SELECTION - ULTRA AGGRESSIVE */
+/* SINGLE DATE SELECTION - MATCH RANGE EXACTLY */
 .rdp-day_selected:not(.rdp-day_range_start):not(.rdp-day_range_end),
-.rdp .rdp-day_selected:not(.rdp-day_range_start):not(.rdp-day_range_end),
-.rdp-months .rdp-day_selected:not(.rdp-day_range_start):not(.rdp-day_range_end) {
+.rdp .rdp-day_selected:not(.rdp-day_range_start):not(.rdp-day_range_end) {
   background-color: transparent !important;
-  border-radius: 0 !important;
 }
 
 .rdp-day_selected:not(.rdp-day_range_start):not(.rdp-day_range_end) button,
-.rdp .rdp-day_selected:not(.rdp-day_range_start):not(.rdp-day_range_end) button,
-.rdp-months .rdp-day_selected button,
-button.rdp-day_selected,
-.rdp-day_selected > button {
-  background-color: rgb(37 99 235) !important; /* blue-600 */
+.rdp .rdp-day_selected:not(.rdp-day_range_start):not(.rdp-day_range_end) button {
+  background-color: rgb(37 99 235) !important; /* blue-600 SAME AS RANGE */
   color: white !important;
   border-radius: 50% !important;
   position: relative !important;
   z-index: 1 !important;
-  border: none !important;
+  font-weight: 600 !important;
 }
 
 .rdp-day_selected:not(.rdp-day_range_start):not(.rdp-day_range_end) button:hover,
