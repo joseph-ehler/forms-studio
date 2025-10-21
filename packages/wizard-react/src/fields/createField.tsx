@@ -21,9 +21,9 @@ import { FileField } from './FileField'
 import { CalculatedField } from './CalculatedField'
 // import { ColorField } from './ColorField'  // Temporarily disabled
 // import { RangeField } from './RangeField'  // Temporarily disabled
-// Composite fields (9 fixed, rest still parked)
-import { EmailField, PasswordField, SearchField, PhoneField, OTPField, TableField, DateRangeField, RadioGroupField, MatrixField } from './composite'
-// Still parked: CurrencyField, NPSField, RankField, AddressField
+// Composite fields (12 working, 1 parked)
+import { EmailField, PasswordField, SearchField, PhoneField, OTPField, TableField, DateRangeField, RadioGroupField, MatrixField, CurrencyField, NPSField, AddressField } from './composite'
+// Parked: RankField (drag & drop complexity)
 import { registerFields } from './registry'
 
 export function registerDefaultFields() {
@@ -47,7 +47,7 @@ export function registerDefaultFields() {
     // color: () => ColorField,  // Temporarily disabled
     // range: () => RangeField,  // Temporarily disabled
     
-    // Composite fields (9 working, rest parked)
+    // Composite fields (12 working)
     email: () => EmailField,
     password: () => PasswordField,
     search: () => SearchField,
@@ -57,10 +57,9 @@ export function registerDefaultFields() {
     daterange: () => DateRangeField,
     radiogroup: () => RadioGroupField,
     matrix: () => MatrixField,
-    // Still parked:
-    // currency: () => CurrencyField,
-    // nps: () => NPSField,
-    // rank: () => RankField,
-    // address: () => AddressField,
+    currency: () => CurrencyField,
+    nps: () => NPSField,
+    address: () => AddressField,
+    // Parked: rank (drag & drop)
   })
 }

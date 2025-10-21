@@ -5,7 +5,7 @@
  * Export all composite fields for easy registration.
  */
 
-// ✅ Fixed and working (9)
+// ✅ Fixed and working (12)
 export { EmailField } from './EmailField'
 export { PasswordField } from './PasswordField'
 export { SearchField } from './SearchField'
@@ -15,6 +15,9 @@ export { TableField } from './TableField'
 export { DateRangeField } from './DateRangeField'
 export { RadioGroupField } from './RadioGroupField'
 export { MatrixField } from './MatrixField'
+export { CurrencyField } from './CurrencyField'
+export { NPSField } from './NPSField'
+export { AddressField } from './AddressField'
 
-// 🔄 Still parked - will re-export as fixed:
-// - CurrencyField, NPSField, RankField, AddressField
+// 🔄 Still parked:
+// - RankField (drag & drop complexity)

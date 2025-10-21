@@ -31,7 +31,7 @@ export * from './fields/CalculatedField'
 export { SliderField } from './fields/SliderField'
 
 // ========================================
-// COMPOSITE FIELDS (Working - 9)
+// COMPOSITE FIELDS (Working - 12)
 // ========================================
 export { EmailField } from './fields/composite/EmailField'
 export { PasswordField } from './fields/composite/PasswordField'
@@ -42,6 +42,9 @@ export { TableField } from './fields/composite/TableField'
 export { DateRangeField } from './fields/composite/DateRangeField'
 export { RadioGroupField } from './fields/composite/RadioGroupField'
 export { MatrixField } from './fields/composite/MatrixField'
+export { CurrencyField } from './fields/composite/CurrencyField'
+export { NPSField } from './fields/composite/NPSField'
+export { AddressField } from './fields/composite/AddressField'
 
 // ========================================
 // PARKED FIELDS (Being Fixed)
