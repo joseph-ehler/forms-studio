@@ -325,7 +325,7 @@ export const DateRangeField: React.FC<FieldComponentProps> = ({
                             id={`${name}-dialog`}
                             role="dialog"
                             aria-labelledby={`${name}-label`}
-                            className="z-50 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 flex flex-col"
+                            className="z-50 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 flex flex-col overflow-hidden"
                           >
                             {/* Content with Presets + Calendar - Scrollable */}
                             <div
