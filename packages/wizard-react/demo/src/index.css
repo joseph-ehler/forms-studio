@@ -80,44 +80,56 @@ button:focus,
 
 /* Fix thick borders on chips/buttons when selected */
 button[aria-pressed="true"],
-button[data-selected="true"],
-.border-2 {
-  border-width: 1px !important;
+/* Global focus override to prevent thick blue outlines (but not in DayPicker) */
+:focus:not(.rdp *):not(.rdp) {
+  box-shadow: 0 0 0 1px rgb(59 130 246) !important;
+  outline: none !important;
 }
 
-/* Override Tailwind's ring utilities that create thick borders */
-.ring-2 {
+.border-2:not(.rdp *):not(.rdp) {
   --tw-ring-offset-width: 0px !important;
   --tw-ring-width: 1px !important;
 }
 
-.focus\:ring-2:focus {
+.ring-2:not(.rdp *):not(.rdp) {
   --tw-ring-offset-width: 0px !important;
   --tw-ring-width: 1px !important;
+}
+
+.focus\:ring-2:focus:not(.rdp *):not(.rdp) {
+  --tw-ring-offset-width: 0px !important;
+  --tw-ring-width: 1px !important;
+}
+
+/* Don't nerf borders/rings inside DayPicker */
+.rdp .border-2,
+.rdp .ring-2,
+.rdp :focus {
+  border-width: revert !important;
+  --tw-ring-width: revert !important;
+  box-shadow: none !important;
+  outline: none !important;
 }
 
 /* Date picker styles - Single date + Range selection */
 
-/* SINGLE DATE SELECTION - EXACT SAME AS RANGE */
-.rdp .rdp-day_selected .rdp-day_button,
-.rdp-day_selected button {
+/* SINGLE DATE SELECTION - v9 button classes */
+.rdp .rdp-day_selected {
   background-color: rgb(37 99 235) !important; /* blue-600 */
-  color: white !important;
+  color: #fff !important;
   border-radius: 50% !important;
+  border: none !important;
   font-weight: 700 !important;
 }
 
-.rdp-day_selected:not(.rdp-day_range_start):not(.rdp-day_range_end) button:hover,
-.rdp .rdp-day_selected:not(.rdp-day_range_start):not(.rdp-day_range_end) button:hover,
-.rdp-day_selected > button:hover {
+/* Hover selected day */
+.rdp .rdp-day_selected:hover {
   background-color: rgb(29 78 216) !important; /* blue-700 */
-  color: white !important;
-  outline: none !important;
-  border: none !important;
+  color: #fff !important;
 }
 
-/* Today indicator */
-.rdp-day_today button {
+/* Today indicator (unselected) */
+.rdp .rdp-day_today {
   font-weight: 700;
   color: rgb(37 99 235) !important;
 }
@@ -142,11 +154,12 @@ button[data-selected="true"],
   background: linear-gradient(to right, transparent 50%, rgb(219 234 254) 50%) !important;
 }
 
-.rdp .rdp-day_range_start .rdp-day_button,
-.rdp-day_range_start button {
+.rdp .rdp-day_range_start,
+.rdp-day_range_start {
   background-color: rgb(37 99 235) !important; /* blue-600 */
-  color: white !important;
+  color: #fff !important;
   border-radius: 50% !important;
+  font-weight: 700 !important;
 }
 
 /* End date - filled circle + left-side light fill */
@@ -155,55 +168,45 @@ button[data-selected="true"],
   background: linear-gradient(to left, transparent 50%, rgb(219 234 254) 50%) !important;
 }
 
-.rdp .rdp-day_range_end .rdp-day_button,
-.rdp-day_range_end button {
+.rdp .rdp-day_range_end,
+.rdp-day_range_end {
   background-color: rgb(37 99 235) !important; /* blue-600 */
-  color: white !important;
+  color: #fff !important;
   border-radius: 50% !important;
+  font-weight: 700 !important;
 }
 
 /* Single day range */
-.rdp .rdp-day_range_start.rdp-day_range_end,
-.rdp-day_range_start.rdp-day_range_end {
-  background-color: transparent !important;
-}
-
-.rdp .rdp-day_range_start.rdp-day_range_end .rdp-day_button,
-.rdp-day_range_start.rdp-day_range_end button {
-  background-color: rgb(37 99 235) !important;
-  color: white !important;
+.rdp .rdp-day_range_start.rdp-day_range_end {
+  background-color: rgb(37 99 235) !important; /* blue-600 */
+  color: #fff !important;
   border-radius: 50% !important;
+  font-weight: 700 !important;
 }
 
 /* HOVER: Blue ring on unselected days only */
-.rdp .rdp-day:not(.rdp-day_range_start):not(.rdp-day_range_end):not(.rdp-day_range_middle):not(.rdp-day_disabled) .rdp-day_button:hover,
-.rdp-day:not(.rdp-day_range_start):not(.rdp-day_range_end):not(.rdp-day_range_middle):not(.rdp-day_disabled) button:hover {
+.rdp .rdp-day:not(.rdp-day_range_start):not(.rdp-day_range_end):not(.rdp-day_range_middle):not(.rdp-day_selected):not(.rdp-day_disabled):hover {
   outline: 2px solid rgb(59 130 246) !important;
   outline-offset: -2px !important;
   border-radius: 50% !important;
 }
 
-/* HOVER: Selected start/end stay blue (darker) - NO WHITE */
-.rdp .rdp-day_range_start .rdp-day_button:hover,
-.rdp .rdp-day_range_end .rdp-day_button:hover,
-.rdp-day_range_start button:hover,
-.rdp-day_range_end button:hover {
+/* HOVER: Selected start/end/single stay blue (darker) */
+.rdp .rdp-day_range_start:hover,
+.rdp .rdp-day_range_end:hover {
   background-color: rgb(29 78 216) !important; /* blue-700 */
-  color: white !important;
-  outline: none !important;
+  color: #fff !important;
 }
 
 /* HOVER: Middle range days stay transparent */
-.rdp .rdp-day_range_middle .rdp-day_button:hover,
-.rdp-day_range_middle button:hover {
+.rdp .rdp-day_range_middle:hover {
   background-color: transparent !important;
   color: rgb(17 24 39) !important;
   outline: none !important;
 }
 
-/* Preview ring */
-.rdp .rdp-day_preview .rdp-day_button,
-.rdp-day_preview button {
+/* Preview ring on hover */
+.rdp .rdp-day_preview:hover {
   outline: 2px solid rgb(59 130 246) !important;
   outline-offset: -2px !important;
   border-radius: 50% !important;
@@ -215,30 +218,3 @@ button[data-selected="true"],
   background-color: rgba(59, 130, 246, 0.08) !important;
 }
 
-/* ========================================
-   DATEFIELD SINGLE SELECTION FIX
-   MUST BE LAST TO OVERRIDE EVERYTHING
-   ======================================== */
-
-/* Reset selected day container - MAXIMUM SPECIFICITY */
-.rdp .rdp-month .rdp-day_selected,
-.rdp-months .rdp-month .rdp-day_selected,
-div.rdp-day_selected {
-  background-color: transparent !important;
-}
-
-/* Force blue filled circle - NUCLEAR SPECIFICITY */
-.rdp .rdp-month .rdp-day_selected button,
-.rdp-months .rdp-month .rdp-day_selected button,
-div.rdp-day_selected button,
-.rdp-day_selected button.rdp-button_reset,
-.date-picker-single .rdp-day_selected_custom button,
-.rdp-day_selected_custom button {
-  background-color: rgb(37 99 235) !important;
-  color: white !important;
-  border-radius: 50% !important;
-  border: none !important;
-  width: 40px !important;
-  height: 40px !important;
-  font-weight: 600 !important;
-}
