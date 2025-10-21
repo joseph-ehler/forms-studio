@@ -243,7 +243,9 @@ div.rdp-day_selected {
 .rdp .rdp-month .rdp-day_selected button,
 .rdp-months .rdp-month .rdp-day_selected button,
 div.rdp-day_selected button,
-.rdp-day_selected button.rdp-button_reset {
+.rdp-day_selected button.rdp-button_reset,
+.date-picker-single .rdp-day_selected_custom button,
+.rdp-day_selected_custom button {
   background-color: rgb(37 99 235) !important;
   color: white !important;
   border-radius: 50% !important;

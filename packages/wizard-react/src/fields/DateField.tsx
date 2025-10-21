@@ -169,20 +169,13 @@ export const DateField: React.FC<FieldComponentProps> = ({
                             ...(minDate ? [{ before: minDate }] : []),
                             ...(maxDate ? [{ after: maxDate }] : []),
                           ]}
-                          modifiers={{
-                            selected: selectedDate ? [selectedDate] : []
-                          }}
-                          modifiersStyles={{
-                            selected: {
-                              backgroundColor: '#2563eb',
-                              color: '#ffffff',
-                              borderRadius: '50%',
-                              fontWeight: 'normal'
-                            }
+                          modifiersClassNames={{
+                            selected: 'rdp-day_selected_custom'
                           }}
                           styles={{
                             day_button: { borderRadius: '50%' }
                           }}
+                          className="date-picker-single"
                         />
                       </div>
 
@@ -247,20 +240,13 @@ export const DateField: React.FC<FieldComponentProps> = ({
                                   ...(minDate ? [{ before: minDate }] : []),
                                   ...(maxDate ? [{ after: maxDate }] : []),
                                 ]}
-                                modifiers={{
-                                  selected: selectedDate ? [selectedDate] : []
-                                }}
-                                modifiersStyles={{
-                                  selected: {
-                                    backgroundColor: '#2563eb',
-                                    color: '#ffffff',
-                                    borderRadius: '50%',
-                                    fontWeight: 'normal'
-                                  }
+                                modifiersClassNames={{
+                                  selected: 'rdp-day_selected_custom'
                                 }}
                                 styles={{
                                   day_button: { borderRadius: '50%' }
                                 }}
+                                className="date-picker-single"
                               />
                             </div>
                           </div>
