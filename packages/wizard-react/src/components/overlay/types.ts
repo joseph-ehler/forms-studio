@@ -47,11 +47,11 @@ export interface OverlayPickerProps {
   allowOutsideScroll?: boolean
 
   // Slots
-  trigger: ReactNode
+  trigger?: ReactNode
   header?: ReactNode
   footer?: ReactNode
   emptyState?: ReactNode
-  children: ReactNode
+  children?: ReactNode
 
   // Accessibility
   'aria-label'?: string

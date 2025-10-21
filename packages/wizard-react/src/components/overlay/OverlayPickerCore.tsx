@@ -8,8 +8,9 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react'
 import type { OverlayPickerProps, OverlayCloseReason } from './types'
 
-export interface OverlayPickerCoreProps extends OverlayPickerProps {
+export interface OverlayPickerCoreProps extends Omit<OverlayPickerProps, 'children'> {
   id?: string
+  children: React.ReactNode | ((context: OverlayContextValue) => React.ReactNode)
 }
 
 export const OverlayPickerCore: React.FC<OverlayPickerCoreProps> = ({
