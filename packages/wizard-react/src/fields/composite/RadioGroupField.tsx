@@ -103,20 +103,10 @@ export const RadioGroupField: React.FC<FieldComponentProps> = ({
                       <div
                         className={`
                           h-5 w-5 rounded-full border-2 flex items-center justify-center
-                          ${
-                            isSelected
-                              ? 'border-blue-600 bg-white'
-                              : 'border-gray-300 bg-white'
-                          }
                         `}
-                      >
-                        {isSelected && (
-                          <div className="h-2.5 w-2.5 rounded-full bg-blue-600" />
-                        )}
-                      </Flex>
+                      />
                     </div>
-                    {/* Label & Description */}
-                    <div className="ml-3 flex-1">
+                    <Stack>
                       <span
                         className={`block text-sm font-medium ${
                           isSelected ? 'text-blue-900' : 'text-gray-900'
@@ -125,17 +115,12 @@ export const RadioGroupField: React.FC<FieldComponentProps> = ({
                         {optionLabel}
                       </span>
                       {optionDescription && (
-                        <span
-                          className={`block text-sm ${
-                            isSelected ? 'text-blue-700' : 'text-gray-500'
-                          }`}
-                        >
-                          {optionDescription}
-                        </span>
+                        <p className="text-sm text-gray-500">{optionDescription}</p>
                       )}
-                    </div>
+                    </Stack>
                   </Flex>
                 </label>
+              )
             })}
           </div>
         )}

@@ -89,7 +89,7 @@ export const MatrixField: React.FC<FieldComponentProps> = ({
           <FormLabel required={typography.showRequired && required} optional={typography.showOptional && !required}>
             {label}
           </FormLabel>
-        </Stack>
+        </div>
       )}
       {typography.showDescription && description && (
         <div className="mb-3">
