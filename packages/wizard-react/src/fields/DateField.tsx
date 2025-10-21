@@ -155,10 +155,6 @@ export const DateField: React.FC<FieldComponentProps> = ({
                             ...(minDate ? [{ before: minDate }] : []),
                             ...(maxDate ? [{ after: maxDate }] : []),
                           ]}
-                          modifiersClassNames={{
-                            selected: 'bg-blue-600 text-white hover:bg-blue-700',
-                            today: 'font-bold text-blue-600',
-                          }}
                         />
                       </div>
 
