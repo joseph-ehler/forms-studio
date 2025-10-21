@@ -120,13 +120,15 @@ body :not(.rdp) button[aria-pressed="true"] {
   background-color: rgb(29, 78, 216) !important; /* blue-700 */
 }
 
-/* =================================================================
-   HOVER RING on UNSELECTED days only (single & range)
-   ================================================================= */
-.rdp [role="gridcell"] > *:not([aria-pressed="true"]):not([aria-selected="true"]):not([disabled]):hover {
-  outline: 2px solid rgb(59, 130, 246) !important; /* blue-500 */
+/* --- HOVER RING on UNSELECTED days (ARIA-only, works with any classNames) --- */
+.rdp [role="gridcell"] > *:not([aria-selected="true"]):not([aria-pressed="true"]):not([aria-disabled="true"]):hover {
+  /* show ring reliably across browsers */
+  outline: 2px solid rgb(59, 130, 246) !important;      /* blue-500 */
   outline-offset: -2px !important;
   border-radius: 50% !important;
+
+  /* fallback in case outline gets clipped by UA quirks */
+  box-shadow: 0 0 0 2px rgb(59, 130, 246) inset !important;
 }
 
 /* =================================================================
