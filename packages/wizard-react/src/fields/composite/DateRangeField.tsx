@@ -196,6 +196,7 @@ export const DateRangeField: React.FC<FieldComponentProps> = ({
             modifiers: previewRange ? { preview: previewRange } : undefined,
             classNames: {
               day: 'fs-day',
+              day_selected: 'fs-selected',
               day_range_start: 'fs-range-start',
               day_range_end: 'fs-range-end',
               day_range_middle: 'fs-range-mid',

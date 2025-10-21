@@ -82,26 +82,14 @@ button:focus,
 }
 
 /* Fix thick borders on chips/buttons when selected */
-button[aria-pressed="true"],
-/* Global focus override to prevent thick blue outlines (but not in DayPicker) */
-:focus:not(.rdp *):not(.rdp) {
+button[aria-pressed="true"] {
+  border-width: 1px !important;
+}
+
+/* Keep the "thin ring" look globally… */
+body :focus {
   box-shadow: 0 0 0 1px rgb(59 130 246) !important;
   outline: none !important;
-}
-
-.border-2:not(.rdp *):not(.rdp) {
-  --tw-ring-offset-width: 0px !important;
-  --tw-ring-width: 1px !important;
-}
-
-.ring-2:not(.rdp *):not(.rdp) {
-  --tw-ring-offset-width: 0px !important;
-  --tw-ring-width: 1px !important;
-}
-
-.focus\:ring-2:focus:not(.rdp *):not(.rdp) {
-  --tw-ring-offset-width: 0px !important;
-  --tw-ring-width: 1px !important;
 }
 
 /* Isolate DayPicker from global rings/focus */
