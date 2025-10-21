@@ -182,7 +182,7 @@ export const TimeField: React.FC<FieldComponentProps> = ({
                 momentumRef.current = false
                 
                 // Snap to nearest item
-                const offsetSteps = -scrollOffsetRef.current / itemHeight
+                const offsetSteps = scrollOffsetRef.current / itemHeight
                 const targetValue = value + offsetSteps
                 const snappedValue = Math.round(targetValue)
                 const finalValue = normalizeValue(snappedValue)
@@ -194,14 +194,14 @@ export const TimeField: React.FC<FieldComponentProps> = ({
               }
 
               // Check if we crossed a threshold during momentum
-              const currentOffset = -scrollOffsetRef.current / itemHeight
+              const currentOffset = scrollOffsetRef.current / itemHeight
               const steps = Math.floor(Math.abs(currentOffset))
               
               if (steps >= 1) {
                 const direction = currentOffset > 0 ? 1 : -1
                 const newValue = normalizeValue(value + (direction * steps))
                 onChange(newValue)
-                scrollOffsetRef.current = scrollOffsetRef.current + (direction * steps * itemHeight)
+                scrollOffsetRef.current = scrollOffsetRef.current - (direction * steps * itemHeight)
                 setScrollOffset(scrollOffsetRef.current)
               }
 
@@ -263,7 +263,8 @@ export const TimeField: React.FC<FieldComponentProps> = ({
                 startMomentum()
               } else {
                 // Snap to nearest - figure out which number is visually closest to center
-                const offsetSteps = -scrollOffsetRef.current / itemHeight // Negative because dragging down = scroll up
+                // The visually centered number is: value + (scrollOffset / itemHeight)
+                const offsetSteps = scrollOffsetRef.current / itemHeight
                 const targetValue = value + offsetSteps
                 const snappedValue = Math.round(targetValue)
                 const finalValue = normalizeValue(snappedValue)
