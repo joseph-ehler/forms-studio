@@ -95,21 +95,34 @@ body :focus {
 
 /* --- Guard: don't let global thin-ring clobber calendar --- */
 .rdp-root *:focus,
-.rdp-root *:focus-visible {
+.rdp-root *:focus-visible,
+.rdp-root button:focus,
+.rdp-root button:focus-visible {
   box-shadow: none !important;
   outline: none !important;
-  border: none !important;
+  border-width: 0 !important;
 }
 
-/* Selected buttons should never show focus ring */
+/* Selected buttons should NEVER show focus ring - ultra specific */
 .rdp-root .rdp-selected button:focus,
+.rdp-root .rdp-selected button:focus-visible,
 .rdp-root .fs-selected button:focus,
+.rdp-root .fs-selected button:focus-visible,
 .rdp-root .rdp-day_selected button:focus,
+.rdp-root .rdp-day_selected button:focus-visible,
 .rdp-root button[aria-pressed="true"]:focus,
-.rdp-root button[aria-selected="true"]:focus {
+.rdp-root button[aria-pressed="true"]:focus-visible,
+.rdp-root button[aria-selected="true"]:focus,
+.rdp-root button[aria-selected="true"]:focus-visible,
+.rdp-root .rdp-day_range_start button:focus,
+.rdp-root .rdp-day_range_end button:focus,
+.rdp-root .rdp-day_button:focus,
+.rdp-root .rdp-day_button:focus-visible {
   box-shadow: none !important;
   outline: none !important;
   border: none !important;
+  outline-width: 0 !important;
+  outline-style: none !important;
 }
 
 /* If you have a global aria-pressed thin border, keep it out of the calendar */
@@ -167,11 +180,17 @@ body :not(.rdp-root) button[aria-pressed="true"] {
   border: none !important;
 }
 
-/* IMPORTANT: Don't apply to middle range dates */
+/* CRITICAL: Middle range dates must NOT have filled buttons - ultra specific */
 .rdp-root .rdp-day_range_middle:not(.rdp-day_range_start):not(.rdp-day_range_end) button,
-.rdp-root .fs-range-mid:not(.fs-range-start):not(.fs-range-end) button {
+.rdp-root .rdp-day_range_middle:not(.rdp-day_range_start):not(.rdp-day_range_end) .rdp-day_button,
+.rdp-root .fs-range-mid:not(.fs-range-start):not(.fs-range-end) button,
+.rdp-root .fs-range-mid:not(.fs-range-start):not(.fs-range-end) .rdp-day_button,
+.rdp-root [data-day-range="middle"]:not([data-day-range="start"]):not([data-day-range="end"]) button,
+.rdp-root [data-day-range="middle"]:not([data-day-range="start"]):not([data-day-range="end"]) .rdp-day_button {
   background-color: transparent !important;
+  background: transparent !important;
   color: rgb(17, 24, 39) !important;
+  border: none !important;
 }
 
 /* =================================================================
