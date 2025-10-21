@@ -218,3 +218,16 @@ button[aria-pressed="true"],
   background-color: rgba(59, 130, 246, 0.08) !important;
 }
 
+/* FORCE DARK BLUE - NUCLEAR OVERRIDE */
+.force-dark-blue,
+.rdp .force-dark-blue,
+button.force-dark-blue {
+  background-color: #2563eb !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  border-radius: 50% !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+

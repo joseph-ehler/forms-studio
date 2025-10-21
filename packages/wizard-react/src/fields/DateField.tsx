@@ -183,7 +183,13 @@ export const DateField: React.FC<FieldComponentProps> = ({
                               color: '#ffffff',
                               fontWeight: 700,
                               borderRadius: '50%',
+                              border: 'none',
+                              outline: 'none',
+                              boxShadow: 'none',
                             }
+                          }}
+                          modifiersClassNames={{
+                            selected: 'force-dark-blue'
                           }}
                         />
                       </div>
@@ -263,7 +269,13 @@ export const DateField: React.FC<FieldComponentProps> = ({
                                     color: '#ffffff',
                                     fontWeight: 700,
                                     borderRadius: '50%',
+                                    border: 'none',
+                                    outline: 'none',
+                                    boxShadow: 'none',
                                   }
+                                }}
+                                modifiersClassNames={{
+                                  selected: 'force-dark-blue'
                                 }}
                               />
                             </div>
