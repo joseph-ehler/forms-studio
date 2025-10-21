@@ -231,10 +231,6 @@ export const DateRangeField: React.FC<FieldComponentProps> = ({
                           disabled={disabled ? { before: new Date() } : undefined}
                           fromDate={min}
                           toDate={max}
-                          modifiersClassNames={{
-                            selected: 'bg-blue-600 text-white hover:bg-blue-700',
-                            today: 'font-bold text-blue-600',
-                          }}
                         />
                       </div>
 
@@ -323,10 +319,6 @@ export const DateRangeField: React.FC<FieldComponentProps> = ({
                                   disabled={disabled ? { before: new Date() } : undefined}
                                   fromDate={min}
                                   toDate={max}
-                                  modifiersClassNames={{
-                                    selected: 'bg-blue-600 text-white hover:bg-blue-700',
-                                    today: 'font-bold text-blue-600',
-                                  }}
                                 />
                               </div>
                             </div>
