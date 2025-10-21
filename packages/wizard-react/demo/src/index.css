@@ -113,10 +113,45 @@ button[aria-pressed="true"],
 
 /* Date picker styles - Single date + Range selection */
 
-/* DayPicker v9 base styling - NO defaults imported */
+/* DayPicker v9 base styling - Complete structure */
 .rdp {
   --rdp-cell-size: 44px;
   --rdp-accent-color: #2563eb;
+}
+
+.rdp-months {
+  display: flex;
+  gap: 1rem;
+}
+
+.rdp-month {
+  margin: 0;
+}
+
+.rdp-caption {
+  display: flex;
+  justify-content: center;
+  padding: 0.5rem 0;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.rdp-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.rdp-head_cell {
+  text-align: center;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #6b7280;
+  padding: 0.5rem 0;
+}
+
+.rdp-cell {
+  text-align: center;
+  padding: 2px;
 }
 
 .rdp-day {
@@ -126,6 +161,19 @@ button[aria-pressed="true"],
   border: none;
   background: transparent;
   cursor: pointer;
+  font-size: 0.875rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rdp-day:hover:not(.rdp-day_disabled) {
+  background-color: #f3f4f6;
+}
+
+.rdp-day_disabled {
+  opacity: 0.3;
+  cursor: default;
 }
 
 /* SINGLE DATE SELECTION */
