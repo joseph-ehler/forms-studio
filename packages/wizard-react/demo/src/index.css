@@ -273,21 +273,29 @@ body :not(.rdp-root) button[aria-pressed="true"] {
    
    Excludes ALL selected states using :not() selectors
 ================================================================= */
-.rdp-root [role="gridcell"] > *:not([aria-pressed="true"]):not([aria-selected="true"]):not([aria-disabled="true"]):not(.fs-selected):not(.rdp-selected):not(.rdp-day_selected):not(.rdp-day_range_start):not(.rdp-day_range_middle):not(.rdp-day_range_end):not(.fs-range-start):not(.fs-range-mid):not(.fs-range-end):not(.fs-disabled):not(.rdp-day_disabled):hover,
-.rdp-root .fs-day:not(.fs-selected):not(.rdp-selected):not(.fs-range-start):not(.fs-range-mid):not(.fs-range-end):not(.fs-disabled):hover,
-.rdp-root .rdp-day:not([aria-pressed="true"]):not([aria-selected="true"]):not(.rdp-selected):not(.rdp-day_selected):not(.rdp-day_range_start):not(.rdp-day_range_middle):not(.rdp-day_range_end):not(.rdp-day_disabled):not([aria-disabled="true"]):hover {
+/* ONLY style the BUTTON on hover, not the cell */
+.rdp-root button.rdp-day_button:not([aria-pressed="true"]):not([aria-selected="true"]):not([aria-disabled="true"]):hover {
   border: 2px solid rgb(59, 130, 246) !important;
   border-radius: 50% !important;
   box-sizing: border-box !important;
   background-color: transparent !important;
 }
 
-/* Middle range dates should NOT get hover ring, they already have the band */
-.rdp-root .rdp-day_range_middle:hover,
-.rdp-root .fs-range-mid:hover,
-.rdp-root [data-day-range="middle"]:hover {
+/* Cells should NEVER have hover borders */
+.rdp-root [role="gridcell"]:hover,
+.rdp-root td:hover {
   border: none !important;
   outline: none !important;
+}
+
+/* Middle range buttons should NEVER get hover styling */
+.rdp-root .rdp-day_range_middle button:hover,
+.rdp-root .rdp-day_range_middle .rdp-day_button:hover,
+.rdp-root .fs-range-mid button:hover,
+.rdp-root [data-day-range="middle"] button:hover {
+  border: none !important;
+  outline: none !important;
+  background-color: transparent !important;
 }
 
 /* =================================================================
@@ -385,4 +393,22 @@ body :not(.rdp-root) button[aria-pressed="true"] {
   border: none !important;
   background-color: transparent !important;
   outline: none !important;
+}
+
+/* =================================================================
+   FINAL OVERRIDE - Range middle dates MUST be transparent
+   This rule is at the END to win over ALL previous blue fills
+================================================================= */
+.rdp-root td.rdp-day_range_middle:not(.rdp-day_range_start):not(.rdp-day_range_end) button.rdp-day_button,
+.rdp-root td.rdp-day_range_middle:not(.rdp-day_range_start):not(.rdp-day_range_end) > button,
+.rdp-root td[data-day-range="middle"]:not([data-day-range="start"]):not([data-day-range="end"]) button,
+.rdp-root [role="gridcell"].rdp-day_range_middle button,
+.rdp-root [role="gridcell"][data-day-range="middle"] button {
+  background-color: transparent !important;
+  background: transparent !important;
+  background-image: none !important;
+  color: rgb(17, 24, 39) !important;
+  border: none !important;
+  font-weight: 400 !important;
+  box-shadow: none !important;
 }
