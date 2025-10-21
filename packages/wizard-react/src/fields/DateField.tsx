@@ -27,6 +27,21 @@ import 'react-day-picker/dist/style.css'
 import { OverlayPickerCore, OverlaySheet, OverlayPositioner, calculateOverlayHeights, getOverlayContentClasses } from '../components/overlay'
 import { useDeviceType } from '../hooks/useDeviceType'
 
+// Local (tz-safe) conversion helpers
+const toLocalDateString = (d?: Date) => {
+  if (!d) return undefined
+  const y = d.getFullYear()
+  const m = String(d.getMonth() + 1).padStart(2, '0')
+  const da = String(d.getDate()).padStart(2, '0')
+  return `${y}-${m}-${da}`
+}
+
+const fromLocalDateString = (s?: string) => {
+  if (!s) return undefined
+  const [y, m, d] = s.split('-').map(Number)
+  return new Date(y, (m ?? 1) - 1, d ?? 1)
+}
+
 export const DateField: React.FC<FieldComponentProps> = ({
   name,
   label: propLabel,
@@ -82,14 +97,14 @@ export const DateField: React.FC<FieldComponentProps> = ({
         control={control}
         defaultValue={defaultValue}
         render={({ field }) => {
-          const selectedDate = field.value ? new Date(field.value) : undefined
+          const selectedDate = fromLocalDateString(field.value)
           const displayValue = field.value
             ? formatDate(field.value)
             : ''
 
           const handleDateSelect = (date: Date | undefined) => {
             if (date) {
-              field.onChange(format(date, 'yyyy-MM-dd'))
+              field.onChange(toLocalDateString(date))
             } else {
               field.onChange('')
             }
