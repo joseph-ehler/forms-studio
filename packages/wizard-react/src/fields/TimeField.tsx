@@ -156,9 +156,9 @@ export const TimeField: React.FC<FieldComponentProps> = ({
 
             const getVisibleNumbers = () => {
               const numbers: number[] = []
-              const offset = scrollOffset / itemHeight
-              for (let i = -centerIndex - 2; i <= centerIndex + 2; i++) {
-                let num = Math.round(value - offset + i)
+              // Show more numbers for smoother scrolling
+              for (let i = -5; i <= 5; i++) {
+                let num = value + i
                 num = normalizeValue(num)
                 numbers.push(num)
               }
@@ -249,19 +249,8 @@ export const TimeField: React.FC<FieldComponentProps> = ({
                 velocityRef.current = deltaY / deltaTime * 16 // Scale to ~60fps
               }
               
-              // Update scroll offset smoothly
+              // Update scroll offset smoothly (no value changes during drag)
               setScrollOffset(prev => prev + deltaY)
-              
-              // Check if we crossed a threshold during drag
-              setScrollOffset(prev => {
-                if (Math.abs(prev) >= itemHeight) {
-                  const steps = Math.floor(Math.abs(prev) / itemHeight) * Math.sign(prev)
-                  const newValue = normalizeValue(value - steps)
-                  onChange(newValue)
-                  return prev - (steps * itemHeight)
-                }
-                return prev
-              })
               
               lastYRef.current = currentY
               lastTimeRef.current = currentTime
@@ -271,16 +260,17 @@ export const TimeField: React.FC<FieldComponentProps> = ({
               setIsDragging(false)
               e.currentTarget.releasePointerCapture(e.pointerId)
               
+              // Calculate where we are now based on scroll offset
+              const offsetSteps = scrollOffset / itemHeight
+              
               // Start momentum if velocity is significant
               if (Math.abs(velocityRef.current) > snapThreshold) {
                 startMomentum()
               } else {
                 // Snap to nearest
-                const steps = Math.round(scrollOffset / itemHeight)
-                const newValue = normalizeValue(value - steps)
-                if (steps !== 0) {
-                  onChange(newValue)
-                }
+                const roundedSteps = Math.round(offsetSteps)
+                const newValue = normalizeValue(value - roundedSteps)
+                onChange(newValue)
                 setScrollOffset(0)
               }
             }
@@ -293,14 +283,13 @@ export const TimeField: React.FC<FieldComponentProps> = ({
             }, [])
 
             const numbers = getVisibleNumbers()
-            const offset = scrollOffset / itemHeight
 
             return (
               <div className="flex flex-col items-center">
                 <div className="text-xs font-medium text-gray-500 mb-2">{label}</div>
                 <div
                   ref={containerRef}
-                  className="relative h-60 w-20 overflow-hidden cursor-grab active:cursor-grabbing select-none"
+                  className="relative h-60 w-20 overflow-hidden cursor-grab active:cursor-grabbing select-none touch-none"
                   onPointerDown={handlePointerDown}
                   onPointerMove={handlePointerMove}
                   onPointerUp={handlePointerUp}
@@ -312,14 +301,21 @@ export const TimeField: React.FC<FieldComponentProps> = ({
                   {/* Numbers */}
                   <div className="absolute inset-0 flex flex-col items-center justify-center">
                     {numbers.map((num, idx) => {
-                      const basePosition = idx - centerIndex - 2
-                      const position = basePosition + offset
+                      // Calculate position: base position of this number relative to center value
+                      const numberOffset = num - value
+                      // Adjust for wrapping (e.g., 59 -> 0 or 0 -> 59)
+                      let adjustedOffset = numberOffset
+                      if (adjustedOffset > max / 2) adjustedOffset -= (max + 1)
+                      if (adjustedOffset < -max / 2) adjustedOffset += (max + 1)
+                      
+                      // Apply scroll offset
+                      const position = adjustedOffset - (scrollOffset / itemHeight)
                       const distance = Math.abs(position)
                       const opacity = distance < 0.5 ? 1 : distance < 1.5 ? 0.4 : distance < 2.5 ? 0.15 : 0.05
                       const scale = distance < 0.5 ? 1 : 0.75
                       const translateY = position * itemHeight
 
-                      if (Math.abs(translateY) > 150) return null // Don't render far items
+                      if (Math.abs(translateY) > 180) return null // Don't render far items
 
                       return (
                         <div
@@ -469,13 +465,13 @@ export const TimeField: React.FC<FieldComponentProps> = ({
                       offset={6}
                       strategy="fixed"
                       sameWidth={false}
-                      maxHeight={500}
-                      collision={{ flip: true, shift: true, size: true }}
+                      maxHeight={480}
+                      collision={{ flip: true, shift: true, size: false }}
                     >
                       {({ refs, floatingStyles }) => (
                         <div
                           ref={refs.setFloating}
-                          style={floatingStyles}
+                          style={{ ...floatingStyles, width: 'auto', minWidth: '320px' }}
                           className="z-50 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 p-4"
                         >
                           <div ref={contentRef} className="space-y-4">
