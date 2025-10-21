@@ -15,6 +15,7 @@ import React, { useState } from 'react'
 import { Controller, useFieldArray } from 'react-hook-form'
 import type { FieldComponentProps } from '../types'
 import { FormLabel, FormHelperText } from '../../components'
+import { Stack } from '../../components/DSShims'
 import { resolveTypographyDisplay, getTypographyFromJSON } from '../utils/typography-display'
 import { mergeFieldConfig } from '../utils/field-json-config'
 
@@ -86,7 +87,7 @@ export const TableField: React.FC<FieldComponentProps> = ({
           <FormLabel required={typography.showRequired && required} optional={typography.showOptional && !required}>
             {label}
           </FormLabel>
-        </Stack>
+        </div>
       )}
       {typography.showDescription && description && (
         <div className="mb-3">
@@ -225,7 +226,7 @@ export const TableField: React.FC<FieldComponentProps> = ({
           {String(errors[name].message)}
         </FormHelperText>
       )}
-    </div>
+    </Stack>
   )
 }
 

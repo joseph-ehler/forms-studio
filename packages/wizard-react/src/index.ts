@@ -31,11 +31,14 @@ export * from './fields/CalculatedField'
 export { SliderField } from './fields/SliderField'
 
 // ========================================
-// COMPOSITE FIELDS (Working - 3)
+// COMPOSITE FIELDS (Working - 6)
 // ========================================
 export { EmailField } from './fields/composite/EmailField'
 export { PasswordField } from './fields/composite/PasswordField'
 export { SearchField } from './fields/composite/SearchField'
+export { PhoneField } from './fields/composite/PhoneField'
+export { OTPField } from './fields/composite/OTPField'
+export { TableField } from './fields/composite/TableField'
 
 // ========================================
 // PARKED FIELDS (Being Fixed)

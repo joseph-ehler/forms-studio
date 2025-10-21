@@ -13,10 +13,11 @@
  * - Lockout after failed attempts
  */
 
-import React, { useRef, useState, useEffect } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { Controller } from 'react-hook-form'
 import type { FieldComponentProps } from '../types'
 import { FormLabel, FormHelperText } from '../../components'
+import { Stack } from '../../components/DSShims'
 import { resolveTypographyDisplay, getTypographyFromJSON } from '../utils/typography-display'
 import { mergeFieldConfig } from '../utils/field-json-config'
 
@@ -63,7 +64,7 @@ export const OTPField: React.FC<FieldComponentProps> = ({
           <FormLabel required={typography.showRequired && required} optional={typography.showOptional && !required}>
             {label}
           </FormLabel>
-        </Stack>
+        </div>
       )}
       {typography.showDescription && description && (
         <div className="mb-3">
@@ -90,13 +91,11 @@ export const OTPField: React.FC<FieldComponentProps> = ({
       />
 
       {typography.showError && errors?.[name]?.message && (
-        <div className="mt-2">
-          <FormHelperText variant="error">
-            {String(errors[name].message)}
-          </FormHelperText>
-        </div>
+        <FormHelperText variant="error">
+          {String(errors[name].message)}
+        </FormHelperText>
       )}
-    </div>
+    </Stack>
   )
 }
 
@@ -267,7 +266,7 @@ const OTPInput: React.FC<OTPInputProps> = ({
             aria-label={`Digit ${index + 1}`}
           />
         ))}
-      </Stack>
+      </div>
 
       {/* Resend button */}
       {allowResend && (
@@ -308,6 +307,6 @@ const OTPInput: React.FC<OTPInputProps> = ({
           <span className="text-sm font-medium">Code complete</span>
         </div>
       )}
-    </div>
+    </Stack>
   )
 }

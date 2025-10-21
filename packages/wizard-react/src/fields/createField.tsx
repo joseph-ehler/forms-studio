@@ -21,9 +21,9 @@ import { FileField } from './FileField'
 import { CalculatedField } from './CalculatedField'
 // import { ColorField } from './ColorField'  // Temporarily disabled
 // import { RangeField } from './RangeField'  // Temporarily disabled
-// Composite fields (3 fixed, rest still parked)
-import { EmailField, PasswordField, SearchField } from './composite'
-// Still parked: PhoneField, DateRangeField, MatrixField, OTPField, TableField
+// Composite fields (6 fixed, rest still parked)
+import { EmailField, PasswordField, SearchField, PhoneField, OTPField, TableField } from './composite'
+// Still parked: DateRangeField, MatrixField
 import { registerFields } from './registry'
 
 export function registerDefaultFields() {
@@ -47,15 +47,15 @@ export function registerDefaultFields() {
     // color: () => ColorField,  // Temporarily disabled
     // range: () => RangeField,  // Temporarily disabled
     
-    // Composite fields (3 working, rest parked)
+    // Composite fields (6 working, rest parked)
     email: () => EmailField,
     password: () => PasswordField,
     search: () => SearchField,
+    phone: () => PhoneField,
+    otp: () => OTPField,
+    table: () => TableField,
     // Still parked:
-    // phone: () => PhoneField,
     // daterange: () => DateRangeField,
     // matrix: () => MatrixField,
-    // otp: () => OTPField,
-    // table: () => TableField,
   })
 }
