@@ -113,34 +113,18 @@ button[aria-pressed="true"],
 
 /* Date picker color overrides - Default CSS handles structure */
 
-/* SINGLE DATE SELECTION - Try attribute selector */
-.rdp button[aria-selected="true"],
-.rdp button.rdp-day[aria-selected="true"],
-button.rdp-day[aria-selected="true"],
-.rdp-root button.rdp-day_selected,
-.rdp button.rdp-day.rdp-day_selected,
-button.rdp-day_selected,
-.rdp button.rdp-day_selected {
-  background-color: #2563eb !important;
-  color: #ffffff !important;
+/* SINGLE DATE SELECTION - EXACT SAME PATTERN AS RANGE */
+.rdp .rdp-day_selected,
+.rdp-day_selected {
+  background-color: rgb(37 99 235) !important; /* blue-600 SAME AS RANGE */
+  color: #fff !important;
   font-weight: 700 !important;
-  border: none !important;
-  box-shadow: none !important;
-  outline: none !important;
 }
 
-.rdp button[aria-selected="true"]:hover,
-.rdp button.rdp-day[aria-selected="true"]:hover,
-button.rdp-day[aria-selected="true"]:hover,
-.rdp-root button.rdp-day_selected:hover,
-.rdp button.rdp-day.rdp-day_selected:hover,
-button.rdp-day_selected:hover,
-.rdp button.rdp-day_selected:hover {
-  background-color: #1d4ed8 !important;
-  color: #ffffff !important;
-  border: none !important;
-  box-shadow: none !important;
-  outline: none !important;
+.rdp .rdp-day_selected:hover,
+.rdp-day_selected:hover {
+  background-color: rgb(29 78 216) !important; /* blue-700 */
+  color: #fff !important;
 }
 
 /* Airbnb-style date RANGE picker - AGGRESSIVE SPECIFICITY */
