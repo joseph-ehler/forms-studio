@@ -29,9 +29,14 @@ export * from './fields/DateTimeField'
 export * from './fields/FileField'
 export * from './fields/CalculatedField'
 export { SliderField } from './fields/SliderField'
+export { ColorField } from './fields/ColorField'
+export { RangeField } from './fields/RangeField'
+export { RatingField } from './fields/RatingField'
+export { RepeaterField } from './fields/RepeaterField'
+export { SignatureField } from './fields/SignatureField'
 
 // ========================================
-// COMPOSITE FIELDS (Working - 12)
+// COMPOSITE FIELDS (ALL 13 COMPLETE! 🎉)
 // ========================================
 export { EmailField } from './fields/composite/EmailField'
 export { PasswordField } from './fields/composite/PasswordField'
@@ -45,6 +50,7 @@ export { MatrixField } from './fields/composite/MatrixField'
 export { CurrencyField } from './fields/composite/CurrencyField'
 export { NPSField } from './fields/composite/NPSField'
 export { AddressField } from './fields/composite/AddressField'
+export { RankField } from './fields/composite/RankField'
 
 // ========================================
 // PARKED FIELDS (Being Fixed)

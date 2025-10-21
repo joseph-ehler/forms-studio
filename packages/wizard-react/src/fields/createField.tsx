@@ -14,16 +14,15 @@ import { DateField } from './DateField'
 import { TimeField } from './TimeField'
 import { DateTimeField } from './DateTimeField'
 import { SliderField } from './SliderField'
-// import { RatingField } from './RatingField'  // Temporarily disabled
-// import { RepeaterField } from './RepeaterField'  // Temporarily disabled
-// import { SignatureField } from './SignatureField'  // Temporarily disabled
+import { RatingField } from './RatingField'
+import { RepeaterField } from './RepeaterField'
+import { SignatureField } from './SignatureField'
 import { FileField } from './FileField'
 import { CalculatedField } from './CalculatedField'
-// import { ColorField } from './ColorField'  // Temporarily disabled
-// import { RangeField } from './RangeField'  // Temporarily disabled
-// Composite fields (12 working, 1 parked)
-import { EmailField, PasswordField, SearchField, PhoneField, OTPField, TableField, DateRangeField, RadioGroupField, MatrixField, CurrencyField, NPSField, AddressField } from './composite'
-// Parked: RankField (drag & drop complexity)
+import { ColorField } from './ColorField'
+import { RangeField } from './RangeField'
+// Composite fields (ALL 13 COMPLETE! 🎉)
+import { EmailField, PasswordField, SearchField, PhoneField, OTPField, TableField, DateRangeField, RadioGroupField, MatrixField, CurrencyField, NPSField, AddressField, RankField } from './composite'
 import { registerFields } from './registry'
 
 export function registerDefaultFields() {
@@ -39,15 +38,15 @@ export function registerDefaultFields() {
     time: () => TimeField,
     datetime: () => DateTimeField,
     slider: () => SliderField,
-    // rating: () => RatingField,  // Temporarily disabled
-    // repeater: () => RepeaterField,  // Temporarily disabled
-    // signature: () => SignatureField,  // Temporarily disabled
+    rating: () => RatingField,
+    repeater: () => RepeaterField,
+    signature: () => SignatureField,
     file: () => FileField,
     calculated: () => CalculatedField,
-    // color: () => ColorField,  // Temporarily disabled
-    // range: () => RangeField,  // Temporarily disabled
+    color: () => ColorField,
+    range: () => RangeField,
     
-    // Composite fields (12 working)
+    // Composite fields (ALL 13 COMPLETE! 🎉)
     email: () => EmailField,
     password: () => PasswordField,
     search: () => SearchField,
@@ -60,6 +59,6 @@ export function registerDefaultFields() {
     currency: () => CurrencyField,
     nps: () => NPSField,
     address: () => AddressField,
-    // Parked: rank (drag & drop)
+    rank: () => RankField,
   })
 }

@@ -5,7 +5,7 @@
  * Export all composite fields for easy registration.
  */
 
-// ✅ Fixed and working (12)
+// ✅ ALL 13 COMPOSITE FIELDS COMPLETE! 🎉
 export { EmailField } from './EmailField'
 export { PasswordField } from './PasswordField'
 export { SearchField } from './SearchField'
@@ -18,6 +18,4 @@ export { MatrixField } from './MatrixField'
 export { CurrencyField } from './CurrencyField'
 export { NPSField } from './NPSField'
 export { AddressField } from './AddressField'
-
-// 🔄 Still parked:
-// - RankField (drag & drop complexity)
+export { RankField } from './RankField'
