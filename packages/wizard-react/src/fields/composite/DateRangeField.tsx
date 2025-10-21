@@ -31,6 +31,21 @@ interface DateRangeValue {
   end?: string
 }
 
+// Local (tz-safe) conversion, no UTC skew
+const toLocalDateString = (d?: Date) => {
+  if (!d) return undefined
+  const y = d.getFullYear()
+  const m = String(d.getMonth() + 1).padStart(2, '0')
+  const da = String(d.getDate()).padStart(2, '0')
+  return `${y}-${m}-${da}`
+}
+
+const fromLocalDateString = (s?: string) => {
+  if (!s) return undefined
+  const [y, m, d] = s.split('-').map(Number)
+  return new Date(y, (m ?? 1) - 1, d ?? 1)
+}
+
 export const DateRangeField: React.FC<FieldComponentProps> = ({
   name,
   label: propLabel,
@@ -63,41 +78,30 @@ export const DateRangeField: React.FC<FieldComponentProps> = ({
   const max = (config as any).max ? new Date((config as any).max) : undefined
   const presets = (config as any).presets ?? ['Today', 'This Week', 'This Month', 'Last 30 Days']
 
-  // Quick preset calculations
+  // Quick preset calculations (local timezone)
   const getPresetRange = (preset: string): DateRangeValue => {
     const today = new Date()
-    const startOfWeek = new Date(today)
-    startOfWeek.setDate(today.getDate() - today.getDay())
-    const endOfWeek = new Date(startOfWeek)
-    endOfWeek.setDate(startOfWeek.getDate() + 6)
-    
-    const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1)
-    const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0)
-    
+
+    const wStart = new Date(today)
+    wStart.setDate(today.getDate() - today.getDay())
+    const wEnd = new Date(wStart)
+    wEnd.setDate(wStart.getDate() + 6)
+
+    const mStart = new Date(today.getFullYear(), today.getMonth(), 1)
+    const mEnd = new Date(today.getFullYear(), today.getMonth() + 1, 0)
+
     const last30Start = new Date(today)
     last30Start.setDate(today.getDate() - 30)
 
     switch (preset) {
       case 'Today':
-        return { 
-          start: today.toISOString().split('T')[0], 
-          end: today.toISOString().split('T')[0] 
-        }
+        return { start: toLocalDateString(today), end: toLocalDateString(today) }
       case 'This Week':
-        return { 
-          start: startOfWeek.toISOString().split('T')[0], 
-          end: endOfWeek.toISOString().split('T')[0] 
-        }
+        return { start: toLocalDateString(wStart), end: toLocalDateString(wEnd) }
       case 'This Month':
-        return { 
-          start: startOfMonth.toISOString().split('T')[0], 
-          end: endOfMonth.toISOString().split('T')[0] 
-        }
+        return { start: toLocalDateString(mStart), end: toLocalDateString(mEnd) }
       case 'Last 30 Days':
-        return { 
-          start: last30Start.toISOString().split('T')[0], 
-          end: today.toISOString().split('T')[0] 
-        }
+        return { start: toLocalDateString(last30Start), end: toLocalDateString(today) }
       default:
         return {}
     }
@@ -107,9 +111,14 @@ export const DateRangeField: React.FC<FieldComponentProps> = ({
     <Stack spacing="sm">
       {typography.showLabel && label && (
         <Stack>
-          <FormLabel required={typography.showRequired && required} optional={typography.showOptional && !required}>
-            {label}
-          </FormLabel>
+          <div id={`${name}-label`}>
+            <FormLabel 
+              required={typography.showRequired && required} 
+              optional={typography.showOptional && !required}
+            >
+              {label}
+            </FormLabel>
+          </div>
         </Stack>
       )}
       {typography.showDescription && description && (
@@ -124,24 +133,30 @@ export const DateRangeField: React.FC<FieldComponentProps> = ({
         render={({ field }) => {
           const value: DateRangeValue = field.value || {}
           
+          // Convert string dates to Date objects
+          const selectedFrom = fromLocalDateString(value.start)
+          const selectedTo = fromLocalDateString(value.end)
+
+          // Hover state for live preview
+          const [hoverDate, setHoverDate] = React.useState<Date | undefined>(undefined)
+
+          // Compute preview range (from fixed date to hovered date)
+          const previewRange =
+            selectedFrom && !selectedTo && hoverDate
+              ? {
+                  from: hoverDate < selectedFrom ? hoverDate : selectedFrom,
+                  to: hoverDate < selectedFrom ? selectedFrom : hoverDate,
+                }
+              : undefined
+
           const handleRangeChange = (range: DateRange | undefined) => {
             if (!range) {
               field.onChange({})
               return
             }
-            
-            // Format dates in local timezone (not UTC) to avoid off-by-one errors
-            const formatLocalDate = (date: Date | undefined) => {
-              if (!date) return undefined
-              const year = date.getFullYear()
-              const month = String(date.getMonth() + 1).padStart(2, '0')
-              const day = String(date.getDate()).padStart(2, '0')
-              return `${year}-${month}-${day}`
-            }
-            
             field.onChange({
-              start: formatLocalDate(range.from),
-              end: formatLocalDate(range.to)
+              start: toLocalDateString(range.from),
+              end: toLocalDateString(range.to)
             })
           }
 
@@ -163,6 +178,19 @@ export const DateRangeField: React.FC<FieldComponentProps> = ({
             footerHeight: 48,
           })
 
+          // Common DayPicker props with hover preview
+          const dayPickerCommon = {
+            mode: 'range' as const,
+            selected: { from: selectedFrom, to: selectedTo },
+            onSelect: handleRangeChange,
+            onDayMouseEnter: (d: Date) => setHoverDate(d),
+            onDayMouseLeave: () => setHoverDate(undefined),
+            fromDate: min,
+            toDate: max,
+            modifiers: previewRange ? { preview: previewRange } : undefined,
+            modifiersClassNames: previewRange ? { preview: 'rdp-preview' } : undefined,
+          }
+
           return (
             <OverlayPickerCore
               closeOnSelect={false}
@@ -175,6 +203,9 @@ export const DateRangeField: React.FC<FieldComponentProps> = ({
                     type="button"
                     onClick={() => isOpen ? close() : open()}
                     disabled={disabled}
+                    aria-haspopup="dialog"
+                    aria-expanded={isOpen}
+                    aria-controls={`${name}-dialog`}
                     className="w-full min-h-[48px] rounded-md border border-gray-300 bg-white px-3 py-3 text-left text-base shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:bg-gray-50 flex items-center justify-between"
                   >
                     <span className={value.start ? 'text-gray-900' : 'text-gray-400'}>
@@ -230,16 +261,8 @@ export const DateRangeField: React.FC<FieldComponentProps> = ({
                         onClick={(e) => e.stopPropagation()}
                       >
                         <DayPicker
-                          mode="range"
-                          selected={{
-                            from: value.start ? new Date(value.start) : undefined,
-                            to: value.end ? new Date(value.end) : undefined
-                          }}
-                          onSelect={handleRangeChange}
+                          {...dayPickerCommon}
                           numberOfMonths={1}
-                          disabled={disabled ? { before: new Date() } : undefined}
-                          fromDate={min}
-                          toDate={max}
                         />
                       </div>
 
@@ -283,6 +306,9 @@ export const DateRangeField: React.FC<FieldComponentProps> = ({
                         <div
                           ref={refs.setFloating}
                           style={floatingStyles}
+                          id={`${name}-dialog`}
+                          role="dialog"
+                          aria-labelledby={`${name}-label`}
                           className="z-50 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden"
                         >
                           {/* Content with Presets + Calendar */}
@@ -318,16 +344,8 @@ export const DateRangeField: React.FC<FieldComponentProps> = ({
                               {/* Dual Calendar */}
                               <div>
                                 <DayPicker
-                                  mode="range"
-                                  selected={{
-                                    from: value.start ? new Date(value.start) : undefined,
-                                    to: value.end ? new Date(value.end) : undefined
-                                  }}
-                                  onSelect={handleRangeChange}
+                                  {...dayPickerCommon}
                                   numberOfMonths={2}
-                                  disabled={disabled ? { before: new Date() } : undefined}
-                                  fromDate={min}
-                                  toDate={max}
                                 />
                               </div>
                             </div>

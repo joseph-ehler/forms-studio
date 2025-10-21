@@ -96,7 +96,7 @@ button[data-selected="true"],
   --tw-ring-width: 1px !important;
 }
 
-/* Airbnb-style date range picker - Clean implementation */
+/* Airbnb-style date range picker - With live hover preview */
 
 /* 1. Reset all default styles */
 .rdp-day {
@@ -132,7 +132,7 @@ button[data-selected="true"],
 }
 
 /* 4. End date - Filled circle ONLY, background only extends to the LEFT */
-.rdp-day_range_end:not(.rdp-day_range_start) {
+.rdp-day_range_end:not(.rdp-day_range_end) {
   background: linear-gradient(to left, transparent 50%, rgb(219 234 254) 50%) !important;
 }
 
@@ -176,4 +176,16 @@ button[data-selected="true"],
 .rdp-day_range_end button:hover,
 .rdp-day_range_middle button:hover {
   border: none !important;
+}
+
+/* 9. AIRBNB PREVIEW - Border ring on the candidate end day (hovered edge) */
+.rdp-preview:not(.rdp-day_selected) button {
+  outline: 2px solid rgb(59 130 246) !important; /* blue-500 ring */
+  outline-offset: -2px !important;
+  border-radius: 50% !important;
+}
+
+/* 10. Preview span - Softly tint the span between from..hover during preview */
+.rdp-day_preview {
+  background-color: rgba(59, 130, 246, 0.08) !important; /* blue @ 8% */
 }
