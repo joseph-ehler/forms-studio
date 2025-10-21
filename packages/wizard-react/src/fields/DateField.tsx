@@ -169,6 +169,17 @@ export const DateField: React.FC<FieldComponentProps> = ({
                             ...(minDate ? [{ before: minDate }] : []),
                             ...(maxDate ? [{ after: maxDate }] : []),
                           ]}
+                          modifiers={{
+                            selected: selectedDate ? [selectedDate] : []
+                          }}
+                          modifiersStyles={{
+                            selected: {
+                              backgroundColor: 'rgb(37 99 235)',
+                              color: 'white',
+                              borderRadius: '50%',
+                              fontWeight: 'normal'
+                            }
+                          }}
                           styles={{
                             day_button: { borderRadius: '50%' }
                           }}
@@ -236,6 +247,17 @@ export const DateField: React.FC<FieldComponentProps> = ({
                                   ...(minDate ? [{ before: minDate }] : []),
                                   ...(maxDate ? [{ after: maxDate }] : []),
                                 ]}
+                                modifiers={{
+                                  selected: selectedDate ? [selectedDate] : []
+                                }}
+                                modifiersStyles={{
+                                  selected: {
+                                    backgroundColor: 'rgb(37 99 235)',
+                                    color: 'white',
+                                    borderRadius: '50%',
+                                    fontWeight: 'normal'
+                                  }
+                                }}
                                 styles={{
                                   day_button: { borderRadius: '50%' }
                                 }}
