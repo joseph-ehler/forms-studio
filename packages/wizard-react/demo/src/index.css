@@ -182,8 +182,9 @@ body :not(.rdp-root) button[aria-pressed="true"] {
    
    CRITICAL: Style the BUTTON inside the selected cell!
 ================================================================= */
-/* Single date mode - aria-pressed */
-.rdp-root [role="gridcell"] > [aria-pressed="true"]:not([aria-selected="true"]) {
+/* Single date mode - aria-pressed (NOT range middle) */
+.rdp-root td:not(.rdp-day_range_middle) [role="gridcell"] > [aria-pressed="true"]:not([aria-selected="true"]),
+.rdp-root [role="gridcell"]:not(.rdp-day_range_middle) > [aria-pressed="true"]:not([aria-selected="true"]) {
   background-color: rgb(37, 99, 235) !important;
   color: #ffffff !important;
   font-weight: 500 !important;
@@ -217,19 +218,7 @@ body :not(.rdp-root) button[aria-pressed="true"] {
   border: none !important;
 }
 
-/* CRITICAL: This rule MUST come after the blue fill rules to override them */
-/* Middle range dates must NOT have filled buttons - maximum specificity */
-.rdp-root td.rdp-day_range_middle:not(.rdp-day_range_start):not(.rdp-day_range_end) button.rdp-day_button,
-.rdp-root td.fs-range-mid:not(.fs-range-start):not(.fs-range-end) button.rdp-day_button,
-.rdp-root [role="gridcell"][data-day-range="middle"] button,
-.rdp-root td[data-day-range="middle"]:not([data-day-range="start"]):not([data-day-range="end"]) button {
-  background-color: transparent !important;
-  background: transparent !important;
-  background-image: none !important;
-  color: rgb(17, 24, 39) !important;
-  border: none !important;
-  font-weight: 400 !important;
-}
+/* Middle range transparency MOVED to end of file for maximum specificity */
 
 /* =================================================================
    HOVER ON SELECTED - Darker blue (rgb(29, 78, 216))
@@ -308,14 +297,7 @@ body :not(.rdp-root) button[aria-pressed="true"] {
   background-color: rgb(219, 234, 254) !important;
 }
 
-/* Middle range buttons should be transparent (band is on cell) */
-.rdp-root [data-day-range="middle"] button,
-.rdp-root .rdp-day_range_middle button,
-.rdp-root .fs-range-mid button {
-  background-color: transparent !important;
-  color: rgb(17, 24, 39) !important;
-  border: none !important;
-}
+/* Middle range buttons REMOVED - See final override at end of file */
 
 /* =================================================================
    RANGE GRADIENTS - Half-circle fills for start/end
@@ -398,12 +380,17 @@ body :not(.rdp-root) button[aria-pressed="true"] {
 /* =================================================================
    FINAL OVERRIDE - Range middle dates MUST be transparent
    This rule is at the END to win over ALL previous blue fills
+   
+   CRITICAL: Middle range buttons should be invisible, only the
+   light blue band on the cell should show through
 ================================================================= */
 .rdp-root td.rdp-day_range_middle:not(.rdp-day_range_start):not(.rdp-day_range_end) button.rdp-day_button,
 .rdp-root td.rdp-day_range_middle:not(.rdp-day_range_start):not(.rdp-day_range_end) > button,
 .rdp-root td[data-day-range="middle"]:not([data-day-range="start"]):not([data-day-range="end"]) button,
 .rdp-root [role="gridcell"].rdp-day_range_middle button,
-.rdp-root [role="gridcell"][data-day-range="middle"] button {
+.rdp-root [role="gridcell"][data-day-range="middle"] button,
+.rdp-root .rdp-day_range_middle button,
+.rdp-root [data-day-range="middle"] button {
   background-color: transparent !important;
   background: transparent !important;
   background-image: none !important;
@@ -411,4 +398,15 @@ body :not(.rdp-root) button[aria-pressed="true"] {
   border: none !important;
   font-weight: 400 !important;
   box-shadow: none !important;
+  outline: none !important;
+}
+
+/* Also on hover - middle dates should stay transparent */
+.rdp-root td.rdp-day_range_middle button:hover,
+.rdp-root .rdp-day_range_middle button:hover,
+.rdp-root [data-day-range="middle"] button:hover {
+  background-color: transparent !important;
+  background: transparent !important;
+  color: rgb(17, 24, 39) !important;
+  border: none !important;
 }
