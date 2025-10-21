@@ -105,11 +105,10 @@ body :not(.rdp-root) button[aria-pressed="true"] {
 }
 
 /* =================================================================
-   BASE CIRCLE STYLING - All day buttons must be circles
+   BASE CIRCLE STYLING - Only style the BUTTON, not the cell
 ================================================================= */
-.rdp-root [role="gridcell"] > *,
-.rdp-root .fs-day,
-.rdp-root .rdp-day {
+.rdp-root .rdp-day_button,
+.rdp-root button[name="day"] {
   border-radius: 50% !important;
   border: none !important;
   width: 40px !important;
@@ -119,7 +118,6 @@ body :not(.rdp-root) button[aria-pressed="true"] {
   justify-content: center !important;
   background-clip: padding-box !important;
   box-sizing: border-box !important;
-  position: relative !important;
   transition: all 0.15s ease !important;
 }
 
