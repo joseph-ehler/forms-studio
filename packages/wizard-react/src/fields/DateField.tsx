@@ -144,7 +144,10 @@ export const DateField: React.FC<FieldComponentProps> = ({
                       aria-labelledby={`${name}-label`}
                     >
                       {/* Calendar Body */}
-                      <div className="px-4 py-6 flex justify-center">
+                      <div 
+                        className="px-4 py-6 flex justify-center"
+                        onClick={(e) => e.stopPropagation()}
+                      >
                         <DayPicker
                           mode="single"
                           selected={selectedDate}
