@@ -97,8 +97,9 @@ body :not(.rdp) button[aria-pressed="true"] {
 /* --- Every day cell is a circular hit area --- */
 .rdp [role="gridcell"] > * {
   border-radius: 50% !important;   /* circular */
-  border: none !important;         /* no thin borders leaking through */
+  border: 0;                       /* reset borders (hover will override) */
   background-clip: padding-box !important;
+  box-sizing: border-box !important;
 }
 
 /* =================================================================
@@ -121,14 +122,12 @@ body :not(.rdp) button[aria-pressed="true"] {
 }
 
 /* --- HOVER RING on UNSELECTED days (ARIA-only, works with any classNames) --- */
+/* Use border instead of outline/box-shadow to avoid conflicts with focus rules */
 .rdp [role="gridcell"] > *:not([aria-selected="true"]):not([aria-pressed="true"]):not([aria-disabled="true"]):hover {
-  /* show ring reliably across browsers */
-  outline: 2px solid rgb(59, 130, 246) !important;      /* blue-500 */
-  outline-offset: -2px !important;
+  border: 2px solid rgb(59, 130, 246) !important;      /* blue-500 */
   border-radius: 50% !important;
-
-  /* fallback in case outline gets clipped by UA quirks */
-  box-shadow: 0 0 0 2px rgb(59, 130, 246) inset !important;
+  /* Adjust for border so size stays the same */
+  box-sizing: border-box !important;
 }
 
 /* =================================================================
