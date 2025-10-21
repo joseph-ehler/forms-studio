@@ -139,6 +139,8 @@ body :not(.rdp) button[aria-pressed="true"] {
 .rdp [role="gridcell"] > [aria-selected="true"],
 .rdp .fs-selected button,
 .rdp .fs-selected .rdp-day_button,
+.rdp .rdp-selected button,
+.rdp .rdp-selected .rdp-day_button,
 .rdp .rdp-day_selected button,
 .rdp .rdp-day_selected .rdp-day_button,
 .rdp .rdp-day_range_start button,
@@ -163,6 +165,8 @@ body :not(.rdp) button[aria-pressed="true"] {
 .rdp [role="gridcell"] > [aria-selected="true"]:hover,
 .rdp .fs-selected:hover button,
 .rdp .fs-selected:hover .rdp-day_button,
+.rdp .rdp-selected:hover button,
+.rdp .rdp-selected:hover .rdp-day_button,
 .rdp .rdp-day_selected:hover button,
 .rdp .rdp-day_selected:hover .rdp-day_button,
 .rdp .rdp-day_range_start:hover button,
@@ -187,9 +191,9 @@ body :not(.rdp) button[aria-pressed="true"] {
    
    Excludes ALL selected states using :not() selectors
 ================================================================= */
-.rdp [role="gridcell"] > *:not([aria-pressed="true"]):not([aria-selected="true"]):not([aria-disabled="true"]):not(.fs-selected):not(.rdp-day_selected):not(.rdp-day_range_start):not(.rdp-day_range_end):not(.fs-range-start):not(.fs-range-end):not(.fs-disabled):not(.rdp-day_disabled):hover,
-.rdp .fs-day:not(.fs-selected):not(.fs-range-start):not(.fs-range-end):not(.fs-disabled):hover,
-.rdp .rdp-day:not([aria-pressed="true"]):not([aria-selected="true"]):not(.rdp-day_selected):not(.rdp-day_range_start):not(.rdp-day_range_end):not(.rdp-day_disabled):not([aria-disabled="true"]):hover {
+.rdp [role="gridcell"] > *:not([aria-pressed="true"]):not([aria-selected="true"]):not([aria-disabled="true"]):not(.fs-selected):not(.rdp-selected):not(.rdp-day_selected):not(.rdp-day_range_start):not(.rdp-day_range_end):not(.fs-range-start):not(.fs-range-end):not(.fs-disabled):not(.rdp-day_disabled):hover,
+.rdp .fs-day:not(.fs-selected):not(.rdp-selected):not(.fs-range-start):not(.fs-range-end):not(.fs-disabled):hover,
+.rdp .rdp-day:not([aria-pressed="true"]):not([aria-selected="true"]):not(.rdp-selected):not(.rdp-day_selected):not(.rdp-day_range_start):not(.rdp-day_range_end):not(.rdp-day_disabled):not([aria-disabled="true"]):hover {
   border: 2px solid rgb(59, 130, 246) !important;
   border-radius: 50% !important;
   box-sizing: border-box !important;
