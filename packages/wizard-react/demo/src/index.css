@@ -118,8 +118,8 @@ button[aria-pressed="true"],
 .rdp .custom-selected-date,
 .custom-selected-date button,
 .rdp .custom-selected-date button {
-  background-color: #2563eb !important; /* EXACT same as range */
-  color: #fff !important;
+  background-color: rgb(37, 99, 235) !important; /* blue-600 */
+  color: rgb(255, 255, 255) !important;
   border-radius: 50% !important;
   font-weight: 700 !important;
   border: none !important;
@@ -167,8 +167,8 @@ button[aria-pressed="true"],
 
 .rdp .rdp-day_range_start,
 .rdp-day_range_start {
-  background-color: #2563eb !important; /* Match DatePicker */
-  color: #fff !important;
+  background-color: rgb(37, 99, 235) !important; /* blue-600 */
+  color: rgb(255, 255, 255) !important;
   border-radius: 50% !important;
   font-weight: 700 !important;
 }
@@ -181,16 +181,16 @@ button[aria-pressed="true"],
 
 .rdp .rdp-day_range_end,
 .rdp-day_range_end {
-  background-color: #2563eb !important; /* Match DatePicker */
-  color: #fff !important;
+  background-color: rgb(37, 99, 235) !important; /* blue-600 */
+  color: rgb(255, 255, 255) !important;
   border-radius: 50% !important;
   font-weight: 700 !important;
 }
 
 /* Single day range */
 .rdp .rdp-day_range_start.rdp-day_range_end {
-  background-color: #2563eb !important; /* Match DatePicker */
-  color: #fff !important;
+  background-color: rgb(37, 99, 235) !important; /* blue-600 */
+  color: rgb(255, 255, 255) !important;
   border-radius: 50% !important;
   font-weight: 700 !important;
 }
