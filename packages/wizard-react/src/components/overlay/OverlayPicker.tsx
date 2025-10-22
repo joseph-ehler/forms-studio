@@ -218,7 +218,7 @@ export const OverlayPicker: React.FC<OverlayPickerProps> = ({
     >
       {/* Header (optional, sticky) */}
       {header && (
-        <div className="flex-shrink-0" data-role="header">
+        <div className="flex-shrink-0 border-b border-gray-200 px-4 py-3 bg-white" data-role="header">
           {header}
         </div>
       )}
@@ -230,7 +230,7 @@ export const OverlayPicker: React.FC<OverlayPickerProps> = ({
 
       {/* Footer (optional, sticky) */}
       {footer && (
-        <div className="flex-shrink-0" data-role="footer">
+        <div className="flex-shrink-0 border-t border-gray-200 px-4 py-3 bg-white" data-role="footer">
           {footer}
         </div>
       )}

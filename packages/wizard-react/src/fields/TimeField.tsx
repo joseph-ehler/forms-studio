@@ -384,17 +384,8 @@ export const TimeField: React.FC<FieldComponentProps> = ({
                       onClose={() => close('outside')}
                       maxHeight={560}
                       aria-labelledby={`${name}-label`}
-                      footer={
-                        <PickerFooter
-                          onClear={handleClear}
-                          onDone={() => close('select')}
-                          size="default"
-                        />
-                      }
-                    >
-                      <div ref={contentRef} className="p-4 space-y-4">
-                        {/* Format Toggle */}
-                        <div className="flex items-center justify-between pb-2 border-b border-gray-200">
+                      header={
+                        <div className="flex items-center justify-between">
                           <span className="text-sm font-medium text-gray-700">Time Format</span>
                           <button
                             type="button"
@@ -407,7 +398,16 @@ export const TimeField: React.FC<FieldComponentProps> = ({
                             </svg>
                           </button>
                         </div>
-
+                      }
+                      footer={
+                        <PickerFooter
+                          onClear={handleClear}
+                          onDone={() => close('select')}
+                          size="default"
+                        />
+                      }
+                    >
+                      <div ref={contentRef} className="p-4">
                         {/* Wheel Pickers */}
                         <div className="flex items-center justify-center gap-2">
                           <WheelPicker
@@ -472,7 +472,7 @@ export const TimeField: React.FC<FieldComponentProps> = ({
                       hardMaxHeight={480}
                       style={{ width: 'auto', minWidth: '320px' }}
                       header={
-                        <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200">
+                        <div className="flex items-center justify-between">
                           <span className="text-sm font-medium text-gray-700">Time Format</span>
                           <button
                             type="button"

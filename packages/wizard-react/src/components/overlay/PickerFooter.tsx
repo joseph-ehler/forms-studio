@@ -39,8 +39,7 @@ export const PickerFooter: React.FC<PickerFooterProps> = ({
     : 'flex gap-3'
 
   return (
-    <div className="border-t border-gray-200 p-3 bg-white">
-      <div className={containerClass}>
+    <div className={containerClass}>
         <button
           type="button"
           onClick={onClear}
@@ -55,7 +54,6 @@ export const PickerFooter: React.FC<PickerFooterProps> = ({
         >
           {doneLabel}
         </button>
-      </div>
     </div>
   )
 }
