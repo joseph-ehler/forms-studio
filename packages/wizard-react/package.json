@@ -1,7 +1,7 @@
 {
-  "name": "@joseph-ehler/wizard-react",
+  "name": "@intstudio/ds",
   "version": "0.3.0",
-  "description": "React runtime for Forms Studio: render any JSON field type with RHF + Zod",
+  "description": "Intelligence Studio Design System - tokens, primitives, patterns, shell components, and accessibility layer",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -28,13 +28,16 @@
     "precommit": "pnpm run guard:ds && pnpm run guard:atoms && pnpm run typecheck"
   },
   "keywords": [
-    "forms",
-    "wizard",
+    "design-system",
     "react",
-    "react-hook-form",
-    "field-registry",
-    "json-forms",
-    "dynamic-forms"
+    "components",
+    "tokens",
+    "primitives",
+    "accessibility",
+    "a11y",
+    "flat-design",
+    "white-label",
+    "storybook"
   ],
   "author": "Intelligence Studio",
   "license": "Apache-2.0",
@@ -49,9 +52,7 @@
   },
   "peerDependencies": {
     "react": "^18.0.0",
-    "react-dom": "^18.0.0",
-    "react-hook-form": "^7.0.0",
-    "zod": "^3.22.0"
+    "react-dom": "^18.0.0"
   },
   "dependencies": {
     "@floating-ui/react": "^0.27.16",

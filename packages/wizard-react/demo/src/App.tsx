@@ -12,7 +12,7 @@ import {
   FormSkeleton, FormEmpty,
   // Typography
   FormHelperText, FormCode,
-} from '@joseph.ehler/wizard-react'
+} from '@intstudio/ds'
 
 export default function Demo() {
   const { control, handleSubmit, formState: { errors } } = useForm()
@@ -927,7 +927,7 @@ export default function Demo() {
 
         {/* Footer */}
         <div className="mt-8 text-center text-sm text-gray-500">
-          <p className="font-semibold">Built with @joseph.ehler/wizard-react v0.3.0</p>
+          <p className="font-semibold">Built with @intstudio/ds v0.3.0</p>
           <p className="mt-1">32 Fields • 21 Components • 🚀 Unified Overlay System • Mobile-First 📱</p>
           <p className="mt-2 text-xs">
             <span className="text-blue-600">~317 KB ESM</span> • 

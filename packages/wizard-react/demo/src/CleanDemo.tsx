@@ -13,7 +13,7 @@ import {
   PasswordField,
   SelectField,
   DateField,
-} from '@joseph.ehler/wizard-react';
+} from '@intstudio/ds';
 import { BrandThemeSwitcher } from './BrandThemeSwitcher';
 
 export default function CleanDemo() {
