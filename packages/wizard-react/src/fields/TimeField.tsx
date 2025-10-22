@@ -450,11 +450,13 @@ export const TimeField: React.FC<FieldComponentProps> = ({
                         </div>
 
                         {/* Footer */}
-                        <PickerFooter
-                          onClear={handleClear}
-                          onDone={() => close('select')}
-                          size="default"
-                        />
+                        <div className="border-t border-gray-200 p-4">
+                          <PickerFooter
+                            onClear={handleClear}
+                            onDone={() => close('select')}
+                            size="default"
+                          />
+                        </div>
                       </div>
                     </OverlaySheet>
                   )}
@@ -543,11 +545,13 @@ export const TimeField: React.FC<FieldComponentProps> = ({
                           </div>
 
                           {/* Footer */}
-                          <PickerFooter
-                            onClear={handleClear}
-                            onDone={() => close('select')}
-                            size="default"
-                          />
+                          <div className="shrink-0 border-t border-gray-200 p-4">
+                            <PickerFooter
+                              onClear={handleClear}
+                              onDone={() => close('select')}
+                              size="default"
+                            />
+                          </div>
                           </EventWrapper>
                         </div>
                       )}

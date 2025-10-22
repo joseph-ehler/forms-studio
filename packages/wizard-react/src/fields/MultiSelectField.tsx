@@ -296,20 +296,21 @@ export const MultiSelectField: React.FC<FieldComponentProps> = ({
                         collision={ui.collision ?? { flip: true, shift: true, size: true }}
                       >
                         {({ refs, floatingStyles, EventWrapper }) => {
-                          const maxHeight = ui.maxHeight ?? 560
+                          // Get actual maxHeight from collision detection or use default
+                          const containerMaxHeight = floatingStyles.maxHeight 
+                            ? (typeof floatingStyles.maxHeight === 'string' 
+                                ? parseInt(floatingStyles.maxHeight) 
+                                : floatingStyles.maxHeight)
+                            : (ui.maxHeight ?? 560)
+                          
                           const searchHeight = allowSearch ? 60 : 0 // search bar height
                           const footerHeight = 48 // footer height
-                          const listMaxHeight = maxHeight - searchHeight - footerHeight
+                          const listMaxHeight = containerMaxHeight - searchHeight - footerHeight
                           
                           return (
                             <div ref={refs.setFloating} style={floatingStyles}>
                               <EventWrapper
-                                style={{
-                                  maxHeight: `${maxHeight}px`,
-                                  display: 'flex',
-                                  flexDirection: 'column',
-                                }}
-                                className="z-50 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden"
+                                className="z-50 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 flex flex-col overflow-hidden"
                               >
                               {/* Search */}
                               {allowSearch && (
@@ -325,8 +326,7 @@ export const MultiSelectField: React.FC<FieldComponentProps> = ({
                               {/* List */}
                               <div 
                                 ref={contentRef}
-                                className="overflow-y-auto"
-                                style={{ maxHeight: `${listMaxHeight}px` }}
+                                className="flex-1 overflow-y-auto"
                               >
                               <PickerList
                                 role="listbox"

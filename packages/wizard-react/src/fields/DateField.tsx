@@ -23,7 +23,7 @@ import { mergeFieldConfig } from './utils/field-json-config'
 import { getAriaProps, getLabelProps, getDescriptionProps } from './utils/a11y-helpers'
 import { DayPicker } from 'react-day-picker'
 import { format, isValid } from 'date-fns'
-import { OverlayPickerCore, OverlaySheet, OverlayPositioner, PickerFooter, calculateOverlayHeights, getOverlayContentClasses } from '../components/overlay'
+import { OverlayPickerCore, OverlaySheet, OverlayPositioner, PickerFooter } from '../components/overlay'
 import { useDeviceType } from '../hooks/useDeviceType'
 
 // Local (tz-safe) conversion helpers
@@ -117,12 +117,6 @@ export const DateField: React.FC<FieldComponentProps> = ({
           }
 
           const { isMobile } = useDeviceType()
-          const heights = calculateOverlayHeights({
-            maxHeight: 560,
-            hasSearch: false,
-            hasFooter: true,
-            footerHeight: 48,
-          })
 
           return (
             <OverlayPickerCore
@@ -218,12 +212,9 @@ export const DateField: React.FC<FieldComponentProps> = ({
                             {/* Calendar Body */}
                             <div
                               ref={contentRef}
-                              className={getOverlayContentClasses().content}
-                              style={{
-                                maxHeight: `${heights.contentMaxHeight}px`,
-                              }}
+                              className="flex-1 overflow-y-auto p-4"
                             >
-                            <div className="p-4 flex justify-center">
+                            <div className="flex justify-center">
                               <DayPicker
                                 mode="single"
                                 selected={selectedDate}
