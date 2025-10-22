@@ -5,64 +5,62 @@
  * Provides consistent sizing tokens.
  */
 
-@layer components {
-  /* ==========================================
-     SVG ICON CONSTRAINTS
-     ========================================== */
-  
-  /* Prevent SVGs from expanding to container width */
-  svg {
-    max-width: 100%;
-    max-height: 100%;
-    flex-shrink: 0; /* Don't shrink in flex containers */
-  }
-  
-  /* Icon size utilities (Tailwind-compatible) */
-  .h-4, .w-4 {
-    width: 1rem;   /* 16px */
-    height: 1rem;  /* 16px */
-  }
-  
-  .h-5, .w-5 {
-    width: 1.25rem; /* 20px */
-    height: 1.25rem; /* 20px */
-  }
-  
-  .h-6, .w-6 {
-    width: 1.5rem;  /* 24px */
-    height: 1.5rem; /* 24px */
-  }
-  
-  /* Helper text icon sizing */
-  .ds-helper svg {
-    width: 1rem;   /* 16px - matches h-4 */
-    height: 1rem;
-    flex-shrink: 0;
-  }
-  
-  /* Button icon sizing */
-  .ds-btn svg {
-    width: 1.25rem; /* 20px - matches h-5 */
-    height: 1.25rem;
-    flex-shrink: 0;
-  }
-  
-  .ds-btn--sm svg {
-    width: 1rem;   /* 16px */
-    height: 1rem;
-  }
-  
-  .ds-btn--lg svg,
-  .ds-btn--xl svg {
-    width: 1.5rem; /* 24px */
-    height: 1.5rem;
-  }
-  
-  /* Input/Field icon sizing */
-  .ds-input-wrapper svg,
-  .ds-field svg {
-    width: 1.25rem; /* 20px */
-    height: 1.25rem;
-    flex-shrink: 0;
-  }
+/* ==========================================
+   SVG ICON CONSTRAINTS
+   ========================================== */
+
+/* Prevent SVGs from expanding to container width */
+svg {
+  max-width: 100%;
+  max-height: 100%;
+  flex-shrink: 0; /* Don't shrink in flex containers */
+}
+
+/* Icon size utilities (Tailwind-compatible) */
+.h-4, .w-4 {
+  width: 1rem;   /* 16px */
+  height: 1rem;  /* 16px */
+}
+
+.h-5, .w-5 {
+  width: 1.25rem; /* 20px */
+  height: 1.25rem; /* 20px */
+}
+
+.h-6, .w-6 {
+  width: 1.5rem;  /* 24px */
+  height: 1.5rem; /* 24px */
+}
+
+/* Helper text icon sizing */
+.ds-helper svg {
+  width: 1rem;   /* 16px - matches h-4 */
+  height: 1rem;
+  flex-shrink: 0;
+}
+
+/* Button icon sizing */
+.ds-btn svg {
+  width: 1.25rem; /* 20px - matches h-5 */
+  height: 1.25rem;
+  flex-shrink: 0;
+}
+
+.ds-btn--sm svg {
+  width: 1rem;   /* 16px */
+  height: 1rem;
+}
+
+.ds-btn--lg svg,
+.ds-btn--xl svg {
+  width: 1.5rem; /* 24px */
+  height: 1.5rem;
+}
+
+/* Input/Field icon sizing */
+.ds-input-wrapper svg,
+.ds-field svg {
+  width: 1.25rem; /* 20px */
+  height: 1.25rem;
+  flex-shrink: 0;
 }

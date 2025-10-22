@@ -11,9 +11,19 @@
  */
 
 export const layoutPresets = {
+  // FormLayout sizes (sm → 2xl)
+  sm: 'var(--ds-width-sm)',             // 24rem (384px) - Login forms
+  md: 'var(--ds-width-md)',             // 28rem (448px) - Compact forms
+  lg: 'var(--ds-width-lg)',             // 32rem (512px) - Standard forms
+  xl: 'var(--ds-width-xl)',             // 36rem (576px) - Default forms
+  '2xl': 'var(--ds-width-2xl)',         // 42rem (672px) - Wider forms
+  
+  // Semantic aliases (backward compatible)
   prose: 'var(--ds-width-prose)',       // 65ch - Reading by measure
-  narrow: 'var(--ds-width-narrow)',     // 36rem - Auth, short forms
-  comfy: 'var(--ds-width-comfy)',       // 42rem - Label-heavy forms
+  narrow: 'var(--ds-width-narrow)',     // 36rem - Auth, short forms (alias for xl)
+  comfy: 'var(--ds-width-comfy)',       // 42rem - Label-heavy forms (alias for 2xl)
+  
+  // Section widths
   standard: 'var(--ds-width-standard)', // 56rem - Typical sections
   wide: 'var(--ds-width-wide)',         // 64rem - Media-rich
   max: 'var(--ds-width-max)',           // 80rem - Page max
@@ -51,9 +61,19 @@ export type LayoutPreset = keyof typeof layoutPresets
 
 // Suggested uses (for demo/docs)
 export const presetSuggestions: Record<LayoutPreset | 'full', string[]> = {
+  // FormLayout sizes
+  sm: ['Login forms', 'Minimal auth', 'OTP entry', 'Simple wizards'],
+  md: ['Compact forms', 'Quick surveys', 'Newsletter signup'],
+  lg: ['Standard forms', 'Contact forms', 'Feedback forms'],
+  xl: ['Default forms', 'Registration', 'Profile editing'],
+  '2xl': ['Complex forms', 'Multi-field forms', 'Settings pages'],
+  
+  // Semantic aliases
   prose: ['Blog posts', 'Articles', 'Documentation', 'Long-form content'],
   narrow: ['Login forms', 'Sign up', 'Wizards', 'Short surveys'],
   comfy: ['Multi-step forms', 'Settings pages', 'Label-heavy inputs'],
+  
+  // Section widths
   standard: ['Marketing sections', 'Product features', 'Team pages'],
   wide: ['Media galleries', 'Case studies', 'Rich content'],
   max: ['Page container', 'Full-width sections', 'Default max'],

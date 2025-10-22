@@ -26,10 +26,11 @@ import { Stack } from './Stack'
 import { layoutPresets, type LayoutPreset } from '../lib/layoutConfig'
 
 type FormSpacing = 'tight' | 'normal' | 'relaxed'
+type FormWidth = 'sm' | 'md' | 'lg' | 'xl' | '2xl' | 'narrow' | 'comfy' | 'inherit'
 
 interface FormLayoutProps {
-  /** Max content width - defaults to narrow (36rem) */
-  maxWidth?: 'narrow' | 'comfy' | 'inherit'
+  /** Max content width - defaults to xl (576px, was narrow) */
+  maxWidth?: FormWidth
   /** Spacing between fields - defaults to normal (24px) */
   spacing?: FormSpacing
   /** HTML element to render */
@@ -44,7 +45,7 @@ interface FormLayoutProps {
 
 
 export const FormLayout: React.FC<FormLayoutProps> = ({
-  maxWidth = 'narrow',  // 36rem - focused forms by default
+  maxWidth = 'xl',  // 36rem (576px) - focused forms by default
   spacing = 'normal',   // 24px - beautiful default
   as: Component = 'form',
   style,
@@ -52,12 +53,12 @@ export const FormLayout: React.FC<FormLayoutProps> = ({
   children,
   className = '',
 }) => {
-  // Auto-promote narrow → comfy when font scale >= 1.25
+  // Auto-promote narrow/xl → comfy/2xl when font scale >= 1.25
   const [effectiveWidth, setEffectiveWidth] = useState(maxWidth)
   
   useEffect(() => {
-    // Only auto-promote if user selected 'narrow'
-    if (maxWidth !== 'narrow') {
+    // Only auto-promote if user selected 'narrow' or 'xl'
+    if (maxWidth !== 'narrow' && maxWidth !== 'xl') {
       setEffectiveWidth(maxWidth)
       return
     }
@@ -69,11 +70,11 @@ export const FormLayout: React.FC<FormLayoutProps> = ({
           .getPropertyValue('--a11y-font-size-scale') || '1'
       )
       
-      // Auto-promote to comfy if scale >= 1.25
+      // Auto-promote to comfy/2xl if scale >= 1.25
       if (scale >= 1.25) {
-        setEffectiveWidth('comfy')
+        setEffectiveWidth(maxWidth === 'narrow' ? 'comfy' : '2xl')
       } else {
-        setEffectiveWidth('narrow')
+        setEffectiveWidth(maxWidth)
       }
     }
     
@@ -95,7 +96,7 @@ export const FormLayout: React.FC<FormLayoutProps> = ({
   const containerStyle: React.CSSProperties = effectiveWidth === 'inherit'
     ? { width: '100%', ...style }
     : {
-        maxWidth: layoutPresets[effectiveWidth as 'narrow' | 'comfy'],
+        maxWidth: layoutPresets[effectiveWidth as LayoutPreset],
         width: '100%',
         marginInline: 'auto', // Logical property for RTL support
         ...style,

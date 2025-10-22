@@ -14,11 +14,22 @@
 :root {
   /* Width presets (layout intents) */
   --ds-width-prose: 65ch;           /* Reading comfort by measure */
-  --ds-width-narrow: 36rem;         /* 576px - Auth, short forms, wizards */
-  --ds-width-comfy: 42rem;          /* 672px - Longer/label-heavy forms */
+  
+  /* FormLayout sizes (sm → 2xl) */
+  --ds-width-sm: 24rem;             /* 384px - Login forms, minimal */
+  --ds-width-md: 28rem;             /* 448px - Compact forms */
+  --ds-width-lg: 32rem;             /* 512px - Standard forms */
+  --ds-width-xl: 36rem;             /* 576px - Default forms (was narrow) */
+  --ds-width-2xl: 42rem;            /* 672px - Wider forms (was comfy) */
+  
+  /* Semantic aliases (backward compatible) */
+  --ds-width-narrow: var(--ds-width-xl);   /* 576px - Auth, short forms, wizards */
+  --ds-width-comfy: var(--ds-width-2xl);   /* 672px - Longer/label-heavy forms */
+  
+  /* Section widths */
   --ds-width-standard: 56rem;       /* 896px - Typical sections/marketing */
   --ds-width-wide: 64rem;           /* 1024px - Media-heavy sections */
-  --ds-width-max: 80rem;            /* 1280px - Page max for single-column */
+  --ds-width-max: 80rem;            /* 1280px - Page max container */
   /* full = no max-width (for dashboards/canvases) */
   
   /* Legacy aliases (for migration) */
