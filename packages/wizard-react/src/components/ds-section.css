@@ -122,7 +122,8 @@
     mask-image: var(--ds-divider-wave-url);
     mask-size: 100% 100%;
     mask-repeat: no-repeat;
-    background: inherit; /* Uses section bg color */
+    /* Use base surface color (contrasts with subtle) */
+    background: var(--ds-color-surface-base);
   }
   
   .ds-section__divider--wave.ds-section__divider--top {
@@ -131,6 +132,12 @@
   
   .ds-section__divider--wave.ds-section__divider--bottom {
     mask-position: top;
+  }
+  
+  /* When section is base, use subtle for contrast */
+  .ds-section[style*="--ds-section-bg-base"] .ds-section__divider--wave,
+  .ds-section[style*="transparent"] .ds-section__divider--wave {
+    background: var(--ds-color-surface-subtle);
   }
   
   /* Diagonal divider (slant) */
@@ -187,10 +194,7 @@
     text-decoration: underline;
   }
   
-  /* Auto tone: inherit from parent theme */
-  .ds-tone-auto {
-    /* Uses default color cascade */
-  }
+  /* Auto tone: inherit from parent theme (no styles needed - uses default cascade) */
   
   
   /* ========================================
