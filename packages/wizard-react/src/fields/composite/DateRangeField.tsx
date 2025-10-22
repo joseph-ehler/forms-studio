@@ -15,7 +15,7 @@
 
 import React, { Fragment, useState } from 'react'
 import { Controller } from 'react-hook-form'
-import { OverlayPickerCore, OverlaySheet, OverlayPositioner, calculateOverlayHeights, getOverlayContentClasses } from '../../components/overlay'
+import { OverlayPickerCore, OverlaySheet, OverlayPositioner, PickerFooter, calculateOverlayHeights, getOverlayContentClasses } from '../../components/overlay'
 import { useDeviceType } from '../../hooks/useDeviceType'
 import { DayPicker, DateRange } from 'react-day-picker'
 import { format, parseISO, startOfDay, endOfDay, startOfWeek, endOfWeek, startOfMonth, endOfMonth, startOfYear, endOfYear } from 'date-fns'
@@ -284,27 +284,11 @@ export const DateRangeField: React.FC<FieldComponentProps> = ({
                       </div>
 
                       {/* Footer */}
-                      <div className="shrink-0 border-t border-gray-200 p-4">
-                        <div className="flex gap-3">
-                          <button
-                            type="button"
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              field.onChange(null)
-                            }}
-                            className="flex-1 min-h-[48px] px-4 text-base text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
-                          >
-                            Clear
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => close('select')}
-                            className="flex-1 min-h-[48px] px-4 text-base bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
-                          >
-                            Done
-                          </button>
-                        </div>
-                      </div>
+                      <PickerFooter
+                        onClear={() => field.onChange(null)}
+                        onDone={() => close('select')}
+                        size="default"
+                      />
                     </OverlaySheet>
                   )}
 
@@ -320,7 +304,7 @@ export const DateRangeField: React.FC<FieldComponentProps> = ({
                       maxHeight={550}
                       collision={{ flip: true, shift: true, size: true }}
                     >
-                      {({ refs, floatingStyles, isPositioned }) => {
+                      {({ refs, floatingStyles, isPositioned, EventWrapper }) => {
                         // Extract maxHeight from floatingStyles if set by size middleware
                         const containerMaxHeight = floatingStyles.maxHeight 
                           ? (typeof floatingStyles.maxHeight === 'string' 
@@ -330,26 +314,9 @@ export const DateRangeField: React.FC<FieldComponentProps> = ({
                         const contentMaxHeight = containerMaxHeight - 60 // Reserve 60px for footer
                         
                         return (
-                          <div
-                            ref={refs.setFloating}
-                            style={floatingStyles}
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              e.nativeEvent.stopImmediatePropagation()
-                            }}
-                            onMouseDown={(e) => {
-                              e.stopPropagation()
-                              e.nativeEvent.stopImmediatePropagation()
-                            }}
-                            onMouseUp={(e) => {
-                              e.stopPropagation()
-                              e.nativeEvent.stopImmediatePropagation()
-                            }}
-                            id={`${name}-dialog`}
-                            role="dialog"
-                            aria-labelledby={`${name}-label`}
-                            className="z-50 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 flex flex-col overflow-hidden"
-                          >
+                          <div ref={refs.setFloating} style={floatingStyles}>
+                            <EventWrapper className="z-50 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 flex flex-col overflow-hidden">
+                            <div id={`${name}-dialog`} role="dialog" aria-labelledby={`${name}-label`}>
                             {/* Content with Presets + Calendar - Scrollable */}
                             <div
                               ref={contentRef}
@@ -392,26 +359,14 @@ export const DateRangeField: React.FC<FieldComponentProps> = ({
 
                           {/* Footer - Fixed at bottom */}
                           <div className="shrink-0 border-t border-gray-200 p-3 bg-white">
-                            <div className="flex justify-end gap-2">
-                              <button
-                                type="button"
-                                onClick={(e) => {
-                                  e.stopPropagation()
-                                  field.onChange(null)
-                                }}
-                                className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md transition-colors"
-                              >
-                                Clear
-                              </button>
-                              <button
-                                type="button"
-                                onClick={() => close('select')}
-                                className="px-4 py-2 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
-                              >
-                                Done
-                              </button>
-                            </div>
+                            <PickerFooter
+                              onClear={() => field.onChange(null)}
+                              onDone={() => close('select')}
+                              size="small"
+                            />
                           </div>
+                        </div>
+                        </EventWrapper>
                         </div>
                         )
                       }}
