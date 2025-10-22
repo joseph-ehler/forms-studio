@@ -45,6 +45,7 @@ export const OverlayPickerCore: React.FC<OverlayPickerCoreProps> = ({
   // Open/close handlers
   const open = useCallback(() => setOpen(true, 'programmatic'), [setOpen])
   const close = useCallback((reason: OverlayCloseReason = 'programmatic') => {
+    console.log('[OverlayPickerCore] close() called with reason:', reason)
     setOpen(false, reason)
   }, [setOpen])
 
@@ -130,6 +131,9 @@ export const OverlayPickerCore: React.FC<OverlayPickerCoreProps> = ({
     if (!isOpen) return
     
     const target = e.target as Node
+    
+    // ONLY close if clicking OUTSIDE both content and trigger
+    // This allows ALL buttons inside the overlay to control their own behavior
     const isClickInside = contentRef.current?.contains(target) || 
                          triggerRef.current?.contains(target)
     
