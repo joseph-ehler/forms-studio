@@ -82,6 +82,8 @@ export const DateField: React.FC<FieldComponentProps> = ({
 
   // Overlay state at component level so it persists across Controller re-renders
   const [isOverlayOpen, setIsOverlayOpen] = useState(false)
+  
+  console.log('[DateField] Component render - isOverlayOpen:', isOverlayOpen)
 
   return (
     <Stack spacing="sm">
@@ -99,6 +101,8 @@ export const DateField: React.FC<FieldComponentProps> = ({
         control={control}
         defaultValue={defaultValue}
         render={({ field }) => {
+          console.log('[DateField] Controller render - field.value:', field.value, 'isOverlayOpen:', isOverlayOpen)
+          
           const selectedDate = fromLocalDateString(field.value)
           const displayValue = field.value
             ? formatDate(field.value)
@@ -123,7 +127,10 @@ export const DateField: React.FC<FieldComponentProps> = ({
           return (
             <OverlayPickerCore
               open={isOverlayOpen}
-              onOpenChange={(newOpen) => setIsOverlayOpen(newOpen)}
+              onOpenChange={(newOpen) => {
+                console.log('[DateField] onOpenChange called:', newOpen)
+                setIsOverlayOpen(newOpen)
+              }}
               closeOnSelect={false}
             >
               {({ isOpen, open, close, triggerRef, contentRef }) => (
@@ -189,7 +196,9 @@ export const DateField: React.FC<FieldComponentProps> = ({
                             type="button"
                             onClick={(e) => {
                               e.stopPropagation()
+                              console.log('[DateField] Clear clicked - BEFORE onChange - isOverlayOpen:', isOverlayOpen, 'isOpen:', isOpen)
                               field.onChange(null)
+                              console.log('[DateField] Clear clicked - AFTER onChange')
                             }}
                             className="flex-1 min-h-[48px] px-4 text-base text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
                           >
