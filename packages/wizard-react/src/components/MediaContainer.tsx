@@ -114,15 +114,8 @@ export function MediaContainer({
           inset: 0,
         }}
       >
-        <div style={{
-          width: '100%',
-          height: '100%',
-          objectFit: fit,
-        }}>
-          {children}
-        </div>
-      </div>
-      
+        {children}
+      </div>      
       {/* Overlay slot (badges, gradients, actions) */}
       {overlay && (
         <div
