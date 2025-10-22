@@ -24,13 +24,8 @@ import { FormLabel, FormHelperText, Stack } from '../components'
 import { resolveTypographyDisplay, getTypographyFromJSON } from './utils/typography-display'
 import { mergeFieldConfig } from './utils/field-json-config'
 import { useDeviceType } from '../hooks/useDeviceType'
-import { OverlayPickerCore } from '../components/overlay/OverlayPickerCore'
-import { OverlayPositioner } from '../components/overlay/OverlayPositioner'
-import { OverlaySheet } from '../components/overlay/OverlaySheet'
-import { PickerList } from '../components/picker/PickerList'
-import { PickerOption } from '../components/picker/PickerOption'
-import { PickerSearch } from '../components/picker/PickerSearch'
-import { PickerEmptyState } from '../components/picker/PickerEmptyState'
+import { OverlayPickerCore, OverlayPicker, OverlaySheet } from '../components/overlay'
+import { PickerList, PickerOption, PickerSearch, PickerEmptyState } from '../components/picker'
 
 export const MultiSelectField: React.FC<FieldComponentProps> = ({
   name,
@@ -285,101 +280,83 @@ export const MultiSelectField: React.FC<FieldComponentProps> = ({
                         </div>
                       </OverlaySheet>
                     ) : (
-                      <OverlayPositioner
+                      <OverlayPicker
                         open={isOpen}
                         anchor={triggerRef.current}
+                        onOpenChange={(open) => {
+                          if (!open) close('outside')
+                        }}
                         placement={ui.placement ?? 'bottom-start'}
-                        offset={ui.offset ?? 6}
-                        strategy="fixed"
                         sameWidth={ui.sameWidth ?? true}
-                        maxHeight={ui.maxHeight ?? 560}
-                        collision={ui.collision ?? { flip: true, shift: true, size: true }}
-                      >
-                        {({ refs, floatingStyles, EventWrapper, maxHeightPx }) => (
-                          <div
-                            ref={refs.setFloating as any}
-                            style={floatingStyles}
-                            data-overlay="picker"
-                            className="z-50 bg-white rounded-md shadow-lg ring-1 ring-black/10 flex flex-col overflow-hidden"
-                          >
-                            <EventWrapper className="flex-1 flex flex-col min-h-0">
-                              {/* Search */}
-                              {allowSearch && (
-                                <div className="flex-shrink-0">
-                                  <PickerSearch 
-                                    value={query} 
-                                    onChange={setQuery}
-                                    placeholder="Search..."
-                                  />
-                                </div>
+                        hardMaxHeight={ui.maxHeight ?? 560}
+                        header={allowSearch ? (
+                          <PickerSearch 
+                            value={query} 
+                            onChange={setQuery}
+                            placeholder="Search..."
+                          />
+                        ) : undefined}
+                        content={
+                          <div ref={contentRef}>
+                            <PickerList
+                              role="listbox"
+                              aria-label={label ?? name}
+                              aria-multiselectable={true}
+                            >
+                              {filteredOptions.length === 0 ? (
+                                <PickerEmptyState message="No results found" />
+                              ) : (
+                                filteredOptions.map((opt: any, idx: number) => {
+                                  const optValue = opt.value
+                                  const optLabel = opt.label ?? String(optValue)
+                                  const isSelected = selectedValues.includes(optValue)
+
+                                  return (
+                                    <div
+                                      key={`${optValue}-${idx}`}
+                                      role="option"
+                                      aria-selected={isSelected}
+                                      onClick={() => toggleSelection(optValue)}
+                                      className="flex items-center gap-3 px-3 py-2 min-h-[44px] text-sm text-gray-900 cursor-pointer hover:bg-gray-50"
+                                    >
+                                      <input
+                                        type="checkbox"
+                                        checked={isSelected}
+                                        readOnly
+                                        className="h-4 w-4 rounded border-gray-300 text-blue-600"
+                                      />
+                                      <span className="flex-1">{optLabel}</span>
+                                    </div>
+                                  )
+                                })
                               )}
-
-                              {/* List */}
-                              <div 
-                                ref={contentRef}
-                                className="flex-1 min-h-0 overflow-auto"
-                              >
-                              <PickerList
-                                role="listbox"
-                                aria-label={label ?? name}
-                                aria-multiselectable={true}
-                              >
-                                {filteredOptions.length === 0 ? (
-                                  <PickerEmptyState message="No results found" />
-                                ) : (
-                                  filteredOptions.map((opt: any, idx: number) => {
-                                    const optValue = opt.value
-                                    const optLabel = opt.label ?? String(optValue)
-                                    const isSelected = selectedValues.includes(optValue)
-
-                                    return (
-                                      <div
-                                        key={`${optValue}-${idx}`}
-                                        role="option"
-                                        aria-selected={isSelected}
-                                        onClick={() => toggleSelection(optValue)}
-                                        className="flex items-center gap-3 px-3 py-2 min-h-[44px] text-sm text-gray-900 cursor-pointer hover:bg-gray-50"
-                                      >
-                                        <input
-                                          type="checkbox"
-                                          checked={isSelected}
-                                          readOnly
-                                          className="h-4 w-4 rounded border-gray-300 text-blue-600"
-                                        />
-                                        <span className="flex-1">{optLabel}</span>
-                                      </div>
-                                    )
-                                  })
-                                )}
-                              </PickerList>
-                            </div>
-
-                            {/* Footer */}
-                            <div className="flex-shrink-0 border-t border-gray-200 px-3 py-2 flex justify-between items-center bg-gray-50">
+                            </PickerList>
+                          </div>
+                        }
+                        footer={
+                          <div className="border-t border-gray-200 px-3 py-2 flex justify-between items-center bg-gray-50">
+                            <button
+                              type="button"
+                              onClick={() => clearAll()}
+                              className="px-3 py-1.5 text-sm text-gray-700 hover:text-gray-900"
+                            >
+                              Clear All
+                            </button>
+                            <div className="flex items-center gap-2">
+                              <span className="text-sm text-gray-600">
+                                {selectedOptions.length} selected
+                              </span>
                               <button
                                 type="button"
-                                onClick={() => clearAll()}
-                                className="px-3 py-1.5 text-sm text-gray-700 hover:text-gray-900"
+                                onClick={() => close('select')}
+                                className="px-3 py-1.5 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700"
                               >
-                                Clear All
+                                Done
                               </button>
-                              <div className="flex items-center gap-2">
-                                <span className="text-sm text-gray-600">
-                                  {selectedOptions.length} selected
-                                </span>
-                                <button
-                                  type="button"
-                                  onClick={() => close('select')}
-                                  className="px-3 py-1.5 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700"
-                                >
-                                  Done
-                                </button>
-                              </div>
                             </div>
-                          </EventWrapper>
-                        </div>
-                        )}
-                      </OverlayPositioner>
+                          </div>
+                        }
+                      />
                     )
                   )}
                 </>

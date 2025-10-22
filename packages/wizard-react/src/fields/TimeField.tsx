@@ -21,7 +21,7 @@ import { FormLabel, FormHelperText } from '../components'
 import { FormStack, FormGrid, Stack } from '../components'
 import { resolveTypographyDisplay, getTypographyFromJSON } from './utils/typography-display'
 import { mergeFieldConfig } from './utils/field-json-config'
-import { OverlayPickerCore, OverlayPositioner, OverlaySheet, PickerFooter } from '../components/overlay'
+import { OverlayPickerCore, OverlayPicker, OverlaySheet, PickerFooter } from '../components/overlay'
 import { useDeviceType } from '../hooks/useDeviceType'
 
 export const TimeField: React.FC<FieldComponentProps> = ({
@@ -461,101 +461,89 @@ export const TimeField: React.FC<FieldComponentProps> = ({
 
                   {/* Desktop Popover */}
                   {!isMobile && isOpen && (
-                    <OverlayPositioner
+                    <OverlayPicker
                       open={isOpen}
                       anchor={triggerRef.current}
+                      onOpenChange={(open) => {
+                        if (!open) close('outside')
+                      }}
                       placement="bottom-start"
-                      offset={6}
-                      strategy="fixed"
                       sameWidth={false}
-                      maxHeight={480}
-                      collision={{ flip: true, shift: true, size: false }}
-                    >
-                      {({ refs, floatingStyles, EventWrapper, maxHeightPx }) => (
-                        <div
-                          ref={refs.setFloating as any}
-                          style={{ ...floatingStyles, width: 'auto', minWidth: '320px' }}
-                          data-overlay="picker"
-                          className="z-50 bg-white rounded-md shadow-lg ring-1 ring-black/10 flex flex-col overflow-hidden"
-                        >
-                          <EventWrapper className="flex-1 flex flex-col min-h-0">
-                          <div ref={contentRef} className="flex-1 min-h-0 overflow-auto p-4 space-y-4">
-                            {/* Format Toggle */}
-                            <div className="flex items-center justify-between pb-2 border-b border-gray-200">
-                              <span className="text-sm font-medium text-gray-700">Time Format</span>
-                              <button
-                                type="button"
-                                onClick={() => setUse24Hour(!use24Hour)}
-                                className="flex items-center gap-2 px-3 py-1 rounded-md bg-gray-100 hover:bg-gray-200 text-sm font-medium text-gray-700 transition-colors"
-                              >
-                                {use24Hour ? '24hr' : '12hr'}
-                                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
-                                </svg>
-                              </button>
-                            </div>
-
-                            {/* Wheel Pickers */}
-                            <div className="flex items-center justify-center gap-2">
-                              <WheelPicker
-                                value={use24Hour ? hour : getDisplayHour(hour)}
-                                onChange={(v) => {
-                                  const newHour = use24Hour ? v : (getPeriod(hour) === 'PM' ? (v === 12 ? 12 : v + 12) : (v === 12 ? 0 : v))
-                                  updateFieldValue(newHour, minute)
-                                }}
-                                max={use24Hour ? 23 : 12}
-                                label="Hour"
-                              />
-                              <div className="text-4xl font-bold text-gray-400 mt-6">:</div>
-                              <WheelPicker
-                                value={minute}
-                                onChange={(v) => updateFieldValue(hour, v)}
-                                max={59}
-                                label="Minute"
-                              />
-                              {!use24Hour && (
-                                <div className="flex flex-col items-center mt-6 ml-2">
-                                  <div className="inline-flex flex-col rounded-md shadow-sm border border-gray-300" role="group">
-                                    <button
-                                      type="button"
-                                      onClick={() => setPeriod(false)}
-                                      className={`px-4 py-3 text-sm font-medium rounded-t-md transition-colors ${
-                                        getPeriod(hour) === 'AM'
-                                          ? 'bg-blue-600 text-white'
-                                          : 'bg-white text-gray-700 hover:bg-gray-50'
-                                      }`}
-                                    >
-                                      AM
-                                    </button>
-                                    <button
-                                      type="button"
-                                      onClick={() => setPeriod(true)}
-                                      className={`px-4 py-3 text-sm font-medium rounded-b-md border-t transition-colors ${
-                                        getPeriod(hour) === 'PM'
-                                          ? 'bg-blue-600 text-white border-blue-600'
-                                          : 'bg-white text-gray-700 hover:bg-gray-50 border-gray-300'
-                                      }`}
-                                    >
-                                      PM
-                                    </button>
-                                  </div>
-                                </div>
-                              )}
-                            </div>
-                          </div>
-
-                          {/* Footer */}
-                          <div className="flex-shrink-0 border-t border-gray-200 p-4">
-                            <PickerFooter
-                              onClear={handleClear}
-                              onDone={() => close('select')}
-                              size="default"
-                            />
-                          </div>
-                        </EventWrapper>
+                      hardMaxHeight={480}
+                      style={{ width: 'auto', minWidth: '320px' }}
+                      header={
+                        <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200">
+                          <span className="text-sm font-medium text-gray-700">Time Format</span>
+                          <button
+                            type="button"
+                            onClick={() => setUse24Hour(!use24Hour)}
+                            className="flex items-center gap-2 px-3 py-1 rounded-md bg-gray-100 hover:bg-gray-200 text-sm font-medium text-gray-700 transition-colors"
+                          >
+                            {use24Hour ? '24hr' : '12hr'}
+                            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+                            </svg>
+                          </button>
                         </div>
-                      )}
-                    </OverlayPositioner>
+                      }
+                      content={
+                        <div ref={contentRef} className="p-4">
+                          <div className="flex items-center justify-center gap-2">
+                            <WheelPicker
+                              value={use24Hour ? hour : getDisplayHour(hour)}
+                              onChange={(v) => {
+                                const newHour = use24Hour ? v : (getPeriod(hour) === 'PM' ? (v === 12 ? 12 : v + 12) : (v === 12 ? 0 : v))
+                                updateFieldValue(newHour, minute)
+                              }}
+                              max={use24Hour ? 23 : 12}
+                              label="Hour"
+                            />
+                            <div className="text-4xl font-bold text-gray-400 mt-6">:</div>
+                            <WheelPicker
+                              value={minute}
+                              onChange={(v) => updateFieldValue(hour, v)}
+                              max={59}
+                              label="Minute"
+                            />
+                            {!use24Hour && (
+                              <div className="flex flex-col items-center mt-6 ml-2">
+                                <div className="inline-flex flex-col rounded-md shadow-sm border border-gray-300" role="group">
+                                  <button
+                                    type="button"
+                                    onClick={() => setPeriod(false)}
+                                    className={`px-4 py-3 text-sm font-medium rounded-t-md transition-colors ${
+                                      getPeriod(hour) === 'AM'
+                                        ? 'bg-blue-600 text-white'
+                                        : 'bg-white text-gray-700 hover:bg-gray-50'
+                                    }`}
+                                  >
+                                    AM
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => setPeriod(true)}
+                                    className={`px-4 py-3 text-sm font-medium rounded-b-md border-t transition-colors ${
+                                      getPeriod(hour) === 'PM'
+                                        ? 'bg-blue-600 text-white border-blue-600'
+                                        : 'bg-white text-gray-700 hover:bg-gray-50 border-gray-300'
+                                    }`}
+                                  >
+                                    PM
+                                  </button>
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      }
+                      footer={
+                        <PickerFooter
+                          onClear={handleClear}
+                          onDone={() => close('select')}
+                          size="default"
+                        />
+                      }
+                    />
                   )}
                 </>
               )}

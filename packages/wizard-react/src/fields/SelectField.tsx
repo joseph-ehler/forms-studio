@@ -22,7 +22,7 @@ import { resolveTypographyDisplay, getTypographyFromJSON } from './utils/typogra
 import { mergeFieldConfig } from './utils/field-json-config'
 import { useDeviceType } from '../hooks/useDeviceType'
 import { OverlayPickerCore, useOverlayContext } from '../components/overlay/OverlayPickerCore'
-import { OverlayPositioner } from '../components/overlay/OverlayPositioner'
+import { OverlayPicker } from '../components/overlay/OverlayPicker'
 import { OverlaySheet } from '../components/overlay/OverlaySheet'
 import { PickerList } from '../components/picker/PickerList'
 import { PickerOption } from '../components/picker/PickerOption'
@@ -211,72 +211,58 @@ export const SelectField: React.FC<FieldComponentProps> = ({
                         </div>
                       </OverlaySheet>
                     ) : (
-                      <OverlayPositioner
+                      <OverlayPicker
                         open={isOpen}
                         anchor={triggerRef.current}
+                        onOpenChange={(open) => {
+                          if (!open) close('outside')
+                        }}
                         placement={ui.placement ?? 'bottom-start'}
-                        offset={ui.offset ?? 6}
-                        strategy="fixed"
                         sameWidth={ui.sameWidth ?? true}
-                        maxHeight={ui.maxHeight ?? 560}
-                        collision={ui.collision ?? { flip: true, shift: true, size: true }}
-                      >
-                        {({ refs, floatingStyles, isPositioned }) => (
-                          <div
-                            ref={refs.setFloating}
-                            style={floatingStyles}
-                            className="z-50 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden"
-                          >
-                            {/* Search */}
-                            {allowSearch && (
-                              <PickerSearch 
-                                value={query} 
-                                onChange={setQuery}
-                                placeholder="Search..."
-                              />
-                            )}
-
-                            {/* List */}
-                            <div 
-                              ref={contentRef}
-                              className="overflow-y-auto"
-                              style={{ maxHeight: ui.maxHeight ?? 560 }}
+                        hardMaxHeight={ui.maxHeight ?? 560}
+                        header={allowSearch ? (
+                          <PickerSearch 
+                            value={query} 
+                            onChange={setQuery}
+                            placeholder="Search..."
+                          />
+                        ) : undefined}
+                        content={
+                          <div ref={contentRef}>
+                            <PickerList
+                              role="listbox"
+                              aria-label={label ?? name}
                             >
-                              <PickerList
-                                role="listbox"
-                                aria-label={label ?? name}
-                              >
-                                {filteredOptions.length === 0 ? (
-                                  <PickerEmptyState message="No results found" />
-                                ) : (
-                                  filteredOptions.map((opt: any, idx: number) => {
-                                    const optValue = opt.value ?? opt
-                                    const optLabel = opt.label ?? String(optValue)
-                                    const isSelected = optValue === field.value
+                              {filteredOptions.length === 0 ? (
+                                <PickerEmptyState message="No results found" />
+                              ) : (
+                                filteredOptions.map((opt: any, idx: number) => {
+                                  const optValue = opt.value ?? opt
+                                  const optLabel = opt.label ?? String(optValue)
+                                  const isSelected = optValue === field.value
 
-                                    return (
-                                      <PickerOption
-                                        key={`${optValue}-${idx}`}
-                                        value={optValue}
-                                        selected={isSelected}
-                                        disabled={disabled}
-                                        onClick={() => {
-                                          field.onChange(optValue)
-                                          if (ui.closeOnSelect ?? true) {
-                                            close('select')
-                                          }
-                                        }}
-                                      >
-                                        {optLabel}
-                                      </PickerOption>
-                                    )
-                                  })
-                                )}
-                              </PickerList>
-                            </div>
+                                  return (
+                                    <PickerOption
+                                      key={`${optValue}-${idx}`}
+                                      value={optValue}
+                                      selected={isSelected}
+                                      disabled={disabled}
+                                      onClick={() => {
+                                        field.onChange(optValue)
+                                        if (ui.closeOnSelect ?? true) {
+                                          close('select')
+                                        }
+                                      }}
+                                    >
+                                      {optLabel}
+                                    </PickerOption>
+                                  )
+                                })
+                              )}
+                            </PickerList>
                           </div>
-                        )}
-                      </OverlayPositioner>
+                        }
+                      />
                     )
                   )}
                 </>

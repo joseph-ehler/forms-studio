@@ -15,7 +15,7 @@
 
 import React, { Fragment, useState } from 'react'
 import { Controller } from 'react-hook-form'
-import { OverlayPickerCore, OverlaySheet, OverlayPositioner, PickerFooter, calculateOverlayHeights, getOverlayContentClasses } from '../../components/overlay'
+import { OverlayPickerCore, OverlaySheet, OverlayPicker, CalendarSkin, PickerFooter } from '../../components/overlay'
 import { useDeviceType } from '../../hooks/useDeviceType'
 import { DayPicker, DateRange } from 'react-day-picker'
 import { format, parseISO, startOfDay, endOfDay, startOfWeek, endOfWeek, startOfMonth, endOfMonth, startOfYear, endOfYear } from 'date-fns'
@@ -175,18 +175,6 @@ export const DateRangeField: React.FC<FieldComponentProps> = ({
           const { isMobile } = useDeviceType()
           
           // Calculate heights with proper footer accounting
-          const footerHeight = 56 // Desktop footer with padding
-          const calendarHeight = 320 // Approximate DayPicker height for 2 months
-          const presetsWidth = 140 // Presets sidebar
-          const maxContentHeight = 450 // Safe max to fit in viewport
-          
-          const heights = calculateOverlayHeights({
-            maxHeight: isMobile ? 560 : maxContentHeight,
-            hasSearch: false,
-            hasFooter: true,
-            footerHeight: isMobile ? 48 : footerHeight,
-          })
-
           // Common DayPicker props with hover preview
           const dayPickerCommon = {
             mode: 'range' as const,
@@ -294,73 +282,58 @@ export const DateRangeField: React.FC<FieldComponentProps> = ({
 
                   {/* Desktop Popover */}
                   {!isMobile && isOpen && (
-                    <OverlayPositioner
+                    <OverlayPicker
                       open={isOpen}
                       anchor={triggerRef.current}
+                      onOpenChange={(open) => {
+                        if (!open) close('outside')
+                      }}
                       placement="bottom-start"
-                      offset={6}
-                      strategy="fixed"
                       sameWidth={false}
-                      maxHeight={550}
-                      collision={{ flip: true, shift: true, size: true }}
-                    >
-                      {({ refs, floatingStyles, EventWrapper, maxHeightPx }) => (
-                        <div
-                          ref={refs.setFloating as any}
-                          style={floatingStyles}
-                          data-overlay="picker"
-                          className="z-50 bg-white rounded-md shadow-lg ring-1 ring-black/10 flex flex-col overflow-hidden"
-                        >
-                          <EventWrapper className="flex-1 flex flex-col min-h-0">
-                            {/* Scrollable content */}
-                            <div
-                              ref={contentRef}
-                              className="flex-1 min-h-0 overflow-auto"
-                            >
-                            <div className="p-4 flex gap-4">
-                              {/* Presets Sidebar */}
-                              {presets.length > 0 && (
-                                <div className="flex flex-col gap-1 pr-4 border-r border-gray-200">
-                                  <div className="text-xs font-medium text-gray-500 mb-1">
-                                    Quick Select
-                                  </div>
-                                  {presets.map((preset: string) => (
-                                    <button
-                                      key={preset}
-                                      type="button"
-                                      onClick={() => {
-                                        handlePreset(preset)
-                                      }}
-                                      className="text-left px-3 py-2 text-sm rounded-md hover:bg-gray-100 text-gray-700 whitespace-nowrap transition-colors"
-                                    >
-                                      {preset}
-                                    </button>
-                                  ))}
-                                </div>
-                              )}
-
-                              {/* Dual Calendar */}
-                              <div>
-                                <DayPicker
-                                  {...dayPickerCommon}
-                                  numberOfMonths={2}
-                                />
+                      hardMaxHeight={550}
+                      content={
+                        <div ref={contentRef} className="p-4 flex gap-4">
+                          {/* Presets Sidebar */}
+                          {presets.length > 0 && (
+                            <div className="flex flex-col gap-1 pr-4 border-r border-gray-200">
+                              <div className="text-xs font-medium text-gray-500 mb-1">
+                                Quick Select
                               </div>
+                              {presets.map((preset: string) => (
+                                <button
+                                  key={preset}
+                                  type="button"
+                                  onClick={() => handlePreset(preset)}
+                                  className="text-left px-3 py-2 text-sm rounded-md hover:bg-gray-100 text-gray-700 whitespace-nowrap transition-colors"
+                                >
+                                  {preset}
+                                </button>
+                              ))}
                             </div>
-                          </div>
+                          )}
 
-                          {/* Footer - Fixed at bottom */}
-                          <div className="flex-shrink-0 border-t border-gray-200 p-3">
-                            <PickerFooter
-                              onClear={() => field.onChange(null)}
-                              onDone={() => close('select')}
-                              size="small"
-                            />
-                          </div>
-                          </EventWrapper>
+                          {/* Dual Calendar */}
+                          <CalendarSkin
+                            mode="range"
+                            selected={{ from: selectedFrom, to: selectedTo }}
+                            onSelect={handleRangeChange}
+                            disabled={previewRange ? { preview: previewRange } : undefined}
+                            fromDate={min}
+                            toDate={max}
+                            numberOfMonths={2}
+                            onPreviewEnter={(d) => setHoverDate(d)}
+                            onPreviewLeave={() => setHoverDate(undefined)}
+                          />
                         </div>
-                      )}
-                    </OverlayPositioner>
+                      }
+                      footer={
+                        <PickerFooter
+                          onClear={() => field.onChange(null)}
+                          onDone={() => close('select')}
+                          size="small"
+                        />
+                      }
+                    />
                   )}
                 </>
               )}
