@@ -153,6 +153,7 @@
     --ds-color-state-danger:   var(--tw-red-600);
     
     /* Interactive - Primary */
+    --ds-color-primary:           var(--tw-blue-600); /* Alias for primary-bg */
     --ds-color-primary-bg:        var(--tw-blue-600);
     --ds-color-primary-bg-hover:  var(--tw-blue-700);
     --ds-color-primary-bg-active: var(--tw-blue-800);
@@ -214,6 +215,7 @@
     --ds-color-state-danger:   var(--tw-red-500);
     
     /* Interactive - Primary */
+    --ds-color-primary:           var(--tw-blue-500); /* Alias for primary-bg */
     --ds-color-primary-bg:        var(--tw-blue-500);
     --ds-color-primary-bg-hover:  var(--tw-blue-600);
     --ds-color-primary-bg-active: var(--tw-blue-700);
@@ -286,6 +288,7 @@
     --ds-color-state-danger:   var(--tw-red-500);
     
     /* Interactive - Primary */
+    --ds-color-primary:           var(--tw-violet-500); /* Alias for primary-bg */
     --ds-color-primary-bg:        var(--tw-violet-500);
     --ds-color-primary-bg-hover:  var(--tw-violet-600);
     --ds-color-primary-bg-active: var(--tw-violet-700);
@@ -322,9 +325,11 @@
     --ds-color-border-focus:   var(--tw-emerald-500);
     --ds-color-state-info:     var(--tw-emerald-600);
     
+    --ds-color-primary:           var(--tw-emerald-600); /* Alias for primary-bg */
     --ds-color-primary-bg:        var(--tw-emerald-600);
     --ds-color-primary-bg-hover:  var(--tw-emerald-700);
     --ds-color-primary-bg-active: var(--tw-emerald-800);
+    --ds-color-primary-text:      #ffffff;
     --ds-color-primary-ring:      var(--tw-emerald-500);
   }
   
@@ -358,6 +363,7 @@
     --ds-color-state-danger:   var(--tw-red-500);
     
     /* Interactive - Primary */
+    --ds-color-primary:           var(--tw-emerald-500); /* Alias for primary-bg */
     --ds-color-primary-bg:        var(--tw-emerald-500);
     --ds-color-primary-bg-hover:  var(--tw-emerald-600);
     --ds-color-primary-bg-active: var(--tw-emerald-700);
@@ -388,9 +394,11 @@
     --ds-color-border-focus:   var(--tw-rose-500);
     --ds-color-state-info:     var(--tw-rose-600);
     
+    --ds-color-primary:           var(--tw-rose-600); /* Alias for primary-bg */
     --ds-color-primary-bg:        var(--tw-rose-600);
     --ds-color-primary-bg-hover:  var(--tw-rose-700);
     --ds-color-primary-bg-active: var(--tw-rose-800);
+    --ds-color-primary-text:      #ffffff;
     --ds-color-primary-ring:      var(--tw-rose-500);
   }
   
@@ -424,6 +432,7 @@
     --ds-color-state-danger:   var(--tw-red-500);
     
     /* Interactive - Primary */
+    --ds-color-primary:           var(--tw-rose-500); /* Alias for primary-bg */
     --ds-color-primary-bg:        var(--tw-rose-500);
     --ds-color-primary-bg-hover:  var(--tw-rose-600);
     --ds-color-primary-bg-active: var(--tw-rose-700);
