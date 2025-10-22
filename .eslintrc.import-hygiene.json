@@ -1,0 +1,48 @@
+{
+  "rules": {
+    "no-restricted-imports": [
+      "error",
+      {
+        "patterns": [
+          {
+            "group": ["@intstudio/*/src/*", "@intstudio/*/dist/*"],
+            "message": "❌ Deep imports forbidden. Import from package root: @intstudio/ds (not @intstudio/ds/src/...)"
+          },
+          {
+            "group": ["@joseph*"],
+            "message": "❌ Old package names forbidden. Use @intstudio/* scope."
+          }
+        ]
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": ["packages/*/src/**/*.ts", "packages/*/src/**/*.tsx"],
+      "excludedFiles": ["**/*.config.ts", "**/*.test.ts", "**/*.spec.ts"],
+      "rules": {
+        "no-restricted-imports": ["off"]
+      }
+    },
+    {
+      "files": ["packages/demo-app/**/*.ts", "packages/demo-app/**/*.tsx", "apps/**/*.ts", "apps/**/*.tsx"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": ["../*", "../../*", "../../../*", "../../../../*"],
+                "message": "❌ Consumer apps must use @intstudio/* scoped imports only. No relative imports across packages."
+              },
+              {
+                "group": ["@intstudio/*/src/*", "@intstudio/*/dist/*"],
+                "message": "❌ Deep imports forbidden. Import from package root: @intstudio/ds"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

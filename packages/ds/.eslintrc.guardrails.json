@@ -1,5 +1,6 @@
 {
   "extends": [
+    "../../.eslintrc.import-hygiene.json",
     "./.eslintrc.focus-rules.json",
     "./.eslintrc.semantic-sizing.json",
     "./.eslintrc.density-rules.json",
