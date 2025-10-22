@@ -164,17 +164,15 @@ export const SelectField: React.FC<FieldComponentProps> = ({
                         onClose={() => close('outside')}
                         maxHeight={ui.maxHeight ?? 560}
                         aria-labelledby={`${name}-label`}
-                      >
-                        {/* Search */}
-                        {allowSearch && (
+                        header={allowSearch ? (
                           <PickerSearch 
                             value={query} 
                             onChange={setQuery}
                             placeholder="Search..."
                             autoFocus
                           />
-                        )}
-
+                        ) : undefined}
+                      >
                         {/* List */}
                         <div ref={contentRef}>
                           <PickerList

@@ -208,6 +208,14 @@ export const MultiSelectField: React.FC<FieldComponentProps> = ({
                         onClose={() => close('outside')}
                         maxHeight={ui.maxHeight ?? 560}
                         aria-labelledby={`${name}-label`}
+                        header={allowSearch ? (
+                          <PickerSearch 
+                            value={query} 
+                            onChange={setQuery}
+                            placeholder="Search..."
+                            autoFocus
+                          />
+                        ) : undefined}
                         footer={
                           <div className="flex justify-between items-center gap-2">
                             <button
@@ -232,16 +240,6 @@ export const MultiSelectField: React.FC<FieldComponentProps> = ({
                           </div>
                         }
                       >
-                        {/* Search */}
-                        {allowSearch && (
-                          <PickerSearch 
-                            value={query} 
-                            onChange={setQuery}
-                            placeholder="Search..."
-                            autoFocus
-                          />
-                        )}
-
                         {/* List */}
                         <div ref={contentRef}>
                           <PickerList
