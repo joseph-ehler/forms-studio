@@ -1,0 +1,132 @@
+/**
+ * CSS Cascade Layers - Deterministic Specificity
+ * 
+ * PHILOSOPHY:
+ * - Explicit precedence order (no !important needed)
+ * - Brands use low-specificity :where() selectors
+ * - Components can override brand defaults
+ * - Utilities always win (atomic CSS pattern)
+ * 
+ * ORDER (lowest → highest precedence):
+ * 1. tokens   - Design tokens (--ds-*)
+ * 2. brand    - Brand-specific overrides (low specificity)
+ * 3. base     - Base resets & typography
+ * 4. atoms    - Neutral atoms (Heading, Body, Button)
+ * 5. layout   - Layout primitives (Stack, Grid, Container)
+ * 6. patterns - Composite patterns (FormLayout, Card)
+ * 7. utils    - Utility classes (ds-px-4, ds-gap-6)
+ * 
+ * USAGE:
+ * 
+ * Brand files wrap rules in @layer brand:
+ *   @layer brand {
+ *     :where([data-brand="acme"]) {
+ *       --ds-color-primary: oklch(60% 0.2 220);
+ *     }
+ *   }
+ * 
+ * Component files specify their layer:
+ *   @layer atoms {
+ *     .ds-button { ... }
+ *   }
+ * 
+ * Why :where()? Zero specificity, so components can override!
+ */
+
+@layer tokens, brand, base, atoms, layout, patterns, utils;
+
+/* ========================================
+   Layer Descriptions
+   ======================================== */
+
+/**
+ * @layer tokens
+ * Purpose: CSS custom properties only
+ * Specificity: Low (just property definitions)
+ * Examples: color.vars.css, typography.vars.css, layout.vars.css
+ */
+
+/**
+ * @layer brand
+ * Purpose: Brand-specific token overrides
+ * Specificity: Zero (uses :where() selector)
+ * Examples: brand-acme.css, brand-vertex.css
+ * 
+ * Pattern:
+ *   @layer brand {
+ *     :where([data-brand="acme"]) {
+ *       --ds-color-primary: oklch(60% 0.2 220);
+ *     }
+ *   }
+ */
+
+/**
+ * @layer base
+ * Purpose: Resets, normalize, base typography
+ * Specificity: Element selectors (low)
+ * Examples: reset.css, base.css
+ */
+
+/**
+ * @layer atoms
+ * Purpose: Neutral design system primitives
+ * Specificity: Single class (.ds-button)
+ * Examples: ds-inputs.css, ds-typography.css, Button.css
+ */
+
+/**
+ * @layer layout
+ * Purpose: Spacing & positioning primitives
+ * Specificity: Single class (.ds-stack)
+ * Examples: Stack.css, Grid.css, Container.css
+ */
+
+/**
+ * @layer patterns
+ * Purpose: Composite patterns (atoms + layout)
+ * Specificity: Single or nested class
+ * Examples: FormLayout.css, Card.css, Prose.css
+ */
+
+/**
+ * @layer utils
+ * Purpose: Atomic utility classes (highest precedence)
+ * Specificity: Single class but layer wins
+ * Examples: ds-px-4, ds-gap-6, ds-text-center
+ * 
+ * Note: Always wins due to layer order, no !important needed
+ */
+
+/* ========================================
+   Benefits
+   ======================================== */
+
+/**
+ * BEFORE (specificity wars):
+ * - Brand: [data-brand] (0,1,0)
+ * - Component: .ds-button (0,1,0) 
+ * - Result: First-in-source wins (brittle!)
+ * - Fix: !important hacks
+ * 
+ * AFTER (cascade layers):
+ * - Brand: @layer brand (always lower)
+ * - Component: @layer atoms (always higher)
+ * - Result: Components win, no !important needed
+ * - Override: Utils layer or inline styles
+ */
+
+/**
+ * SCOPED BRANDING:
+ * 
+ * Two brands side-by-side? No problem!
+ * 
+ *   <div data-brand="acme">
+ *     <Button>Acme Button</Button>
+ *   </div>
+ * 
+ *   <div data-brand="vertex">
+ *     <Button>Vertex Button</Button>
+ *   </div>
+ * 
+ * Each subtree gets its own brand tokens automatically.
+ */

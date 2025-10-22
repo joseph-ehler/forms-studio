@@ -1,0 +1,50 @@
+{
+  "name": "Typography Guardrails",
+  "description": "Prevents typography drift by enforcing DS primitives in fields",
+  "rules": {
+    "no-restricted-syntax": [
+      "error",
+      {
+        "selector": "JSXElement[openingElement.name.name='label']",
+        "message": "❌ Use <FormLabel> from @design-system/typography instead of raw <label> in fields. Import: import { FormLabel } from '../components/typography';"
+      }
+    ],
+    "no-restricted-imports": [
+      "error",
+      {
+        "patterns": [
+          {
+            "group": ["**/node_modules/**/*.css", "react-day-picker/dist/style.css"],
+            "message": "❌ Import CSS only from design system skins (ds-*.css). Fields should never import node_modules CSS directly."
+          },
+          {
+            "group": ["**/wizard-react/src/components/overlay/*", "!**/wizard-react/src/components/overlay/index.ts"],
+            "message": "❌ Import from barrel only: import { OverlayPicker } from '../components/overlay' or '@ds/overlay'"
+          }
+        ]
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": ["packages/**/src/fields/**/*.tsx", "packages/**/src/fields/**/*.ts"],
+      "rules": {
+        "no-restricted-syntax": [
+          "error",
+          {
+            "selector": "JSXElement[openingElement.name.name='label']",
+            "message": "❌ Use <FormLabel> instead of raw <label> in fields"
+          },
+          {
+            "selector": "JSXAttribute[name.name='className'][value.value=/text-|font-|leading-/]",
+            "message": "❌ No typography Tailwind classes in fields. Use FormLabel/FormHelperText primitives with size props."
+          },
+          {
+            "selector": "JSXAttribute[name.name='style'] Property[key.name=/fontSize|fontWeight|lineHeight|fontFamily/]",
+            "message": "❌ No inline typography styles. Use TYPO_TOKENS or FormLabel/FormHelperText primitives."
+          }
+        ]
+      }
+    }
+  ]
+}

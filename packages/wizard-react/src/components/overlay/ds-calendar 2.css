@@ -1,0 +1,282 @@
+/**
+ * ds-calendar.css - Centralized Calendar Styling
+ * 
+ * Single source of truth for ALL calendar appearance.
+ * Uses ARIA/role/data selectors (not class names) for robustness.
+ * 
+ * Fields import CalendarSkin → CalendarSkin imports this → zero manual styling.
+ */
+
+/* ========================================
+   Container
+   ======================================== */
+
+.ds-calendar {
+  --cal-border: var(--ds-color-border-subtle);
+  --cal-text: var(--ds-color-text-primary);
+  --cal-text-muted: var(--ds-color-text-secondary);
+  --cal-bg-hover: var(--ds-color-surface-subtle);
+  --cal-bg-selected: var(--ds-color-primary-bg);
+  --cal-bg-selected-hover: var(--ds-color-primary-bg);
+  --cal-bg-today: color-mix(in oklab, var(--ds-color-primary-bg), transparent 90%);
+  --cal-bg-range-middle: color-mix(in oklab, var(--ds-color-primary-bg), transparent 95%);
+  --cal-bg-disabled: var(--ds-color-surface-subtle);
+  --cal-text-disabled: var(--ds-color-text-muted);
+  --cal-radius: 0.5rem;
+  --cal-day-size: 40px;
+  --cal-spacing: 0.5rem;
+}
+
+.ds-calendar {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: var(--cal-text);
+  padding: var(--ds-space-4); /* 16px */
+}
+
+/* ========================================
+   Month Grid
+   ======================================== */
+
+.ds-calendar [role="grid"] {
+  border-spacing: 0;
+  border-collapse: separate;
+}
+
+.ds-calendar caption {
+  font-weight: 600;
+  font-size: 0.875rem;
+  margin-bottom: var(--ds-space-3); /* 12px */
+  text-align: center;
+}
+
+/* ========================================
+   Weekday Headers
+   ======================================== */
+
+.ds-calendar thead [role="columnheader"] {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--cal-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding-bottom: var(--cal-spacing);
+  width: var(--cal-day-size);
+  height: var(--cal-day-size);
+  text-align: center;
+}
+
+/* ========================================
+   Day Cells (Base)
+   ======================================== */
+
+.ds-calendar [role="gridcell"] {
+  width: var(--cal-day-size);
+  height: var(--cal-day-size);
+  padding: 0;
+  text-align: center;
+  position: relative;
+}
+
+.ds-calendar [role="gridcell"] button {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: none;
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: var(--cal-text);
+  cursor: pointer;
+  border-radius: var(--cal-radius);
+  transition: background-color 150ms ease, color 150ms ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+}
+
+.ds-calendar [role="gridcell"] button:hover {
+  background-color: var(--cal-bg-hover);
+}
+
+.ds-calendar [role="gridcell"] button:focus-visible {
+  outline: 2px solid var(--cal-bg-selected);
+  outline-offset: 2px;
+}
+
+/* ========================================
+   Today
+   ======================================== */
+
+.ds-calendar .data-today button {
+  background-color: var(--cal-bg-today);
+  font-weight: 600;
+}
+
+/* ========================================
+   Selected (Single Mode)
+   ======================================== */
+
+.ds-calendar [role="gridcell"][aria-selected="true"] button {
+  background-color: var(--cal-bg-selected);
+  color: white;
+  font-weight: 600;
+}
+
+.ds-calendar [role="gridcell"][aria-selected="true"] button:hover {
+  background-color: var(--cal-bg-selected-hover);
+}
+
+/* ========================================
+   Disabled
+   ======================================== */
+
+.ds-calendar [role="gridcell"][aria-disabled="true"] button {
+  color: var(--cal-text-disabled);
+  background-color: var(--cal-bg-disabled);
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.ds-calendar [role="gridcell"][aria-disabled="true"] button:hover {
+  background-color: var(--cal-bg-disabled);
+}
+
+/* ========================================
+   Range Mode - Start, Middle, End
+   ======================================== */
+
+/* Range middle cells get a subtle background fill */
+.ds-calendar .data-range-middle {
+  background-color: var(--cal-bg-range-middle);
+}
+
+.ds-calendar .data-range-middle button {
+  background-color: transparent;
+}
+
+.ds-calendar .data-range-middle button:hover {
+  background-color: var(--cal-bg-hover);
+}
+
+/* Range start/end get strong selected styling */
+.ds-calendar .data-range-start button,
+.ds-calendar .data-range-end button {
+  background-color: var(--cal-bg-selected);
+  color: white;
+  font-weight: 600;
+  z-index: 2;
+}
+
+.ds-calendar .data-range-start button:hover,
+.ds-calendar .data-range-end button:hover {
+  background-color: var(--cal-bg-selected-hover);
+}
+
+/* Extend background to connect range cells */
+.ds-calendar .data-range-start::after,
+.ds-calendar .data-range-end::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  background-color: var(--cal-bg-range-middle);
+  z-index: 0;
+}
+
+.ds-calendar .data-range-start::after {
+  right: 0;
+}
+
+.ds-calendar .data-range-end::before {
+  left: 0;
+}
+
+/* If a cell is both start AND end (same day selected twice), no extension */
+.ds-calendar .data-range-start.data-range-end::after,
+.ds-calendar .data-range-start.data-range-end::before {
+  display: none;
+}
+
+/* ========================================
+   Outside Month (Faded)
+   ======================================== */
+
+.ds-calendar [role="gridcell"].rdp-day_outside button {
+  color: var(--cal-text-muted);
+  opacity: 0.4;
+}
+
+/* ========================================
+   Navigation Buttons
+   ======================================== */
+
+.ds-calendar button[aria-label*="previous"],
+.ds-calendar button[aria-label*="next"],
+.ds-calendar button[aria-label*="Previous"],
+.ds-calendar button[aria-label*="Next"] {
+  background: none;
+  border: none;
+  padding: var(--ds-space-2); /* 8px */
+  cursor: pointer;
+  color: var(--cal-text);
+  border-radius: var(--cal-radius);
+  transition: background-color 150ms ease;
+}
+
+.ds-calendar button[aria-label*="previous"]:hover,
+.ds-calendar button[aria-label*="next"]:hover,
+.ds-calendar button[aria-label*="Previous"]:hover,
+.ds-calendar button[aria-label*="Next"]:hover {
+  background-color: var(--cal-bg-hover);
+}
+
+/* ========================================
+   Multiple Months Layout
+   ======================================== */
+
+.ds-calendar[data-months="2"] {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--ds-space-6); /* 24px */
+}
+
+/* ========================================
+   Dark Mode Support (Optional)
+   ======================================== */
+
+@media (prefers-color-scheme: dark) {
+  .ds-calendar {
+    --cal-border: var(--ds-calendar-border);
+    --cal-text: var(--ds-calendar-fg);
+    --cal-text-muted: var(--ds-calendar-fg-secondary);
+    --cal-bg-hover: var(--ds-calendar-bg-hover);
+    --cal-bg-selected: var(--ds-calendar-bg-selected);
+    --cal-bg-selected-hover: var(--ds-calendar-bg-selected);
+    --cal-bg-today: var(--ds-calendar-today-ring);
+    --cal-bg-range-middle: var(--ds-calendar-range-middle);
+    --cal-bg-disabled: var(--ds-calendar-bg-hover);
+    --cal-text-disabled: var(--ds-calendar-disabled);
+  }
+}
+
+/* ========================================
+   Responsive (Mobile)
+   ======================================== */
+
+@media (max-width: 640px) {
+  .ds-calendar {
+    --cal-day-size: 36px;
+    --cal-spacing: 0.25rem;
+    padding: var(--ds-space-3); /* 12px */
+  }
+
+  .ds-calendar caption {
+    font-size: 0.8125rem;
+  }
+
+  .ds-calendar [role="gridcell"] button {
+    font-size: 0.8125rem;
+  }
+}

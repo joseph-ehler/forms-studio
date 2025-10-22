@@ -7,6 +7,7 @@
 
 import React, { createContext, useContext, useEffect, useRef, useState, useCallback } from 'react'
 import type { OverlayPickerCoreProps, OverlayCloseReason } from './types'
+import { FocusTrap } from '../../lib/focus'
 
 // Context for automatic contentRef wiring - prevents manual wiring bugs
 interface OverlayContextType {
@@ -42,7 +43,6 @@ export const OverlayPickerCore: React.FC<OverlayPickerCoreComponentProps> = ({
   // Refs
   const triggerRef = useRef<HTMLElement | null>(null)
   const contentRef = useRef<HTMLDivElement | null>(null)
-  const previousActiveElement = useRef<Element | null>(null)
 
   // Update open state
   const setOpen = useCallback((newOpen: boolean, reason?: OverlayCloseReason) => {
@@ -58,82 +58,21 @@ export const OverlayPickerCore: React.FC<OverlayPickerCoreComponentProps> = ({
     setOpen(false, reason)
   }, [setOpen])
 
-  // Focus management
+  // Body scroll lock (only handle scroll, focus is handled by FocusTrap)
   useEffect(() => {
-    if (isOpen) {
-      // Store current active element
-      previousActiveElement.current = document.activeElement
-
-      // Focus trap
-      if (trapFocus && contentRef.current) {
-        const focusableElements = contentRef.current.querySelectorAll(
-          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-        )
-        const firstFocusable = focusableElements[0] as HTMLElement
-        firstFocusable?.focus()
+    if (isOpen && !allowOutsideScroll) {
+      // Lock body scroll
+      const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth
+      document.body.style.overflow = 'hidden'
+      document.body.style.paddingRight = `${scrollbarWidth}px`
+      
+      return () => {
+        // Unlock body scroll
+        document.body.style.overflow = ''
+        document.body.style.paddingRight = ''
       }
-
-      // Lock body scroll (if not allowed)
-      if (!allowOutsideScroll) {
-        const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth
-        document.body.style.overflow = 'hidden'
-        document.body.style.paddingRight = `${scrollbarWidth}px`
-      }
-    } else {
-      // Return focus
-      if (returnFocus && previousActiveElement.current instanceof HTMLElement) {
-        previousActiveElement.current.focus()
-      }
-
-      // Unlock body scroll
-      document.body.style.overflow = ''
-      document.body.style.paddingRight = ''
     }
-
-    return () => {
-      // Cleanup on unmount
-      document.body.style.overflow = ''
-      document.body.style.paddingRight = ''
-    }
-  }, [isOpen, trapFocus, returnFocus, allowOutsideScroll])
-
-  // Keyboard handling
-  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
-    if (!isOpen) return
-
-    switch (e.key) {
-      case 'Escape':
-        e.preventDefault()
-        close('escape')
-        break
-
-      case 'Tab':
-        if (trapFocus && contentRef.current) {
-          const focusableElements = Array.from(
-            contentRef.current.querySelectorAll(
-              'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-            )
-          ) as HTMLElement[]
-
-          if (focusableElements.length === 0) {
-            e.preventDefault()
-            return
-          }
-
-          const firstFocusable = focusableElements[0]
-          const lastFocusable = focusableElements[focusableElements.length - 1]
-
-          if (e.shiftKey && document.activeElement === firstFocusable) {
-            e.preventDefault()
-            lastFocusable.focus()
-          } else if (!e.shiftKey && document.activeElement === lastFocusable) {
-            e.preventDefault()
-            firstFocusable.focus()
-          }
-        }
-        break
-    }
-  }, [isOpen, trapFocus, close])
+  }, [isOpen, allowOutsideScroll])
 
   // Outside click handling
   const handleOutsideClick = useCallback((e: PointerEvent) => {
@@ -167,7 +106,6 @@ export const OverlayPickerCore: React.FC<OverlayPickerCoreComponentProps> = ({
     triggerRef,
     contentRef, // Still available in render props for backwards compatibility
     closeOnSelect,
-    handleKeyDown,
   }
 
   // Separate Context for auto-wiring (OverlaySheet/OverlayPicker consume this)
@@ -177,7 +115,14 @@ export const OverlayPickerCore: React.FC<OverlayPickerCoreComponentProps> = ({
 
   return (
     <OverlayContext.Provider value={autoWireContext}>
-      {typeof children === 'function' ? children(renderPropsContext) : children}
+      <FocusTrap
+        active={isOpen && trapFocus}
+        returnFocus={returnFocus}
+        autoFocus={true}
+        onEscape={() => close('escape')}
+      >
+        {typeof children === 'function' ? children(renderPropsContext) : children}
+      </FocusTrap>
     </OverlayContext.Provider>
   )
 }
@@ -190,5 +135,4 @@ interface OverlayContextValue {
   triggerRef: React.RefObject<HTMLElement>
   contentRef: React.RefObject<HTMLDivElement>
   closeOnSelect: boolean
-  handleKeyDown: (e: React.KeyboardEvent) => void
 }

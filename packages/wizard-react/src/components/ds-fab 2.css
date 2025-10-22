@@ -1,0 +1,68 @@
+/**
+ * FAB Component Styles
+ * 
+ * Animations and focus states for FAB system.
+ */
+
+@layer layout {
+  
+  /* ========================================
+   * FAB ANIMATIONS
+   * ======================================== */
+  
+  @keyframes ds-fab-slide-in {
+    from {
+      opacity: 0;
+      transform: scale(0.8) translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+  
+  
+  /* ========================================
+   * FOCUS STYLES
+   * ======================================== */
+  
+  .ds-fab button:focus-visible {
+    outline: var(--a11y-focus-ring-width) solid var(--a11y-focus-ring-color);
+    outline-offset: var(--a11y-focus-ring-offset);
+  }
+  
+  .ds-fab-item:focus-visible {
+    outline: var(--a11y-focus-ring-width) solid var(--a11y-focus-ring-color);
+    outline-offset: -2px;
+  }
+  
+  
+  /* ========================================
+   * REDUCED MOTION
+   * ======================================== */
+  
+  @media (prefers-reduced-motion: reduce) {
+    @keyframes ds-fab-slide-in {
+      from, to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+    
+    .ds-fab button,
+    .ds-fab-item {
+      transition: none !important;
+    }
+  }
+  
+  
+  /* ========================================
+   * ACCESSIBILITY - LARGE TOUCH TARGETS
+   * ======================================== */
+  
+  /* Ensure FAB meets minimum touch target */
+  .ds-fab button {
+    min-width: var(--a11y-touch-min);
+    min-height: var(--a11y-touch-min);
+  }
+}

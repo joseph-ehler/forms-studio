@@ -1,0 +1,28 @@
+/**
+ * CSS Cascade Layers
+ * 
+ * Establishes deterministic layer precedence:
+ * 1. @layer tokens - Design tokens (lowest specificity)
+ * 2. @layer skins - Component skins
+ * 3. @layer app - Application overrides (highest specificity)
+ * 
+ * Allows safe local overrides while maintaining token authority.
+ */
+
+@layer tokens, skins, app;
+
+/* Import design system CSS into appropriate layers */
+@layer tokens {
+  /* Token CSS variables will go here in future */
+  :root {
+    /* Placeholder for CSS var tokens */
+  }
+}
+
+@layer skins {
+  /* DS component skins (ds-inputs.css, etc.) will be imported here */
+}
+
+@layer app {
+  /* Application-specific overrides allowed here */
+}

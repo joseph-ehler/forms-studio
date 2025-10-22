@@ -1,0 +1,225 @@
+/**
+ * Section Component Styles
+ * 
+ * Layering, tone system, dividers, borders for Section primitive.
+ * All visual effects use tokens for consistency.
+ */
+
+@layer layout {
+  
+  /* ========================================
+   * BASE SECTION
+   * ======================================== */
+  
+  .ds-section {
+    /* Create stacking context for layers */
+    isolation: isolate;
+    
+    /* Ensure edge-to-edge works in any parent */
+    box-sizing: border-box;
+  }
+  
+  
+  /* ========================================
+   * CONTENT WRAPPER
+   * 
+   * Ensures content sits above media/overlays
+   * ======================================== */
+  
+  .ds-section__content {
+    position: relative;
+    z-index: 10;
+  }
+  
+  
+  /* ========================================
+   * LAYERING (Media, Overlays, Borders)
+   * 
+   * All decorative layers are absolutely positioned
+   * and non-interactive (pointer-events: none).
+   * ======================================== */
+  
+  .ds-section__media,
+  .ds-section__overlay,
+  .ds-section__border,
+  .ds-section__divider {
+    position: absolute;
+    pointer-events: none;
+  }
+  
+  /* Background media (Picture, Video) */
+  .ds-section__media {
+    inset: 0;
+    z-index: 1;
+    overflow: hidden;
+  }
+  
+  .ds-section__media > * {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  /* Gradient overlay */
+  .ds-section__overlay {
+    inset: 0;
+    z-index: 2;
+    mix-blend-mode: normal; /* Predictable layering */
+  }
+  
+  /* Borders */
+  .ds-section__border {
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--ds-divider-color-subtle);
+    z-index: 3;
+  }
+  
+  .ds-section__border--top {
+    top: 0;
+  }
+  
+  .ds-section__border--bottom {
+    bottom: 0;
+  }
+  
+  
+  /* ========================================
+   * DIVIDERS (Shaped Edges)
+   * ======================================== */
+  
+  .ds-section__divider {
+    left: 0;
+    right: 0;
+    height: 24px;
+    z-index: 3;
+  }
+  
+  .ds-section__divider--top {
+    top: 0;
+  }
+  
+  .ds-section__divider--bottom {
+    bottom: 0;
+  }
+  
+  /* Subtle divider (thin line) */
+  .ds-section__divider--subtle {
+    height: 1px;
+    background: var(--ds-divider-color-subtle);
+  }
+  
+  /* Strong divider (thick line) */
+  .ds-section__divider--strong {
+    height: 2px;
+    background: var(--ds-divider-color-strong);
+  }
+  
+  /* Wave divider (decorative) */
+  .ds-section__divider--wave {
+    height: 48px;
+    mask-image: var(--ds-divider-wave-url);
+    mask-size: 100% 100%;
+    mask-repeat: no-repeat;
+    background: inherit; /* Uses section bg color */
+  }
+  
+  .ds-section__divider--wave.ds-section__divider--top {
+    mask-position: bottom;
+  }
+  
+  .ds-section__divider--wave.ds-section__divider--bottom {
+    mask-position: top;
+  }
+  
+  /* Diagonal divider (slant) */
+  .ds-section__divider--diagonal {
+    height: 80px;
+    mask-image: var(--ds-divider-diagonal-url);
+    mask-size: 100% 100%;
+    mask-repeat: no-repeat;
+    background: inherit;
+  }
+  
+  
+  /* ========================================
+   * TONE SYSTEM (Text Contrast)
+   * 
+   * Forces safe color tokens based on background.
+   * Ensures WCAG AA contrast for all content.
+   * ======================================== */
+  
+  /* Light tone: standard text colors (for light backgrounds) */
+  .ds-tone-light {
+    color: var(--ds-color-text-primary);
+  }
+  
+  .ds-tone-light h1,
+  .ds-tone-light h2,
+  .ds-tone-light h3,
+  .ds-tone-light h4,
+  .ds-tone-light h5,
+  .ds-tone-light h6 {
+    color: var(--ds-color-text-heading);
+  }
+  
+  .ds-tone-light a {
+    color: var(--ds-color-text-link);
+  }
+  
+  /* Dark tone: inverted text colors (for dark backgrounds) */
+  .ds-tone-dark {
+    color: var(--ds-color-text-inverted);
+  }
+  
+  .ds-tone-dark h1,
+  .ds-tone-dark h2,
+  .ds-tone-dark h3,
+  .ds-tone-dark h4,
+  .ds-tone-dark h5,
+  .ds-tone-dark h6 {
+    color: var(--ds-color-text-inverted);
+  }
+  
+  .ds-tone-dark a {
+    color: var(--ds-color-text-inverted);
+    text-decoration: underline;
+  }
+  
+  /* Auto tone: inherit from parent theme */
+  .ds-tone-auto {
+    /* Uses default color cascade */
+  }
+  
+  
+  /* ========================================
+   * ACCESSIBILITY
+   * ======================================== */
+  
+  /* Reduced motion: disable parallax/fixed backgrounds */
+  @media (prefers-reduced-motion: reduce) {
+    .ds-section {
+      background-attachment: scroll !important;
+    }
+    
+    .ds-section__media video {
+      animation: none !important;
+    }
+  }
+  
+  
+  /* ========================================
+   * PERFORMANCE
+   * ======================================== */
+  
+  /* Promote media layers to GPU (sparingly) */
+  .ds-section__media {
+    will-change: transform;
+  }
+  
+  /* But not for static content */
+  .ds-section__content {
+    will-change: auto;
+  }
+}

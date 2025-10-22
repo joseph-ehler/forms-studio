@@ -53,7 +53,6 @@ import { AccessibilityShowcase } from './sections/AccessibilityShowcase'
 import { ButtonShowcase } from './sections/ButtonShowcase'
 import { FormShowcase } from './sections/FormShowcase'
 import { ProseShowcase } from './sections/ProseShowcase'
-import { InteractiveShowcase } from './sections/InteractiveShowcase'
 import { ThemeSwitcher } from './components/ThemeSwitcher'
 
 type WidthPreset = 'prose' | 'narrow' | 'comfy' | 'standard' | 'wide' | 'max' | 'full'
@@ -165,19 +164,6 @@ export function DesignSystemDemo() {
                 Aspect ratios, responsive images, video player, captions, overlays
               </Text>
               <MediaShowcase />
-            </Stack>
-          </section>
-
-          <Divider />
-
-          {/* Interactive Components - Focus Management */}
-          <section>
-            <Stack spacing="normal">
-              <Heading size="xl">Interactive Components</Heading>
-              <Text variant="secondary">
-                Test focus management: Tab cycling, Escape, Arrow keys
-              </Text>
-              <InteractiveShowcase />
             </Stack>
           </section>
 

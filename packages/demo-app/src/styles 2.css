@@ -1,0 +1,8 @@
+/**
+ * Design System CSS Import
+ * 
+ * Imports all design system styles for the demo app.
+ */
+
+/* Import local copy */
+@import './design-system.css';

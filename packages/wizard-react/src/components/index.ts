@@ -137,6 +137,43 @@ export {
   generateDensityCSS,
 } from '../lib/densityAdapter'
 
+// Focus Management Primitives
+export {
+  FocusTrap,
+  useFocusTrap,
+  type FocusTrapProps,
+} from '../lib/focus'
+export {
+  FocusScope,
+  useFocusScope,
+  useFocusScopeChain,
+  type FocusScopeProps,
+} from '../lib/focus'
+export {
+  RovingFocus,
+  useRovingFocus,
+  type RovingFocusProps,
+} from '../lib/focus'
+export {
+  FOCUSABLE_SELECTOR,
+  getFocusableElements,
+  getFirstFocusable,
+  getLastFocusable,
+  getNextFocusable,
+  getPreviousFocusable,
+  isFocusable,
+  focusElement,
+  createFocusStore,
+} from '../lib/focus'
+export {
+  debugFocus,
+  debugFocusTraps,
+  debugFocusScopes,
+  debugRovingFocus,
+  watchFocus,
+  testFocusTrap,
+} from '../lib/focus'
+
 // Phase 1: Foundation
 export { AppShell } from './shell'
 export { TopBar } from './shell'
