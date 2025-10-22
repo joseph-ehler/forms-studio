@@ -309,9 +309,9 @@ export const DateRangeField: React.FC<FieldComponentProps> = ({
                           ref={refs.setFloating as any}
                           style={floatingStyles}
                           data-overlay="picker"
-                          className="z-50 bg-white rounded-md shadow-lg ring-1 ring-black/10 flex flex-col"
+                          className="z-50 bg-white rounded-md shadow-lg ring-1 ring-black/10 flex flex-col overflow-hidden"
                         >
-                          <EventWrapper className="flex flex-col h-full">
+                          <EventWrapper className="flex-1 flex flex-col min-h-0">
                             {/* Scrollable content */}
                             <div
                               ref={contentRef}

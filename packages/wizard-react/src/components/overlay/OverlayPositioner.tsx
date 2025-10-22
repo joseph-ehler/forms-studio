@@ -48,14 +48,16 @@ export const OverlayPositioner: React.FC<OverlayPositionerProps> = ({
             const maxH = Math.max(0, Math.min(maxHeight, availableHeight - 8))
             maxHRef.current = maxH
 
-            const style: Partial<CSSStyleDeclaration> = {
+            // Set regular styles
+            Object.assign(elements.floating.style, {
               maxHeight: `${maxH}px`,
-              // @ts-ignore - expose as CSS var for content
-              '--overlay-max-h': `${maxH}px`,
-            }
-            if (sameWidth) style.width = `${rects.reference.width}px`
-
-            Object.assign(elements.floating.style, style)
+              ...(sameWidth ? { width: `${rects.reference.width}px` } : {}),
+            })
+            
+            // CSS custom properties must use setProperty
+            elements.floating.style.setProperty('--overlay-max-h', `${maxH}px`)
+            
+            // Diagnostic attributes
             elements.floating.setAttribute('data-overlay', 'picker')
             elements.floating.setAttribute('data-max-h', String(maxH))
           },
@@ -128,7 +130,7 @@ export const OverlayPositioner: React.FC<OverlayPositionerProps> = ({
         // @ts-ignore
         rest.onClick?.(e)
       }}
-      style={{ height: '100%', ...rest.style }}
+      style={rest.style}
     >
       {children}
     </div>
