@@ -285,6 +285,7 @@ export const DateRangeField: React.FC<FieldComponentProps> = ({
                             type="button"
                             onClick={() => {
                               field.onChange({})
+                              close('select')
                             }}
                             className="flex-1 min-h-[48px] px-4 text-base text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
                           >
@@ -379,6 +380,7 @@ export const DateRangeField: React.FC<FieldComponentProps> = ({
                                 type="button"
                                 onClick={() => {
                                   field.onChange({})
+                                  close('select')
                                 }}
                                 className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md transition-colors"
                               >
