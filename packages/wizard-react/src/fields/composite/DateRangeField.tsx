@@ -283,7 +283,8 @@ export const DateRangeField: React.FC<FieldComponentProps> = ({
                         <div className="flex gap-3">
                           <button
                             type="button"
-                            onClick={() => {
+                            onClick={(e) => {
+                              e.stopPropagation()
                               field.onChange(null)
                             }}
                             className="flex-1 min-h-[48px] px-4 text-base text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
@@ -377,7 +378,8 @@ export const DateRangeField: React.FC<FieldComponentProps> = ({
                             <div className="flex justify-end gap-2">
                               <button
                                 type="button"
-                                onClick={() => {
+                                onClick={(e) => {
+                                  e.stopPropagation()
                                   field.onChange(null)
                                 }}
                                 className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md transition-colors"
