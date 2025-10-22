@@ -23,7 +23,7 @@ import { mergeFieldConfig } from './utils/field-json-config'
 import { getAriaProps, getLabelProps, getDescriptionProps } from './utils/a11y-helpers'
 import { DayPicker } from 'react-day-picker'
 import { format, isValid } from 'date-fns'
-import { OverlayPickerCore, OverlaySheet, OverlayPositioner, calculateOverlayHeights, getOverlayContentClasses } from '../components/overlay'
+import { OverlayPickerCore, OverlaySheet, OverlayPositioner, PickerFooter, calculateOverlayHeights, getOverlayContentClasses } from '../components/overlay'
 import { useDeviceType } from '../hooks/useDeviceType'
 
 // Local (tz-safe) conversion helpers
@@ -191,27 +191,11 @@ export const DateField: React.FC<FieldComponentProps> = ({
 
                       {/* Footer */}
                       <div className="shrink-0 border-t border-gray-200 p-4">
-                        <div className="flex gap-3">
-                          <button
-                            type="button"
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              console.log('[DateField] Clear clicked - BEFORE onChange - isOverlayOpen:', isOverlayOpen, 'isOpen:', isOpen)
-                              field.onChange(null)
-                              console.log('[DateField] Clear clicked - AFTER onChange')
-                            }}
-                            className="flex-1 min-h-[48px] px-4 text-base text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
-                          >
-                            Clear
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => close('select')}
-                            className="flex-1 min-h-[48px] px-4 text-base bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
-                          >
-                            Done
-                          </button>
-                        </div>
+                        <PickerFooter
+                          onClear={() => field.onChange(null)}
+                          onDone={() => close('select')}
+                          size="default"
+                        />
                       </div>
                     </OverlaySheet>
                   )}
@@ -228,32 +212,17 @@ export const DateField: React.FC<FieldComponentProps> = ({
                       maxHeight={560}
                       collision={{ flip: true, shift: true, size: true }}
                     >
-                      {({ refs, floatingStyles, isPositioned }) => (
-                        <div
-                          ref={refs.setFloating}
-                          style={floatingStyles}
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            e.nativeEvent.stopImmediatePropagation()
-                          }}
-                          onMouseDown={(e) => {
-                            e.stopPropagation()
-                            e.nativeEvent.stopImmediatePropagation()
-                          }}
-                          onMouseUp={(e) => {
-                            e.stopPropagation()
-                            e.nativeEvent.stopImmediatePropagation()
-                          }}
-                          className="z-50 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden"
-                        >
-                          {/* Calendar Body */}
-                          <div
-                            ref={contentRef}
-                            className={getOverlayContentClasses().content}
-                            style={{
-                              maxHeight: `${heights.contentMaxHeight}px`,
-                            }}
-                          >
+                      {({ refs, floatingStyles, isPositioned, EventWrapper }) => (
+                        <div ref={refs.setFloating} style={floatingStyles}>
+                          <EventWrapper className="z-50 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden">
+                            {/* Calendar Body */}
+                            <div
+                              ref={contentRef}
+                              className={getOverlayContentClasses().content}
+                              style={{
+                                maxHeight: `${heights.contentMaxHeight}px`,
+                              }}
+                            >
                             <div className="p-4 flex justify-center">
                               <DayPicker
                                 mode="single"
@@ -276,26 +245,13 @@ export const DateField: React.FC<FieldComponentProps> = ({
 
                           {/* Footer */}
                           <div className="shrink-0 border-t border-gray-200 p-3">
-                            <div className="flex justify-end gap-2">
-                              <button
-                                type="button"
-                                onClick={(e) => {
-                                  e.stopPropagation()
-                                  field.onChange(null)
-                                }}
-                                className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md transition-colors"
-                              >
-                                Clear
-                              </button>
-                              <button
-                                type="button"
-                                onClick={() => close('select')}
-                                className="px-4 py-2 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
-                              >
-                                Done
-                              </button>
-                            </div>
+                            <PickerFooter
+                              onClear={() => field.onChange(null)}
+                              onDone={() => close('select')}
+                              size="small"
+                            />
                           </div>
+                        </EventWrapper>
                         </div>
                       )}
                     </OverlayPositioner>

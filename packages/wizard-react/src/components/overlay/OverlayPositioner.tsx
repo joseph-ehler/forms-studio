@@ -91,6 +91,32 @@ export const OverlayPositioner: React.FC<OverlayPositionerProps> = ({
   // Don't render if not open
   if (!open) return null
 
+  // Event wrapper component that stops propagation to prevent outside click handler
+  const EventWrapper: React.FC<{ children: React.ReactNode; className?: string; style?: React.CSSProperties }> = ({ 
+    children, 
+    className = '', 
+    style = {} 
+  }) => (
+    <div
+      onClick={(e) => {
+        e.stopPropagation()
+        e.nativeEvent.stopImmediatePropagation()
+      }}
+      onMouseDown={(e) => {
+        e.stopPropagation()
+        e.nativeEvent.stopImmediatePropagation()
+      }}
+      onMouseUp={(e) => {
+        e.stopPropagation()
+        e.nativeEvent.stopImmediatePropagation()
+      }}
+      className={className}
+      style={style}
+    >
+      {children}
+    </div>
+  )
+
   // Provide positioning data to children
-  return <>{children({ refs, floatingStyles, isPositioned })}</>
+  return <>{children({ refs, floatingStyles, isPositioned, EventWrapper })}</>
 }
