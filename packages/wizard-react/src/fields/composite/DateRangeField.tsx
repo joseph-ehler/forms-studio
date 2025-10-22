@@ -106,6 +106,9 @@ export const DateRangeField: React.FC<FieldComponentProps> = ({
     }
   }
 
+  // Overlay state at component level so it persists across Controller re-renders
+  const [isOverlayOpen, setIsOverlayOpen] = useState(false)
+
   return (
     <Stack spacing="sm">
       {typography.showLabel && label && (
@@ -208,6 +211,8 @@ export const DateRangeField: React.FC<FieldComponentProps> = ({
 
           return (
             <OverlayPickerCore
+              open={isOverlayOpen}
+              onOpenChange={(newOpen) => setIsOverlayOpen(newOpen)}
               closeOnSelect={false}
             >
               {({ isOpen, open, close, triggerRef, contentRef }) => (

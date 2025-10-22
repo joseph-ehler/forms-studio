@@ -13,7 +13,7 @@
  * - 48px input height
  */
 
-import React, { Fragment } from 'react'
+import React, { Fragment, useState } from 'react'
 import { Controller } from 'react-hook-form'
 import type { FieldComponentProps } from './types'
 import { FormLabel, FormHelperText } from '../components'
@@ -80,6 +80,9 @@ export const DateField: React.FC<FieldComponentProps> = ({
   const minDate = min ? new Date(min) : undefined
   const maxDate = max ? new Date(max) : undefined
 
+  // Overlay state at component level so it persists across Controller re-renders
+  const [isOverlayOpen, setIsOverlayOpen] = useState(false)
+
   return (
     <Stack spacing="sm">
       {typography.showLabel && label && (
@@ -119,6 +122,8 @@ export const DateField: React.FC<FieldComponentProps> = ({
 
           return (
             <OverlayPickerCore
+              open={isOverlayOpen}
+              onOpenChange={(newOpen) => setIsOverlayOpen(newOpen)}
               closeOnSelect={false}
             >
               {({ isOpen, open, close, triggerRef, contentRef }) => (
