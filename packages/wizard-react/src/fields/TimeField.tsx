@@ -21,7 +21,7 @@ import { FormLabel, FormHelperText } from '../components'
 import { FormStack, FormGrid, Stack } from '../components'
 import { resolveTypographyDisplay, getTypographyFromJSON } from './utils/typography-display'
 import { mergeFieldConfig } from './utils/field-json-config'
-import { OverlayPickerCore, OverlayPositioner, OverlaySheet } from '../components/overlay'
+import { OverlayPickerCore, OverlayPositioner, OverlaySheet, PickerFooter } from '../components/overlay'
 import { useDeviceType } from '../hooks/useDeviceType'
 
 export const TimeField: React.FC<FieldComponentProps> = ({
@@ -443,14 +443,12 @@ export const TimeField: React.FC<FieldComponentProps> = ({
                           )}
                         </div>
 
-                        {/* Done Button */}
-                        <button
-                          type="button"
-                          onClick={() => close('select')}
-                          className="w-full min-h-[48px] px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors font-medium"
-                        >
-                          Done
-                        </button>
+                        {/* Footer */}
+                        <PickerFooter
+                          onClear={() => field.onChange(null)}
+                          onDone={() => close('select')}
+                          size="default"
+                        />
                       </div>
                     </OverlaySheet>
                   )}
@@ -467,12 +465,12 @@ export const TimeField: React.FC<FieldComponentProps> = ({
                       maxHeight={480}
                       collision={{ flip: true, shift: true, size: false }}
                     >
-                      {({ refs, floatingStyles }) => (
-                        <div
-                          ref={refs.setFloating}
-                          style={{ ...floatingStyles, width: 'auto', minWidth: '320px' }}
-                          className="z-50 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 p-4"
-                        >
+                      {({ refs, floatingStyles, EventWrapper }) => (
+                        <div ref={refs.setFloating} style={floatingStyles}>
+                          <EventWrapper 
+                            className="z-50 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 p-4"
+                            style={{ width: 'auto', minWidth: '320px' }}
+                          >
                           <div ref={contentRef} className="space-y-4">
                             {/* Format Toggle */}
                             <div className="flex items-center justify-between pb-2 border-b border-gray-200">
@@ -537,15 +535,14 @@ export const TimeField: React.FC<FieldComponentProps> = ({
                               )}
                             </div>
 
-                            {/* Done Button */}
-                            <button
-                              type="button"
-                              onClick={() => close('select')}
-                              className="w-full min-h-[48px] px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors font-medium"
-                            >
-                              Done
-                            </button>
+                            {/* Footer */}
+                            <PickerFooter
+                              onClear={() => field.onChange(null)}
+                              onDone={() => close('select')}
+                              size="default"
+                            />
                           </div>
+                          </EventWrapper>
                         </div>
                       )}
                     </OverlayPositioner>

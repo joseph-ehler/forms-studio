@@ -217,11 +217,7 @@ export const MultiSelectField: React.FC<FieldComponentProps> = ({
                           <div className="flex justify-between items-center gap-2">
                             <button
                               type="button"
-                              onClick={(e) => {
-                                e.stopPropagation()
-                                clearAll()
-                              }}
-                              onMouseDown={(e) => e.stopPropagation()}
+                              onClick={() => clearAll()}
                               className="px-4 py-2 text-sm text-gray-700 hover:text-gray-900"
                             >
                               Clear All
@@ -232,11 +228,7 @@ export const MultiSelectField: React.FC<FieldComponentProps> = ({
                               </span>
                               <button
                                 type="button"
-                                onClick={(e) => {
-                                  e.stopPropagation()
-                                  close('select')
-                                }}
-                                onMouseDown={(e) => e.stopPropagation()}
+                                onClick={() => close('select')}
                                 className="px-4 py-2 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700 min-h-[44px]"
                               >
                                 Done
@@ -303,23 +295,22 @@ export const MultiSelectField: React.FC<FieldComponentProps> = ({
                         maxHeight={ui.maxHeight ?? 560}
                         collision={ui.collision ?? { flip: true, shift: true, size: true }}
                       >
-                        {({ refs, floatingStyles }) => {
+                        {({ refs, floatingStyles, EventWrapper }) => {
                           const maxHeight = ui.maxHeight ?? 560
                           const searchHeight = allowSearch ? 60 : 0 // search bar height
                           const footerHeight = 48 // footer height
                           const listMaxHeight = maxHeight - searchHeight - footerHeight
                           
                           return (
-                            <div
-                              ref={refs.setFloating}
-                              style={{
-                                ...floatingStyles,
-                                maxHeight: `${maxHeight}px`,
-                                display: 'flex',
-                                flexDirection: 'column',
-                              }}
-                              className="z-50 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden"
-                            >
+                            <div ref={refs.setFloating} style={floatingStyles}>
+                              <EventWrapper
+                                style={{
+                                  maxHeight: `${maxHeight}px`,
+                                  display: 'flex',
+                                  flexDirection: 'column',
+                                }}
+                                className="z-50 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden"
+                              >
                               {/* Search */}
                               {allowSearch && (
                                 <div className="flex-shrink-0">
@@ -376,11 +367,7 @@ export const MultiSelectField: React.FC<FieldComponentProps> = ({
                             <div className="flex-shrink-0 border-t border-gray-200 px-3 py-2 flex justify-between items-center bg-gray-50">
                               <button
                                 type="button"
-                                onClick={(e) => {
-                                  e.stopPropagation()
-                                  clearAll()
-                                }}
-                                onMouseDown={(e) => e.stopPropagation()}
+                                onClick={() => clearAll()}
                                 className="px-3 py-1.5 text-sm text-gray-700 hover:text-gray-900"
                               >
                                 Clear All
@@ -391,17 +378,14 @@ export const MultiSelectField: React.FC<FieldComponentProps> = ({
                                 </span>
                                 <button
                                   type="button"
-                                  onClick={(e) => {
-                                    e.stopPropagation()
-                                    close('select')
-                                  }}
-                                  onMouseDown={(e) => e.stopPropagation()}
+                                  onClick={() => close('select')}
                                   className="px-3 py-1.5 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700"
                                 >
                                   Done
                                 </button>
                               </div>
                             </div>
+                            </EventWrapper>
                           </div>
                           )
                         }}
