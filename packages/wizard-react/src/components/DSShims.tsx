@@ -9,9 +9,8 @@
  */
 
 import * as React from 'react'
-import { FormStack } from './FormStack'
-import { FormGrid } from './FormGrid'
-import { FormSection } from './FormSection'
+import { Stack as StackPrimitive } from './Stack'
+import { Grid as GridPrimitive } from './Grid'
 
 // Map short spacing tokens to DS tokens
 const SPACING_MAP = {
@@ -39,12 +38,12 @@ export function Stack({ spacing = 'sm', children, className }: StackProps) {
     : spacing
   
   return (
-    <FormStack 
+    <StackPrimitive 
       spacing={mappedSpacing as 'tight' | 'normal' | 'relaxed'} 
       className={className}
     >
       {children}
-    </FormStack>
+    </StackPrimitive>
   )
 }
 
@@ -120,42 +119,24 @@ export function Grid({
   }
 
   return (
-    <FormGrid 
+    <GridPrimitive 
       columns={effectiveColumns} 
       className={className}
     >
       {children}
-    </FormGrid>
+    </GridPrimitive>
   )
 }
 
 /**
- * Section - Semantic section wrapper
- * Maps to FormSection
+ * Section - REMOVED
+ * FormSection component was deleted for later reimplementation.
+ * Use FormStack or div for now.
  */
-type SectionProps = {
-  title?: string
-  description?: string
-  divider?: 'none' | 'top' | 'bottom' | 'both'
-  children: React.ReactNode
-  className?: string
-}
-
-export function Section({ 
-  title,
-  description,
-  divider = 'none',
-  children, 
-  className 
-}: SectionProps) {
+export function Section({ children, className }: { children: React.ReactNode; className?: string }) {
   return (
-    <FormSection 
-      title={title}
-      description={description}
-      divider={divider}
-      className={className}
-    >
+    <div className={className}>
       {children}
-    </FormSection>
+    </div>
   )
 }

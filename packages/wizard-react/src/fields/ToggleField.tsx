@@ -39,13 +39,13 @@ export const ToggleField: React.FC<FieldComponentProps> = ({
   const jsonTypography = getTypographyFromJSON(json)
   const typography = resolveTypographyDisplay(config.typographyDisplay || jsonTypography.display, config.typographyVariant || jsonTypography.variant)
   return (
-    <Stack spacing="sm">
+    <Stack spacing="tight">
       <Controller
         name={name}
         control={control}
         render={({ field }) => (
-          <div className="min-h-[44px]">
-            <div className="flex items-center justify-center h-[44px]">
+          <div style={{ minHeight: '44px' }}>
+            <div className="flex items-center justify-center" style={{ height: '44px' }}>
               <button
                 type="button"
                 role="switch"
@@ -54,29 +54,41 @@ export const ToggleField: React.FC<FieldComponentProps> = ({
                 aria-describedby={description ? `${name}-description` : undefined}
                 onClick={() => field.onChange(!field.value)}
                 disabled={disabled}
-                className={`
-                  relative inline-flex h-6 w-11 items-center rounded-full transition-colors
-                  focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
-                  disabled:opacity-50 disabled:cursor-not-allowed
-                  ${field.value ? 'bg-blue-600' : 'bg-gray-200'}
-                `}
+                className="relative inline-flex h-6 w-11 items-center disabled:opacity-50 disabled:cursor-not-allowed"
+                style={{
+                  borderRadius: '9999px',
+                  backgroundColor: field.value
+                    ? 'var(--ds-color-primary-bg)'
+                    : 'var(--ds-color-border-strong)',
+                  transition: 'all 150ms ease',
+                  outline: 'none'
+                }}
+                onFocus={(e) => {
+                  e.currentTarget.style.boxShadow = `0 0 0 3px color-mix(in oklab, var(--ds-color-border-focus), transparent 85%), 0 0 0 1px var(--ds-color-surface-base)`;
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
               >
                 <span className="sr-only">{label || 'Toggle'}</span>
                 <span
-                  className={`
-                    inline-block h-4 w-4 transform rounded-full bg-white transition-transform
-                    ${field.value ? 'translate-x-6' : 'translate-x-1'}
-                  `}
+                  className="inline-block h-4 w-4 transform"
+                  style={{
+                    borderRadius: '9999px',
+                    backgroundColor: 'white',
+                    transition: 'transform 150ms ease',
+                    transform: field.value ? 'translateX(24px)' : 'translateX(4px)'
+                  }}
                 />
               </button>
             </div>
             <div className="ml-3 text-sm">
-              <label id={`${name}-label`} htmlFor={name} className="font-medium text-gray-700">
+              <div id={`${name}-label`} className="font-medium" style={{ color: 'var(--ds-color-text-primary)' }}>
                 {label}
-                {required && <span className="text-red-500 ml-1">*</span>}
-              </label>
+                {required && <span style={{ color: 'var(--ds-color-state-danger-text)' }} className="ml-1">*</span>}
+              </div>
               {description && (
-                <p id={`${name}-description`} className="text-gray-500">
+                <p id={`${name}-description`} style={{ color: 'var(--ds-color-text-secondary)' }}>
                   {description}
                 </p>
               )}

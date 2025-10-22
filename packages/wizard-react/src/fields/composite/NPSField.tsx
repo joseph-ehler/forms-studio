@@ -10,7 +10,8 @@ import React, { useMemo } from 'react'
 import { Controller } from 'react-hook-form'
 import type { FieldComponentProps } from '../types'
 
-import { FormLabel, FormHelperText } from '../../components'
+import { FormLabel as FormLabelOld, FormHelperText } from '../../components'
+import { FormLabel } from '../../components/typography'
 import { Stack } from '../../components/DSShims'
 import { resolveTypographyDisplay, getTypographyFromJSON } from '../utils/typography-display'
 import { mergeFieldConfig } from '../utils/field-json-config'
@@ -28,18 +29,43 @@ const getCategory = (score: number): NpsCategory => {
   return 'promoter'
 }
 
-const categoryBadge: Record<NpsCategory, { text: string; className: string }> = {
-  detractor: { text: 'Detractor', className: 'bg-red-100 text-red-800' },
-  passive:   { text: 'Passive',   className: 'bg-yellow-100 text-yellow-800' },
-  promoter:  { text: 'Promoter',  className: 'bg-green-100 text-green-800' },
+const categoryBadge: Record<NpsCategory, { text: string; bg: string; text_color: string }> = {
+  detractor: { text: 'Detractor', bg: 'var(--ds-color-state-danger-bg)', text_color: 'var(--ds-color-state-danger-text)' },
+  passive:   { text: 'Passive',   bg: 'var(--ds-color-state-warning-bg)', text_color: 'var(--ds-color-state-warning-text)' },
+  promoter:  { text: 'Promoter',  bg: 'var(--ds-color-state-success-bg)', text_color: 'var(--ds-color-state-success-text)' },
 }
 
-const buttonColor = (score: number, selected: boolean): string => {
-  if (!selected) return 'border-gray-300 bg-white text-gray-700 hover:border-blue-400 hover:bg-blue-50'
+const getButtonStyle = (score: number, selected: boolean) => {
+  if (!selected) {
+    return {
+      border: '2px solid var(--ds-color-border-subtle)',
+      backgroundColor: 'var(--ds-color-surface-base)',
+      color: 'var(--ds-color-text-primary)',
+    }
+  }
   const cat = getCategory(score)
-  if (cat === 'detractor') return 'border-red-500 bg-red-500 text-white shadow-md'
-  if (cat === 'passive')   return 'border-yellow-500 bg-yellow-500 text-white shadow-md'
-  return 'border-green-500 bg-green-500 text-white shadow-md'
+  if (cat === 'detractor') {
+    return {
+      border: '2px solid var(--ds-color-state-danger-border)',
+      backgroundColor: 'var(--ds-color-state-danger-bg)',
+      color: 'white',
+      boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+    }
+  }
+  if (cat === 'passive') {
+    return {
+      border: '2px solid var(--ds-color-state-warning-border)',
+      backgroundColor: 'var(--ds-color-state-warning-bg)',
+      color: 'white',
+      boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+    }
+  }
+  return {
+    border: '2px solid var(--ds-color-state-success-border)',
+    backgroundColor: 'var(--ds-color-state-success-bg)',
+    color: 'white',
+    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+  }
 }
 
 export const NPSField: React.FC<FieldComponentProps> = ({
@@ -85,7 +111,7 @@ export const NPSField: React.FC<FieldComponentProps> = ({
   const scores = useMemo(() => Array.from({ length: 11 }, (_, i) => i), [])
 
   return (
-    <Stack spacing="xl">
+    <Stack spacing="relaxed">
       {/* Label */}
       {typography.showLabel && label && (
         <div className="mb-2">
@@ -103,7 +129,7 @@ export const NPSField: React.FC<FieldComponentProps> = ({
       )}
 
       {/* Question */}
-      <p className="text-base font-medium text-gray-900">{question}</p>
+      <p className="text-base font-medium" style={{ color: 'var(--ds-color-text-primary)' }}>{question}</p>
 
       <Controller
         name={name}
@@ -124,10 +150,10 @@ export const NPSField: React.FC<FieldComponentProps> = ({
           const shouldFollow = followUp && typeof currentScore === 'number' && currentScore <= followUpThreshold
 
           return (
-            <Stack spacing="xl">
+            <Stack spacing="relaxed">
               {/* Labels above grid */}
               {showLabels && (
-                <div className="flex justify-between text-xs text-gray-600 px-1">
+                <div className="flex justify-between text-xs px-1" style={{ color: 'var(--ds-color-text-secondary)' }}>
                   <span className="max-w-[40%] text-left">{detractorLabel}</span>
                   <span className="max-w-[40%] text-right">{promoterLabel}</span>
                 </div>
@@ -143,13 +169,22 @@ export const NPSField: React.FC<FieldComponentProps> = ({
                       type="button"
                       onClick={() => !disabled && onPick(score)}
                       disabled={disabled}
-                      className={[
-                        'flex items-center justify-center min-h-[48px] rounded-lg border-2 font-semibold text-lg transition-all',
-                        buttonColor(score, selected),
-                        selected ? 'scale-105' : '',
-                        'disabled:opacity-50 disabled:cursor-not-allowed',
-                        'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
-                      ].join(' ')}
+                      className="flex items-center justify-center font-semibold text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                      style={{
+                        minHeight: '48px',
+                        borderRadius: 'var(--ds-radius-md, 8px)',
+                        transition: 'all 150ms ease',
+                        transform: selected ? 'scale(1.05)' : 'scale(1)',
+                        ...getButtonStyle(score, selected)
+                      }}
+                      onMouseEnter={(e) => !selected && !disabled && (
+                        e.currentTarget.style.borderColor = 'var(--ds-color-border-focus)',
+                        e.currentTarget.style.backgroundColor = 'color-mix(in oklab, var(--ds-color-primary-bg), transparent 95%)'
+                      )}
+                      onMouseLeave={(e) => !selected && (
+                        e.currentTarget.style.borderColor = 'var(--ds-color-border-subtle)',
+                        e.currentTarget.style.backgroundColor = 'var(--ds-color-surface-base)'
+                      )}
                       aria-label={`Score ${score}`}
                       aria-pressed={selected}
                     >
@@ -170,13 +205,22 @@ export const NPSField: React.FC<FieldComponentProps> = ({
                         type="button"
                         onClick={() => !disabled && onPick(score)}
                         disabled={disabled}
-                        className={[
-                          'flex items-center justify-center min-h-[48px] rounded-lg border-2 font-semibold text-lg transition-all',
-                          buttonColor(score, selected),
-                          selected ? 'scale-105' : '',
-                          'disabled:opacity-50 disabled:cursor-not-allowed',
-                          'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
-                        ].join(' ')}
+                        className="flex items-center justify-center font-semibold text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                        style={{
+                          minHeight: '48px',
+                          borderRadius: 'var(--ds-radius-md, 8px)',
+                          transition: 'all 150ms ease',
+                          transform: selected ? 'scale(1.05)' : 'scale(1)',
+                          ...getButtonStyle(score, selected)
+                        }}
+                        onMouseEnter={(e) => !selected && !disabled && (
+                          e.currentTarget.style.borderColor = 'var(--ds-color-border-focus)',
+                          e.currentTarget.style.backgroundColor = 'color-mix(in oklab, var(--ds-color-primary-bg), transparent 95%)'
+                        )}
+                        onMouseLeave={(e) => !selected && (
+                          e.currentTarget.style.borderColor = 'var(--ds-color-border-subtle)',
+                          e.currentTarget.style.backgroundColor = 'var(--ds-color-surface-base)'
+                        )}
                         aria-label={`Score ${score}`}
                         aria-pressed={selected}
                       >
@@ -194,13 +238,22 @@ export const NPSField: React.FC<FieldComponentProps> = ({
                         type="button"
                         onClick={() => !disabled && onPick(score)}
                         disabled={disabled}
-                        className={[
-                          'flex items-center justify-center min-h-[48px] rounded-lg border-2 font-semibold text-lg transition-all',
-                          buttonColor(score, selected),
-                          selected ? 'scale-105' : '',
-                          'disabled:opacity-50 disabled:cursor-not-allowed',
-                          'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
-                        ].join(' ')}
+                        className="flex items-center justify-center font-semibold text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                        style={{
+                          minHeight: '48px',
+                          borderRadius: 'var(--ds-radius-md, 8px)',
+                          transition: 'all 150ms ease',
+                          transform: selected ? 'scale(1.05)' : 'scale(1)',
+                          ...getButtonStyle(score, selected)
+                        }}
+                        onMouseEnter={(e) => !selected && !disabled && (
+                          e.currentTarget.style.borderColor = 'var(--ds-color-border-focus)',
+                          e.currentTarget.style.backgroundColor = 'color-mix(in oklab, var(--ds-color-primary-bg), transparent 95%)'
+                        )}
+                        onMouseLeave={(e) => !selected && (
+                          e.currentTarget.style.borderColor = 'var(--ds-color-border-subtle)',
+                          e.currentTarget.style.backgroundColor = 'var(--ds-color-surface-base)'
+                        )}
                         aria-label={`Score ${score}`}
                         aria-pressed={selected}
                       >
@@ -218,7 +271,14 @@ export const NPSField: React.FC<FieldComponentProps> = ({
                     const cat = getCategory(currentScore)
                     const b = categoryBadge[cat]
                     return (
-                      <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${b.className}`}>
+                      <span
+                        className="inline-flex items-center px-3 py-1 text-sm font-medium"
+                        style={{
+                          borderRadius: '9999px',
+                          backgroundColor: b.bg,
+                          color: b.text_color
+                        }}
+                      >
                         {b.text}
                       </span>
                     )
@@ -228,17 +288,17 @@ export const NPSField: React.FC<FieldComponentProps> = ({
 
               {/* Follow-up (optional) */}
               {shouldFollow && (
-                <div className="pt-4 border-t border-gray-200 space-y-2">
-                  <label htmlFor={`${name}-reason`} className="block text-sm font-medium text-gray-700">
+                <div className="pt-4 space-y-2" style={{ borderTop: '1px solid var(--ds-color-border-subtle)' }}>
+                  <FormLabel htmlFor={`${name}-reason`} size="sm">
                     {followUpQuestion}
-                  </label>
+                  </FormLabel>
                   <textarea
                     id={`${name}-reason`}
                     value={value.reason || ''}
                     onChange={(e) => onReason(e.target.value)}
                     disabled={disabled}
                     rows={3}
-                    className="w-full rounded-md border border-gray-300 px-3 py-3 text-base shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:bg-gray-50 disabled:text-gray-500 min-h-[48px]"
+                    className="ds-input ds-textarea w-full"
                     placeholder="Your feedback helps us improve…"
                     aria-label="NPS follow-up reason"
                   />

@@ -50,7 +50,7 @@ export const DateTimeField: React.FC<FieldComponentProps> = ({
   const defaultValue = (config as any).defaultValue
 
   return (
-    <Stack spacing="sm">
+    <Stack spacing="tight">
       {typography.showLabel && label && (
         <FormLabel htmlFor={name} required={typography.showRequired && required} optional={typography.showOptional && !required}>
           {label}
@@ -73,7 +73,7 @@ export const DateTimeField: React.FC<FieldComponentProps> = ({
             step={step}
             enterKeyHint="next"
             autoComplete="off"
-            className="w-full rounded-md border border-gray-300 px-3 py-3 text-base shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:bg-gray-50 disabled:text-gray-500 min-h-[44px]"
+            className="ds-input w-full"
             placeholder={placeholder}
             disabled={disabled}
             aria-invalid={!!errors?.[name]}
@@ -83,13 +83,13 @@ export const DateTimeField: React.FC<FieldComponentProps> = ({
       />
       {/* DateTime range hint */}
       {(min || max) && (
-        <p className="text-xs text-gray-400">
+        <FormHelperText>
           {min && max
             ? `Range: ${formatDateTime(min)} - ${formatDateTime(max)}`
             : min
             ? `Earliest: ${formatDateTime(min)}`
             : `Latest: ${formatDateTime(max)}`}
-        </p>
+        </FormHelperText>
       )}
       {typography.showError && errors?.[name]?.message && (
         <FormHelperText variant="error">

@@ -69,7 +69,7 @@ export const SelectField: React.FC<FieldComponentProps> = ({
         })
 
   return (
-    <Stack spacing="sm">
+    <Stack spacing="tight">
       {typography.showLabel && label && (
         <FormLabel htmlFor={name} required={typography.showRequired && required} optional={typography.showOptional && !required}>
           {label}

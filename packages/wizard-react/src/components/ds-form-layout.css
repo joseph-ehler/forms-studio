@@ -1,0 +1,55 @@
+/**
+ * FormLayout Component Styles
+ * 
+ * Auto-promotes width when A11Y font scaling is active.
+ * Prevents cramped forms at large text sizes.
+ */
+
+@layer layout {
+  
+  /* ========================================
+   * A11Y ADAPTIVE WIDTH
+   * ======================================== */
+  
+  /* Base widths (tokens) */
+  :root {
+    --ds-form-narrow-base: 36rem;  /* 576px */
+    --ds-form-comfy-base: 42rem;   /* 672px */
+  }
+  
+  /* Auto-promote narrow → comfy when text is 1.25x or larger */
+  :root {
+    --ds-form-narrow: var(--ds-form-narrow-base);
+    --ds-form-comfy: var(--ds-form-comfy-base);
+  }
+  
+  /* If font size scale >= 1.25, promote narrow to comfy */
+  @supports (selector(:has(*))) {
+    :root:has([style*="--a11y-font-size-scale: 1.25"]),
+    :root:has([style*="--a11y-font-size-scale: 1.3"]),
+    :root:has([style*="--a11y-font-size-scale: 1.4"]),
+    :root:has([style*="--a11y-font-size-scale: 1.5"]) {
+      --ds-form-narrow: var(--ds-form-comfy-base); /* Auto-promote! */
+    }
+  }
+  
+  /* Fallback: Check via media query if custom property is set */
+  @media (min-width: 1px) {
+    :root[style*="--a11y-font-size-scale"] {
+      /* If scale is present, check if >= 1.25 via calc trick */
+      --ds-form-auto-promote: calc(
+        (var(--a11y-font-size-scale, 1) - 1.24) * 9999
+      );
+    }
+  }
+  
+  
+  /* ========================================
+   * SPACING ADAPTATION
+   * ======================================== */
+  
+  /* Stack spacing also scales with density */
+  .ds-form-layout .ds-stack {
+    gap: calc(var(--ds-stack-gap, 1.5rem) * var(--a11y-density-multiplier, 1));
+  }
+}

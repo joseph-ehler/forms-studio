@@ -44,7 +44,7 @@ export const EmailField: React.FC<FieldComponentProps> = ({
     config.typographyVariant || jsonTypography.variant
   )
   return (
-    <Stack spacing="sm">
+    <Stack spacing="tight">
       {typography.showLabel && label && (
         <FormLabel htmlFor={name} required={typography.showRequired && required} optional={typography.showOptional && !required}>
           {label}
@@ -61,7 +61,8 @@ export const EmailField: React.FC<FieldComponentProps> = ({
             {/* Email Icon */}
             <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
               <svg
-                className="h-5 w-5 text-gray-400"
+                className="h-5 w-5"
+                style={{ color: 'var(--ds-color-text-muted)' }}
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -84,7 +85,7 @@ export const EmailField: React.FC<FieldComponentProps> = ({
               autoCorrect="off"
               spellCheck={false}
               {...field}
-              className="w-full rounded-md border border-gray-300 pl-10 pr-3 py-3 text-base shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:bg-gray-50 disabled:text-gray-500 min-h-[44px]"
+              className="ds-input w-full pl-10"
               placeholder={placeholder || 'email@example.com'}
               disabled={disabled}
               aria-invalid={!!errors?.[name]}

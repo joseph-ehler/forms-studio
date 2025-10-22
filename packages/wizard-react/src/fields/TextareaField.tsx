@@ -55,7 +55,7 @@ export const TextareaField: React.FC<FieldComponentProps> = ({
   const rows = (config as any).rows ?? 4
 
   return (
-    <Stack spacing="sm">
+    <Stack spacing="tight">
       {typography.showLabel && label && (
         <FormLabel 
           htmlFor={name} 
@@ -81,7 +81,7 @@ export const TextareaField: React.FC<FieldComponentProps> = ({
               autoCapitalize="sentences"
               autoCorrect="on"
               spellCheck={true}
-              className="w-full rounded-md border border-gray-300 px-3 py-3 text-base shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:bg-gray-50 disabled:text-gray-500 resize-y"
+              className="ds-input ds-textarea w-full resize-y"
               placeholder={placeholder}
               disabled={disabled}
               maxLength={maxLength}
@@ -90,7 +90,7 @@ export const TextareaField: React.FC<FieldComponentProps> = ({
               style={{ minHeight: '88px' }}
             />
             {maxLength && (
-              <div className="absolute bottom-2 right-2 text-xs text-gray-400">
+              <div className="absolute bottom-2 right-2 text-xs" style={{ color: 'var(--ds-color-text-muted)' }}>
                 {field.value?.length || 0}/{maxLength}
               </div>
             )}

@@ -55,7 +55,7 @@ export const ColorField: React.FC<FieldComponentProps> = ({
   ]
 
   return (
-    <Stack spacing="sm">
+    <Stack spacing="tight">
       {typography.showLabel && label && (
         <FormLabel htmlFor={name} required={typography.showRequired && required} optional={typography.showOptional && !required}>
           {label}
@@ -137,7 +137,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
   }
 
   return (
-    <Stack spacing="sm">
+    <Stack spacing="tight">
       <Popover className="relative">
         {({ open }) => (
           <>
@@ -205,7 +205,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
 
                     <Tab.Panels>
                       <Tab.Panel>
-                        <Stack spacing="lg">
+                        <Stack spacing="relaxed">
                           {presets.length > 0 && (
                             <div>
                               <div className="text-xs font-medium text-gray-500 mb-2">Presets</div>
@@ -226,7 +226,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
 
                           <div>
                             <div className="text-xs font-medium text-gray-500 mb-2">Colors</div>
-                            <Stack spacing="sm">
+                            <Stack spacing="tight">
                               {palette.map((row, i) => (
                                 <div key={`row-${i}`} className="flex gap-1">
                                   {row.map((hex, j) => (
@@ -265,7 +265,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
                       </Tab.Panel>
 
                       <Tab.Panel>
-                        <Stack spacing="lg">
+                        <Stack spacing="relaxed">
                           <div>
                             <label className="block text-xs font-medium text-gray-700 mb-1">Pick any color</label>
                             <input

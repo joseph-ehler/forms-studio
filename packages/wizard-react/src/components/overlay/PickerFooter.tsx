@@ -31,8 +31,8 @@ export const PickerFooter: React.FC<PickerFooterProps> = ({
     ? 'px-4 py-2 text-sm'
     : 'flex-1 min-h-[48px] px-4 text-base'
 
-  const clearButtonClass = `${buttonBaseClass} text-gray-700 hover:bg-gray-100 rounded-${size === 'small' ? 'md' : 'lg'} transition-colors`
-  const doneButtonClass = `${buttonBaseClass} bg-blue-600 text-white rounded-${size === 'small' ? 'md' : 'lg'} hover:bg-blue-700 transition-colors font-medium`
+  const clearButtonClass = `${buttonBaseClass} transition-colors`
+  const doneButtonClass = `ds-button ${buttonBaseClass} font-medium`
 
   const containerClass = size === 'small'
     ? 'flex justify-end gap-2'
@@ -44,6 +44,13 @@ export const PickerFooter: React.FC<PickerFooterProps> = ({
           type="button"
           onClick={onClear}
           className={clearButtonClass}
+          style={{
+            borderRadius: size === 'small' ? 'var(--ds-radius-md, 6px)' : 'var(--ds-radius-md, 8px)',
+            color: 'var(--ds-color-text-primary)',
+            backgroundColor: 'transparent'
+          }}
+          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--ds-color-surface-subtle)'}
+          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
         >
           {clearLabel}
         </button>

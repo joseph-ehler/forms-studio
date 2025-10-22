@@ -58,7 +58,7 @@ export const RepeaterField: React.FC<FieldComponentProps> = ({
   const canRemove = !disabled && fields.length > minItems
 
   return (
-    <Stack spacing="lg">
+    <Stack spacing="relaxed">
       {typography.showLabel && fieldLabel && (
         <div className="mb-1">
           <FormLabel
@@ -76,10 +76,17 @@ export const RepeaterField: React.FC<FieldComponentProps> = ({
         </div>
       )}
 
-      <Stack spacing="lg">
+      <Stack spacing="relaxed">
         {fields.length === 0 && (
-          <div className="text-center py-8 border-2 border-dashed border-gray-300 rounded-lg bg-white">
-            <p className="text-sm text-gray-500">
+          <div
+            className="text-center py-8"
+            style={{
+              border: '2px dashed var(--ds-color-border-subtle)',
+              borderRadius: 'var(--ds-radius-md, 8px)',
+              backgroundColor: 'var(--ds-color-surface-base)'
+            }}
+          >
+            <p className="text-sm" style={{ color: 'var(--ds-color-text-secondary)' }}>
               No items yet. Click "{addButtonText}" to add one.
             </p>
           </div>
@@ -88,16 +95,27 @@ export const RepeaterField: React.FC<FieldComponentProps> = ({
         {fields.map((row, index) => (
           <div
             key={row.id}
-            className="relative border border-gray-300 rounded-lg p-4 bg-white"
+            className="relative p-4"
+            style={{
+              border: '1px solid var(--ds-color-border-subtle)',
+              borderRadius: 'var(--ds-radius-md, 8px)',
+              backgroundColor: 'var(--ds-color-surface-base)'
+            }}
             aria-label={`Item ${index + 1}`}
           >
-            <div className="flex items-center justify-between pb-2 border-b border-gray-200">
-              <span className="text-sm font-medium text-gray-700">Item {index + 1}</span>
+            <div className="flex items-center justify-between pb-2" style={{ borderBottom: '1px solid var(--ds-color-border-subtle)' }}>
+              <span className="text-sm font-medium" style={{ color: 'var(--ds-color-text-primary)' }}>Item {index + 1}</span>
               {canRemove && (
                 <button
                   type="button"
                   onClick={() => remove(index)}
-                  className="text-sm text-red-600 hover:text-red-700 font-medium min-h-[44px] px-3"
+                  className="text-sm font-medium px-3"
+                  style={{
+                    minHeight: '44px',
+                    color: 'var(--ds-color-state-danger-text)'
+                  }}
+                  onMouseEnter={(e) => e.currentTarget.style.opacity = '0.8'}
+                  onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
                   aria-label={`${removeButtonText} item ${index + 1}`}
                 >
                   {removeButtonText}
@@ -105,7 +123,7 @@ export const RepeaterField: React.FC<FieldComponentProps> = ({
               )}
             </div>
 
-            <Stack spacing="lg" className="mt-3">
+            <Stack spacing="relaxed" className="mt-3">
               {itemSchema.map((fieldDef: any, fieldIndex: number) => {
                 const fieldId   = String(fieldDef.id ?? `field_${fieldIndex}`)
                 const fieldPath = `${name}.${index}.${fieldId}`
@@ -116,11 +134,12 @@ export const RepeaterField: React.FC<FieldComponentProps> = ({
                       name={fieldPath}
                       control={control}
                       render={({ field: itemField }) => (
-                        <Stack spacing="sm">
+                        <Stack spacing="tight">
                           {fieldDef.label && (
                             <label
                               htmlFor={fieldPath}
-                              className="block text-sm font-medium text-gray-700"
+                              className="block text-sm font-medium"
+                              style={{ color: 'var(--ds-color-text-primary)' }}
                             >
                               {fieldDef.label}
                               {fieldDef.validation?.required && (
@@ -134,7 +153,7 @@ export const RepeaterField: React.FC<FieldComponentProps> = ({
                             {...itemField}
                             placeholder={fieldDef.placeholder}
                             disabled={disabled}
-                            className="w-full rounded-md border border-gray-300 px-3 py-3 text-base shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:bg-gray-50 min-h-[44px]"
+                            className="ds-input w-full"
                             aria-required={Boolean(fieldDef.validation?.required)}
                           />
                         </Stack>
@@ -152,7 +171,22 @@ export const RepeaterField: React.FC<FieldComponentProps> = ({
         <button
           type="button"
           onClick={() => append({})}
-          className="w-full flex items-center justify-center gap-2 rounded-lg border-2 border-dashed border-gray-300 px-4 py-3 text-sm font-medium text-gray-700 hover:border-blue-500 hover:text-blue-600 transition-colors min-h-[44px] active:scale-[0.98]"
+          className="w-full flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium active:scale-[0.98]"
+          style={{
+            minHeight: '44px',
+            borderRadius: 'var(--ds-radius-md, 8px)',
+            border: '2px dashed var(--ds-color-border-subtle)',
+            color: 'var(--ds-color-text-primary)',
+            transition: 'all 150ms ease'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.borderColor = 'var(--ds-color-border-focus)';
+            e.currentTarget.style.color = 'var(--ds-color-primary-text, var(--ds-color-primary-bg))';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.borderColor = 'var(--ds-color-border-subtle)';
+            e.currentTarget.style.color = 'var(--ds-color-text-primary)';
+          }}
           aria-label={addButtonText}
         >
           <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -169,7 +203,7 @@ export const RepeaterField: React.FC<FieldComponentProps> = ({
       )}
 
       {(minItems > 0 || maxItems < Number.POSITIVE_INFINITY) && (
-        <p className="text-xs text-gray-400">
+        <p className="text-xs" style={{ color: 'var(--ds-color-text-muted)' }}>
           {minItems > 0 && `Minimum: ${minItems} item${minItems > 1 ? 's' : ''}`}
           {minItems > 0 && maxItems < Number.POSITIVE_INFINITY && ' • '}
           {maxItems < Number.POSITIVE_INFINITY && `Maximum: ${maxItems} items`}

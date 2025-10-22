@@ -69,7 +69,7 @@ export const RangeField: React.FC<FieldComponentProps> = ({
   const defaultValue: RangeValue = (config as any).defaultValue ?? { min, max }
 
   return (
-    <Stack spacing="lg">
+    <Stack spacing="relaxed">
       {typography.showLabel && label && (
         <div className="mb-1">
           <FormLabel
@@ -236,20 +236,32 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
   const maxPct = getPercent(currentMax)
 
   return (
-    <Stack spacing="xl">
+    <Stack spacing="relaxed">
       {showValues && (
         <Flex align="center" justify="between">
-          <span className="text-sm font-semibold text-blue-600">{formatValue(currentMin)}</span>
-          <span className="text-xs text-gray-500">to</span>
-          <span className="text-sm font-semibold text-blue-600">{formatValue(currentMax)}</span>
+          <span className="text-sm font-semibold" style={{ color: 'var(--ds-color-primary-text, var(--ds-color-primary-bg))' }}>{formatValue(currentMin)}</span>
+          <span className="text-xs" style={{ color: 'var(--ds-color-text-secondary)' }}>to</span>
+          <span className="text-sm font-semibold" style={{ color: 'var(--ds-color-primary-text, var(--ds-color-primary-bg))' }}>{formatValue(currentMax)}</span>
         </Flex>
       )}
 
       <div className="relative pt-2 pb-6">
-        <div ref={trackRef} className="relative h-2 bg-gray-200 rounded-full">
+        <div
+          ref={trackRef}
+          className="relative h-2"
+          style={{
+            backgroundColor: 'var(--ds-color-border-subtle)',
+            borderRadius: '9999px'
+          }}
+        >
           <div
-            className="absolute h-2 bg-blue-600 rounded-full"
-            style={{ left: `${minPct}%`, right: `${100 - maxPct}%` }}
+            className="absolute h-2"
+            style={{
+              left: `${minPct}%`,
+              right: `${100 - maxPct}%`,
+              backgroundColor: 'var(--ds-color-primary-bg)',
+              borderRadius: '9999px'
+            }}
           />
 
           <button
@@ -258,8 +270,18 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
             onTouchStart={() => startDrag('min')}
             onKeyDown={(e) => onKeyDown(e, 'min')}
             disabled={disabled}
-            className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-5 h-5 bg-white border-2 border-blue-600 rounded-full shadow-md hover:scale-110 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-transform z-10"
-            style={{ left: `${minPct}%` }}
+            className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-5 h-5 hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed z-10"
+            style={{
+              left: `${minPct}%`,
+              backgroundColor: 'white',
+              border: '2px solid var(--ds-color-primary-bg)',
+              borderRadius: '9999px',
+              boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+              outline: 'none',
+              transition: 'transform 150ms ease'
+            }}
+            onFocus={(e) => e.currentTarget.style.boxShadow = `0 0 0 3px color-mix(in oklab, var(--ds-color-border-focus), transparent 85%), 0 2px 4px rgba(0,0,0,0.1)`}
+            onBlur={(e) => e.currentTarget.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)'}
             aria-label={`Minimum value: ${formatValue(currentMin)}`}
             aria-valuemin={min}
             aria-valuemax={currentMax}
@@ -273,8 +295,18 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
             onTouchStart={() => startDrag('max')}
             onKeyDown={(e) => onKeyDown(e, 'max')}
             disabled={disabled}
-            className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-5 h-5 bg-white border-2 border-blue-600 rounded-full shadow-md hover:scale-110 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-transform z-10"
-            style={{ left: `${maxPct}%` }}
+            className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-5 h-5 hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed z-10"
+            style={{
+              left: `${maxPct}%`,
+              backgroundColor: 'white',
+              border: '2px solid var(--ds-color-primary-bg)',
+              borderRadius: '9999px',
+              boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+              outline: 'none',
+              transition: 'transform 150ms ease'
+            }}
+            onFocus={(e) => e.currentTarget.style.boxShadow = `0 0 0 3px color-mix(in oklab, var(--ds-color-border-focus), transparent 85%), 0 2px 4px rgba(0,0,0,0.1)`}
+            onBlur={(e) => e.currentTarget.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)'}
             aria-label={`Maximum value: ${formatValue(currentMax)}`}
             aria-valuemin={currentMin}
             aria-valuemax={max}
@@ -284,7 +316,7 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
         </div>
 
         {showTicks && (
-          <div className="flex justify-between text-xs text-gray-500 mt-2">
+          <div className="flex justify-between text-xs mt-2" style={{ color: 'var(--ds-color-text-secondary)' }}>
             <span>{formatValue(min)}</span>
             <span>{formatValue(max)}</span>
           </div>

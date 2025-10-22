@@ -41,7 +41,7 @@ export const ChipsField: React.FC<FieldComponentProps> = ({
   const options = (config as any).options ?? []
 
   return (
-    <Stack spacing="md">
+    <Stack spacing="normal">
       {typography.showLabel && label && (
         <FormLabel htmlFor={name} required={typography.showRequired && required} optional={typography.showOptional && !required}>
           {label}
@@ -65,7 +65,7 @@ export const ChipsField: React.FC<FieldComponentProps> = ({
           }
 
           return (
-            <Stack spacing="lg">
+            <Stack spacing="relaxed">
               {/* Options Grid */}
               <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
                 {options.map((option: any) => {
@@ -79,16 +79,33 @@ export const ChipsField: React.FC<FieldComponentProps> = ({
                       type="button"
                       onClick={() => toggleOption(optionValue)}
                       disabled={disabled}
-                      className={`
-                        relative flex items-center justify-center rounded-lg border-2 px-4 py-3 text-base font-medium min-h-[44px]
-                        transition-all duration-150 ease-in-out active:scale-95
-                        disabled:cursor-not-allowed disabled:opacity-50
-                        ${
-                          isSelected
-                            ? 'border-blue-600 bg-blue-50 text-blue-700 ring-1 ring-blue-600'
-                            : 'border-gray-300 bg-white text-gray-700 hover:border-gray-400 hover:bg-gray-50'
-                        }
-                      `}
+                      className="relative flex items-center justify-center px-4 py-3 text-base font-medium active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
+                      style={{
+                        minHeight: '44px',
+                        borderRadius: 'var(--ds-radius-md, 8px)',
+                        border: '2px solid',
+                        borderColor: isSelected
+                          ? 'var(--ds-color-border-focus)'
+                          : 'var(--ds-color-border-subtle)',
+                        backgroundColor: isSelected
+                          ? 'color-mix(in oklab, var(--ds-color-primary-bg), transparent 90%)'
+                          : 'var(--ds-color-surface-base)',
+                        color: isSelected
+                          ? 'var(--ds-color-primary-text, var(--ds-color-primary-bg))'
+                          : 'var(--ds-color-text-primary)',
+                        boxShadow: isSelected
+                          ? `0 0 0 1px var(--ds-color-border-focus)`
+                          : 'none',
+                        transition: 'all 150ms ease-in-out'
+                      }}
+                      onMouseEnter={(e) => !isSelected && !disabled && (
+                        e.currentTarget.style.borderColor = 'var(--ds-color-border-strong)',
+                        e.currentTarget.style.backgroundColor = 'var(--ds-color-surface-subtle)'
+                      )}
+                      onMouseLeave={(e) => !isSelected && (
+                        e.currentTarget.style.borderColor = 'var(--ds-color-border-subtle)',
+                        e.currentTarget.style.backgroundColor = 'var(--ds-color-surface-base)'
+                      )}
                       aria-pressed={isSelected}
                     >
                       {optionLabel}
@@ -112,8 +129,14 @@ export const ChipsField: React.FC<FieldComponentProps> = ({
 
               {/* Selected Chips Display */}
               {selectedValues.length > 0 && (
-                <div className="flex flex-wrap gap-2 rounded-md bg-gray-50 p-3">
-                  <span className="text-xs font-medium text-gray-500">
+                <div
+                  className="flex flex-wrap gap-2 p-3"
+                  style={{
+                    borderRadius: 'var(--ds-radius-md, 6px)',
+                    backgroundColor: 'var(--ds-color-surface-subtle)'
+                  }}
+                >
+                  <span className="text-xs font-medium" style={{ color: 'var(--ds-color-text-secondary)' }}>
                     Selected ({selectedValues.length}):
                   </span>
                   {selectedValues.map((value) => {
@@ -125,14 +148,27 @@ export const ChipsField: React.FC<FieldComponentProps> = ({
                     return (
                       <span
                         key={value}
-                        className="inline-flex items-center gap-1 rounded-full bg-blue-100 px-3 py-1 text-xs font-medium text-blue-700"
+                        className="inline-flex items-center gap-1 px-3 py-1 text-xs font-medium"
+                        style={{
+                          borderRadius: '9999px',
+                          backgroundColor: 'color-mix(in oklab, var(--ds-color-primary-bg), transparent 85%)',
+                          color: 'var(--ds-color-primary-text, var(--ds-color-primary-bg))'
+                        }}
                       >
                         {displayLabel}
                         <button
                           type="button"
                           onClick={() => toggleOption(value)}
                           disabled={disabled}
-                          className="ml-1 inline-flex h-6 w-6 items-center justify-center rounded-full hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500 active:scale-90"
+                          className="ml-1 inline-flex h-6 w-6 items-center justify-center active:scale-90"
+                          style={{
+                            borderRadius: '9999px',
+                            outline: 'none'
+                          }}
+                          onMouseEnter={(e) => !disabled && (e.currentTarget.style.backgroundColor = 'color-mix(in oklab, var(--ds-color-primary-bg), transparent 75%)')}
+                          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                          onFocus={(e) => e.currentTarget.style.boxShadow = `0 0 0 2px color-mix(in oklab, var(--ds-color-border-focus), transparent 85%)`}
+                          onBlur={(e) => e.currentTarget.style.boxShadow = 'none'}
                           aria-label={`Remove ${displayLabel}`}
                         >
                           <svg className="h-3 w-3" fill="currentColor" viewBox="0 0 20 20">

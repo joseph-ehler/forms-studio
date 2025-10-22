@@ -5,8 +5,18 @@
  * This is the foundation that Select, MultiSelect, Date, Color, etc. build on.
  */
 
-import React, { useEffect, useRef, useState, useCallback } from 'react'
+import React, { createContext, useContext, useEffect, useRef, useState, useCallback } from 'react'
 import type { OverlayPickerCoreProps, OverlayCloseReason } from './types'
+
+// Context for automatic contentRef wiring - prevents manual wiring bugs
+interface OverlayContextType {
+  contentRef: React.RefObject<HTMLDivElement>
+}
+
+const OverlayContext = createContext<OverlayContextType | null>(null)
+
+// Export hook for OverlaySheet/OverlayPicker to auto-consume contentRef
+export const useOverlayContext = () => useContext(OverlayContext)
 
 export interface OverlayPickerCoreComponentProps extends Omit<OverlayPickerCoreProps, 'children'> {
   id?: string
@@ -126,7 +136,7 @@ export const OverlayPickerCore: React.FC<OverlayPickerCoreComponentProps> = ({
   }, [isOpen, trapFocus, close])
 
   // Outside click handling
-  const handleOutsideClick = useCallback((e: MouseEvent) => {
+  const handleOutsideClick = useCallback((e: PointerEvent) => {
     if (!isOpen) return
     
     const target = e.target as Node
@@ -143,30 +153,36 @@ export const OverlayPickerCore: React.FC<OverlayPickerCoreComponentProps> = ({
 
   useEffect(() => {
     if (isOpen) {
-      document.addEventListener('mousedown', handleOutsideClick)
-      return () => document.removeEventListener('mousedown', handleOutsideClick)
+      // Use pointerdown for touch/pen support (consistent with OverlayPicker)
+      document.addEventListener('pointerdown', handleOutsideClick)
+      return () => document.removeEventListener('pointerdown', handleOutsideClick)
     }
   }, [isOpen, handleOutsideClick])
 
-  // Provide context to children
-  const contextValue = {
+  // Provide context to children - contentRef flows automatically via Context
+  const renderPropsContext = {
     isOpen,
     open,
     close,
     triggerRef,
-    contentRef,
+    contentRef, // Still available in render props for backwards compatibility
     closeOnSelect,
     handleKeyDown,
   }
 
+  // Separate Context for auto-wiring (OverlaySheet/OverlayPicker consume this)
+  const autoWireContext = {
+    contentRef,
+  }
+
   return (
-    <OverlayContext.Provider value={contextValue}>
-      {typeof children === 'function' ? children(contextValue) : children}
+    <OverlayContext.Provider value={autoWireContext}>
+      {typeof children === 'function' ? children(renderPropsContext) : children}
     </OverlayContext.Provider>
   )
 }
 
-// Context for overlay state
+// Context for overlay state (render props interface)
 interface OverlayContextValue {
   isOpen: boolean
   open: () => void
@@ -175,14 +191,4 @@ interface OverlayContextValue {
   contentRef: React.RefObject<HTMLDivElement>
   closeOnSelect: boolean
   handleKeyDown: (e: React.KeyboardEvent) => void
-}
-
-const OverlayContext = React.createContext<OverlayContextValue | null>(null)
-
-export const useOverlayContext = () => {
-  const context = React.useContext(OverlayContext)
-  if (!context) {
-    throw new Error('useOverlayContext must be used within OverlayPickerCore')
-  }
-  return context
 }

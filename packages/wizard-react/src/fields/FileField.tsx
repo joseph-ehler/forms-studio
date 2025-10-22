@@ -56,7 +56,7 @@ export const FileField: React.FC<FieldComponentProps> = ({
   const showPreview = (config as any).showPreview ?? true
 
   return (
-    <Stack spacing="md">
+    <Stack spacing="normal">
       {typography.showLabel && label && (
         <div className="mb-2">
           <FormLabel required={typography.showRequired && required} optional={typography.showOptional && !required}>
@@ -88,7 +88,7 @@ export const FileField: React.FC<FieldComponentProps> = ({
       />
 
       {/* File constraints hint */}
-      <p className="text-xs text-gray-400">
+      <p className="text-xs" style={{ color: 'var(--ds-color-text-muted)' }}>
         {accept !== '*/*' && `Accepted: ${accept}`}
         {accept !== '*/*' && ' • '}
         Max size: {formatFileSize(maxSize)} per file
@@ -228,20 +228,31 @@ const FileUploader: React.FC<FileUploaderProps> = ({
   }
 
   return (
-    <Stack spacing="lg">
+    <Stack spacing="relaxed">
       {/* Drop zone */}
       <div
         onClick={!disabled ? triggerFileInput : undefined}
         onDrop={handleDrop}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
-        className={`relative border-2 border-dashed rounded-lg p-6 text-center transition-colors cursor-pointer min-h-[120px] flex flex-col items-center justify-center ${
-          isDragging
-            ? 'border-blue-500 bg-blue-50'
+        className="relative p-6 text-center flex flex-col items-center justify-center"
+        style={{
+          border: '2px dashed',
+          borderColor: isDragging
+            ? 'var(--ds-color-border-focus)'
+            : 'var(--ds-color-border-subtle)',
+          borderRadius: 'var(--ds-radius-md, 8px)',
+          backgroundColor: isDragging
+            ? 'color-mix(in oklab, var(--ds-color-primary-bg), transparent 90%)'
             : disabled
-            ? 'border-gray-300 bg-gray-50 cursor-not-allowed'
-            : 'border-gray-300 hover:border-blue-400 hover:bg-gray-50'
-        }`}
+            ? 'var(--ds-color-surface-subtle)'
+            : 'var(--ds-color-surface-base)',
+          cursor: disabled ? 'not-allowed' : 'pointer',
+          minHeight: '120px',
+          transition: 'all 150ms ease'
+        }}
+        onMouseEnter={(e) => !disabled && !isDragging && (e.currentTarget.style.borderColor = 'var(--ds-color-border-strong)')}
+        onMouseLeave={(e) => !isDragging && (e.currentTarget.style.borderColor = 'var(--ds-color-border-subtle)')}
       >
         <input
           ref={inputRef}
@@ -255,9 +266,12 @@ const FileUploader: React.FC<FileUploaderProps> = ({
 
         {/* Upload icon */}
         <svg
-          className={`mx-auto h-12 w-12 mb-3 ${
-            isDragging ? 'text-blue-500' : 'text-gray-400'
-          }`}
+          className="mx-auto h-12 w-12 mb-3"
+          style={{
+            color: isDragging
+              ? 'var(--ds-color-primary-bg)'
+              : 'var(--ds-color-text-muted)'
+          }}
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -270,10 +284,10 @@ const FileUploader: React.FC<FileUploaderProps> = ({
           />
         </svg>
 
-        <p className="text-sm text-gray-600">
+        <p className="text-sm" style={{ color: 'var(--ds-color-text-secondary)' }}>
           {placeholder || (
             <>
-              <span className="font-medium text-blue-600">Click to upload</span> or
+              <span className="font-medium" style={{ color: 'var(--ds-color-primary-text, var(--ds-color-primary-bg))' }}>Click to upload</span> or
               drag and drop
             </>
           )}
@@ -282,18 +296,23 @@ const FileUploader: React.FC<FileUploaderProps> = ({
 
       {/* Error message */}
       {error && (
-        <p className="text-sm text-red-600" role="alert">
+        <p className="text-sm" style={{ color: 'var(--ds-color-state-danger-text)' }} role="alert">
           {error}
         </p>
       )}
 
       {/* File list with previews */}
       {files.length > 0 && (
-        <Stack spacing="md">
+        <Stack spacing="normal">
           {files.map((file, index) => (
             <div
               key={index}
-              className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg border border-gray-200"
+              className="flex items-center gap-3 p-3"
+              style={{
+                backgroundColor: 'var(--ds-color-surface-subtle)',
+                borderRadius: 'var(--ds-radius-md, 6px)',
+                border: '1px solid var(--ds-color-border-subtle)'
+              }}
             >
               {/* Preview */}
               {showPreview && file.type.startsWith('image/') ? (
@@ -303,9 +322,16 @@ const FileUploader: React.FC<FileUploaderProps> = ({
                   className="w-12 h-12 object-cover rounded"
                 />
               ) : (
-                <div className="w-12 h-12 bg-gray-200 rounded flex items-center justify-center">
+                <div
+                  className="w-12 h-12 flex items-center justify-center"
+                  style={{
+                    backgroundColor: 'var(--ds-color-surface-subtle)',
+                    borderRadius: 'var(--ds-radius-sm, 4px)'
+                  }}
+                >
                   <svg
-                    className="h-6 w-6 text-gray-500"
+                    className="h-6 w-6"
+                    style={{ color: 'var(--ds-color-text-secondary)' }}
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -322,10 +348,10 @@ const FileUploader: React.FC<FileUploaderProps> = ({
 
               {/* File info */}
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-gray-900 truncate">
+                <p className="text-sm font-medium truncate" style={{ color: 'var(--ds-color-text-primary)' }}>
                   {file.name}
                 </p>
-                <p className="text-xs text-gray-500">
+                <p className="text-xs" style={{ color: 'var(--ds-color-text-secondary)' }}>
                   {formatFileSize(file.size)}
                 </p>
               </div>
@@ -338,7 +364,14 @@ const FileUploader: React.FC<FileUploaderProps> = ({
                     e.stopPropagation()
                     removeFile(index)
                   }}
-                  className="text-red-600 hover:text-red-700 min-h-[44px] min-w-[44px] flex items-center justify-center"
+                  className="flex items-center justify-center"
+                  style={{
+                    minHeight: '44px',
+                    minWidth: '44px',
+                    color: 'var(--ds-color-state-danger-text)'
+                  }}
+                  onMouseEnter={(e) => e.currentTarget.style.opacity = '0.8'}
+                  onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
                   aria-label={`Remove ${file.name}`}
                 >
                   <svg

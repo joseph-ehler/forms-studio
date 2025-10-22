@@ -86,7 +86,7 @@ export const DateField: React.FC<FieldComponentProps> = ({
   console.log('[DateField] Component render - isOverlayOpen:', isOverlayOpen)
 
   return (
-    <Stack spacing="sm">
+    <Stack spacing="tight">
       {typography.showLabel && label && (
         <FormLabel htmlFor={name} required={typography.showRequired && required} optional={typography.showOptional && !required}>
           {label}
@@ -135,13 +135,14 @@ export const DateField: React.FC<FieldComponentProps> = ({
                     type="button"
                     onClick={() => isOpen ? close() : open()}
                     disabled={disabled}
-                    className="w-full min-h-[48px] rounded-md border border-gray-300 bg-white px-3 py-3 text-left text-base shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:bg-gray-50 flex items-center justify-between"
+                    className="ds-input w-full text-left flex items-center justify-between"
                   >
-                    <span className={displayValue ? 'text-gray-900' : 'text-gray-400'}>
+                    <span style={{ color: displayValue ? 'var(--ds-color-text-primary)' : 'var(--ds-color-text-muted)' }}>
                       {displayValue || placeholder || 'Select date...'}
                     </span>
                     <svg
-                      className="h-5 w-5 text-gray-400"
+                      className="h-5 w-5"
+                      style={{ color: 'var(--ds-color-text-muted)' }}
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -164,7 +165,10 @@ export const DateField: React.FC<FieldComponentProps> = ({
                       aria-labelledby={`${name}-label`}
                       footer={
                         <PickerFooter
-                          onClear={() => field.onChange(null)}
+                          onClear={() => {
+                            console.log('[DateField] Clear button clicked!')
+                            field.onChange(null)
+                          }}
                           onDone={() => close('select')}
                           size="default"
                         />
@@ -204,7 +208,7 @@ export const DateField: React.FC<FieldComponentProps> = ({
                       sameWidth
                       hardMaxHeight={560}
                       content={
-                        <div ref={contentRef} className="p-4">
+                        <div className="p-4">
                           <CalendarSkin
                             mode="single"
                             selected={selectedDate}
@@ -222,7 +226,10 @@ export const DateField: React.FC<FieldComponentProps> = ({
                       }
                       footer={
                         <PickerFooter
-                          onClear={() => field.onChange(null)}
+                          onClear={() => {
+                            console.log('[DateField] Clear button clicked!')
+                            field.onChange(null)
+                          }}
                           onDone={() => close('select')}
                           size="small"
                         />
@@ -238,7 +245,7 @@ export const DateField: React.FC<FieldComponentProps> = ({
 
       {/* Min/Max hint */}
       {(min || max) && (
-        <p className="text-xs text-gray-400">
+        <p className="text-xs" style={{ color: 'var(--ds-color-text-muted)' }}>
           {min && max
             ? `Date range: ${formatDate(min)} - ${formatDate(max)}`
             : min

@@ -65,7 +65,7 @@ export const SliderField: React.FC<FieldComponentProps> = ({
   }
 
   return (
-    <Stack spacing="lg">
+    <Stack spacing="relaxed">
       <Flex align="center" justify="between">
         {typography.showLabel && label && (
           <div className="mb-1">
@@ -99,7 +99,7 @@ export const SliderField: React.FC<FieldComponentProps> = ({
         control={control}
         defaultValue={defaultValue}
         render={({ field }) => (
-          <Stack spacing="md">
+          <Stack spacing="normal">
             {/* Slider input */}
             <input
               id={name}
@@ -109,15 +109,18 @@ export const SliderField: React.FC<FieldComponentProps> = ({
               max={max}
               step={step}
               disabled={disabled}
-              className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full h-2 appearance-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+              data-ds="slider"
               style={{
+                borderRadius: 'var(--ds-radius-md, 8px)',
                 background: disabled
-                  ? undefined
-                  : `linear-gradient(to right, #2563eb 0%, #2563eb ${
+                  ? 'var(--ds-color-border-subtle)'
+                  : `linear-gradient(to right, var(--ds-color-primary-bg) 0%, var(--ds-color-primary-bg) ${
                       ((Number(field.value) - min) / (max - min)) * 100
-                    }%, #e5e7eb ${
+                    }%, var(--ds-color-border-subtle) ${
                       ((Number(field.value) - min) / (max - min)) * 100
-                    }%, #e5e7eb 100%)`,
+                    }%, var(--ds-color-border-subtle) 100%)`,
+                accentColor: 'var(--ds-color-primary-bg)',
               }}
               aria-invalid={!!errors?.[name]}
               aria-describedby={errors?.[name] ? `${name}-error` : description ? `${name}-description` : undefined}
@@ -138,7 +141,7 @@ export const SliderField: React.FC<FieldComponentProps> = ({
       />
 
       {typography.showError && errors?.[name]?.message && (
-        <Stack spacing="md">
+        <Stack spacing="normal">
           <FormHelperText variant="error">
             {String(errors[name].message)}
           </FormHelperText>

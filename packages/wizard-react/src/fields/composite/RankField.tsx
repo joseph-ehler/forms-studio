@@ -63,7 +63,7 @@ export const RankField: React.FC<FieldComponentProps> = ({
   const defaultOrder = options.map(o => o.id)
 
   return (
-    <Stack spacing="lg">
+    <Stack spacing="relaxed">
       {typography.showLabel && label && (
         <div className="mb-2">
           <FormLabel required={typography.showRequired && required} optional={typography.showOptional && !required}>
@@ -78,9 +78,16 @@ export const RankField: React.FC<FieldComponentProps> = ({
         </div>
       )}
 
-      <div className="flex items-center gap-2 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+      <div
+        className="flex items-center gap-2 p-3"
+        style={{
+          backgroundColor: 'color-mix(in oklab, var(--ds-color-primary-bg), transparent 90%)',
+          border: '1px solid color-mix(in oklab, var(--ds-color-primary-bg), transparent 70%)',
+          borderRadius: 'var(--ds-radius-md, 8px)'
+        }}
+      >
         <svg
-          className="h-5 w-5 text-blue-600 flex-shrink-0"
+          className="h-5 w-5  style={{ color: 'var(--ds-color-primary-text, var(--ds-color-primary-bg))' }} flex-shrink-0"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -187,7 +194,7 @@ const RankList: React.FC<RankListProps> = ({
   }
 
   return (
-    <Stack spacing="md">
+    <Stack spacing="normal">
       {rankedItems.map((item, index) => {
         const isDragging = draggedIndex === index
         const isDragOver = dragOverIndex === index
@@ -205,13 +212,24 @@ const RankList: React.FC<RankListProps> = ({
             }}
             onKeyDown={(e) => handleKeyDown(index, e)}
             tabIndex={disabled ? -1 : 0}
-            className={`flex items-center gap-3 p-4 rounded-lg border-2 transition-all ${
-              isDragging
-                ? 'opacity-50 border-blue-400 bg-blue-50'
-                : isDragOver
-                ? 'border-blue-500 bg-blue-50'
-                : 'border-gray-300 bg-white hover:border-gray-400'
-            } ${disabled ? 'cursor-not-allowed opacity-60' : 'cursor-move'}`}
+            className="flex items-center gap-3 p-4"
+            style={{
+              borderRadius: 'var(--ds-radius-md, 8px)',
+              border: '2px solid',
+              borderColor:
+                isDragging || isDragOver
+                  ? 'var(--ds-color-border-focus)'
+                  : 'var(--ds-color-border-subtle)',
+              backgroundColor:
+                isDragging || isDragOver
+                  ? 'color-mix(in oklab, var(--ds-color-primary-bg), transparent 90%)'
+                  : 'var(--ds-color-surface-base)',
+              opacity: isDragging || disabled ? 0.5 : 1,
+              cursor: disabled ? 'not-allowed' : 'move',
+              transition: 'all 150ms ease'
+            }}
+            onMouseEnter={(e) => !isDragging && !isDragOver && !disabled && (e.currentTarget.style.borderColor = 'var(--ds-color-border-strong)')}
+            onMouseLeave={(e) => !isDragging && !isDragOver && (e.currentTarget.style.borderColor = 'var(--ds-color-border-subtle)')}
             role="button"
             aria-label={`Rank ${index + 1}: ${item.label}. Use arrow keys to reorder`}
           >
@@ -222,14 +240,21 @@ const RankList: React.FC<RankListProps> = ({
             </div>
 
             {showRankNumbers && (
-              <div className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-blue-100 text-blue-800 font-bold text-sm">
+              <div
+                className="flex-shrink-0 w-8 h-8 flex items-center justify-center font-bold text-sm"
+                style={{
+                  borderRadius: '9999px',
+                  backgroundColor: 'color-mix(in oklab, var(--ds-color-primary-bg), transparent 85%)',
+                  color: 'var(--ds-color-primary-text, var(--ds-color-primary-bg))'
+                }}
+              >
                 {index + 1}
               </div>
             )}
 
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium text-gray-900">{item.label}</p>
-              {item.description && <p className="text-xs text-gray-500 mt-1">{item.description}</p>}
+              {item.description && <p className="text-xs  style={{ color: 'var(--ds-color-text-secondary)' }} mt-1">{item.description}</p>}
             </div>
 
             {!disabled && (
@@ -246,7 +271,7 @@ const RankList: React.FC<RankListProps> = ({
                     }
                   }}
                   disabled={index === 0}
-                  className="p-1 text-gray-400 hover:text-gray-600 disabled:opacity-30 disabled:cursor-not-allowed"
+                  className="p-1  style={{ color: 'var(--ds-color-text-muted)' }} hover: style={{ color: 'var(--ds-color-text-secondary)' }} disabled:opacity-30 disabled:cursor-not-allowed"
                   aria-label="Move up"
                 >
                   <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
@@ -266,7 +291,7 @@ const RankList: React.FC<RankListProps> = ({
                     }
                   }}
                   disabled={index === rankedItems.length - 1}
-                  className="p-1 text-gray-400 hover:text-gray-600 disabled:opacity-30 disabled:cursor-not-allowed"
+                  className="p-1  style={{ color: 'var(--ds-color-text-muted)' }} hover: style={{ color: 'var(--ds-color-text-secondary)' }} disabled:opacity-30 disabled:cursor-not-allowed"
                   aria-label="Move down"
                 >
                   <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">

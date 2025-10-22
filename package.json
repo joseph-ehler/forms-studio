@@ -16,11 +16,18 @@
     "clean": "turbo run clean && rm -rf node_modules",
     "changeset": "changeset",
     "version-packages": "changeset version",
-    "release": "turbo run build --filter=!./examples/* && changeset publish"
+    "release": "turbo run build --filter=!./examples/* && changeset publish",
+    "gen:picker": "hygen picker new",
+    "test:overlay-smoke": "playwright test tests/overlay.spec.ts",
+    "prepare": "husky"
   },
   "devDependencies": {
     "@changesets/cli": "^2.27.1",
+    "@playwright/test": "^1.56.1",
     "@types/node": "^20.11.0",
+    "husky": "^9.1.7",
+    "hygen": "^6.2.11",
+    "lint-staged": "^16.2.5",
     "tsup": "^8.0.2",
     "turbo": "^1.13.0",
     "typescript": "^5.4.5",
@@ -30,5 +37,11 @@
   "engines": {
     "node": ">=18.0.0",
     "pnpm": ">=8.0.0"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,css}": [
+      "pnpm -w eslint --fix",
+      "git add"
+    ]
   }
 }

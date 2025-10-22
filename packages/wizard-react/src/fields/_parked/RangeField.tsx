@@ -63,7 +63,7 @@ export const RangeField: React.FC<FieldComponentProps> = ({
   const defaultValue = (config as any).defaultValue ?? { min, max }
 
   return (
-    <Stack spacing="lg">
+    <Stack spacing="relaxed">
       {typography.showLabel && label && (
         <div className="mb-1">
           <FormLabel required={typography.showRequired && required} optional={typography.showOptional && !required}>
@@ -213,7 +213,7 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
   const maxPercent = getPercent(currentMax)
 
   return (
-    <Stack spacing="xl">
+    <Stack spacing="relaxed">
       {/* Value display */}
       {showValues && (
         <Flex align="center" justify="between">

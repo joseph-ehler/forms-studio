@@ -1,0 +1,57 @@
+/**
+ * Layout Width Tokens
+ * 
+ * Snapped width presets for consistent, bounded layout choices.
+ * Choose by content type, not tenant.
+ * 
+ * Philosophy:
+ * - Reading → measure (65ch adapts to font size)
+ * - Focused forms → narrow/comfy
+ * - Sections → standard/wide/max
+ * - Dashboards → full (rare)
+ */
+
+:root {
+  /* Width presets (layout intents) */
+  --ds-width-prose: 65ch;           /* Reading comfort by measure */
+  --ds-width-narrow: 36rem;         /* 576px - Auth, short forms, wizards */
+  --ds-width-comfy: 42rem;          /* 672px - Longer/label-heavy forms */
+  --ds-width-standard: 56rem;       /* 896px - Typical sections/marketing */
+  --ds-width-wide: 64rem;           /* 1024px - Media-heavy sections */
+  --ds-width-max: 80rem;            /* 1280px - Page max for single-column */
+  /* full = no max-width (for dashboards/canvases) */
+  
+  /* Legacy aliases (for migration) */
+  --ds-content-b2c-form: var(--ds-width-narrow);
+  --ds-content-b2c-section: var(--ds-width-standard);
+  --ds-content-b2c-max: var(--ds-width-max);
+  --ds-content-b2b-standard: var(--ds-width-wide);
+  --ds-content-b2b-max: 160rem; /* 2560px - kept for true ultrawide dashboards */
+}
+
+/**
+ * Usage Guide:
+ * 
+ * Reading content:
+ *   <Prose maxWidth="prose">...</Prose>
+ * 
+ * Forms:
+ *   <FormLayout maxWidth="narrow">...</FormLayout>     // Default
+ *   <FormLayout maxWidth="comfy">...</FormLayout>      // Label-heavy
+ * 
+ * Page sections:
+ *   <Container maxWidth="standard">...</Container>     // Typical
+ *   <Container maxWidth="wide">...</Container>         // Media-rich
+ *   <Container maxWidth="max">...</Container>          // Page default
+ * 
+ * Dashboards:
+ *   <Container maxWidth="full">...</Container>         // No constraint
+ * 
+ * Nesting works:
+ *   <Container maxWidth="max">
+ *     <Stack>
+ *       <Prose maxWidth="prose">Article...</Prose>
+ *       <FormLayout maxWidth="narrow">Form...</FormLayout>
+ *     </Stack>
+ *   </Container>
+ */

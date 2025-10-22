@@ -4,11 +4,14 @@
  * Single source of truth for all calendar styling.
  * Fields ONLY pass state - no classNames, no CSS imports.
  * 
- * Future calendar changes (colors, spacing, animations) happen HERE.
+ * Uses ds-calendar.css with ARIA/role/data selectors.
+ * Future calendar changes (colors, spacing, animations) happen in ONE CSS file.
  */
 
 import React from 'react'
 import { DayPicker, type DateRange } from 'react-day-picker'
+import './ds-calendar.tokens.css'
+import './ds-calendar.css'
 
 export interface CalendarSkinProps {
   mode: 'single' | 'range'
@@ -35,20 +38,30 @@ export const CalendarSkin: React.FC<CalendarSkinProps> = ({
   onPreviewEnter,
   onPreviewLeave,
 }) => {
-  // Centralized classNames for DayPicker
-  const classNames = {
-    day: 'fs-day',
-    day_selected: 'fs-selected',
-    day_today: 'fs-today',
-    day_disabled: 'fs-disabled',
-    day_range_start: 'fs-range-start',
-    day_range_end: 'fs-range-end',
-    day_range_middle: 'fs-range-middle',
+  // Modifiers to add data attributes for CSS targeting
+  // DayPicker will apply these as classes, which we target with [class*="data-"] selectors
+  const rangeSelection = mode === 'range' && selected && 'from' in selected ? selected : null
+  
+  const modifiers = {
+    today: new Date(),
+    rangeStart: rangeSelection?.from,
+    rangeEnd: rangeSelection?.to,
+    // rangeMiddle requires both dates to be defined
+    rangeMiddle: rangeSelection?.from && rangeSelection?.to
+      ? { after: rangeSelection.from, before: rangeSelection.to }
+      : undefined,
+  }
+
+  const modifiersClassNames = {
+    today: 'data-today',
+    rangeStart: 'data-range-start',
+    rangeEnd: 'data-range-end', 
+    rangeMiddle: 'data-range-middle',
   }
 
   if (mode === 'single') {
     return (
-      <div className="ds-calendar flex justify-center">
+      <div className="ds-calendar" data-months={numberOfMonths}>
         <DayPicker
           mode="single"
           selected={selected as Date}
@@ -57,14 +70,15 @@ export const CalendarSkin: React.FC<CalendarSkinProps> = ({
           fromDate={fromDate}
           toDate={toDate}
           numberOfMonths={numberOfMonths}
-          classNames={classNames}
+          modifiers={modifiers}
+          modifiersClassNames={modifiersClassNames}
         />
       </div>
     )
   }
 
   return (
-    <div className="ds-calendar flex justify-center">
+    <div className="ds-calendar" data-months={numberOfMonths}>
       <DayPicker
         mode="range"
         selected={selected as DateRange}
@@ -73,7 +87,8 @@ export const CalendarSkin: React.FC<CalendarSkinProps> = ({
         fromDate={fromDate}
         toDate={toDate}
         numberOfMonths={numberOfMonths}
-        classNames={classNames}
+        modifiers={modifiers}
+        modifiersClassNames={modifiersClassNames}
         // @ts-ignore - DayPicker types don't expose these but they work
         onDayMouseEnter={onPreviewEnter}
         onDayMouseLeave={onPreviewLeave}

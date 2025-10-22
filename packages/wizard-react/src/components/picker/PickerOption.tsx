@@ -26,6 +26,8 @@ export const PickerOption: React.FC<PickerOptionProps> = ({
     }
   }
 
+  const [isHovered, setIsHovered] = React.useState(false);
+
   return (
     <div
       role="option"
@@ -33,18 +35,29 @@ export const PickerOption: React.FC<PickerOptionProps> = ({
       aria-disabled={disabled}
       data-value={value}
       onClick={handleClick}
-      onMouseEnter={onMouseEnter}
-      className={`
-        flex items-center justify-between
-        px-3 py-2.5 min-h-[44px]
-        text-sm text-gray-900
-        cursor-pointer
-        transition-colors duration-150
-        ${active ? 'bg-blue-50' : ''}
-        ${selected ? 'bg-blue-50' : ''}
-        ${!selected && !active ? 'hover:bg-gray-50' : ''}
-        ${disabled ? 'opacity-50 cursor-not-allowed' : ''}
-      `.trim()}
+      onMouseEnter={(e) => {
+        setIsHovered(true);
+        onMouseEnter?.();
+      }}
+      onMouseLeave={() => setIsHovered(false)}
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: '10px 12px',
+        minHeight: '44px',
+        fontSize: '14px',
+        color: 'var(--ds-color-text-primary)',
+        cursor: disabled ? 'not-allowed' : 'pointer',
+        transition: 'all 150ms ease',
+        backgroundColor:
+          selected || active
+            ? 'color-mix(in oklab, var(--ds-color-primary-bg), transparent 90%)'
+            : isHovered && !disabled
+            ? 'var(--ds-color-surface-subtle)'
+            : 'transparent',
+        opacity: disabled ? 0.5 : 1,
+      }}
     >
       {/* Content */}
       <span className="flex-1">{children}</span>
@@ -52,7 +65,13 @@ export const PickerOption: React.FC<PickerOptionProps> = ({
       {/* Selected checkmark */}
       {selected && (
         <svg
-          className="h-5 w-5 text-blue-600 flex-shrink-0 ml-2"
+          style={{
+            width: '20px',
+            height: '20px',
+            color: 'var(--ds-color-primary-bg)',
+            flexShrink: 0,
+            marginLeft: '8px',
+          }}
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"

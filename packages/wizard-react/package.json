@@ -20,7 +20,12 @@
   "scripts": {
     "build": "tsup src/index.ts --format esm,cjs --dts --clean",
     "dev": "tsup src/index.ts --format esm,cjs --dts --watch",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "guard:ds": "node scripts/guard-ds.js",
+    "guard:atoms": "node scripts/guard-atoms.js",
+    "test:smoke": "playwright test tests/*.spec.ts",
+    "lint:css": "stylelint 'src/**/*.css'",
+    "precommit": "pnpm run guard:ds && pnpm run guard:atoms && pnpm run typecheck"
   },
   "keywords": [
     "forms",

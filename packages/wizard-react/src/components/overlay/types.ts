@@ -4,7 +4,7 @@
  * Central types for all picker-style overlays (Select, Date, Color, etc.)
  */
 
-import type { ReactNode } from 'react'
+import type { ReactNode, RefObject } from 'react'
 import type { Placement, Strategy } from '@floating-ui/react'
 
 export type OverlayPresentation = 'sheet' | 'popover' | 'modal'
@@ -88,6 +88,7 @@ export interface OverlaySheetProps {
   footer?: ReactNode
   children: ReactNode
   allowOutsideScroll?: boolean
+  contentRef?: RefObject<HTMLDivElement>
   'aria-label'?: string
   'aria-labelledby'?: string
 }

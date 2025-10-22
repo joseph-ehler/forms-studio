@@ -1,0 +1,86 @@
+/**
+ * FAB Tokens - Floating Action Button System
+ * 
+ * Fixed positioning, safe areas, and Z-index for FABs.
+ */
+
+@layer tokens {
+  :root {
+    /* ========================================
+     * POSITIONING & SAFE AREAS
+     * ======================================== */
+    
+    /* Desktop spacing from edges */
+    --ds-fab-offset-x: var(--ds-space-6);   /* 24px from right/left */
+    --ds-fab-offset-y: var(--ds-space-6);   /* 24px from bottom/top */
+    
+    /* Mobile safe areas */
+    --ds-fab-safe-bottom: max(var(--ds-space-6), env(safe-area-inset-bottom));
+    --ds-fab-safe-right: max(var(--ds-space-6), env(safe-area-inset-right));
+    --ds-fab-safe-left: max(var(--ds-space-6), env(safe-area-inset-left));
+    
+    
+    /* ========================================
+     * SIZING
+     * ======================================== */
+    
+    --ds-fab-size-sm: 40px;    /* Small FAB */
+    --ds-fab-size-md: 56px;    /* Standard FAB (Material Design) */
+    --ds-fab-size-lg: 64px;    /* Large FAB */
+    
+    /* Icon sizes within FAB */
+    --ds-fab-icon-sm: 20px;
+    --ds-fab-icon-md: 24px;
+    --ds-fab-icon-lg: 28px;
+    
+    
+    /* ========================================
+     * ELEVATION & DEPTH
+     * ======================================== */
+    
+    /* FAB sits above most content but below overlays */
+    --ds-fab-z-index: 900;
+    --ds-fab-menu-z-index: 1000;
+    
+    /* Shadow for elevation (exception to flat design for FABs) */
+    --ds-fab-shadow: 0 4px 12px rgb(0 0 0 / 0.15);
+    --ds-fab-shadow-hover: 0 6px 16px rgb(0 0 0 / 0.2);
+    
+    
+    /* ========================================
+     * SPEED DIAL / MENU
+     * ======================================== */
+    
+    /* Spacing between FAB items in speed dial */
+    --ds-fab-item-gap: var(--ds-space-3);  /* 12px */
+    
+    /* Menu item height */
+    --ds-fab-item-height: 48px;
+    
+    /* Label offset from FAB */
+    --ds-fab-label-offset: var(--ds-space-3);
+    
+    
+    /* ========================================
+     * ANIMATION
+     * ======================================== */
+    
+    --ds-fab-transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+    --ds-fab-scale-active: 0.95;
+    
+    /* Respect reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      --ds-fab-transition: none;
+    }
+  }
+  
+  
+  /* ========================================
+   * DARK MODE ADJUSTMENTS
+   * ======================================== */
+  
+  :root[data-theme="dark"] {
+    --ds-fab-shadow: 0 4px 12px rgb(0 0 0 / 0.4);
+    --ds-fab-shadow-hover: 0 6px 16px rgb(0 0 0 / 0.5);
+  }
+}

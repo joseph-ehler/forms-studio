@@ -1,0 +1,37 @@
+/**
+ * Calendar Token Variables
+ * 
+ * Semantic color tokens for calendar components.
+ * All hexes replaced with semantic tokens - adapts automatically to themes.
+ */
+
+:root {
+  /* Calendar surfaces */
+  --ds-calendar-bg: var(--ds-color-surface-base);
+  --ds-calendar-bg-hover: var(--ds-color-surface-subtle);
+  --ds-calendar-bg-selected: var(--ds-color-primary-bg);
+  
+  /* Calendar text */
+  --ds-calendar-fg: var(--ds-color-text-primary);
+  --ds-calendar-fg-secondary: var(--ds-color-text-secondary);
+  --ds-calendar-fg-muted: var(--ds-color-text-muted);
+  --ds-calendar-fg-selected: var(--ds-color-primary-text);
+  
+  /* Calendar accents */
+  --ds-calendar-accent: var(--ds-color-text-link);
+  --ds-calendar-today-ring: var(--ds-color-border-focus);
+  --ds-calendar-range-middle: var(--ds-color-primary-bg-subtle);
+  
+  /* Calendar borders */
+  --ds-calendar-border: var(--ds-color-border-subtle);
+  --ds-calendar-border-strong: var(--ds-color-border-strong);
+  
+  /* Calendar states */
+  --ds-calendar-disabled: var(--ds-color-text-muted);
+  --ds-calendar-outside: var(--ds-color-text-secondary);
+}
+
+/* Theme-specific adjustments (if needed) */
+:root[data-theme="dark"] {
+  --ds-calendar-range-middle: rgba(124, 58, 237, 0.15);
+}

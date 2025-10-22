@@ -91,7 +91,7 @@ export const SelectField: React.FC<FieldComponentProps> = ({
   }, [options, allowSearch, query])
 
   return (
-    <Stack spacing="sm">
+    <Stack spacing="tight">
       {/* Label */}
       {typography.showLabel && label && (
         <FormLabel 
@@ -137,13 +137,14 @@ export const SelectField: React.FC<FieldComponentProps> = ({
                     aria-haspopup="listbox"
                     aria-expanded={isOpen}
                     aria-controls={`${name}-listbox`}
-                    className="w-full rounded-md border border-gray-300 bg-white px-3 py-3 text-base shadow-sm min-h-[48px] flex items-center justify-between focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-50 disabled:text-gray-400"
+                    className="ds-input w-full flex items-center justify-between"
                   >
-                    <span className={displayValue ? 'text-gray-900' : 'text-gray-400'}>
+                    <span style={{ color: displayValue ? 'var(--ds-color-text-primary)' : 'var(--ds-color-text-muted)' }}>
                       {displayValue || placeholder}
                     </span>
                     <svg 
-                      className={`h-5 w-5 text-gray-400 transition-transform ${isOpen ? 'rotate-180' : ''}`}
+                      className={`h-5 w-5 transition-transform ${isOpen ? 'rotate-180' : ''}`}
+                      style={{ color: 'var(--ds-color-text-muted)' }}
                       viewBox="0 0 20 20" 
                       fill="currentColor"
                       aria-hidden="true"

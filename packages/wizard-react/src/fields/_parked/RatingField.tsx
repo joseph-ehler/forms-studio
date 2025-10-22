@@ -121,7 +121,7 @@ export const RatingField: React.FC<FieldComponentProps> = ({
   }
 
   return (
-    <Stack spacing="md">
+    <Stack spacing="normal">
       {typography.showLabel && label && (
         <Stack>
           <FormLabel required={typography.showRequired && required} optional={typography.showOptional && !required}>
@@ -143,7 +143,7 @@ export const RatingField: React.FC<FieldComponentProps> = ({
           const displayValue = hoverValue ?? currentValue
 
           return (
-            <Stack spacing="md">
+            <Stack spacing="normal">
               {/* Rating icons */}
               <div
                 className="flex gap-1"

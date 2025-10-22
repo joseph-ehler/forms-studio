@@ -14,7 +14,9 @@
 
 import React, { Fragment, useState } from 'react'
 import { Controller } from 'react-hook-form'
-import { Listbox, Transition } from '@headlessui/react'
+import { OverlayPickerCore, OverlaySheet, OverlayPicker } from '../../components/overlay'
+import { PickerList, PickerOption, PickerSearch, PickerEmptyState } from '../../components/picker'
+import { useDeviceType } from '../../hooks/useDeviceType'
 import type { FieldComponentProps } from '../types'
 import { FormStack, FormGrid, Stack, Flex } from '../../components'
 import { FormLabel, FormHelperText } from '../../components'
@@ -104,7 +106,7 @@ export const CurrencyField: React.FC<FieldComponentProps> = ({
   }
 
   return (
-    <Stack spacing="sm">
+    <Stack spacing="tight">
       {typography.showLabel && label && (
         <FormLabel htmlFor={name} required={typography.showRequired && required} optional={typography.showOptional && !required}>
           {label}
@@ -151,19 +153,28 @@ export const CurrencyField: React.FC<FieldComponentProps> = ({
             }
           }
 
+          const { isMobile } = useDeviceType()
+
           return (
             <Flex gap="md">
               {/* Currency Selector */}
-              <Listbox value={value.currency} onChange={handleCurrencyChange} disabled={disabled}>
-                {({ open }) => (
+              <OverlayPickerCore closeOnSelect={true}>
+                {({ isOpen, open, close, triggerRef }) => (
                   <div className="relative w-32">
-                    <Listbox.Button className="relative w-full min-h-[48px] rounded-md border border-gray-300 bg-white px-3 py-2.5 text-left text-base shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:bg-gray-50 flex items-center justify-between">
+                    <button
+                      ref={triggerRef as React.RefObject<HTMLButtonElement>}
+                      type="button"
+                      onClick={() => isOpen ? close() : open()}
+                      disabled={disabled}
+                      className="ds-input relative w-full text-left flex items-center justify-between"
+                    >
                       <span className="flex items-center gap-2">
                         <span className="text-xl">{selectedCurrency.flag}</span>
                         <span className="font-medium">{selectedCurrency.code}</span>
                       </span>
                       <svg
-                        className={`h-4 w-4 text-gray-400 transition-transform ${open ? 'rotate-180' : ''}`}
+                        className={`h-4 w-4 transition-transform ${isOpen ? 'rotate-180' : ''}`}
+                        style={{ color: 'var(--ds-color-text-muted)' }}
                         viewBox="0 0 20 20"
                         fill="currentColor"
                       >
@@ -173,109 +184,128 @@ export const CurrencyField: React.FC<FieldComponentProps> = ({
                           clipRule="evenodd"
                         />
                       </svg>
-                    </Listbox.Button>
+                    </button>
 
-                    <Transition
-                      as={Fragment}
-                      leave="transition ease-in duration-100"
-                      leaveFrom="opacity-100"
-                      leaveTo="opacity-0"
-                      afterLeave={() => setSearchQuery('')}
-                    >
-                      <Listbox.Options className="absolute z-10 mt-1 max-h-80 w-72 rounded-md bg-white text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none overflow-hidden">
-                        {/* Search input */}
-                        <div className="sticky top-0 bg-white border-b border-gray-200 p-2">
-                          <div className="relative">
-                            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                              <svg
-                                className="h-5 w-5 text-gray-400"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth={2}
-                                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                                />
-                              </svg>
-                            </div>
-                            <input
-                              type="text"
-                              className="w-full rounded-md border border-gray-300 bg-white py-2 pl-10 pr-3 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                              placeholder="Type to search currencies..."
-                              value={searchQuery}
-                              onChange={(e) => setSearchQuery(e.target.value)}
-                              onClick={(e) => e.stopPropagation()}
-                            />
-                          </div>
-                        </div>
-
-                        {/* Currencies list */}
-                        <div className="max-h-60 overflow-auto py-1">
+                    {/* Mobile Sheet */}
+                    {isMobile && isOpen && (
+                      <OverlaySheet
+                        open={isOpen}
+                        onClose={() => {
+                          close('outside')
+                          setSearchQuery('')
+                        }}
+                        maxHeight={560}
+                        aria-labelledby="currency-picker"
+                      >
+                        <PickerSearch
+                          value={searchQuery}
+                          onChange={setSearchQuery}
+                          placeholder="Search currencies..."
+                          autoFocus
+                        />
+                        <PickerList role="listbox" aria-label="Select currency">
                           {filteredCurrencies.length === 0 ? (
-                            <div className="py-2 px-4 text-sm text-gray-500">
-                              No currencies found
-                            </div>
+                            <PickerEmptyState message="No currencies found" />
                           ) : (
-                            filteredCurrencies.map((currency) => (
-                              <Listbox.Option
-                                key={currency.code}
-                                value={currency.code}
-                                className={({ active }) =>
-                                  `relative cursor-pointer select-none min-h-[48px] py-2.5 pl-3 pr-9 flex items-center gap-3 ${
-                                    active ? 'bg-blue-600 text-white' : 'text-gray-900'
-                                  }`
-                                }
-                              >
-                                {({ selected, active }) => (
-                                  <>
-                                    <div className="flex items-center gap-3">
-                                      <span className="text-lg">{currency.flag}</span>
-                                      <div>
+                            filteredCurrencies.map((currency) => {
+                              const isSelected = currency.code === value.currency
+                              return (
+                                <PickerOption
+                                  key={currency.code}
+                                  value={currency.code}
+                                  selected={isSelected}
+                                  disabled={disabled}
+                                  onClick={() => {
+                                    handleCurrencyChange(currency.code)
+                                    close('select')
+                                    setSearchQuery('')
+                                  }}
+                                >
+                                  <div className="flex items-center gap-3 w-full">
+                                    <span className="text-xl">{currency.flag}</span>
+                                    <div className="flex-1 min-w-0">
+                                      <div className="flex items-center gap-2">
+                                        <span className="font-mono font-medium">{currency.code}</span>
+                                        <span className="text-sm" style={{ color: 'var(--ds-color-text-secondary)' }}>{currency.symbol}</span>
+                                      </div>
+                                      <div className="text-sm" style={{ color: 'var(--ds-color-text-secondary)' }}>{currency.name}</div>
+                                    </div>
+                                  </div>
+                                </PickerOption>
+                              )
+                            })
+                          )}
+                        </PickerList>
+                      </OverlaySheet>
+                    )}
+
+                    {/* Desktop Picker */}
+                    {!isMobile && isOpen && (
+                      <OverlayPicker
+                        open={isOpen}
+                        anchor={triggerRef.current}
+                        onOpenChange={(o) => {
+                          if (!o) {
+                            close('outside')
+                            setSearchQuery('')
+                          }
+                        }}
+                        placement="bottom-start"
+                        sameWidth={false}
+                        hardMaxHeight={560}
+                        style={{ width: '288px' }}
+                        header={
+                          <PickerSearch
+                            value={searchQuery}
+                            onChange={setSearchQuery}
+                            placeholder="Search currencies..."
+                          />
+                        }
+                        content={
+                          <PickerList role="listbox" aria-label="Select currency">
+                            {filteredCurrencies.length === 0 ? (
+                              <PickerEmptyState message="No currencies found" />
+                            ) : (
+                              filteredCurrencies.map((currency) => {
+                                const isSelected = currency.code === value.currency
+                                return (
+                                  <PickerOption
+                                    key={currency.code}
+                                    value={currency.code}
+                                    selected={isSelected}
+                                    disabled={disabled}
+                                    onClick={() => {
+                                      handleCurrencyChange(currency.code)
+                                      close('select')
+                                      setSearchQuery('')
+                                    }}
+                                  >
+                                    <div className="flex items-center gap-3 w-full">
+                                      <span className="text-xl">{currency.flag}</span>
+                                      <div className="flex-1 min-w-0">
                                         <div className="flex items-center gap-2">
-                                          <span className={`font-mono font-medium ${selected ? 'font-bold' : ''}`}>
-                                            {currency.code}
-                                          </span>
-                                          <span className={`text-sm ${active ? 'text-blue-100' : 'text-gray-500'}`}>
-                                            {currency.symbol}
-                                          </span>
+                                          <span className="font-mono font-medium">{currency.code}</span>
+                                          <span className="text-sm" style={{ color: 'var(--ds-color-text-secondary)' }}>{currency.symbol}</span>
                                         </div>
-                                        <div className={`text-sm ${active ? 'text-blue-100' : 'text-gray-500'}`}>
-                                          {currency.name}
-                                        </div>
+                                        <div className="text-sm" style={{ color: 'var(--ds-color-text-secondary)' }}>{currency.name}</div>
                                       </div>
                                     </div>
-                                    {selected && (
-                                      <svg
-                                        className={`absolute right-3 h-5 w-5 ${active ? 'text-white' : 'text-blue-600'}`}
-                                        fill="currentColor"
-                                        viewBox="0 0 20 20"
-                                      >
-                                        <path
-                                          fillRule="evenodd"
-                                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                          clipRule="evenodd"
-                                        />
-                                      </svg>
-                                    )}
-                                  </>
-                                )}
-                              </Listbox.Option>
-                            ))
-                          )}
-                        </div>
-                      </Listbox.Options>
-                    </Transition>
+                                  </PickerOption>
+                                )
+                              })
+                            )}
+                          </PickerList>
+                        }
+                      />
+                    )}
                   </div>
                 )}
-              </Listbox>
+              </OverlayPickerCore>
 
               {/* Amount Input */}
               <div className="relative flex-1">
                 <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                  <span className="text-gray-500 font-medium text-lg">{selectedCurrency.symbol}</span>
+                  <span className="font-medium text-lg" style={{ color: 'var(--ds-color-text-secondary)' }}>{selectedCurrency.symbol}</span>
                 </div>
                 <input
                   id={name}
@@ -287,7 +317,7 @@ export const CurrencyField: React.FC<FieldComponentProps> = ({
                   onFocus={handleFocus}
                   placeholder={placeholder || '0.00'}
                   disabled={disabled}
-                  className="w-full rounded-md border border-gray-300 bg-white pl-10 pr-3 py-3 text-base shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:bg-gray-50 disabled:text-gray-500 min-h-[48px]"
+                  className="ds-input w-full pl-10"
                   aria-invalid={!!errors?.[name]}
                 />
               </div>
@@ -298,7 +328,7 @@ export const CurrencyField: React.FC<FieldComponentProps> = ({
 
       {/* Min/Max hint */}
       {(min > 0 || max) && (
-        <p className="text-xs text-gray-400">
+        <p className="text-xs" style={{ color: 'var(--ds-color-text-muted)' }}>
           {min > 0 && max
             ? `Range: ${min} - ${max}`
             : min > 0

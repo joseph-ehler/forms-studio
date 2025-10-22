@@ -110,7 +110,7 @@ export const DateRangeField: React.FC<FieldComponentProps> = ({
   const [isOverlayOpen, setIsOverlayOpen] = useState(false)
 
   return (
-    <Stack spacing="sm">
+    <Stack spacing="tight">
       {typography.showLabel && label && (
         <Stack>
           <div id={`${name}-label`}>
@@ -214,13 +214,14 @@ export const DateRangeField: React.FC<FieldComponentProps> = ({
                     aria-haspopup="dialog"
                     aria-expanded={isOpen}
                     aria-controls={`${name}-dialog`}
-                    className="w-full min-h-[48px] rounded-md border border-gray-300 bg-white px-3 py-3 text-left text-base shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:bg-gray-50 flex items-center justify-between"
+                    className="ds-input w-full text-left flex items-center justify-between"
                   >
-                    <span className={value.start ? 'text-gray-900' : 'text-gray-400'}>
+                    <span style={{ color: value.start ? 'var(--ds-color-text-primary)' : 'var(--ds-color-text-muted)' }}>
                       {displayValue}
                     </span>
                     <svg
-                      className={`h-5 w-5 text-gray-400 transition-transform ${isOpen ? 'rotate-180' : ''}`}
+                      className={`transition-transform ${isOpen ? 'rotate-180' : ''}`}
+                      style={{ width: '20px', height: '20px', color: 'var(--ds-color-text-muted)' }}
                       viewBox="0 0 20 20"
                       fill="currentColor"
                     >
@@ -249,8 +250,8 @@ export const DateRangeField: React.FC<FieldComponentProps> = ({
                     >
                       {/* Presets */}
                       {presets.length > 0 && (
-                        <div className="px-4 pt-4 pb-2 border-b border-gray-200">
-                          <div className="text-xs font-medium text-gray-500 mb-2">
+                        <div className="px-4 pt-4 pb-2" style={{ borderBottom: '1px solid var(--ds-color-border-subtle)' }}>
+                          <div className="text-xs font-medium mb-2" style={{ color: 'var(--ds-color-text-secondary)' }}>
                             Quick Select
                           </div>
                           <div className="flex flex-wrap gap-2">
@@ -261,7 +262,15 @@ export const DateRangeField: React.FC<FieldComponentProps> = ({
                                 onClick={() => {
                                   handlePreset(preset)
                                 }}
-                                className="px-3 py-2 text-sm rounded-md bg-gray-100 hover:bg-gray-200 text-gray-700 transition-colors"
+                                className="px-3 py-2 text-sm"
+                                style={{
+                                  borderRadius: 'var(--ds-radius-md, 6px)',
+                                  backgroundColor: 'var(--ds-color-surface-subtle)',
+                                  color: 'var(--ds-color-text-primary)',
+                                  transition: 'all 150ms ease'
+                                }}
+                                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'color-mix(in oklab, var(--ds-color-surface-subtle), var(--ds-color-text-primary) 10%)'}
+                                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'var(--ds-color-surface-subtle)'}
                               >
                                 {preset}
                               </button>
@@ -295,8 +304,8 @@ export const DateRangeField: React.FC<FieldComponentProps> = ({
                         <div ref={contentRef} className="p-4 flex gap-4">
                           {/* Presets Sidebar */}
                           {presets.length > 0 && (
-                            <div className="flex flex-col gap-1 pr-4 border-r border-gray-200">
-                              <div className="text-xs font-medium text-gray-500 mb-1">
+                            <div className="flex flex-col gap-1 pr-4" style={{ borderRight: '1px solid var(--ds-color-border-subtle)' }}>
+                              <div className="text-xs font-medium mb-1" style={{ color: 'var(--ds-color-text-secondary)' }}>
                                 Quick Select
                               </div>
                               {presets.map((preset: string) => (
@@ -304,7 +313,15 @@ export const DateRangeField: React.FC<FieldComponentProps> = ({
                                   key={preset}
                                   type="button"
                                   onClick={() => handlePreset(preset)}
-                                  className="text-left px-3 py-2 text-sm rounded-md hover:bg-gray-100 text-gray-700 whitespace-nowrap transition-colors"
+                                  className="text-left px-3 py-2 text-sm whitespace-nowrap"
+                                  style={{
+                                    borderRadius: 'var(--ds-radius-md, 6px)',
+                                    color: 'var(--ds-color-text-primary)',
+                                    backgroundColor: 'transparent',
+                                    transition: 'all 150ms ease'
+                                  }}
+                                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--ds-color-surface-subtle)'}
+                                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
                                 >
                                   {preset}
                                 </button>

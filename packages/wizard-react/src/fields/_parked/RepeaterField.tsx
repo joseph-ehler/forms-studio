@@ -61,9 +61,9 @@ export const RepeaterField: React.FC<FieldComponentProps> = ({
   const canRemove = fields.length > minItems
 
   return (
-    <Stack spacing="lg">
+    <Stack spacing="relaxed">
       {typography.showLabel && label && (
-        <Stack spacing="sm">
+        <Stack spacing="tight">
           <FormLabel required={typography.showRequired && required} optional={typography.showOptional && !required}>
             {label}
           </FormLabel>
@@ -76,7 +76,7 @@ export const RepeaterField: React.FC<FieldComponentProps> = ({
       )}
 
       {/* List of items */}
-      <Stack spacing="lg">
+      <Stack spacing="relaxed">
         {fields.length === 0 && (
           <div className="text-center py-8 border-2 border-dashed border-gray-300 rounded-lg">
             <p className="text-sm text-gray-500">
@@ -108,14 +108,14 @@ export const RepeaterField: React.FC<FieldComponentProps> = ({
             </div>
 
             {/* Item fields - Placeholder for field rendering */}
-            <Stack spacing="lg">
+            <Stack spacing="relaxed">
               {itemSchema.map((fieldDef: any, fieldIndex: number) => (
                 <div key={fieldDef.id || fieldIndex}>
                   <Controller
                     name={`${name}.${index}.${fieldDef.id}`}
                     control={control}
                     render={({ field: itemField }) => (
-                      <Stack spacing="sm">
+                      <Stack spacing="tight">
                         {fieldDef.label && (
                           <label
                             htmlFor={`${name}.${index}.${fieldDef.id}`}

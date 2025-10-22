@@ -3,7 +3,12 @@
  * 
  * React runtime for Forms Studio wizard engine.
  * Render any JSON field type with React Hook Form + Zod validation.
+ * 
+ * PLUS: Complete Design System (Typography, Surface, Shell, Buttons)
  */
+
+// Design System Components (NEW!)
+export * from './components'
 
 // Core renderer
 export * from './renderer/FormScreen'

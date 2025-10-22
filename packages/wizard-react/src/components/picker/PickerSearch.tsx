@@ -61,7 +61,7 @@ export const PickerSearch: React.FC<PickerSearchProps> = ({
         {/* Search icon */}
         <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
           <svg
-            className="h-5 w-5 text-gray-400"
+            style={{ width: '20px', height: '20px', color: 'var(--ds-color-text-muted)' }}
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -85,20 +85,28 @@ export const PickerSearch: React.FC<PickerSearchProps> = ({
           onClick={(e) => e.stopPropagation()}
           onMouseDown={(e) => e.stopPropagation()}
           placeholder={placeholder}
-          className="
-            w-full
-            pl-10 pr-10
-            py-2.5
-            min-h-[44px]
-            text-sm text-gray-900
-            bg-gray-50
-            border border-gray-300
-            rounded-lg
-            focus:outline-none
-            focus:ring-2
-            focus:ring-blue-500
-            focus:border-transparent
-          "
+          style={{
+            width: '100%',
+            paddingLeft: '40px',
+            paddingRight: '40px',
+            paddingTop: '10px',
+            paddingBottom: '10px',
+            minHeight: '44px',
+            fontSize: '14px',
+            color: 'var(--ds-color-text-primary)',
+            backgroundColor: 'var(--ds-color-surface-subtle)',
+            border: '1px solid var(--ds-color-border-subtle)',
+            borderRadius: '8px',
+            outline: 'none',
+          }}
+          onFocus={(e) => {
+            e.target.style.borderColor = 'var(--ds-color-border-focus)';
+            e.target.style.boxShadow = `0 0 0 3px color-mix(in oklab, var(--ds-color-border-focus), transparent 85%)`;
+          }}
+          onBlur={(e) => {
+            e.target.style.borderColor = 'var(--ds-color-border-subtle)';
+            e.target.style.boxShadow = 'none';
+          }}
           aria-label="Search"
         />
 
@@ -111,7 +119,25 @@ export const PickerSearch: React.FC<PickerSearchProps> = ({
               handleClear()
             }}
             onMouseDown={(e) => e.stopPropagation()}
-            className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-600"
+            style={{
+              position: 'absolute',
+              top: 0,
+              bottom: 0,
+              right: 0,
+              display: 'flex',
+              alignItems: 'center',
+              paddingRight: '12px',
+              color: 'var(--ds-color-text-muted)',
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = 'var(--ds-color-text-secondary)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = 'var(--ds-color-text-muted)';
+            }}
             aria-label="Clear search"
           >
             <svg

@@ -46,7 +46,7 @@ export const RadioGroupField: React.FC<FieldComponentProps> = ({
   const layout = (config as any).layout ?? 'vertical'
 
   return (
-    <Stack spacing="md">
+    <Stack spacing="normal">
       {typography.showLabel && label && (
         <Stack>
           <FormLabel required={typography.showRequired && required} optional={typography.showOptional && !required}>
@@ -78,15 +78,27 @@ export const RadioGroupField: React.FC<FieldComponentProps> = ({
               return (
                 <label
                   key={optionValue}
-                  className={`
-                    relative flex cursor-pointer rounded-lg border-2 p-4 transition-all min-h-[44px] active:scale-[0.98]
-                    ${
+                  className="relative flex p-4 active:scale-[0.98]"
+                  style={{
+                    cursor: optionDisabled ? 'not-allowed' : 'pointer',
+                    borderRadius: 'var(--ds-radius-md, 8px)',
+                    border: `2px solid ${
                       isSelected
-                        ? 'border-blue-600 bg-blue-50 ring-2 ring-blue-600'
-                        : 'border-gray-300 bg-white hover:border-gray-400'
-                    }
-                    ${optionDisabled ? 'cursor-not-allowed opacity-50' : ''}
-                  `}
+                        ? 'var(--ds-color-border-focus)'
+                        : 'var(--ds-color-border-subtle)'
+                    }`,
+                    backgroundColor: isSelected
+                      ? 'color-mix(in oklab, var(--ds-color-primary-bg), transparent 90%)'
+                      : 'var(--ds-color-surface-base)',
+                    boxShadow: isSelected
+                      ? `0 0 0 3px color-mix(in oklab, var(--ds-color-border-focus), transparent 85%)`
+                      : 'none',
+                    minHeight: '44px',
+                    transition: 'all 150ms ease',
+                    opacity: optionDisabled ? 0.5 : 1
+                  }}
+                  onMouseEnter={(e) => !isSelected && !optionDisabled && (e.currentTarget.style.borderColor = 'var(--ds-color-border-strong)')}
+                  onMouseLeave={(e) => !isSelected && (e.currentTarget.style.borderColor = 'var(--ds-color-border-subtle)')}
                 >
                   <input
                     type="radio"
@@ -101,21 +113,44 @@ export const RadioGroupField: React.FC<FieldComponentProps> = ({
                     {/* Radio Circle */}
                     <div className="flex h-5 items-center">
                       <div
-                        className={`
-                          h-5 w-5 rounded-full border-2 flex items-center justify-center
-                        `}
-                      />
+                        style={{
+                          height: '20px',
+                          width: '20px',
+                          borderRadius: '50%',
+                          border: `2px solid ${
+                            isSelected
+                              ? 'var(--ds-color-primary-bg)'
+                              : 'var(--ds-color-border-subtle)'
+                          }`,
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          backgroundColor: isSelected ? 'var(--ds-color-primary-bg)' : 'transparent'
+                        }}
+                      >
+                        {isSelected && (
+                          <div
+                            style={{
+                              width: '8px',
+                              height: '8px',
+                              borderRadius: '50%',
+                              backgroundColor: 'white'
+                            }}
+                          />
+                        )}
+                      </div>
                     </div>
                     <Stack>
                       <span
-                        className={`block text-sm font-medium ${
-                          isSelected ? 'text-blue-900' : 'text-gray-900'
-                        }`}
+                        className="block text-sm font-medium"
+                        style={{
+                          color: 'var(--ds-color-text-primary)'
+                        }}
                       >
                         {optionLabel}
                       </span>
                       {optionDescription && (
-                        <p className="text-sm text-gray-500">{optionDescription}</p>
+                        <p className="text-sm" style={{ color: 'var(--ds-color-text-secondary)' }}>{optionDescription}</p>
                       )}
                     </Stack>
                   </Flex>

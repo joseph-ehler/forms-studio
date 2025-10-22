@@ -51,7 +51,7 @@ export const SignatureField: React.FC<FieldComponentProps> = ({
   const clearText       = String((config as any).clearText ?? 'Clear')
 
   return (
-    <Stack spacing="md">
+    <Stack spacing="normal">
       {typography.showLabel && fieldLabel && (
         <div className="mb-2">
           <FormLabel required={typography.showRequired && required} optional={typography.showOptional && !required}>
@@ -209,10 +209,15 @@ const SignatureCanvas: React.FC<SignatureCanvasProps> = ({
   }
 
   return (
-    <Stack spacing="md">
+    <Stack spacing="normal">
       <div
-        className={`relative border-2 ${disabled ? 'border-gray-300 bg-gray-50' : 'border-gray-300 bg-white'} rounded-lg overflow-hidden`}
-        style={{ maxWidth: '100%' }}
+        className="relative overflow-hidden"
+        style={{ 
+          maxWidth: '100%',
+          border: '2px solid var(--ds-color-border-subtle)',
+          backgroundColor: disabled ? 'var(--ds-color-surface-subtle)' : 'var(--ds-color-surface-base)',
+          borderRadius: 'var(--ds-radius-md, 8px)'
+        }}
       >
         <canvas
           ref={canvasRef}
@@ -231,7 +236,7 @@ const SignatureCanvas: React.FC<SignatureCanvasProps> = ({
 
         {isEmpty && !disabled && (
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-            <p className="text-gray-400 text-sm">Sign here</p>
+            <p style={{ color: 'var(--ds-color-text-muted)', fontSize: '14px' }}>Sign here</p>
           </div>
         )}
       </div>
@@ -240,7 +245,13 @@ const SignatureCanvas: React.FC<SignatureCanvasProps> = ({
         <button
           type="button"
           onClick={clear}
-          className="text-sm text-red-600 hover:text-red-700 font-medium min-h-[44px] px-4"
+          className="text-sm font-medium px-4"
+          style={{ 
+            minHeight: '44px',
+            color: 'var(--ds-color-state-danger-text)',
+          }}
+          onMouseEnter={(e) => e.currentTarget.style.color = 'var(--ds-color-state-danger-text-hover, var(--ds-color-state-danger-text))'}
+          onMouseLeave={(e) => e.currentTarget.style.color = 'var(--ds-color-state-danger-text)'}
         >
           {clearText}
         </button>

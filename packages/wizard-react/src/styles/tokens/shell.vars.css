@@ -1,0 +1,438 @@
+/**
+ * UI Shell Tokens - Native OS Experience
+ * 
+ * Mobile-first to the point it feels native.
+ * Gestures, snapping, momentum - the full experience.
+ * 
+ * Philosophy:
+ * - Respect safe areas (notches, nav bars)
+ * - Use dynamic viewport (not broken 100vh)
+ * - Touch targets meet accessibility standards
+ * - Transitions match native OS timing
+ * - Everything snaps with precision
+ */
+
+@layer tokens {
+  :root {
+    /* ==========================================
+       SAFE AREAS - iOS Notch, Android Nav
+       ========================================== */
+    
+    --ds-safe-top: env(safe-area-inset-top, 0px);
+    --ds-safe-bottom: env(safe-area-inset-bottom, 0px);
+    --ds-safe-left: env(safe-area-inset-left, 0px);
+    --ds-safe-right: env(safe-area-inset-right, 0px);
+    
+    /* ==========================================
+       VIEWPORT - Mobile-Aware Heights
+       ========================================== */
+    
+    /* Dynamic viewport (respects browser UI showing/hiding) */
+    --ds-vh: 1dvh;
+    --ds-viewport-height: 100dvh;
+    
+    /* Small viewport (browser UI visible) */
+    --ds-vh-small: 1svh;
+    --ds-viewport-height-small: 100svh;
+    
+    /* Large viewport (browser UI hidden) */
+    --ds-vh-large: 1lvh;
+    --ds-viewport-height-large: 100lvh;
+    
+    /* Safe viewport (minus safe areas) */
+    --ds-viewport-height-safe: calc(100dvh - var(--ds-safe-top) - var(--ds-safe-bottom));
+    
+    /* ==========================================
+       TOUCH TARGETS - Accessibility (4px system)
+       ========================================== */
+    
+    --ds-touch-min: 2.75rem;        /* 44px (11 * 4) - iOS minimum */
+    --ds-touch-comfortable: 3rem;   /* 48px (12 * 4) - Android minimum */
+    --ds-touch-relaxed: 3.5rem;     /* 56px (14 * 4) - Generous */
+    --ds-touch-large: 4rem;         /* 64px (16 * 4) - Extra large */
+    
+    /* ==========================================
+       TOP BAR - Native Header (4px system)
+       ========================================== */
+    
+    --ds-topbar-height-mobile: 3.5rem;   /* 56px (14 * 4) */
+    --ds-topbar-height-desktop: 4rem;    /* 64px (16 * 4) */
+    --ds-topbar-height-safe: calc(var(--ds-topbar-height-mobile) + var(--ds-safe-top));
+    
+    --ds-topbar-bg: var(--ds-color-surface-base);
+    --ds-topbar-bg-blur: rgba(255, 255, 255, 0.8);
+    --ds-topbar-blur: blur(12px);
+    --ds-topbar-border: 1px solid var(--ds-color-border-subtle);
+    
+    --ds-topbar-title-size: 1.125rem;  /* 18px */
+    --ds-topbar-title-weight: var(--ds-weight-semibold);
+    
+    /* ==========================================
+       BOTTOM NAV - Mobile Navigation (4px system)
+       ========================================== */
+    
+    --ds-bottomnav-height: 4rem;  /* 64px (16 * 4) */
+    --ds-bottomnav-height-safe: calc(var(--ds-bottomnav-height) + var(--ds-safe-bottom));
+    
+    --ds-bottomnav-bg: var(--ds-color-surface-base);
+    --ds-bottomnav-bg-blur: rgba(255, 255, 255, 0.8);
+    --ds-bottomnav-blur: blur(12px);
+    --ds-bottomnav-border: 1px solid var(--ds-color-border-subtle);
+    
+    --ds-bottomnav-icon-size: 1.5rem;  /* 24px */
+    --ds-bottomnav-label-size: 0.75rem;  /* 12px */
+    
+    /* ==========================================
+       DRAWER - Side Navigation (4px system)
+       ========================================== */
+    
+    --ds-drawer-width: 17.5rem;      /* 280px (70 * 4) */
+    --ds-drawer-width-wide: 20rem;   /* 320px (80 * 4) */
+    
+    --ds-drawer-bg: var(--ds-color-surface-base);
+    --ds-drawer-overlay: rgba(0, 0, 0, 0.4);
+    
+    /* Snap points (percentage of drawer width) */
+    --ds-drawer-snap-peek: 0.25;   /* 25% visible */
+    --ds-drawer-snap-half: 0.5;    /* 50% visible */
+    --ds-drawer-snap-full: 1.0;    /* 100% visible */
+    
+    /* ==========================================
+       SHEET - Bottom Sheet (4px system)
+       ========================================== */
+    
+    --ds-sheet-handle-width: 2rem;    /* 32px (8 * 4) */
+    --ds-sheet-handle-height: 0.25rem; /* 4px (1 * 4) */
+    --ds-sheet-handle-color: var(--ds-color-border-strong);
+    
+    --ds-sheet-bg: var(--ds-color-surface-base);
+    --ds-sheet-border-radius: 1rem 1rem 0 0;  /* 16px */
+    --ds-sheet-overlay: rgba(0, 0, 0, 0.4);
+    
+    /* Snap points (viewport percentage) */
+    --ds-sheet-snap-collapsed: 7.5rem;  /* 120px (30 * 4) - Just peeking */
+    --ds-sheet-snap-half: 50vh;        /* Half screen */
+    --ds-sheet-snap-full: 90vh;        /* Almost full */
+    
+    /* ==========================================
+       GESTURES - Interaction Thresholds
+       ========================================== */
+    
+    /* Swipe detection */
+    --ds-swipe-threshold: 3.125rem;  /* 50px (12.5 * 4) - Min distance to register */
+    --ds-swipe-velocity: 200;        /* px/s to trigger action */
+    
+    /* Snap behavior */
+    --ds-snap-threshold: 0.3;        /* 30% drag to snap */
+    --ds-snap-velocity-threshold: 500; /* px/s to snap to next */
+    
+    /* Pull-to-refresh */
+    --ds-pull-threshold: 5rem;       /* 80px - Pull distance to trigger */
+    --ds-pull-resistance: 0.55;      /* Damping factor */
+    
+    /* ==========================================
+       TRANSITIONS - Native Timing
+       ========================================== */
+    
+    /* iOS-style transitions */
+    --ds-transition-page: 350ms cubic-bezier(0.4, 0.0, 0.2, 1);
+    --ds-transition-sheet: 300ms cubic-bezier(0.32, 0.72, 0, 1);
+    --ds-transition-drawer: 250ms cubic-bezier(0.4, 0.0, 0.6, 1);
+    --ds-transition-nav: 200ms cubic-bezier(0.4, 0.0, 0.2, 1);
+    
+    /* Spring animations */
+    --ds-spring-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    --ds-spring-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+    --ds-spring-gentle: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    
+    /* ==========================================
+       Z-INDEX SYSTEM - Layering
+       ========================================== */
+    
+    --ds-z-base: 0;
+    --ds-z-content: 1;
+    --ds-z-topbar: 100;
+    --ds-z-bottomnav: 100;
+    --ds-z-drawer: 200;
+    --ds-z-sheet: 300;
+    --ds-z-overlay: 400;
+    --ds-z-toast: 500;
+    --ds-z-tooltip: 600;
+    --ds-z-modal: 700;
+    
+    /* ==========================================
+       SCROLL BEHAVIOR
+       ========================================== */
+    
+    --ds-scroll-padding-top: var(--ds-topbar-height-safe);
+    --ds-scroll-padding-bottom: var(--ds-bottomnav-height-safe);
+    
+    /* ==========================================
+       ELEVATION - Overlay-Only (FLAT FIRST!)
+       ========================================== */
+    
+    /* Base elevation color (theme-aware) */
+    --ds-elevation-color: rgba(0, 0, 0, 0.12);
+    
+    /* Overlay shadows (NOT for surfaces!) */
+    --ds-elevation-drawer: 0 8px 24px var(--ds-elevation-color);
+    --ds-elevation-sheet: 0 -2px 10px var(--ds-elevation-color);
+    --ds-elevation-modal: 0 20px 40px var(--ds-elevation-color);
+    --ds-elevation-toast: 0 4px 12px var(--ds-elevation-color);
+    
+    /* ==========================================
+       CONTENT WIDTH - Tenant-Aware (B2C vs B2B)
+       ========================================== */
+    
+    /* B2C: Readable content (body text, marketing, blogs) */
+    --ds-content-b2c-text: 50rem;       /* 800px - Optimal reading width (4px system: 50 * 16) */
+    --ds-content-b2c-form: 36rem;       /* 576px - Forms constrained for focus (FormLayout default) */
+    --ds-content-b2c-page: 56rem;       /* 896px - Page content (2xl) */
+    --ds-content-b2c-max: 80rem;        /* 1280px - Max for B2C (7xl) */
+    
+    /* B2B: Full-width dashboards (data-dense, tables, charts) */
+    --ds-content-b2b-min: 64rem;        /* 1024px - Min dashboard width */
+    --ds-content-b2b-standard: 90rem;   /* 1440px - Standard dashboard */
+    --ds-content-b2b-wide: 120rem;      /* 1920px - Wide displays */
+    --ds-content-b2b-max: 160rem;       /* 2560px - Ultrawide limit */
+    
+    /* Default (based on tenant type via data-tenant attribute) */
+    --ds-content-default-max: var(--ds-content-b2c-max);
+  }
+  
+  /* ==========================================
+     DARK MODE OVERRIDES
+     ========================================== */
+  
+  :root[data-theme="dark"] {
+    /* Blur backgrounds - darker for contrast */
+    --ds-topbar-bg-blur: rgba(0, 0, 0, 0.8);
+    --ds-bottomnav-bg-blur: rgba(0, 0, 0, 0.8);
+    
+    /* Overlays - darker and more opaque in dark mode */
+    --ds-drawer-overlay: rgba(0, 0, 0, 0.8);
+    --ds-sheet-overlay: rgba(0, 0, 0, 0.7);
+    
+    /* Elevation - stronger in dark mode */
+    --ds-elevation-color: rgba(0, 0, 0, 0.5);
+  }
+  
+  /* ==========================================
+     TENANT TYPE OVERRIDES - B2C vs B2B
+     ========================================== */
+  
+  /* B2C: Readable content widths */
+  :root[data-tenant="b2c"] {
+    --ds-content-default-max: var(--ds-content-b2c-max);
+  }
+  
+  /* B2B: Wide dashboard layouts */
+  :root[data-tenant="b2b"] {
+    --ds-content-default-max: var(--ds-content-b2b-max);
+  }
+  
+  /* ==========================================
+     DESKTOP OVERRIDES
+     ========================================== */
+  
+  @media (min-width: 768px) {
+    :root {
+      --ds-topbar-height-mobile: 4rem;     /* 64px (16 * 4) */
+      --ds-touch-min: 2rem;                /* 32px (8 * 4) */
+      --ds-touch-comfortable: 2.25rem;     /* 36px (9 * 4) */
+      --ds-drawer-width: 20rem;            /* 320px (80 * 4) */
+    }
+  }
+}
+
+/* ==========================================
+   GLOBAL RESETS - Mobile Optimization
+   ========================================== */
+
+html {
+  /* Use dynamic viewport on mobile */
+  height: 100%;
+  height: var(--ds-viewport-height);
+  
+  /* Prevent iOS text size adjust */
+  -webkit-text-size-adjust: 100%;
+  
+  /* Smooth scrolling */
+  scroll-behavior: smooth;
+  
+  /* Better font rendering */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  /* Full height */
+  min-height: 100%;
+  min-height: var(--ds-viewport-height);
+  
+  /* Prevent overscroll bounce (controlled per element) */
+  overscroll-behavior: none;
+  
+  /* No default margin */
+  margin: 0;
+  
+  /* Touch optimization */
+  touch-action: pan-y;
+}
+
+/* ==========================================
+   SAFE AREA UTILITIES
+   ========================================== */
+
+.ds-safe-top {
+  padding-top: var(--ds-safe-top);
+}
+
+.ds-safe-bottom {
+  padding-bottom: var(--ds-safe-bottom);
+}
+
+.ds-safe-left {
+  padding-left: var(--ds-safe-left);
+}
+
+.ds-safe-right {
+  padding-right: var(--ds-safe-right);
+}
+
+.ds-safe-all {
+  padding-top: var(--ds-safe-top);
+  padding-bottom: var(--ds-safe-bottom);
+  padding-left: var(--ds-safe-left);
+  padding-right: var(--ds-safe-right);
+}
+
+/* ==========================================
+   VIEWPORT UTILITIES
+   ========================================== */
+
+.ds-vh-full {
+  height: var(--ds-viewport-height);
+}
+
+.ds-vh-safe {
+  height: var(--ds-viewport-height-safe);
+}
+
+/* ==========================================
+   TOUCH TARGET UTILITIES
+   ========================================== */
+
+.ds-touch-min {
+  min-height: var(--ds-touch-min);
+  min-width: var(--ds-touch-min);
+}
+
+.ds-touch-comfortable {
+  min-height: var(--ds-touch-comfortable);
+  min-width: var(--ds-touch-comfortable);
+}
+
+.ds-touch-relaxed {
+  min-height: var(--ds-touch-relaxed);
+  min-width: var(--ds-touch-relaxed);
+}
+
+/* ==========================================
+   SCROLL OPTIMIZATION
+   ========================================== */
+
+.ds-scroll-smooth {
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+.ds-scroll-momentum {
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
+.ds-scroll-no-bounce {
+  overscroll-behavior: none;
+}
+
+/* ==========================================
+   BACKDROP BLUR (iOS-style)
+   ========================================== */
+
+.ds-backdrop-blur {
+  backdrop-filter: var(--ds-topbar-blur);
+  -webkit-backdrop-filter: var(--ds-topbar-blur);
+}
+
+/* ==========================================
+   Z-INDEX UTILITIES
+   ========================================== */
+
+.ds-z-topbar { z-index: var(--ds-z-topbar); }
+.ds-z-bottomnav { z-index: var(--ds-z-bottomnav); }
+.ds-z-drawer { z-index: var(--ds-z-drawer); }
+.ds-z-sheet { z-index: var(--ds-z-sheet); }
+.ds-z-overlay { z-index: var(--ds-z-overlay); }
+.ds-z-modal { z-index: var(--ds-z-modal); }
+
+/* ==========================================
+   DESKTOP BEHAVIOR - Responsive Shell
+   ========================================== */
+
+@media (min-width: 1024px) {
+  /* Hide BottomNav on desktop */
+  .ds-bottomnav,
+  .ds-app-shell__bottomnav {
+    display: none !important;
+  }
+  
+  /* Make Drawer persistent sidebar on desktop (opt-in via class) */
+  .ds-drawer--persistent {
+    position: relative;
+    transform: none !important;
+    box-shadow: none;
+    border-right: 1px solid var(--ds-color-border-subtle);
+  }
+  
+  /* Hide drawer overlay on desktop when persistent */
+  .ds-drawer--persistent + .ds-drawer-overlay {
+    display: none !important;
+  }
+  
+  /* Sheet becomes modal on desktop */
+  .ds-sheet {
+    max-width: 37.5rem;  /* 600px (150 * 4) */
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: var(--ds-radius-xl);
+  }
+}
+
+/* ==========================================
+   TENANT-AWARE CONTENT WIDTH
+   ========================================== */
+
+/* Auto-constrain content based on tenant type */
+.ds-content-auto {
+  max-width: var(--ds-content-default-max);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--ds-space-4);
+  padding-right: var(--ds-space-4);
+}
+
+/* B2C explicit classes */
+.ds-content-b2c-text { max-width: var(--ds-content-b2c-text); margin: 0 auto; }
+.ds-content-b2c-form { max-width: var(--ds-content-b2c-form); margin: 0 auto; }
+.ds-content-b2c-page { max-width: var(--ds-content-b2c-page); margin: 0 auto; }
+.ds-content-b2c-max { max-width: var(--ds-content-b2c-max); margin: 0 auto; }
+
+/* B2B explicit classes */
+.ds-content-b2b-min { max-width: var(--ds-content-b2b-min); margin: 0 auto; }
+.ds-content-b2b-standard { max-width: var(--ds-content-b2b-standard); margin: 0 auto; }
+.ds-content-b2b-wide { max-width: var(--ds-content-b2b-wide); margin: 0 auto; }
+.ds-content-b2b-max { max-width: var(--ds-content-b2b-max); margin: 0 auto; }
+
+/* Full width override */
+.ds-content-full { max-width: none; }

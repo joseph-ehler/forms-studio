@@ -69,7 +69,7 @@ export const TagInputField: React.FC<FieldComponentProps> = ({
   }
 
   return (
-    <Stack spacing="sm">
+    <Stack spacing="tight">
       {typography.showLabel && label && (
         <FormLabel htmlFor={name} required={typography.showRequired && required} optional={typography.showOptional && !required}>
           {label}
@@ -86,21 +86,29 @@ export const TagInputField: React.FC<FieldComponentProps> = ({
           const canAddMore = !maxTags || currentTags.length < maxTags
 
           return (
-            <Stack spacing="md">
+            <Stack spacing="normal">
               {/* Tags */}
               {currentTags.length > 0 && (
                 <Flex wrap gap="md">
                   {currentTags.map((tag: string, index: number) => (
                     <span
                       key={`${tag}-${index}`}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-blue-100 text-blue-800 font-medium text-base"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 font-medium text-base"
+                      style={{
+                        borderRadius: 'var(--ds-radius-md, 6px)',
+                        backgroundColor: 'color-mix(in oklab, var(--ds-color-primary-bg), transparent 85%)',
+                        color: 'var(--ds-color-primary-text, var(--ds-color-primary-bg))'
+                      }}
                     >
                       {tag}
                       <button
                         type="button"
                         onClick={() => field.onChange(currentTags.filter((_: any, i: number) => i !== index))}
                         disabled={disabled}
-                        className="hover:text-blue-900 disabled:opacity-50"
+                        className="disabled:opacity-50"
+                        style={{ color: 'inherit' }}
+                        onMouseEnter={(e) => !disabled && (e.currentTarget.style.opacity = '0.7')}
+                        onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
                       >
                         <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
                           <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
@@ -141,7 +149,7 @@ export const TagInputField: React.FC<FieldComponentProps> = ({
                   }}
                   placeholder={canAddMore ? (placeholder || 'Type to search or create tags...') : 'Max tags reached'}
                   disabled={disabled || !canAddMore}
-                  className="w-full min-h-[48px] rounded-md border border-gray-300 pl-10 pr-3 py-2.5 text-base shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:bg-gray-50"
+                  className="ds-input w-full pl-10"
                 />
                 {/* Helper text inside input when focused */}
                 {canAddMore && !inputValue && (
@@ -172,7 +180,15 @@ export const TagInputField: React.FC<FieldComponentProps> = ({
                         key={suggestion}
                         type="button"
                         onClick={() => addTag(suggestion, currentTags, field.onChange)}
-                        className="min-h-[44px] px-3 py-2 rounded-md bg-gray-100 text-gray-900 font-medium text-base hover:bg-gray-200"
+                        className="px-3 py-2 font-medium text-base"
+                        style={{
+                          minHeight: '44px',
+                          borderRadius: 'var(--ds-radius-md, 6px)',
+                          backgroundColor: 'var(--ds-color-surface-subtle)',
+                          color: 'var(--ds-color-text-primary)'
+                        }}
+                        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'color-mix(in oklab, var(--ds-color-surface-subtle), var(--ds-color-text-primary) 10%)'}
+                        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'var(--ds-color-surface-subtle)'}
                       >
                         + {suggestion}
                       </button>

@@ -74,7 +74,7 @@ export const PasswordField: React.FC<FieldComponentProps> = ({
   }
 
   return (
-    <Stack spacing="sm">
+    <Stack spacing="tight">
       {typography.showLabel && label && (
         <FormLabel htmlFor={name} required={typography.showRequired && required} optional={typography.showOptional && !required}>
           {label}
@@ -90,7 +90,7 @@ export const PasswordField: React.FC<FieldComponentProps> = ({
           const strength = showStrength ? calculateStrength(field.value || '') : 0
 
           return (
-            <Stack spacing="md">
+            <Stack spacing="normal">
               <div className="relative">
                 <input
                   id={name}
@@ -155,7 +155,7 @@ export const PasswordField: React.FC<FieldComponentProps> = ({
 
               {/* Strength Indicator */}
               {showStrength && field.value && (
-                <Stack spacing="sm">
+                <Stack spacing="tight">
                   <div className="flex gap-1">
                     {[1, 2, 3, 4, 5].map((level) => (
                       <div

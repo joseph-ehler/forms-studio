@@ -1,11 +1,19 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import App from './App'
-import 'react-day-picker/dist/style.css'  // 1) BASE - must come first
-import './index.css'                       // 2) OVERRIDES - come after
+import { DesignSystemDemo } from './DesignSystemDemo'
+import { prePaintScript } from '../../src/components/shell/applyBrand'
+import './demo.css'
+
+// Import component styles (loads all CSS from source)
+import '../../src/components/index.ts'
+
+// Apply pre-paint script to prevent FOUC
+const script = document.createElement('script')
+script.textContent = prePaintScript
+document.head.appendChild(script)
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <App />
+    <DesignSystemDemo />
   </React.StrictMode>,
 )

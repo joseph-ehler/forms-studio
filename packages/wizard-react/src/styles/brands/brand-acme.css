@@ -1,0 +1,60 @@
+/**
+ * Acme Brand - Design Tokens
+ * 
+ * Uses @layer brand + :where() for zero-specificity scoping.
+ * Components can override these without !important.
+ */
+
+@layer brand {
+  /**
+   * Acme: Purple primary, warm accent
+   * Target: SaaS startup, modern tech
+   */
+  :where([data-brand="acme"]) {
+    /* Primary */
+    --ds-color-primary-bg: oklch(60% 0.2 280); /* Purple */
+    --ds-color-primary-bg-hover: oklch(55% 0.2 280);
+    --ds-color-primary-bg-active: oklch(50% 0.2 280);
+    --ds-color-primary-text: oklch(98% 0 0);
+    --ds-color-primary-ring: oklch(60% 0.2 280 / 0.4);
+    
+    /* Accent */
+    --ds-color-accent-bg: oklch(70% 0.15 40); /* Warm orange */
+    --ds-color-accent-text: oklch(25% 0.05 40);
+    
+    /* Brand assets */
+    --ds-brand-logo: url('/brands/acme/logo.svg');
+    
+    /* Border radius (slightly rounder) */
+    --ds-radius-sm: 6px;
+    --ds-radius-md: 8px;
+    --ds-radius-lg: 12px;
+  }
+  
+  /**
+   * Dark mode overrides
+   */
+  :where([data-brand="acme"][data-theme="dark"]) {
+    --ds-color-primary-bg: oklch(65% 0.2 280);
+    --ds-color-primary-bg-hover: oklch(70% 0.2 280);
+    --ds-color-primary-bg-active: oklch(75% 0.2 280);
+  }
+}
+
+/**
+ * WHY :where()?
+ * 
+ * Specificity breakdown:
+ * - [data-brand="acme"] → (0,1,0)
+ * - :where([data-brand="acme"]) → (0,0,0) ✅ Zero!
+ * 
+ * Result: Component classes (.ds-button) always win!
+ * 
+ * BEFORE:
+ *   [data-brand] { color: purple } // (0,1,0)
+ *   .ds-button { color: blue }      // (0,1,0) → tie, source order wins
+ * 
+ * AFTER:
+ *   @layer brand :where([data-brand]) { color: purple } // Layer + 0 specificity
+ *   @layer atoms .ds-button { color: blue }              // Always wins!
+ */

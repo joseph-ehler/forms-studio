@@ -44,7 +44,7 @@ export const SearchField: React.FC<FieldComponentProps> = ({
     config.typographyVariant || jsonTypography.variant
   )
   return (
-    <Stack spacing="sm">
+    <Stack spacing="tight">
       {typography.showLabel && label && (
         <FormLabel htmlFor={name} required={typography.showRequired && required} optional={typography.showOptional && !required}>
           {label}
@@ -84,7 +84,7 @@ export const SearchField: React.FC<FieldComponentProps> = ({
               autoCorrect="off"
               spellCheck={false}
               {...field}
-              className="w-full rounded-md border border-gray-300 pl-10 pr-10 py-3 text-base shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:bg-gray-50 disabled:text-gray-500 min-h-[44px]"
+              className="ds-input w-full pl-10 pr-10"
               placeholder={placeholder || 'Search...'}
               disabled={disabled}
               aria-invalid={!!errors?.[name]}
@@ -95,7 +95,7 @@ export const SearchField: React.FC<FieldComponentProps> = ({
               <button
                 type="button"
                 onClick={() => field.onChange('')}
-                className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-600 focus:outline-none"
+                className="absolute inset-y-0 right-0 flex items-center pr-3  style={{ color: 'var(--ds-color-text-muted)' }} hover: style={{ color: 'var(--ds-color-text-secondary)' }} focus:outline-none"
                 aria-label="Clear search"
               >
                 <svg

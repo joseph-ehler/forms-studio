@@ -13,7 +13,7 @@
 import React from 'react'
 import { Controller } from 'react-hook-form'
 import type { FieldComponentProps } from './types'
-import { FormLabel, FormHelperText, FormStack, FormGrid, Stack, Flex, Grid, Section } from '../components'
+import { FormLabel, FormHelperText, FormStack, FormGrid, Stack, Flex, Grid } from '../components'
 import { resolveTypographyDisplay, getTypographyFromJSON } from './utils/typography-display'
 import { mergeFieldConfig, getAutoCompleteHint, getAutoCapitalize } from './utils/field-json-config'
 import { getAriaProps, getLabelProps, getDescriptionProps, getInputMode, getEnterKeyHint } from './utils/a11y-helpers'
@@ -75,7 +75,7 @@ export const TextField: React.FC<FieldComponentProps> = ({
   const descriptionProps = getDescriptionProps(name, { name, label, description, required, disabled, errors })
 
   return (
-    <Stack spacing="sm">
+    <Stack spacing="tight">
       {/* Label - controlled by typography.showLabel */}
       {typography.showLabel && label && (
         <FormLabel 
@@ -107,7 +107,7 @@ export const TextField: React.FC<FieldComponentProps> = ({
             autoCapitalize={autoCapitalize as any}
             placeholder={placeholder}
             disabled={disabled}
-            className="w-full min-h-[48px] rounded-md border border-gray-300 px-3 py-2.5 text-base shadow-sm placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500"
+            className="ds-input w-full"
             maxLength={(config as any).validation?.maxLength}
           />
         )}

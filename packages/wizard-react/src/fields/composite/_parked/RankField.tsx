@@ -60,9 +60,9 @@ export const RankField: React.FC<FieldComponentProps> = ({
   const instructions = json?.instructions ?? 'Drag to reorder items by preference'
 
   return (
-    <Stack spacing="lg">
+    <Stack spacing="relaxed">
       {typography.showLabel && label && (
-        <Stack spacing="md">
+        <Stack spacing="normal">
           <FormLabel required={typography.showRequired && required} optional={typography.showOptional && !required}>
             {label}
           </FormLabel>
@@ -198,7 +198,7 @@ const RankList: React.FC<RankListProps> = ({
   }
 
   return (
-    <Stack spacing="md">
+    <Stack spacing="normal">
       {rankedItems.map((item, index) => {
         const isDragging = draggedIndex === index
         const isDragOver = dragOverIndex === index

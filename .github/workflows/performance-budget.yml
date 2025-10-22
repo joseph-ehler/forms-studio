@@ -1,0 +1,120 @@
+name: Performance Budget
+
+on:
+  pull_request:
+    paths:
+      - 'packages/wizard-react/src/**/*.css'
+      - 'packages/wizard-react/src/**/*.ts'
+      - 'packages/wizard-react/src/**/*.tsx'
+
+jobs:
+  css-budget:
+    name: CSS Bundle Size
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Measure CSS size
+        id: measure
+        run: |
+          cd packages/wizard-react/src/components
+          
+          # Concatenate all DS CSS
+          cat ds-typography.css ds-spacing.css ds-inputs.css > /tmp/ds-bundle.css
+          
+          # Measure uncompressed
+          UNCOMPRESSED=$(wc -c < /tmp/ds-bundle.css)
+          
+          # Measure gzipped
+          gzip -c /tmp/ds-bundle.css > /tmp/ds-bundle.css.gz
+          GZIPPED=$(wc -c < /tmp/ds-bundle.css.gz)
+          
+          echo "uncompressed=$UNCOMPRESSED" >> $GITHUB_OUTPUT
+          echo "gzipped=$GZIPPED" >> $GITHUB_OUTPUT
+          
+          # Budget: 25KB gzipped
+          BUDGET=25600
+          
+          if [ $GZIPPED -gt $BUDGET ]; then
+            echo "❌ CSS budget exceeded!" >> $GITHUB_STEP_SUMMARY
+            echo "Budget: ${BUDGET} bytes" >> $GITHUB_STEP_SUMMARY
+            echo "Actual: ${GZIPPED} bytes" >> $GITHUB_STEP_SUMMARY
+            echo "Over by: $((GZIPPED - BUDGET)) bytes" >> $GITHUB_STEP_SUMMARY
+            exit 1
+          else
+            echo "✅ CSS budget OK" >> $GITHUB_STEP_SUMMARY
+            echo "Budget: ${BUDGET} bytes" >> $GITHUB_STEP_SUMMARY
+            echo "Actual: ${GZIPPED} bytes" >> $GITHUB_STEP_SUMMARY
+            echo "Remaining: $((BUDGET - GZIPPED)) bytes" >> $GITHUB_STEP_SUMMARY
+          fi
+      
+      - name: Post size comment
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const uncompressed = '${{ steps.measure.outputs.uncompressed }}';
+            const gzipped = '${{ steps.measure.outputs.gzipped }}';
+            const budget = 25600;
+            const remaining = budget - parseInt(gzipped);
+            
+            const comment = `## 📦 CSS Bundle Size
+            
+            | Metric | Size |
+            |--------|------|
+            | Uncompressed | ${(uncompressed / 1024).toFixed(2)} KB |
+            | Gzipped | ${(gzipped / 1024).toFixed(2)} KB |
+            | Budget | ${(budget / 1024).toFixed(2)} KB |
+            | Remaining | ${(remaining / 1024).toFixed(2)} KB |
+            
+            ${remaining > 0 ? '✅ Under budget' : '❌ Over budget!'}`;
+            
+            github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.name,
+              issue_number: context.issue.number,
+              body: comment
+            });
+
+  js-budget:
+    name: JS Bundle Size
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Build
+        run: npm run build
+      
+      - name: Measure bundle
+        run: |
+          cd packages/wizard-react/dist
+          
+          # Find main bundle
+          BUNDLE=$(ls -1 index.*.js | head -1)
+          
+          if [ -f "$BUNDLE" ]; then
+            UNCOMPRESSED=$(wc -c < "$BUNDLE")
+            gzip -c "$BUNDLE" > /tmp/bundle.js.gz
+            GZIPPED=$(wc -c < /tmp/bundle.js.gz)
+            
+            echo "## 📦 JS Bundle Size" >> $GITHUB_STEP_SUMMARY
+            echo "Uncompressed: $((UNCOMPRESSED / 1024)) KB" >> $GITHUB_STEP_SUMMARY
+            echo "Gzipped: $((GZIPPED / 1024)) KB" >> $GITHUB_STEP_SUMMARY
+            
+            # Budget: 50KB gzipped
+            BUDGET=51200
+            
+            if [ $GZIPPED -gt $BUDGET ]; then
+              echo "❌ JS budget exceeded!" >> $GITHUB_STEP_SUMMARY
+              exit 1
+            else
+              echo "✅ JS budget OK" >> $GITHUB_STEP_SUMMARY
+            fi
+          fi

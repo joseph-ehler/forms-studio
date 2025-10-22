@@ -14,7 +14,7 @@
 
 import React, { Fragment, useState } from 'react'
 import { Controller } from 'react-hook-form'
-import { OverlayPickerCore, OverlaySheet, OverlayPositioner, calculateOverlayHeights, getOverlayContentClasses } from '../../components/overlay'
+import { OverlayPickerCore, OverlaySheet, OverlayPicker } from '../../components/overlay'
 import { PickerList, PickerOption, PickerSearch, PickerEmptyState } from '../../components/picker'
 import { useDeviceType } from '../../hooks/useDeviceType'
 import type { FieldComponentProps } from '../types'
@@ -106,7 +106,7 @@ export const PhoneField: React.FC<FieldComponentProps> = ({
   }
 
   return (
-    <Stack spacing="sm">
+    <Stack spacing="tight">
       {typography.showLabel && label && (
         <FormLabel htmlFor={name} required={typography.showRequired && required} optional={typography.showOptional && !required}>
           {label}
@@ -134,12 +134,6 @@ export const PhoneField: React.FC<FieldComponentProps> = ({
           }
 
           const { isMobile } = useDeviceType()
-          const heights = calculateOverlayHeights({
-            maxHeight: 560,
-            hasSearch: true,
-            hasFooter: false,
-            searchHeight: 60,
-          })
 
           return (
             <Flex gap="md">
@@ -147,21 +141,22 @@ export const PhoneField: React.FC<FieldComponentProps> = ({
               <OverlayPickerCore
                 closeOnSelect={true}
               >
-                {({ isOpen, open, close, triggerRef, contentRef }) => (
+                {({ isOpen, open, close, triggerRef }) => (
                   <div className="relative w-32">
                     <button
                       ref={triggerRef as React.RefObject<HTMLButtonElement>}
                       type="button"
                       onClick={() => isOpen ? close() : open()}
                       disabled={disabled}
-                      className="relative w-full min-h-[48px] rounded-md border border-gray-300 bg-white px-3 py-2.5 text-left text-base shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:bg-gray-50 flex items-center justify-between"
+                      className="ds-input relative w-full text-left flex items-center justify-between"
                     >
                       <span className="flex items-center gap-2">
                         <span className="text-xl">{selectedCountry.flag}</span>
                         <span className="font-medium">{selectedCountry.dialCode}</span>
                       </span>
                       <svg
-                        className={`h-4 w-4 text-gray-400 transition-transform ${isOpen ? 'rotate-180' : ''}`}
+                        className={`h-4 w-4 transition-transform ${isOpen ? 'rotate-180' : ''}`}
+                        style={{ color: 'var(--ds-color-text-muted)' }}
                         viewBox="0 0 20 20"
                         fill="currentColor"
                       >
@@ -193,7 +188,65 @@ export const PhoneField: React.FC<FieldComponentProps> = ({
                         />
 
                         {/* Countries List */}
-                        <div ref={contentRef}>
+                        <PickerList
+                          role="listbox"
+                          aria-label="Select country"
+                        >
+                          {filteredCountries.length === 0 ? (
+                            <PickerEmptyState message="No countries found" />
+                          ) : (
+                            filteredCountries.map((country) => {
+                              const isSelected = country.dialCode === value.countryCode
+                              return (
+                                <PickerOption
+                                  key={country.code}
+                                  value={country.dialCode}
+                                  selected={isSelected}
+                                  disabled={disabled}
+                                  onClick={() => {
+                                    handleCountryChange(country.dialCode)
+                                    close('select')
+                                    setSearchQuery('')
+                                  }}
+                                >
+                                  <div className="flex items-center gap-3 w-full">
+                                    <span className="text-xl">{country.flag}</span>
+                                    <div className="flex-1 min-w-0">
+                                      <div className="font-medium">{country.name}</div>
+                                      <div className="text-sm" style={{ color: 'var(--ds-color-text-secondary)' }}>{country.dialCode}</div>
+                                    </div>
+                                  </div>
+                                </PickerOption>
+                              )
+                            })
+                          )}
+                        </PickerList>
+                      </OverlaySheet>
+                    )}
+
+                    {/* Desktop Picker */}
+                    {!isMobile && isOpen && (
+                      <OverlayPicker
+                        open={isOpen}
+                        anchor={triggerRef.current}
+                        onOpenChange={(o) => {
+                          if (!o) {
+                            close('outside')
+                            setSearchQuery('')
+                          }
+                        }}
+                        placement="bottom-start"
+                        sameWidth={false}
+                        hardMaxHeight={560}
+                        style={{ width: '288px' }}
+                        header={
+                          <PickerSearch
+                            value={searchQuery}
+                            onChange={setSearchQuery}
+                            placeholder="Search countries..."
+                          />
+                        }
+                        content={
                           <PickerList
                             role="listbox"
                             aria-label="Select country"
@@ -219,7 +272,7 @@ export const PhoneField: React.FC<FieldComponentProps> = ({
                                       <span className="text-xl">{country.flag}</span>
                                       <div className="flex-1 min-w-0">
                                         <div className="font-medium">{country.name}</div>
-                                        <div className="text-sm text-gray-500">{country.dialCode}</div>
+                                        <div className="text-sm" style={{ color: 'var(--ds-color-text-secondary)' }}>{country.dialCode}</div>
                                       </div>
                                     </div>
                                   </PickerOption>
@@ -227,80 +280,8 @@ export const PhoneField: React.FC<FieldComponentProps> = ({
                               })
                             )}
                           </PickerList>
-                        </div>
-                      </OverlaySheet>
-                    )}
-
-                    {/* Desktop Popover */}
-                    {!isMobile && isOpen && (
-                      <OverlayPositioner
-                        open={isOpen}
-                        anchor={triggerRef.current}
-                        placement="bottom-start"
-                        offset={6}
-                        strategy="fixed"
-                        sameWidth={false}
-                        maxHeight={560}
-                        collision={{ flip: true, shift: true, size: true }}
-                      >
-                        {({ refs, floatingStyles, isPositioned }) => (
-                          <div
-                            ref={refs.setFloating}
-                            style={{ ...floatingStyles, width: '288px' }}
-                            className="z-50 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden"
-                          >
-                            {/* Search */}
-                            <PickerSearch
-                              value={searchQuery}
-                              onChange={setSearchQuery}
-                              placeholder="Search countries..."
-                            />
-
-                            {/* Countries List */}
-                            <div
-                              ref={contentRef}
-                              className={getOverlayContentClasses().content}
-                              style={{
-                                maxHeight: `${heights.contentMaxHeight}px`,
-                              }}
-                            >
-                              <PickerList
-                                role="listbox"
-                                aria-label="Select country"
-                              >
-                                {filteredCountries.length === 0 ? (
-                                  <PickerEmptyState message="No countries found" />
-                                ) : (
-                                  filteredCountries.map((country) => {
-                                    const isSelected = country.dialCode === value.countryCode
-                                    return (
-                                      <PickerOption
-                                        key={country.code}
-                                        value={country.dialCode}
-                                        selected={isSelected}
-                                        disabled={disabled}
-                                        onClick={() => {
-                                          handleCountryChange(country.dialCode)
-                                          close('select')
-                                          setSearchQuery('')
-                                        }}
-                                      >
-                                        <div className="flex items-center gap-3 w-full">
-                                          <span className="text-xl">{country.flag}</span>
-                                          <div className="flex-1 min-w-0">
-                                            <div className="font-medium">{country.name}</div>
-                                            <div className="text-sm text-gray-500">{country.dialCode}</div>
-                                          </div>
-                                        </div>
-                                      </PickerOption>
-                                    )
-                                  })
-                                )}
-                              </PickerList>
-                            </div>
-                          </div>
-                        )}
-                      </OverlayPositioner>
+                        }
+                      />
                     )}
                   </div>
                 )}
@@ -318,7 +299,7 @@ export const PhoneField: React.FC<FieldComponentProps> = ({
                 spellCheck={false}
                 value={value.number}
                 onChange={(e) => handleNumberChange(e.target.value)}
-                className="flex-1 rounded-md border border-gray-300 px-3 py-3 text-base shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:bg-gray-50 disabled:text-gray-500 min-h-[48px]"
+                className="ds-input flex-1"
                 placeholder={placeholder || '(555) 123-4567'}
                 disabled={disabled}
                 maxLength={14}

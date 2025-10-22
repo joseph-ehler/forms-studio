@@ -1,0 +1,50 @@
+{
+  "plugins": [],
+  "rules": {
+    "declaration-property-value-disallowed-list": {
+      "padding": [
+        "/^[0-9]+(px|rem)$/",
+        "/^[0-9]+px$/",
+        "/^0\\.[0-9]+rem$/"
+      ],
+      "margin": [
+        "/^[0-9]+(px|rem)$/",
+        "/^[0-9]+px$/",
+        "/^0\\.[0-9]+rem$/"
+      ],
+      "gap": [
+        "/^[0-9]+(px|rem)$/",
+        "/^[0-9]+px$/",
+        "/^0\\.[0-9]+rem$/"
+      ]
+    },
+    "declaration-property-value-allowed-list": {
+      "padding": [
+        "/^0$/",
+        "/^var\\(--ds-space-/",
+        "/^calc\\(/",
+        "auto",
+        "inherit",
+        "initial",
+        "unset"
+      ],
+      "margin": [
+        "/^0$/",
+        "/^var\\(--ds-space-/",
+        "/^calc\\(/",
+        "auto",
+        "inherit",
+        "initial",
+        "unset"
+      ],
+      "gap": [
+        "/^0$/",
+        "/^var\\(--ds-space-/",
+        "/^calc\\(/",
+        "inherit",
+        "initial",
+        "unset"
+      ]
+    }
+  }
+}

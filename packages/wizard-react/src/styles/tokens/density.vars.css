@@ -1,0 +1,148 @@
+/**
+ * Density & Touch Target Tokens
+ * 
+ * Automatically scale spacing, padding, and touch targets
+ * based on --a11y-font-size-scale.
+ * 
+ * These tokens are consumed by:
+ * - Stack (gap)
+ * - Card (padding)
+ * - Grid (gap)
+ * - Button (min-height/width)
+ * - Input (min-height)
+ */
+
+:root {
+  /* ==========================================
+     DENSITY MULTIPLIER
+     Computed from --a11y-font-size-scale
+     ========================================== */
+  
+  --ds-density-multiplier: 1;
+  --ds-touch-target: 44px;
+  
+  /* ==========================================
+     ADAPTIVE SPACING
+     Base spacing scaled by density
+     ========================================== */
+  
+  --ds-space-xs: calc(0.25rem * var(--ds-density-multiplier));
+  --ds-space-sm: calc(0.5rem * var(--ds-density-multiplier));
+  --ds-space-md: calc(1rem * var(--ds-density-multiplier));
+  --ds-space-lg: calc(1.5rem * var(--ds-density-multiplier));
+  --ds-space-xl: calc(2rem * var(--ds-density-multiplier));
+  --ds-space-2xl: calc(3rem * var(--ds-density-multiplier));
+  
+  /* ==========================================
+     ADAPTIVE PADDING
+     Card/section padding scaled by density
+     ========================================== */
+  
+  --ds-padding-xs: calc(0.5rem * var(--ds-density-multiplier));
+  --ds-padding-sm: calc(0.75rem * var(--ds-density-multiplier));
+  --ds-padding-md: calc(1rem * var(--ds-density-multiplier));
+  --ds-padding-lg: calc(1.5rem * var(--ds-density-multiplier));
+  --ds-padding-xl: calc(2rem * var(--ds-density-multiplier));
+  
+  /* ==========================================
+     TOUCH TARGETS
+     WCAG AAA: 48px minimum (we use 44-64px range)
+     ========================================== */
+  
+  --ds-touch-min-height: var(--ds-touch-target);
+  --ds-touch-min-width: var(--ds-touch-target);
+}
+
+/* ==========================================
+   DENSITY AUTO-ADAPTATION
+   Updates density based on font scale
+   ========================================== */
+
+/* Compact: Small text (0.875x or less) */
+:root[style*="--a11y-font-size-scale: 0.875"],
+:root[style*="--a11y-font-size-scale: 0.8"] {
+  --ds-density-multiplier: 0.75;
+  --ds-touch-target: 44px;
+}
+
+/* Comfortable: Scaled text (1.25x) */
+:root[style*="--a11y-font-size-scale: 1.25"] {
+  --ds-density-multiplier: 1.25;
+  --ds-touch-target: 56px;
+}
+
+/* Spacious: Large text (1.5x) - Low vision */
+:root[style*="--a11y-font-size-scale: 1.5"] {
+  --ds-density-multiplier: 1.5;
+  --ds-touch-target: 64px;
+}
+
+/* ==========================================
+   STACK SPACING
+   Stack component uses these directly
+   ========================================== */
+
+.ds-stack[data-spacing="tight"] {
+  gap: var(--ds-space-sm);
+}
+
+.ds-stack[data-spacing="normal"] {
+  gap: var(--ds-space-md);
+}
+
+.ds-stack[data-spacing="relaxed"] {
+  gap: var(--ds-space-lg);
+}
+
+.ds-stack[data-spacing="loose"] {
+  gap: var(--ds-space-xl);
+}
+
+/* ==========================================
+   CARD PADDING
+   Card component uses these directly
+   ========================================== */
+
+.ds-card[data-padding="sm"] {
+  padding: var(--ds-padding-sm);
+}
+
+.ds-card[data-padding="md"] {
+  padding: var(--ds-padding-md);
+}
+
+.ds-card[data-padding="lg"] {
+  padding: var(--ds-padding-lg);
+}
+
+.ds-card[data-padding="xl"] {
+  padding: var(--ds-padding-xl);
+}
+
+/* ==========================================
+   BUTTON TOUCH TARGETS
+   Buttons always meet minimum touch size
+   ========================================== */
+
+.ds-button {
+  min-height: var(--ds-touch-min-height);
+  min-width: var(--ds-touch-min-width);
+}
+
+/* ==========================================
+   INPUT TOUCH TARGETS
+   Form inputs scale with density
+   ========================================== */
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="tel"],
+input[type="number"],
+input[type="search"],
+input[type="url"],
+textarea,
+select {
+  min-height: var(--ds-touch-min-height);
+  padding: var(--ds-padding-sm) var(--ds-padding-md);
+}

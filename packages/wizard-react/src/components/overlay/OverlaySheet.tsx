@@ -9,24 +9,39 @@
  * - Smooth animations
  */
 
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import type { OverlaySheetProps } from './types'
+import { OVERLAY_TOKENS, getZIndex } from './tokens'
+import { useOverlayContext } from './OverlayPickerCore'
 
 export const OverlaySheet: React.FC<OverlaySheetProps> = ({
   open,
   onClose,
-  maxHeight = 560,
+  maxHeight = OVERLAY_TOKENS.maxHeight.default,
   header,
   footer,
   children,
   allowOutsideScroll = false,
+  contentRef,
   'aria-label': ariaLabel,
   'aria-labelledby': ariaLabelledBy,
 }) => {
   const sheetRef = useRef<HTMLDivElement>(null)
+  const overlayContext = useOverlayContext()
+
+  // Auto-wire contentRef: explicit prop > Context > internal ref
+  // This prevents manual wiring bugs while maintaining backwards compatibility
+  const effectiveRef = contentRef || overlayContext?.contentRef || sheetRef
   const [isDragging, setIsDragging] = useState(false)
   const [dragStart, setDragStart] = useState(0)
   const [dragOffset, setDragOffset] = useState(0)
+
+  // Detect reduced motion preference - skip animated transforms if preferred
+  const prefersReducedMotion = useMemo(() => {
+    if (typeof window === 'undefined') return false
+    return window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false
+  }, [])
 
   // Drag handlers
   const handleDragStart = (clientY: number) => {
@@ -88,17 +103,45 @@ export const OverlaySheet: React.FC<OverlaySheetProps> = ({
     }
   }, [isDragging, dragStart])
 
-  // Lock body scroll
+  // Robust iOS scroll lock - prevents background bounce and touch scrolling
   useEffect(() => {
-    if (open && !allowOutsideScroll) {
-      const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth
-      document.body.style.overflow = 'hidden'
-      document.body.style.paddingRight = `${scrollbarWidth}px`
+    if (!open || allowOutsideScroll) return
 
-      return () => {
-        document.body.style.overflow = ''
-        document.body.style.paddingRight = ''
-      }
+    const html = document.documentElement
+    const scrollbarWidth = window.innerWidth - html.clientWidth
+    
+    // Save previous values
+    const prev = {
+      overflow: html.style.overflow,
+      overscrollBehaviorY: html.style.overscrollBehaviorY,
+      position: html.style.position,
+      paddingRight: document.body.style.paddingRight,
+    }
+
+    // Lock scroll
+    html.style.overflow = 'hidden'
+    html.style.overscrollBehaviorY = 'contain'
+    html.style.position = 'relative'
+    document.body.style.paddingRight = `${scrollbarWidth}px`
+
+    // Prevent touchmove except inside scrollable content
+    const preventTouch = (e: TouchEvent) => {
+      const target = e.target as HTMLElement
+      const root = sheetRef.current
+      // Allow scroll in the content area
+      if (root?.contains(target) && target.closest('.overflow-y-auto')) return
+      e.preventDefault()
+    }
+    document.addEventListener('touchmove', preventTouch, { passive: false })
+
+    return () => {
+      Object.assign(html.style, {
+        overflow: prev.overflow,
+        overscrollBehaviorY: prev.overscrollBehaviorY,
+        position: prev.position,
+      })
+      document.body.style.paddingRight = prev.paddingRight
+      document.removeEventListener('touchmove', preventTouch)
     }
   }, [open, allowOutsideScroll])
 
@@ -108,27 +151,40 @@ export const OverlaySheet: React.FC<OverlaySheetProps> = ({
     <>
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-black/50 z-40 transition-opacity duration-300"
+        className={`fixed inset-0 ${prefersReducedMotion ? '' : 'transition-opacity duration-300'}`}
+        style={{ 
+          position: 'fixed',
+          zIndex: getZIndex('backdrop'),
+          pointerEvents: 'auto',
+          backgroundColor: 'var(--ds-color-surface-overlay)',
+        }}
         onClick={onClose}
         aria-hidden="true"
       />
 
       {/* Sheet */}
       <div
-        ref={sheetRef}
+        ref={effectiveRef}
         role="dialog"
         aria-modal="true"
         aria-label={ariaLabel}
         aria-labelledby={ariaLabelledBy}
         onClick={(e) => e.stopPropagation()}
+        onPointerDown={(e) => e.stopPropagation()}
         onMouseDown={(e) => e.stopPropagation()}
         onMouseUp={(e) => e.stopPropagation()}
         onTouchEnd={(e) => e.stopPropagation()}
-        className="fixed bottom-0 left-0 right-0 z-50 bg-white rounded-t-2xl shadow-2xl transition-transform duration-300 ease-out flex flex-col"
+        className={`fixed bottom-0 left-0 right-0 flex flex-col ${
+          prefersReducedMotion ? '' : 'transition-transform duration-300 ease-out'
+        }`}
         style={{
+          zIndex: getZIndex('sheet'),
           maxHeight: `min(${maxHeight}px, 90vh)`,
-          transform: `translateY(${dragOffset}px)`,
+          transform: prefersReducedMotion ? 'none' : `translateY(${dragOffset}px)`,
           paddingBottom: 'env(safe-area-inset-bottom)',
+          backgroundColor: 'var(--ds-color-surface-base)',
+          borderRadius: '16px 16px 0 0',
+          boxShadow: '0 -4px 24px rgba(0,0,0,0.15)',
         }}
       >
         {/* Drag handle */}
@@ -139,12 +195,22 @@ export const OverlaySheet: React.FC<OverlaySheetProps> = ({
           onTouchEnd={handleTouchEnd}
           onMouseDown={handleMouseDown}
         >
-          <div className="w-10 h-1 bg-gray-300 rounded-full" />
+          <div style={{
+            width: '40px',
+            height: '4px',
+            backgroundColor: 'var(--ds-color-border-strong)',
+            borderRadius: '2px',
+          }} />
         </div>
 
         {/* Header (sticky) */}
         {header && (
-          <div className="flex-shrink-0 bg-white border-b border-gray-200 px-4 py-3">
+          <div style={{
+            flexShrink: 0,
+            backgroundColor: 'var(--ds-color-surface-base)',
+            borderBottom: '1px solid var(--ds-color-border-subtle)',
+            padding: '12px 16px',
+          }}>
             {header}
           </div>
         )}
@@ -156,7 +222,12 @@ export const OverlaySheet: React.FC<OverlaySheetProps> = ({
 
         {/* Footer (always visible at bottom) */}
         {footer && (
-          <div className="flex-shrink-0 bg-white border-t border-gray-200 px-4 py-3">
+          <div style={{
+            flexShrink: 0,
+            backgroundColor: 'var(--ds-color-surface-base)',
+            borderTop: '1px solid var(--ds-color-border-subtle)',
+            padding: '12px 16px',
+          }}>
             {footer}
           </div>
         )}

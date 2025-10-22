@@ -8,12 +8,13 @@
 
 import React, { Fragment, useMemo, useState } from 'react'
 import { Controller } from 'react-hook-form'
-import { OverlayPickerCore, OverlaySheet, OverlayPositioner, calculateOverlayHeights, getOverlayContentClasses } from '../../components/overlay'
+import { OverlayPickerCore, OverlaySheet, OverlayPicker } from '../../components/overlay'
 import { PickerList, PickerOption, PickerSearch, PickerEmptyState } from '../../components/picker'
 import { useDeviceType } from '../../hooks/useDeviceType'
 
 import type { FieldComponentProps } from '../types'
-import { FormLabel, FormHelperText } from '../../components'
+import { FormLabel as FormLabelOld, FormHelperText } from '../../components'
+import { FormLabel } from '../../components/typography'
 import { Stack } from '../../components/DSShims'
 import { resolveTypographyDisplay, getTypographyFromJSON } from '../utils/typography-display'
 import { mergeFieldConfig } from '../utils/field-json-config'
@@ -121,7 +122,7 @@ export const AddressField: React.FC<FieldComponentProps> = ({
   }, [countrySearchQuery])
 
   return (
-    <Stack spacing="lg">
+    <Stack spacing="relaxed">
       {typography.showLabel && label && (
         <div className="mb-2">
           <FormLabel required={typography.showRequired && required} optional={typography.showOptional && !required}>
@@ -148,9 +149,9 @@ export const AddressField: React.FC<FieldComponentProps> = ({
           const selectedCountry = COUNTRIES.find(c => c.code === (value.country || defaultCountry))
 
           return (
-            <Stack spacing="lg">
+            <Stack spacing="relaxed">
               <div>
-                <label htmlFor={`${name}-street`} className="sr-only">Street Address</label>
+                <FormLabel htmlFor={`${name}-street`} srOnly>Street Address</FormLabel>
                 <input
                   id={`${name}-street`}
                   type="text"
@@ -161,13 +162,13 @@ export const AddressField: React.FC<FieldComponentProps> = ({
                   onChange={(e) => update('street', e.target.value)}
                   placeholder="Street Address"
                   disabled={disabled}
-                  className="w-full rounded-md border border-gray-300 px-3 py-3 text-base shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:bg-gray-50 min-h-[48px]"
+                  className="ds-input w-full"
                 />
               </div>
 
               {showStreet2 && (
                 <div>
-                  <label htmlFor={`${name}-street2`} className="sr-only">Apartment, suite, etc.</label>
+                  <FormLabel htmlFor={`${name}-street2`} srOnly>Apartment, suite, etc.</FormLabel>
                   <input
                     id={`${name}-street2`}
                     type="text"
@@ -178,14 +179,14 @@ export const AddressField: React.FC<FieldComponentProps> = ({
                     onChange={(e) => update('street2', e.target.value)}
                     placeholder="Apartment, suite, etc. (optional)"
                     disabled={disabled}
-                    className="w-full rounded-md border border-gray-300 px-3 py-3 text-base shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:bg-gray-50 min-h-[48px]"
+                    className="ds-input w-full"
                   />
                 </div>
               )}
 
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-12">
                 <div className="sm:col-span-6">
-                  <label htmlFor={`${name}-city`} className="sr-only">City</label>
+                  <FormLabel htmlFor={`${name}-city`} srOnly>City</FormLabel>
                   <input
                     id={`${name}-city`}
                     type="text"
@@ -196,21 +197,15 @@ export const AddressField: React.FC<FieldComponentProps> = ({
                     onChange={(e) => update('city', e.target.value)}
                     placeholder="City"
                     disabled={disabled}
-                    className="w-full rounded-md border border-gray-300 px-3 py-3 text-base shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:bg-gray-50 min-h-[48px]"
+                    className="ds-input w-full"
                   />
                 </div>
 
                 <div className="sm:col-span-3">
-                  <label htmlFor={`${name}-state`} className="sr-only">State</label>
+                  <FormLabel htmlFor={`${name}-state`} srOnly>State</FormLabel>
                   <OverlayPickerCore closeOnSelect={true}>
-                    {({ isOpen, open, close, triggerRef, contentRef }) => {
+                    {({ isOpen, open, close, triggerRef }) => {
                       const { isMobile } = useDeviceType()
-                      const heights = calculateOverlayHeights({
-                        maxHeight: 560,
-                        hasSearch: true,
-                        hasFooter: false,
-                        searchHeight: 60,
-                      })
 
                       return (
                         <div className="relative">
@@ -220,12 +215,20 @@ export const AddressField: React.FC<FieldComponentProps> = ({
                             type="button"
                             onClick={() => isOpen ? close() : open()}
                             disabled={disabled}
-                            className="relative w-full min-h-[48px] rounded-md border border-gray-300 bg-white px-3 py-2.5 text-left text-base shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:bg-gray-50 flex items-center justify-between"
+                            className="ds-input w-full text-left flex items-center justify-between"
                           >
-                            <span className={value.state ? 'text-gray-900 font-medium' : 'text-gray-400'}>
+                            <span
+                              className="font-medium"
+                              style={{ color: value.state ? 'var(--ds-color-text-primary)' : 'var(--ds-color-text-muted)' }}
+                            >
                               {selectedState ? selectedState.code : 'State'}
                             </span>
-                            <svg className={`h-4 w-4 text-gray-400 transition-transform ${isOpen ? 'rotate-180' : ''}`} viewBox="0 0 20 20" fill="currentColor">
+                            <svg
+                              className={`h-4 w-4 transition-transform ${isOpen ? 'rotate-180' : ''}`}
+                              style={{ color: 'var(--ds-color-text-muted)' }}
+                              viewBox="0 0 20 20"
+                              fill="currentColor"
+                            >
                               <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
                             </svg>
                           </button>
@@ -247,7 +250,59 @@ export const AddressField: React.FC<FieldComponentProps> = ({
                                 placeholder="Search states..."
                                 autoFocus
                               />
-                              <div ref={contentRef}>
+                              <PickerList role="listbox" aria-label="Select state">
+                                {filteredStates.length === 0 ? (
+                                  <PickerEmptyState message="No states found" />
+                                ) : (
+                                  filteredStates.map((s) => {
+                                    const isSelected = s.code === value.state
+                                    return (
+                                      <PickerOption
+                                        key={s.code}
+                                        value={s.code}
+                                        selected={isSelected}
+                                        disabled={disabled}
+                                        onClick={() => {
+                                          update('state', s.code)
+                                          close('select')
+                                          setStateSearchQuery('')
+                                        }}
+                                      >
+                                        <div className="flex items-center gap-3">
+                                          <span className="font-mono font-medium">{s.code}</span>
+                                          <span>{s.name}</span>
+                                        </div>
+                                      </PickerOption>
+                                    )
+                                  })
+                                )}
+                              </PickerList>
+                            </OverlaySheet>
+                          )}
+
+                          {/* Desktop Picker */}
+                          {!isMobile && isOpen && (
+                            <OverlayPicker
+                              open={isOpen}
+                              anchor={triggerRef.current}
+                              onOpenChange={(o) => {
+                                if (!o) {
+                                  close('outside')
+                                  setStateSearchQuery('')
+                                }
+                              }}
+                              placement="bottom-start"
+                              sameWidth={false}
+                              hardMaxHeight={560}
+                              style={{ width: '256px' }}
+                              header={
+                                <PickerSearch
+                                  value={stateSearchQuery}
+                                  onChange={setStateSearchQuery}
+                                  placeholder="Search states..."
+                                />
+                              }
+                              content={
                                 <PickerList role="listbox" aria-label="Select state">
                                   {filteredStates.length === 0 ? (
                                     <PickerEmptyState message="No states found" />
@@ -275,69 +330,8 @@ export const AddressField: React.FC<FieldComponentProps> = ({
                                     })
                                   )}
                                 </PickerList>
-                              </div>
-                            </OverlaySheet>
-                          )}
-
-                          {/* Desktop Popover */}
-                          {!isMobile && isOpen && (
-                            <OverlayPositioner
-                              open={isOpen}
-                              anchor={triggerRef.current}
-                              placement="bottom-start"
-                              offset={6}
-                              strategy="fixed"
-                              sameWidth={false}
-                              maxHeight={560}
-                              collision={{ flip: true, shift: true, size: true }}
-                            >
-                              {({ refs, floatingStyles }) => (
-                                <div
-                                  ref={refs.setFloating}
-                                  style={{ ...floatingStyles, width: '256px' }}
-                                  className="z-50 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden"
-                                >
-                                  <PickerSearch
-                                    value={stateSearchQuery}
-                                    onChange={setStateSearchQuery}
-                                    placeholder="Search states..."
-                                  />
-                                  <div
-                                    ref={contentRef}
-                                    className={getOverlayContentClasses().content}
-                                    style={{ maxHeight: `${heights.contentMaxHeight}px` }}
-                                  >
-                                    <PickerList role="listbox" aria-label="Select state">
-                                      {filteredStates.length === 0 ? (
-                                        <PickerEmptyState message="No states found" />
-                                      ) : (
-                                        filteredStates.map((s) => {
-                                          const isSelected = s.code === value.state
-                                          return (
-                                            <PickerOption
-                                              key={s.code}
-                                              value={s.code}
-                                              selected={isSelected}
-                                              disabled={disabled}
-                                              onClick={() => {
-                                                update('state', s.code)
-                                                close('select')
-                                                setStateSearchQuery('')
-                                              }}
-                                            >
-                                              <div className="flex items-center gap-3">
-                                                <span className="font-mono font-medium">{s.code}</span>
-                                                <span>{s.name}</span>
-                                              </div>
-                                            </PickerOption>
-                                          )
-                                        })
-                                      )}
-                                    </PickerList>
-                                  </div>
-                                </div>
-                              )}
-                            </OverlayPositioner>
+                              }
+                            />
                           )}
                         </div>
                       )
@@ -346,7 +340,7 @@ export const AddressField: React.FC<FieldComponentProps> = ({
                 </div>
 
                 <div className="sm:col-span-3">
-                  <label htmlFor={`${name}-zip`} className="sr-only">ZIP Code</label>
+                  <FormLabel htmlFor={`${name}-zip`} srOnly>ZIP Code</FormLabel>
                   <input
                     id={`${name}-zip`}
                     type="text"
@@ -362,23 +356,17 @@ export const AddressField: React.FC<FieldComponentProps> = ({
                     placeholder="ZIP"
                     disabled={disabled}
                     maxLength={5}
-                    className="w-full rounded-md border border-gray-300 px-3 py-3 text-base shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:bg-gray-50 min-h-[48px]"
+                    className="ds-input w-full"
                   />
                 </div>
               </div>
 
               {showCountry && (
                 <div>
-                  <label htmlFor={`${name}-country`} className="sr-only">Country</label>
+                  <FormLabel htmlFor={`${name}-country`} srOnly>Country</FormLabel>
                   <OverlayPickerCore closeOnSelect={true}>
-                    {({ isOpen, open, close, triggerRef, contentRef }) => {
+                    {({ isOpen, open, close, triggerRef }) => {
                       const { isMobile } = useDeviceType()
-                      const heights = calculateOverlayHeights({
-                        maxHeight: 560,
-                        hasSearch: true,
-                        hasFooter: false,
-                        searchHeight: 60,
-                      })
 
                       return (
                         <div className="relative">
@@ -388,13 +376,21 @@ export const AddressField: React.FC<FieldComponentProps> = ({
                             type="button"
                             onClick={() => isOpen ? close() : open()}
                             disabled={disabled}
-                            className="relative w-full min-h-[48px] rounded-md border border-gray-300 bg-white px-3 py-2.5 text-left text-base shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:bg-gray-50 flex items-center justify-between"
+                            className="ds-input w-full text-left flex items-center justify-between"
                           >
-                            <span className="flex items-center gap-2 text-gray-900 font-medium">
+                            <span
+                              className="flex items-center gap-2 font-medium"
+                              style={{ color: 'var(--ds-color-text-primary)' }}
+                            >
                               {selectedCountry && <span>{selectedCountry.flag}</span>}
                               {selectedCountry ? selectedCountry.name : 'Country'}
                             </span>
-                            <svg className={`h-4 w-4 text-gray-400 transition-transform ${isOpen ? 'rotate-180' : ''}`} viewBox="0 0 20 20" fill="currentColor">
+                            <svg
+                              className={`h-4 w-4 transition-transform ${isOpen ? 'rotate-180' : ''}`}
+                              style={{ color: 'var(--ds-color-text-muted)' }}
+                              viewBox="0 0 20 20"
+                              fill="currentColor"
+                            >
                               <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
                             </svg>
                           </button>
@@ -416,7 +412,58 @@ export const AddressField: React.FC<FieldComponentProps> = ({
                                 placeholder="Search countries..."
                                 autoFocus
                               />
-                              <div ref={contentRef}>
+                              <PickerList role="listbox" aria-label="Select country">
+                                {filteredCountries.length === 0 ? (
+                                  <PickerEmptyState message="No countries found" />
+                                ) : (
+                                  filteredCountries.map((c) => {
+                                    const isSelected = c.code === (value.country || defaultCountry)
+                                    return (
+                                      <PickerOption
+                                        key={c.code}
+                                        value={c.code}
+                                        selected={isSelected}
+                                        disabled={disabled}
+                                        onClick={() => {
+                                          update('country', c.code)
+                                          close('select')
+                                          setCountrySearchQuery('')
+                                        }}
+                                      >
+                                        <div className="flex items-center gap-3 w-full">
+                                          <span className="text-xl">{c.flag}</span>
+                                          <span>{c.name}</span>
+                                        </div>
+                                      </PickerOption>
+                                    )
+                                  })
+                                )}
+                              </PickerList>
+                            </OverlaySheet>
+                          )}
+
+                          {/* Desktop Picker */}
+                          {!isMobile && isOpen && (
+                            <OverlayPicker
+                              open={isOpen}
+                              anchor={triggerRef.current}
+                              onOpenChange={(o) => {
+                                if (!o) {
+                                  close('outside')
+                                  setCountrySearchQuery('')
+                                }
+                              }}
+                              placement="bottom-start"
+                              sameWidth={true}
+                              hardMaxHeight={560}
+                              header={
+                                <PickerSearch
+                                  value={countrySearchQuery}
+                                  onChange={setCountrySearchQuery}
+                                  placeholder="Search countries..."
+                                />
+                              }
+                              content={
                                 <PickerList role="listbox" aria-label="Select country">
                                   {filteredCountries.length === 0 ? (
                                     <PickerEmptyState message="No countries found" />
@@ -444,69 +491,8 @@ export const AddressField: React.FC<FieldComponentProps> = ({
                                     })
                                   )}
                                 </PickerList>
-                              </div>
-                            </OverlaySheet>
-                          )}
-
-                          {/* Desktop Popover */}
-                          {!isMobile && isOpen && (
-                            <OverlayPositioner
-                              open={isOpen}
-                              anchor={triggerRef.current}
-                              placement="bottom-start"
-                              offset={6}
-                              strategy="fixed"
-                              sameWidth={true}
-                              maxHeight={560}
-                              collision={{ flip: true, shift: true, size: true }}
-                            >
-                              {({ refs, floatingStyles }) => (
-                                <div
-                                  ref={refs.setFloating}
-                                  style={floatingStyles}
-                                  className="z-50 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden"
-                                >
-                                  <PickerSearch
-                                    value={countrySearchQuery}
-                                    onChange={setCountrySearchQuery}
-                                    placeholder="Search countries..."
-                                  />
-                                  <div
-                                    ref={contentRef}
-                                    className={getOverlayContentClasses().content}
-                                    style={{ maxHeight: `${heights.contentMaxHeight}px` }}
-                                  >
-                                    <PickerList role="listbox" aria-label="Select country">
-                                      {filteredCountries.length === 0 ? (
-                                        <PickerEmptyState message="No countries found" />
-                                      ) : (
-                                        filteredCountries.map((c) => {
-                                          const isSelected = c.code === (value.country || defaultCountry)
-                                          return (
-                                            <PickerOption
-                                              key={c.code}
-                                              value={c.code}
-                                              selected={isSelected}
-                                              disabled={disabled}
-                                              onClick={() => {
-                                                update('country', c.code)
-                                                close('select')
-                                                setCountrySearchQuery('')
-                                              }}
-                                            >
-                                              <div className="flex items-center gap-3 w-full">
-                                                <span className="text-xl">{c.flag}</span>
-                                                <span>{c.name}</span>
-                                              </div>
-                                            </PickerOption>
-                                          )
-                                        })
-                                      )}
-                                    </PickerList>
-                                  </div>
-                                </div>
-                              )}
-                            </OverlayPositioner>
+                              }
+                            />
                           )}
                         </div>
                       )

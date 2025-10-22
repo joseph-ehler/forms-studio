@@ -59,9 +59,9 @@ export default function Demo() {
                 Every field can now control typography visibility via JSON. Everything visible by default (safe), hide what you don't need!
               </FormMessage>
 
-              <div className="space-y-6">
-                <div>
-                  <h4 className="text-sm font-semibold mb-3">Default: Show Everything (Safest)</h4>
+              <div>
+                <div className="ds-field">
+                  <h4 className="ds-subsection-heading">Default: Show Everything (Safest)</h4>
                   <TextField
                     name="default_example"
                     label="Email Address"

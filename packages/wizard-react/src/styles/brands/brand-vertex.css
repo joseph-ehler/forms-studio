@@ -1,0 +1,65 @@
+/**
+ * Vertex Brand - Design Tokens
+ * 
+ * Uses @layer brand + :where() for zero-specificity scoping.
+ * Components can override these without !important.
+ */
+
+@layer brand {
+  /**
+   * Vertex: Blue primary, minimal aesthetic
+   * Target: Enterprise, professional services
+   */
+  :where([data-brand="vertex"]) {
+    /* Primary */
+    --ds-color-primary-bg: oklch(55% 0.15 230); /* Corporate blue */
+    --ds-color-primary-bg-hover: oklch(50% 0.15 230);
+    --ds-color-primary-bg-active: oklch(45% 0.15 230);
+    --ds-color-primary-text: oklch(98% 0 0);
+    --ds-color-primary-ring: oklch(55% 0.15 230 / 0.4);
+    
+    /* Accent */
+    --ds-color-accent-bg: oklch(60% 0.12 180); /* Teal */
+    --ds-color-accent-text: oklch(98% 0 0);
+    
+    /* Brand assets */
+    --ds-brand-logo: url('/brands/vertex/logo.svg');
+    
+    /* Border radius (sharper, more professional) */
+    --ds-radius-sm: 2px;
+    --ds-radius-md: 4px;
+    --ds-radius-lg: 6px;
+    
+    /* Typography (slightly tighter) */
+    --ds-font-weight-medium: 500;
+    --ds-font-weight-semibold: 600;
+  }
+  
+  /**
+   * Dark mode overrides
+   */
+  :where([data-brand="vertex"][data-theme="dark"]) {
+    --ds-color-primary-bg: oklch(60% 0.15 230);
+    --ds-color-primary-bg-hover: oklch(65% 0.15 230);
+    --ds-color-primary-bg-active: oklch(70% 0.15 230);
+  }
+}
+
+/**
+ * SCOPED BRANDING DEMO
+ * 
+ * Two brands side-by-side in the same DOM:
+ * 
+ * ```html
+ * <div data-brand="vertex">
+ *   <Button>Vertex Button</Button> <!-- Blue -->
+ * </div>
+ * 
+ * <div data-brand="acme">
+ *   <Button>Acme Button</Button> <!-- Purple -->
+ * </div>
+ * ```
+ * 
+ * Each subtree inherits brand tokens automatically.
+ * No JS switching needed - pure CSS cascade!
+ */

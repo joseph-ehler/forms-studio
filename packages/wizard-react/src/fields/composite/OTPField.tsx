@@ -58,7 +58,7 @@ export const OTPField: React.FC<FieldComponentProps> = ({
   const maskInput = json?.maskInput ?? false
 
   return (
-    <Stack spacing="lg">
+    <Stack spacing="relaxed">
       {typography.showLabel && label && (
         <div className="mb-2">
           <FormLabel required={typography.showRequired && required} optional={typography.showOptional && !required}>
@@ -243,7 +243,7 @@ const OTPInput: React.FC<OTPInputProps> = ({
   }
 
   return (
-    <Stack spacing="xl">
+    <Stack spacing="relaxed">
       {/* OTP input boxes */}
       <div className="flex gap-2 justify-center">
         {otpValues.map((digit, index) => (
@@ -262,7 +262,23 @@ const OTPInput: React.FC<OTPInputProps> = ({
               handlePaste(index, pastedData)
             }}
             disabled={disabled}
-            className="w-12 h-12 sm:w-14 sm:h-14 text-center text-xl font-semibold rounded-lg border-2 border-gray-300 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-50 disabled:text-gray-500 transition-all"
+            className="w-12 h-12 sm:w-14 sm:h-14 text-center text-xl font-semibold disabled:opacity-50"
+            style={{
+              borderRadius: 'var(--ds-radius-md, 8px)',
+              border: '2px solid var(--ds-color-border-subtle)',
+              backgroundColor: disabled ? 'var(--ds-color-surface-subtle)' : 'var(--ds-color-surface-base)',
+              color: disabled ? 'var(--ds-color-text-muted)' : 'var(--ds-color-text-primary)',
+              outline: 'none',
+              transition: 'all 150ms ease'
+            }}
+            onFocus={(e) => {
+              e.target.style.borderColor = 'var(--ds-color-border-focus)';
+              e.target.style.boxShadow = `0 0 0 3px color-mix(in oklab, var(--ds-color-border-focus), transparent 85%)`;
+            }}
+            onBlur={(e) => {
+              e.target.style.borderColor = 'var(--ds-color-border-subtle)';
+              e.target.style.boxShadow = 'none';
+            }}
             aria-label={`Digit ${index + 1}`}
           />
         ))}
@@ -276,12 +292,18 @@ const OTPInput: React.FC<OTPInputProps> = ({
               type="button"
               onClick={handleResend}
               disabled={disabled}
-              className="text-sm text-blue-600 hover:text-blue-700 font-medium underline min-h-[44px] px-4 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="text-sm font-medium underline px-4 disabled:opacity-50 disabled:cursor-not-allowed"
+              style={{
+                minHeight: '44px',
+                color: 'var(--ds-color-primary-text, var(--ds-color-primary-bg))'
+              }}
+              onMouseEnter={(e) => !disabled && (e.currentTarget.style.opacity = '0.8')}
+              onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
             >
               Resend code
             </button>
           ) : (
-            <p className="text-sm text-gray-500">
+            <p className="text-sm" style={{ color: 'var(--ds-color-text-secondary)' }}>
               Resend code in {resendTimer}s
             </p>
           )}

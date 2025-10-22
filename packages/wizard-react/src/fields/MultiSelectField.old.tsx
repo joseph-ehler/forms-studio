@@ -60,7 +60,7 @@ export const MultiSelectField: React.FC<FieldComponentProps> = ({
     : normalizedOptions
 
   return (
-    <Stack spacing="sm">
+    <Stack spacing="tight">
       {typography.showLabel && label && (
         <FormLabel htmlFor={name} required={typography.showRequired && required} optional={typography.showOptional && !required}>
           {label}

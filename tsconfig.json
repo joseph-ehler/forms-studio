@@ -12,6 +12,12 @@
     "resolveJsonModule": true,
     "declaration": true,
     "declarationMap": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "baseUrl": ".",
+    "paths": {
+      "@ds/overlay": ["packages/wizard-react/src/components/overlay/index.ts"],
+      "@ds/typography": ["packages/wizard-react/src/components/typography/index.ts"],
+      "@ds/tokens": ["packages/wizard-react/src/tokens/index.ts"]
+    }
   }
 }

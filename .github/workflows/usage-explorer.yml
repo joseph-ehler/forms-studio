@@ -1,0 +1,96 @@
+name: Usage Explorer
+
+on:
+  pull_request:
+    paths:
+      - 'packages/wizard-react/src/**'
+
+jobs:
+  analyze-usage:
+    name: Design System Adoption
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Analyze DS adoption
+        id: analyze
+        run: |
+          # Count DS classes
+          DS_CLASSES=$(grep -r "ds-input\|ds-button\|ds-label\|ds-helper" packages/wizard-react/src/fields/ | wc -l | tr -d ' ')
+          
+          # Count banned utilities
+          BANNED_ROUNDED=$(grep -r "rounded-md\|rounded-lg" packages/wizard-react/src/fields/ | wc -l | tr -d ' ')
+          BANNED_MINHEIGHT=$(grep -r "min-h-\[" packages/wizard-react/src/fields/ | wc -l | tr -d ' ')
+          BANNED_BORDERS=$(grep -r "border-gray-[0-9]" packages/wizard-react/src/fields/ | wc -l | tr -d ' ')
+          BANNED_SHADOWS=$(grep -r "shadow-sm\|shadow-md\|shadow-lg" packages/wizard-react/src/fields/ | wc -l | tr -d ' ')
+          BANNED_TOTAL=$((BANNED_ROUNDED + BANNED_MINHEIGHT + BANNED_BORDERS + BANNED_SHADOWS))
+          
+          # Calculate coverage
+          TOTAL=$((DS_CLASSES + BANNED_TOTAL))
+          if [ $TOTAL -eq 0 ]; then
+            COVERAGE=0
+          else
+            COVERAGE=$(( (DS_CLASSES * 100) / TOTAL ))
+          fi
+          
+          echo "ds_classes=$DS_CLASSES" >> $GITHUB_OUTPUT
+          echo "banned_total=$BANNED_TOTAL" >> $GITHUB_OUTPUT
+          echo "coverage=$COVERAGE" >> $GITHUB_OUTPUT
+      
+      - name: Post coverage comment
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const coverage = parseInt('${{ steps.analyze.outputs.coverage }}');
+            const dsClasses = parseInt('${{ steps.analyze.outputs.ds_classes }}');
+            const banned = parseInt('${{ steps.analyze.outputs.banned_total }}');
+            
+            // Stoplight
+            let emoji = '🔴';
+            let status = 'NEEDS WORK';
+            if (coverage >= 90) {
+              emoji = '🟢';
+              status = 'EXCELLENT';
+            } else if (coverage >= 70) {
+              emoji = '🟡';
+              status = 'GOOD';
+            }
+            
+            const comment = `## ${emoji} Design System Adoption: ${coverage}%
+            
+            **Status**: ${status}
+            
+            | Metric | Count |
+            |--------|-------|
+            | DS Classes | ${dsClasses} |
+            | Banned Utilities | ${banned} |
+            | **Coverage** | **${coverage}%** |
+            
+            ### Goal: 100% (zero banned utilities)
+            
+            ${coverage < 90 ? '⚠️ Action required: Replace banned utilities with DS classes' : '✅ Great! Almost there!'}
+            
+            <details>
+            <summary>What counts as "banned"?</summary>
+            
+            - \`rounded-*\` → Use \`ds-input\` or \`ds-button\` (radius included)
+            - \`min-h-[*]\` → Use \`ds-input\` or \`ds-button\` (height included)
+            - \`border-gray-*\` → Use \`ds-input\` (border color included)
+            - \`shadow-*\` → Removed (buttons auto-elevate on hover)
+            
+            </details>
+            `;
+            
+            github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.name,
+              issue_number: context.issue.number,
+              body: comment
+            });
+      
+      - name: Fail if coverage too low
+        if: steps.analyze.outputs.coverage < 90
+        run: |
+          echo "❌ DS adoption below 90%" >> $GITHUB_STEP_SUMMARY
+          exit 1

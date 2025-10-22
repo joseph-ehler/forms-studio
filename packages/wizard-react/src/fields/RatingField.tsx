@@ -83,7 +83,8 @@ export const RatingField: React.FC<FieldComponentProps> = ({
     if (icon === 'heart') {
       return (
         <svg
-          className={`${sizeClasses} ${filled ? 'text-red-500' : 'text-gray-300'} transition-colors duration-150`}
+          className={`${sizeClasses} transition-colors duration-150`}
+         style={{ color: filled ? 'var(--ds-color-state-danger-text)' : 'var(--ds-color-border-subtle)' }}
           fill={filled ? 'currentColor' : 'none'}
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -100,7 +101,8 @@ export const RatingField: React.FC<FieldComponentProps> = ({
     }
     return (
       <svg
-        className={`${sizeClasses} ${filled ? 'text-yellow-400' : 'text-gray-300'} transition-colors duration-150`}
+        className={`${sizeClasses} transition-colors duration-150`}
+        style={{ color: filled ? '#FCD34D' : 'var(--ds-color-border-subtle)' }}
         fill={filled ? 'currentColor' : 'none'}
         viewBox="0 0 24 24"
         stroke="currentColor"
@@ -117,7 +119,7 @@ export const RatingField: React.FC<FieldComponentProps> = ({
   }
 
   return (
-    <Stack spacing="md">
+    <Stack spacing="normal">
       {typography.showLabel && fieldLabel && (
         <div className="mb-1">
           <FormLabel
@@ -143,7 +145,7 @@ export const RatingField: React.FC<FieldComponentProps> = ({
           const displayValue = hoverValue ?? currentValue
 
           return (
-            <Stack spacing="md">
+            <Stack spacing="normal">
               <div
                 className="flex gap-1"
                 onMouseLeave={() => setHoverValue(null)}
@@ -162,7 +164,12 @@ export const RatingField: React.FC<FieldComponentProps> = ({
                       onClick={() => !disabled && field.onChange(value)}
                       onMouseEnter={() => !disabled && setHoverValue(value)}
                       disabled={disabled}
-                      className="min-h-[44px] min-w-[44px] flex items-center justify-center cursor-pointer hover:scale-110 transition-transform disabled:cursor-not-allowed disabled:opacity-50"
+                      className="flex items-center justify-center cursor-pointer hover:scale-110 disabled:cursor-not-allowed disabled:opacity-50"
+                      style={{ 
+                        minHeight: '44px',
+                        minWidth: '44px',
+                        transition: 'transform 150ms ease'
+                      }}
                       role="radio"
                       aria-checked={value === currentValue}
                       aria-label={`${value} ${icon}${value > 1 ? 's' : ''}`}

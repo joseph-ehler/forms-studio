@@ -96,7 +96,7 @@ export const MultiSelectField: React.FC<FieldComponentProps> = ({
   }, [normalizedOptions, allowSearch, query])
 
   return (
-    <Stack spacing="sm">
+    <Stack spacing="tight">
       {/* Label */}
       {typography.showLabel && label && (
         <FormLabel 

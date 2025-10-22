@@ -146,7 +146,7 @@ export const CalculatedField: React.FC<FieldComponentProps> = ({
   }
 
   return (
-    <Stack spacing="md">
+    <Stack spacing="normal">
       {typography.showLabel && label && (
         <FormLabel>{label}</FormLabel>
       )}
@@ -167,7 +167,8 @@ export const CalculatedField: React.FC<FieldComponentProps> = ({
 
           return (
             <div
-              className="flex items-center justify-between rounded-md border border-gray-300 bg-gray-50 px-4 py-3 min-h-[44px]"
+              className="ds-input flex items-center justify-between"
+              style={{ padding: 'var(--ds-spacing-md, 12px 16px)' }}
               role="status"
               aria-live="polite"
               aria-label={`Calculated value: ${formatValue(computedValue)}`}
@@ -175,7 +176,7 @@ export const CalculatedField: React.FC<FieldComponentProps> = ({
               {/* Calculated value display */}
               <div className="flex items-center gap-2">
                 <svg
-                  className="h-5 w-5 text-gray-400"
+                  style={{ width: '20px', height: '20px', color: 'var(--ds-color-text-muted)' }}
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -194,7 +195,7 @@ export const CalculatedField: React.FC<FieldComponentProps> = ({
 
               {/* Formula hint (optional) */}
               {json?.showFormula && (
-                <span className="text-xs text-gray-500 font-mono">
+                <span className="text-xs  style={{ color: 'var(--ds-color-text-secondary)' }} font-mono">
                   {expression}
                 </span>
               )}

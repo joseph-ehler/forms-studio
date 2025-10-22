@@ -1,0 +1,14 @@
+{
+  "name": "@cascade/docs",
+  "version": "0.1.0",
+  "description": "Cascade Design System Documentation",
+  "scripts": {
+    "dev": "vitepress dev",
+    "build": "vitepress build",
+    "preview": "vitepress preview"
+  },
+  "devDependencies": {
+    "vitepress": "^1.0.0",
+    "vue": "^3.3.0"
+  }
+}

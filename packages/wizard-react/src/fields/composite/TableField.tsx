@@ -81,7 +81,7 @@ export const TableField: React.FC<FieldComponentProps> = ({
   const canDeleteRow = allowDeleteRows && fields.length > minRows
 
   return (
-    <Stack spacing="lg">
+    <Stack spacing="relaxed">
       {typography.showLabel && label && (
         <div className="mb-2">
           <FormLabel required={typography.showRequired && required} optional={typography.showOptional && !required}>
