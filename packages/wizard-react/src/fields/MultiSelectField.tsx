@@ -295,23 +295,14 @@ export const MultiSelectField: React.FC<FieldComponentProps> = ({
                         maxHeight={ui.maxHeight ?? 560}
                         collision={ui.collision ?? { flip: true, shift: true, size: true }}
                       >
-                        {({ refs, floatingStyles, EventWrapper }) => {
-                          // Get actual maxHeight from collision detection or use default
-                          const containerMaxHeight = floatingStyles.maxHeight 
-                            ? (typeof floatingStyles.maxHeight === 'string' 
-                                ? parseInt(floatingStyles.maxHeight) 
-                                : floatingStyles.maxHeight)
-                            : (ui.maxHeight ?? 560)
-                          
-                          const searchHeight = allowSearch ? 60 : 0 // search bar height
-                          const footerHeight = 48 // footer height
-                          const listMaxHeight = containerMaxHeight - searchHeight - footerHeight
-                          
-                          return (
-                            <div ref={refs.setFloating} style={floatingStyles}>
-                              <EventWrapper
-                                className="z-50 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 flex flex-col overflow-hidden"
-                              >
+                        {({ refs, floatingStyles, EventWrapper, maxHeightPx }) => (
+                          <div
+                            ref={refs.setFloating as any}
+                            style={floatingStyles}
+                            data-overlay="picker"
+                            className="z-50 bg-white rounded-md shadow-lg ring-1 ring-black/10 flex flex-col overflow-hidden"
+                          >
+                            <EventWrapper className="flex-1 flex flex-col min-h-0">
                               {/* Search */}
                               {allowSearch && (
                                 <div className="flex-shrink-0">
@@ -326,7 +317,7 @@ export const MultiSelectField: React.FC<FieldComponentProps> = ({
                               {/* List */}
                               <div 
                                 ref={contentRef}
-                                className="flex-1 overflow-y-auto"
+                                className="flex-1 min-h-0 overflow-auto"
                               >
                               <PickerList
                                 role="listbox"
@@ -385,10 +376,9 @@ export const MultiSelectField: React.FC<FieldComponentProps> = ({
                                 </button>
                               </div>
                             </div>
-                            </EventWrapper>
-                          </div>
-                          )
-                        }}
+                          </EventWrapper>
+                        </div>
+                        )}
                       </OverlayPositioner>
                     )
                   )}

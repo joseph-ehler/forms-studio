@@ -471,13 +471,15 @@ export const TimeField: React.FC<FieldComponentProps> = ({
                       maxHeight={480}
                       collision={{ flip: true, shift: true, size: false }}
                     >
-                      {({ refs, floatingStyles, EventWrapper }) => (
-                        <div ref={refs.setFloating} style={floatingStyles}>
-                          <EventWrapper 
-                            className="z-50 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 flex flex-col overflow-hidden"
-                            style={{ width: 'auto', minWidth: '320px' }}
-                          >
-                          <div ref={contentRef} className="flex-1 overflow-y-auto p-4 space-y-4">
+                      {({ refs, floatingStyles, EventWrapper, maxHeightPx }) => (
+                        <div
+                          ref={refs.setFloating as any}
+                          style={{ ...floatingStyles, width: 'auto', minWidth: '320px' }}
+                          data-overlay="picker"
+                          className="z-50 bg-white rounded-md shadow-lg ring-1 ring-black/10 flex flex-col overflow-hidden"
+                        >
+                          <EventWrapper className="flex-1 flex flex-col min-h-0">
+                          <div ref={contentRef} className="flex-1 min-h-0 overflow-auto p-4 space-y-4">
                             {/* Format Toggle */}
                             <div className="flex items-center justify-between pb-2 border-b border-gray-200">
                               <span className="text-sm font-medium text-gray-700">Time Format</span>
@@ -543,14 +545,14 @@ export const TimeField: React.FC<FieldComponentProps> = ({
                           </div>
 
                           {/* Footer */}
-                          <div className="shrink-0 border-t border-gray-200 p-4">
+                          <div className="flex-shrink-0 border-t border-gray-200 p-4">
                             <PickerFooter
                               onClear={handleClear}
                               onDone={() => close('select')}
                               size="default"
                             />
                           </div>
-                          </EventWrapper>
+                        </EventWrapper>
                         </div>
                       )}
                     </OverlayPositioner>

@@ -204,13 +204,18 @@ export const DateField: React.FC<FieldComponentProps> = ({
                       maxHeight={560}
                       collision={{ flip: true, shift: true, size: true }}
                     >
-                      {({ refs, floatingStyles, isPositioned, EventWrapper }) => (
-                        <div ref={refs.setFloating} style={floatingStyles}>
-                          <EventWrapper className="z-50 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 flex flex-col overflow-hidden">
+                      {({ refs, floatingStyles, EventWrapper, maxHeightPx }) => (
+                        <div
+                          ref={refs.setFloating as any}
+                          style={floatingStyles}
+                          data-overlay="picker"
+                          className="z-50 bg-white rounded-md shadow-lg ring-1 ring-black/10 flex flex-col overflow-hidden"
+                        >
+                          <EventWrapper className="flex-1 flex flex-col min-h-0">
                             {/* Calendar Body */}
                             <div
                               ref={contentRef}
-                              className="flex-1 overflow-y-auto p-4"
+                              className="flex-1 min-h-0 overflow-auto p-4"
                             >
                             <div className="flex justify-center">
                               <DayPicker
@@ -233,7 +238,7 @@ export const DateField: React.FC<FieldComponentProps> = ({
                           </div>
 
                           {/* Footer */}
-                          <div className="shrink-0 border-t border-gray-200 p-3">
+                          <div className="flex-shrink-0 border-t border-gray-200 p-3">
                             <PickerFooter
                               onClear={() => field.onChange(null)}
                               onDone={() => close('select')}
