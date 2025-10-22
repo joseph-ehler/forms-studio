@@ -114,8 +114,8 @@ body :focus {
 .rdp-root button[aria-pressed="true"]:focus-visible,
 .rdp-root button[aria-selected="true"]:focus,
 .rdp-root button[aria-selected="true"]:focus-visible,
-.rdp-root .rdp-day_range_start button:focus,
-.rdp-root .rdp-day_range_end button:focus,
+.rdp-root .rdp-range_start button:focus,
+.rdp-root .rdp-range_end button:focus,
 .rdp-root .rdp-day_button:focus,
 .rdp-root .rdp-day_button:focus-visible {
   box-shadow: none !important;
@@ -178,13 +178,13 @@ body :not(.rdp-root) button[aria-pressed="true"] {
    - aria-selected="true" (range endpoints)
    - .fs-selected (custom class for DateField)
    - .rdp-day_selected (default DayPicker class)
-   - .rdp-day_range_start / .rdp-day_range_end (range classes)
+   - .rdp-range_start / .rdp-range_end (range classes)
    
    CRITICAL: Style the BUTTON inside the selected cell!
 ================================================================= */
 /* Single date mode - aria-pressed (NOT range middle) */
-.rdp-root td:not(.rdp-day_range_middle) [role="gridcell"] > [aria-pressed="true"]:not([aria-selected="true"]),
-.rdp-root [role="gridcell"]:not(.rdp-day_range_middle) > [aria-pressed="true"]:not([aria-selected="true"]) {
+.rdp-root td:not(.rdp-range_middle) [role="gridcell"] > [aria-pressed="true"]:not([aria-selected="true"]),
+.rdp-root [role="gridcell"]:not(.rdp-range_middle) > [aria-pressed="true"]:not([aria-selected="true"]) {
   background-color: rgb(37, 99, 235) !important;
   color: #ffffff !important;
   font-weight: 500 !important;
@@ -192,26 +192,26 @@ body :not(.rdp-root) button[aria-pressed="true"] {
 }
 
 /* Range mode - ONLY start and end, NOT middle */
-.rdp-root .rdp-day_range_start button,
-.rdp-root .rdp-day_range_start .rdp-day_button,
-.rdp-root .rdp-day_range_end button,
-.rdp-root .rdp-day_range_end .rdp-day_button,
+.rdp-root .rdp-range_start button,
+.rdp-root .rdp-range_start .rdp-day_button,
+.rdp-root .rdp-range_end button,
+.rdp-root .rdp-range_end .rdp-day_button,
 .rdp-root .fs-range-start button,
 .rdp-root .fs-range-start .rdp-day_button,
 .rdp-root .fs-range-end button,
 .rdp-root .fs-range-end .rdp-day_button,
-.rdp-root td.rdp-day_range_start button.rdp-day_button,
-.rdp-root td.rdp-day_range_end button.rdp-day_button {
+.rdp-root td.rdp-range_start button.rdp-day_button,
+.rdp-root td.rdp-range_end button.rdp-day_button {
   background-color: rgb(37, 99, 235) !important;
   color: #ffffff !important;
   font-weight: 500 !important;
   border: none !important;
 }
 
-/* Custom classes for single date (NOT range) */
+/* Custom classes for single date (NOT range) - EXCLUDE middle range */
 .rdp-root .fs-selected:not(.fs-range-start):not(.fs-range-end):not(.fs-range-mid) button,
-.rdp-root .rdp-selected:not(.rdp-day_range_start):not(.rdp-day_range_end):not(.rdp-day_range_middle) button,
-.rdp-root .rdp-day_selected:not(.rdp-day_range_start):not(.rdp-day_range_end):not(.rdp-day_range_middle) button {
+.rdp-root .rdp-selected:not(.rdp-range_start):not(.rdp-range_end):not(.rdp-range_middle) button,
+.rdp-root .rdp-day_selected:not(.rdp-range_start):not(.rdp-range_end):not(.rdp-range_middle) button {
   background-color: rgb(37, 99, 235) !important;
   color: #ffffff !important;
   font-weight: 500 !important;
@@ -233,10 +233,10 @@ body :not(.rdp-root) button[aria-pressed="true"] {
 }
 
 /* Hover on range START and END only */
-.rdp-root .rdp-day_range_start:hover button,
-.rdp-root .rdp-day_range_start:hover .rdp-day_button,
-.rdp-root .rdp-day_range_end:hover button,
-.rdp-root .rdp-day_range_end:hover .rdp-day_button,
+.rdp-root .rdp-range_start:hover button,
+.rdp-root .rdp-range_start:hover .rdp-day_button,
+.rdp-root .rdp-range_end:hover button,
+.rdp-root .rdp-range_end:hover .rdp-day_button,
 .rdp-root .fs-range-start:hover button,
 .rdp-root .fs-range-start:hover .rdp-day_button,
 .rdp-root .fs-range-end:hover button,
@@ -249,7 +249,7 @@ body :not(.rdp-root) button[aria-pressed="true"] {
 
 /* Hover on custom single selected (NOT range) */
 .rdp-root .fs-selected:not(.fs-range-start):not(.fs-range-end):not(.fs-range-mid):hover button,
-.rdp-root .rdp-selected:not(.rdp-day_range_start):not(.rdp-day_range_end):not(.rdp-day_range_middle):hover button {
+.rdp-root .rdp-selected:not(.rdp-range_start):not(.rdp-range_end):not(.rdp-range_middle):hover button {
   background-color: rgb(29, 78, 216) !important;
   color: #ffffff !important;
 }
@@ -263,7 +263,7 @@ body :not(.rdp-root) button[aria-pressed="true"] {
    Excludes ALL selected states using :not() selectors
 ================================================================= */
 /* ONLY style UNSELECTED buttons on hover - exclude ALL selected states */
-.rdp-root td:not(.rdp-day_range_start):not(.rdp-day_range_middle):not(.rdp-day_range_end):not(.rdp-selected):not(.fs-selected):not(.rdp-day_selected) button.rdp-day_button:not([aria-pressed="true"]):not([aria-selected="true"]):not([aria-disabled="true"]):hover {
+.rdp-root td:not(.rdp-range_start):not(.rdp-range_middle):not(.rdp-range_end):not(.rdp-selected):not(.fs-selected):not(.rdp-day_selected) button.rdp-day_button:not([aria-pressed="true"]):not([aria-selected="true"]):not([aria-disabled="true"]):hover {
   border: 2px solid rgb(59, 130, 246) !important;
   border-radius: 50% !important;
   box-sizing: border-box !important;
@@ -278,8 +278,8 @@ body :not(.rdp-root) button[aria-pressed="true"] {
 }
 
 /* Middle range buttons should NEVER get hover styling */
-.rdp-root .rdp-day_range_middle button:hover,
-.rdp-root .rdp-day_range_middle .rdp-day_button:hover,
+.rdp-root .rdp-range_middle button:hover,
+.rdp-root .rdp-range_middle .rdp-day_button:hover,
 .rdp-root .fs-range-mid button:hover,
 .rdp-root [data-day-range="middle"] button:hover {
   border: none !important;
@@ -292,7 +292,7 @@ body :not(.rdp-root) button[aria-pressed="true"] {
    Apply to CELL since it needs to span the full width
 ================================================================= */
 .rdp-root [data-day-range="middle"],
-.rdp-root .rdp-day_range_middle,
+.rdp-root .rdp-range_middle,
 .rdp-root .fs-range-mid {
   background-color: rgb(219, 234, 254) !important;
 }
@@ -303,29 +303,29 @@ body :not(.rdp-root) button[aria-pressed="true"] {
    RANGE GRADIENTS - Half-circle fills for start/end
    Apply to CELL to create the Airbnb connected look
 ================================================================= */
-.rdp-root .rdp-day_range_start:not(.rdp-day_range_end),
+.rdp-root .rdp-range_start:not(.rdp-range_end),
 .rdp-root .fs-range-start:not(.fs-range-end) {
   background: linear-gradient(to right, rgb(37, 99, 235) 50%, rgb(219, 234, 254) 50%) !important;
 }
 
-.rdp-root .rdp-day_range_end:not(.rdp-day_range_start),
+.rdp-root .rdp-range_end:not(.rdp-range_start),
 .rdp-root .fs-range-end:not(.fs-range-start) {
   background: linear-gradient(to left, rgb(37, 99, 235) 50%, rgb(219, 234, 254) 50%) !important;
 }
 
 /* Style the BUTTON inside range start/end for the circle */
-.rdp-root .rdp-day_range_start button,
+.rdp-root .rdp-range_start button,
 .rdp-root .fs-range-start button {
   border-radius: 50% !important;
 }
 
-.rdp-root .rdp-day_range_end button,
+.rdp-root .rdp-range_end button,
 .rdp-root .fs-range-end button {
   border-radius: 50% !important;
 }
 
 /* Single day range (start and end on same day) - on button */
-.rdp-root .rdp-day_range_start.rdp-day_range_end button,
+.rdp-root .rdp-range_start.rdp-range_end button,
 .rdp-root .fs-range-start.fs-range-end button {
   background: rgb(37, 99, 235) !important;
   border-radius: 50% !important;
@@ -353,7 +353,7 @@ body :not(.rdp-root) button[aria-pressed="true"] {
 ================================================================= */
 .rdp-root [role="gridcell"] > [data-today="true"]:not([aria-pressed="true"]):not([aria-selected="true"]),
 .rdp-root .fs-today:not(.fs-selected):not(.fs-range-start):not(.fs-range-end),
-.rdp-root .rdp-day_today:not(.rdp-day_selected):not(.rdp-day_range_start):not(.rdp-day_range_end) {
+.rdp-root .rdp-day_today:not(.rdp-day_selected):not(.rdp-range_start):not(.rdp-range_end) {
   color: rgb(37, 99, 235) !important;
   font-weight: 700 !important;
 }
@@ -384,14 +384,15 @@ body :not(.rdp-root) button[aria-pressed="true"] {
    CRITICAL: Middle range buttons should be invisible, only the
    light blue band on the cell should show through
 ================================================================= */
-html body .rdp-root td.rdp-day_range_middle:not(.rdp-day_range_start):not(.rdp-day_range_end) button.rdp-day_button,
-html body .rdp-root td.rdp-day_range_middle:not(.rdp-day_range_start):not(.rdp-day_range_end) > button,
-html body .rdp-root td.rdp-day_range_middle button.rdp-day_button,
-html body .rdp-root td.rdp-day_range_middle > button,
+/* CORRECT CLASS NAME: rdp-range_middle (not rdp-range_middle!) */
+html body .rdp-root td.rdp-range_middle:not(.rdp-range_start):not(.rdp-range_end) button.rdp-day_button,
+html body .rdp-root td.rdp-range_middle:not(.rdp-range_start):not(.rdp-range_end) > button,
+html body .rdp-root td.rdp-range_middle button.rdp-day_button,
+html body .rdp-root td.rdp-range_middle > button,
 html body .rdp-root td[data-day-range="middle"] button,
-html body .rdp-root [role="gridcell"].rdp-day_range_middle button,
+html body .rdp-root [role="gridcell"].rdp-range_middle button,
 html body .rdp-root [role="gridcell"][data-day-range="middle"] button,
-html body .rdp-root .rdp-day_range_middle button,
+html body .rdp-root .rdp-range_middle button,
 html body .rdp-root [data-day-range="middle"] button {
   background-color: transparent !important;
   background: transparent !important;
@@ -404,11 +405,11 @@ html body .rdp-root [data-day-range="middle"] button {
 }
 
 /* Also on hover and any state - middle dates ALWAYS transparent */
-html body .rdp-root td.rdp-day_range_middle button:hover,
-html body .rdp-root td.rdp-day_range_middle button:active,
-html body .rdp-root td.rdp-day_range_middle button:focus,
-html body .rdp-root .rdp-day_range_middle button,
-html body .rdp-root .rdp-day_range_middle button:hover,
+html body .rdp-root td.rdp-range_middle button:hover,
+html body .rdp-root td.rdp-range_middle button:active,
+html body .rdp-root td.rdp-range_middle button:focus,
+html body .rdp-root .rdp-range_middle button,
+html body .rdp-root .rdp-range_middle button:hover,
 html body .rdp-root [data-day-range="middle"] button,
 html body .rdp-root [data-day-range="middle"] button:hover {
   background-color: transparent !important;
