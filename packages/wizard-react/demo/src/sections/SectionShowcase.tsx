@@ -99,14 +99,14 @@ export function SectionShowcase() {
           <Label>Pattern: Feature Stripe</Label>
           <Divider />
           <Text size="sm" variant="muted">
-            Subtle background + wave dividers + standard width
+            Subtle background + clean borders + standard width
           </Text>
           
           <SectionDemoWrapper bg="var(--ds-color-surface-base)">
             <Section 
               bg="subtle" 
-              dividerTop="wave"
-              dividerBottom="wave"
+              borderTop
+              borderBottom
               paddingY="lg"
               style={constrainedSectionStyle}
             >
