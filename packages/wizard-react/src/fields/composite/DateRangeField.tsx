@@ -304,26 +304,18 @@ export const DateRangeField: React.FC<FieldComponentProps> = ({
                       maxHeight={550}
                       collision={{ flip: true, shift: true, size: true }}
                     >
-                      {({ refs, floatingStyles, isPositioned, EventWrapper }) => {
-                        // Extract maxHeight from floatingStyles if set by size middleware
-                        const containerMaxHeight = floatingStyles.maxHeight 
-                          ? (typeof floatingStyles.maxHeight === 'string' 
-                              ? parseInt(floatingStyles.maxHeight) 
-                              : floatingStyles.maxHeight)
-                          : 550
-                        const contentMaxHeight = containerMaxHeight - 60 // Reserve 60px for footer
-                        
-                        return (
-                          <div ref={refs.setFloating} style={floatingStyles}>
-                            <EventWrapper className="z-50 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 flex flex-col overflow-hidden">
-                            <div id={`${name}-dialog`} role="dialog" aria-labelledby={`${name}-label`}>
-                            {/* Content with Presets + Calendar - Scrollable */}
+                      {({ refs, floatingStyles, EventWrapper, maxHeightPx }) => (
+                        <div
+                          ref={refs.setFloating as any}
+                          style={floatingStyles}
+                          data-overlay="picker"
+                          className="z-50 bg-white rounded-md shadow-lg ring-1 ring-black/10 flex flex-col"
+                        >
+                          <EventWrapper className="flex flex-col h-full">
+                            {/* Scrollable content */}
                             <div
                               ref={contentRef}
-                              className="flex-1 overflow-y-auto overscroll-contain"
-                              style={{
-                                maxHeight: `${contentMaxHeight}px`,
-                              }}
+                              className="flex-1 min-h-0 overflow-auto"
                             >
                             <div className="p-4 flex gap-4">
                               {/* Presets Sidebar */}
@@ -358,18 +350,16 @@ export const DateRangeField: React.FC<FieldComponentProps> = ({
                           </div>
 
                           {/* Footer - Fixed at bottom */}
-                          <div className="shrink-0 border-t border-gray-200 p-3 bg-white">
+                          <div className="flex-shrink-0 border-t border-gray-200 p-3">
                             <PickerFooter
                               onClear={() => field.onChange(null)}
                               onDone={() => close('select')}
                               size="small"
                             />
                           </div>
+                          </EventWrapper>
                         </div>
-                        </EventWrapper>
-                        </div>
-                        )
-                      }}
+                      )}
                     </OverlayPositioner>
                   )}
                 </>

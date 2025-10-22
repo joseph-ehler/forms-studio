@@ -1,15 +1,18 @@
 /**
- * OverlayPositioner
+ * OverlayPositioner - Hardened Implementation
  * 
- * Wraps Floating UI to handle positioning, collision detection, and sizing.
- * Provides consistent positioning behavior for all overlay pickers.
+ * Battle-tested overlay positioning with:
+ * - Exposes exact maxHeight as number, CSS var, and data attribute
+ * - Handles visualViewport + ResizeObserver for mobile keyboard/resize
+ * - EventWrapper stops native bubbling (pointerdown + click)
+ * - Diagnostic attributes for DevTools verification
  */
 
-import React, { useMemo } from 'react'
+import React, { useMemo, useRef, useEffect } from 'react'
 import {
   useFloating,
   autoUpdate,
-  offset as offsetMiddleware,
+  offset as offsetMw,
   flip,
   shift,
   size,
@@ -24,108 +27,124 @@ export const OverlayPositioner: React.FC<OverlayPositionerProps> = ({
   placement = 'bottom-start',
   offset = 6,
   strategy = 'fixed',
-  collision = { flip: true, shift: true, size: true },
+  collision = { flip: true, shift: true, size: true, hide: true },
   sameWidth = false,
   maxHeight = 560,
   children,
 }) => {
-  const calculatedMaxHeightRef = React.useRef<number>(maxHeight)
-  
-  // Build middleware array based on options
+  const maxHRef = useRef<number>(maxHeight)
+  const floatingElRef = useRef<HTMLElement | null>(null)
+
   const middleware = useMemo<Middleware[]>(() => {
     const mw: Middleware[] = []
-
-    // Offset from anchor
-    mw.push(offsetMiddleware(offset))
-
-    // Flip to stay in viewport
-    if (collision.flip) {
-      mw.push(flip({ padding: 8 }))
-    }
-
-    // Shift to stay in viewport
-    if (collision.shift) {
-      mw.push(shift({ padding: 8 }))
-    }
-
-    // Size constraints
+    mw.push(offsetMw(offset))
+    if (collision.flip) mw.push(flip({ padding: 8 }))
+    if (collision.shift) mw.push(shift({ padding: 8, crossAxis: true }))
     if (collision.size || sameWidth) {
       mw.push(
         size({
-          apply({ rects, elements, availableHeight }) {
-            // Apply same width as trigger
-            if (sameWidth) {
-              Object.assign(elements.floating.style, {
-                width: `${rects.reference.width}px`,
-              })
-            }
+          padding: 8,
+          apply({ rects, availableHeight, elements }) {
+            const maxH = Math.max(0, Math.min(maxHeight, availableHeight - 8))
+            maxHRef.current = maxH
 
-            // Constrain max height and store it
-            const maxH = Math.min(maxHeight, availableHeight - 16)
-            calculatedMaxHeightRef.current = maxH
-            Object.assign(elements.floating.style, {
+            const style: Partial<CSSStyleDeclaration> = {
               maxHeight: `${maxH}px`,
-            })
+              // @ts-ignore - expose as CSS var for content
+              '--overlay-max-h': `${maxH}px`,
+            }
+            if (sameWidth) style.width = `${rects.reference.width}px`
+
+            Object.assign(elements.floating.style, style)
+            elements.floating.setAttribute('data-overlay', 'picker')
+            elements.floating.setAttribute('data-max-h', String(maxH))
           },
         })
       )
     }
-
-    // Hide when detached
-    if (collision.hide) {
-      mw.push(hide())
-    }
-
+    if (collision.hide) mw.push(hide())
     return mw
-  }, [offset, collision, sameWidth, maxHeight])
+  }, [offset, collision.flip, collision.shift, collision.size, collision.hide, sameWidth, maxHeight])
 
-  // Floating UI hook
-  const { refs, floatingStyles, isPositioned } = useFloating({
+  const { refs, floatingStyles, isPositioned, update } = useFloating({
     placement,
     strategy,
     middleware,
     whileElementsMounted: autoUpdate,
     open,
-    elements: {
-      reference: anchor,
-    },
+    elements: { reference: anchor ?? undefined },
   })
 
-  // Merge calculated maxHeight into floatingStyles
-  const enhancedFloatingStyles = {
+  // Retain handle to real DOM node
+  useEffect(() => {
+    floatingElRef.current = refs.floating.current
+  }, [refs.floating])
+
+  // Track viewport & container resizes (mobile keyboard etc.)
+  useEffect(() => {
+    if (!open) return
+
+    let raf = 0
+    const onVV = () => {
+      cancelAnimationFrame(raf)
+      raf = requestAnimationFrame(() => update?.())
+    }
+    const vv = (window as any).visualViewport
+    vv?.addEventListener?.('resize', onVV)
+    vv?.addEventListener?.('scroll', onVV)
+
+    const ro = new ResizeObserver(() => onVV())
+    if (anchor) ro.observe(anchor)
+
+    return () => {
+      vv?.removeEventListener?.('resize', onVV)
+      vv?.removeEventListener?.('scroll', onVV)
+      ro.disconnect()
+      cancelAnimationFrame(raf)
+    }
+  }, [open, anchor, update])
+
+  // Make computed maxHeight available to children via returned styles too
+  const mergedStyles: React.CSSProperties = {
     ...floatingStyles,
-    maxHeight: calculatedMaxHeightRef.current ? `${calculatedMaxHeightRef.current}px` : floatingStyles.maxHeight,
+    maxHeight: `${maxHRef.current}px`,
   }
 
-  // Don't render if not open
-  if (!open) return null
-
-  // Event wrapper component that stops propagation to prevent outside click handler
-  const EventWrapper: React.FC<{ children: React.ReactNode; className?: string; style?: React.CSSProperties }> = ({ 
-    children, 
-    className = '', 
-    style = {} 
-  }) => (
+  // Stops native bubbling to outside-click handlers
+  const EventWrapper: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ children, ...rest }) => (
     <div
+      {...rest}
+      onPointerDown={(e) => {
+        e.stopPropagation()
+        // @ts-ignore
+        e.nativeEvent?.stopImmediatePropagation?.()
+        // @ts-ignore
+        rest.onPointerDown?.(e)
+      }}
       onClick={(e) => {
         e.stopPropagation()
-        e.nativeEvent.stopImmediatePropagation()
+        // @ts-ignore
+        e.nativeEvent?.stopImmediatePropagation?.()
+        // @ts-ignore
+        rest.onClick?.(e)
       }}
-      onMouseDown={(e) => {
-        e.stopPropagation()
-        e.nativeEvent.stopImmediatePropagation()
-      }}
-      onMouseUp={(e) => {
-        e.stopPropagation()
-        e.nativeEvent.stopImmediatePropagation()
-      }}
-      className={className}
-      style={{ height: '100%', ...style }}
+      style={{ height: '100%', ...rest.style }}
     >
       {children}
     </div>
   )
 
-  // Provide positioning data to children
-  return <>{children({ refs, floatingStyles: enhancedFloatingStyles, isPositioned, EventWrapper })}</>
+  if (!open) return null
+
+  return (
+    <>
+      {children({
+        refs,
+        floatingStyles: mergedStyles,
+        isPositioned,
+        maxHeightPx: maxHRef.current,
+        EventWrapper,
+      })}
+    </>
+  )
 }

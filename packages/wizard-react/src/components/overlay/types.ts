@@ -76,7 +76,8 @@ export interface OverlayPositionData {
   }
   floatingStyles: React.CSSProperties
   isPositioned: boolean
-  EventWrapper: React.FC<{ children: React.ReactNode; className?: string; style?: React.CSSProperties }>
+  maxHeightPx: number
+  EventWrapper: React.FC<React.HTMLAttributes<HTMLDivElement>>
 }
 
 export interface OverlaySheetProps {
