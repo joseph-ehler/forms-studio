@@ -28,8 +28,6 @@ export const OverlayPickerCore: React.FC<OverlayPickerCoreProps> = ({
   const [uncontrolledOpen, setUncontrolledOpen] = useState(defaultOpen)
   const isControlled = controlledOpen !== undefined
   const isOpen = isControlled ? controlledOpen : uncontrolledOpen
-  
-  console.log('[OverlayPickerCore] RENDER:', { isOpen, isControlled, controlledOpen, uncontrolledOpen })
 
   // Refs
   const triggerRef = useRef<HTMLElement | null>(null)
@@ -38,7 +36,6 @@ export const OverlayPickerCore: React.FC<OverlayPickerCoreProps> = ({
 
   // Update open state
   const setOpen = useCallback((newOpen: boolean, reason?: OverlayCloseReason) => {
-    console.log('[OverlayPickerCore] setOpen called:', { newOpen, reason, isControlled })
     if (!isControlled) {
       setUncontrolledOpen(newOpen)
     }
@@ -48,7 +45,6 @@ export const OverlayPickerCore: React.FC<OverlayPickerCoreProps> = ({
   // Open/close handlers
   const open = useCallback(() => setOpen(true, 'programmatic'), [setOpen])
   const close = useCallback((reason: OverlayCloseReason = 'programmatic') => {
-    console.log('[OverlayPickerCore] close() called with reason:', reason)
     setOpen(false, reason)
   }, [setOpen])
 
