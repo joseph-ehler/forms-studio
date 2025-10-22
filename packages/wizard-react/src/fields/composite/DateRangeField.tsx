@@ -333,9 +333,18 @@ export const DateRangeField: React.FC<FieldComponentProps> = ({
                           <div
                             ref={refs.setFloating}
                             style={floatingStyles}
-                            onClick={(e) => e.stopPropagation()}
-                            onMouseDown={(e) => e.stopPropagation()}
-                            onMouseUp={(e) => e.stopPropagation()}
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              e.nativeEvent.stopImmediatePropagation()
+                            }}
+                            onMouseDown={(e) => {
+                              e.stopPropagation()
+                              e.nativeEvent.stopImmediatePropagation()
+                            }}
+                            onMouseUp={(e) => {
+                              e.stopPropagation()
+                              e.nativeEvent.stopImmediatePropagation()
+                            }}
                             id={`${name}-dialog`}
                             role="dialog"
                             aria-labelledby={`${name}-label`}
