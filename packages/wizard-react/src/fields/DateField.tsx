@@ -184,7 +184,6 @@ export const DateField: React.FC<FieldComponentProps> = ({
                             type="button"
                             onClick={() => {
                               field.onChange(null)
-                              close('select')
                             }}
                             className="flex-1 min-h-[48px] px-4 text-base text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
                           >
