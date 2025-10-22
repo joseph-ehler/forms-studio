@@ -9,6 +9,12 @@
   width: 100%;
 }
 
+/* Remove margins when inside grid (grid gap handles spacing) */
+.ds-grid > .ds-media-container,
+.ds-grid .ds-media-container {
+  margin: 0;
+}
+
 /* Content wrapper fills the figure */
 .ds-media-container__content {
   position: absolute;
