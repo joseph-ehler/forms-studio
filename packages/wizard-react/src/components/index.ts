@@ -40,6 +40,7 @@ import './ds-form-layout.css'
 import './ds-grid.css'
 import './ds-inputs.css'
 import './ds-prose.css'
+import './ds-icons.css'
 
 // Brand CSS (optional - for static brands)
 // import '../styles/brands/brand-acme.css'
