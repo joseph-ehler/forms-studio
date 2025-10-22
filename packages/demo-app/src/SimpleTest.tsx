@@ -5,7 +5,7 @@ import {
   Button, 
   Card, 
   Stack 
-} from '@joseph-ehler/wizard-react'
+} from '@intstudio/ds'
 
 export default function SimpleTest() {
   return (

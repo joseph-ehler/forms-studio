@@ -37,18 +37,18 @@
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/joseph-ehler/forms-studio.git",
+    "url": "https://github.com/joseph-ehler/intelligence-studio.git",
     "directory": "packages/datasources"
   },
-  "homepage": "https://github.com/joseph-ehler/forms-studio#readme",
+  "homepage": "https://github.com/joseph-ehler/intelligence-studio#readme",
   "bugs": {
-    "url": "https://github.com/joseph-ehler/forms-studio/issues"
+    "url": "https://github.com/joseph-ehler/intelligence-studio/issues"
   },
   "peerDependencies": {
     "zod": "^3.22.0"
   },
   "dependencies": {
-    "@joseph.ehler/wizard-core": "workspace:*"
+    "@intstudio/core": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^20.11.0",

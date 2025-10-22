@@ -1,8 +1,11 @@
-# Forms Studio by Intelligence Studio
+# Intelligence Studio
 
-**AI-authorable, privacy-first, JSON-driven forms & wizard engine.**
+**A platform for building beautiful, accessible web applications.**
 
-Build enterprise-safe wizards in minutes—not weeks. Declarative flows as JSON, compiled by an LLM, governed by strict contracts, rendered anywhere, and backed by a production-grade data plane (retries, circuit breakers, SSRF/HTTPS, privacy, caching).
+Intelligence Studio provides enterprise-grade tools for modern web development:
+- **Design System Studio** - Tokens, primitives, patterns, and accessibility
+- **Form Studio** - AI-authorable, privacy-first, JSON-driven forms
+- **Shared Core** - Expression engine, data sources, validation
 
 ---
 
@@ -23,45 +26,84 @@ Build enterprise-safe wizards in minutes—not weeks. Declarative flows as JSON,
 
 ## 📦 **Packages**
 
-### **Core (Framework-Agnostic)**
-- `@intelligence-studio/wizard-core` - Expression engine, flow runtime, validation
-- `@intelligence-studio/wizard-datasources` - Data source manager with SSRF/retry/circuit-breaker
-- `@intelligence-studio/wizard-schema` - Zod contracts + JSON Schema
-- `@intelligence-studio/wizard-validator` - CLI & API validation
+### **Design System Studio**
+```bash
+npm install @intstudio/ds
+```
 
-### **React Integration**
-- `@intelligence-studio/wizard-react` - Headless React bindings (providers/hooks)
-- `@intelligence-studio/wizard-react-renderer` - StepRenderer + shells + Loading primitives
-- `@intelligence-studio/wizard-fields-basic` - Default field catalog
+- **Tokens** - Color, typography, spacing, widths
+- **Primitives** - Stack, Grid, Container, Section, Button, Card
+- **Patterns** - Page layouts, card patterns
+- **Shell** - TopBar, Drawer, BottomNav, AppContent
+- **A11y** - Accessibility presets, focus management
+- **White-label** - Brand packs, theme system
 
-### **Tooling**
-- `@intelligence-studio/wizard-cli` - Scaffolding, validation, local preview
+→ [Design System Demo](packages/ds/demo)
+
+### **Form Studio** (Coming Soon)
+```bash
+npm install @intstudio/forms
+```
+
+- AI-authorable JSON flows
+- Privacy-first data handling
+- Enterprise-grade validation
+- Dynamic field registry
+
+### **Core Libraries**
+
+**[@intstudio/core](packages/core)**
+- Expression engine
+- Flow runtime
+- Validation contracts
+
+**[@intstudio/datasources](packages/datasources)**
+- Data source manager
+- SSRF protection
+- Retry + circuit breaker
+- Privacy classification
+
+**[@intstudio/eslint-plugin-cascade](packages/eslint-plugin-cascade)**
+- Design system guardrails
+- Import rules
+- Best practices
 
 ---
 
 ## 🚀 **Quick Start**
 
-```bash
-# Install
-pnpm add @intelligence-studio/wizard-core @intelligence-studio/wizard-react @intelligence-studio/wizard-react-renderer
+### **Design System**
 
-# Use
-import { createWizardRuntime } from '@intelligence-studio/wizard-core'
-import { DataSourceManager } from '@intelligence-studio/wizard-datasources'
-import { OnboardingShell, StepRenderer } from '@intelligence-studio/wizard-react-renderer'
+```typescript
+import { Stack, Button, Section, Container } from '@intstudio/ds'
+
+export function App() {
+  return (
+    <Section bg="base" paddingY="lg">
+      <Container maxWidth="standard" padding>
+        <Stack spacing="comfortable">
+          <h1>Welcome to Intelligence Studio</h1>
+          <Button size="lg" variant="primary">
+            Get Started
+          </Button>
+        </Stack>
+      </Container>
+    </Section>
+  )
+}
+```
+
+### **Forms** (Coming Soon)
+
+```typescript
+import { FormWizard } from '@intstudio/forms'
+import { createRuntime } from '@intstudio/core'
 import flow from './flow.json'
 
-const runtime = createWizardRuntime({ flow })
-const dsm = new DataSourceManager()
-runtime.plugDataSources(dsm)
+const runtime = createRuntime({ flow })
 
-export default function Wizard() {
-  const wizard = useWizard(runtime)
-  return (
-    <OnboardingShell {...wizard.shellProps}>
-      <StepRenderer step={wizard.currentStep} state={wizard.state} runtime={runtime} />
-    </OnboardingShell>
-  )
+export function Wizard() {
+  return <FormWizard runtime={runtime} />
 }
 ```
 
@@ -95,14 +137,30 @@ pnpm dev
 
 ## 🎉 **Status**
 
-**v0.1.0** - Initial extraction from MotoMind AI  
-✅ Expression engine (100% tested)  
-✅ Data source manager (79/79 tests passing)  
+### **Design System Studio**
+✅ Design tokens (color, spacing, typography, widths)  
+✅ Primitives (Stack, Grid, Button, Container, Section, Card, etc.)  
+✅ Patterns (10 layout patterns, 6 card patterns)  
+✅ Shell components (TopBar, Drawer, BottomNav, AppContent)  
+✅ A11y layer (presets, focus management, ARIA)  
+✅ White-label (brand packs, theme system)  
+✅ Guardrails (ESLint rules, Stylelint rules)  
+🚧 Storybook (coming in 2 weeks)  
+🚧 Visual regression tests  
+
+### **Form Studio**
+✅ Expression engine (core logic)  
+✅ Data source manager (79/79 tests)  
 ✅ Flow validator  
-✅ React renderer  
-🚧 CLI tools  
-🚧 Field adapters  
-🚧 Documentation site  
+🚧 Form components (migrating to use @intstudio/ds)  
+🚧 Field registry  
+🚧 Documentation  
+
+### **v0.3.0** - October 2025
+- Soft-extracted Design System as `@intstudio/ds`
+- Reorganized to platform structure
+- Added comprehensive guardrails
+- Fixed 9 critical bugs (buttons, icons, MediaContainer)  
 
 ---
 

@@ -1,5 +1,5 @@
 {
-  "name": "@joseph.ehler/wizard-core",
+  "name": "@intstudio/core",
   "version": "0.1.0",
   "description": "Headless wizard engine: expression parser, flow runtime, validation",
   "type": "module",
@@ -37,12 +37,12 @@
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/joseph-ehler/forms-studio.git",
+    "url": "https://github.com/joseph-ehler/intelligence-studio.git",
     "directory": "packages/core"
   },
-  "homepage": "https://github.com/joseph-ehler/forms-studio#readme",
+  "homepage": "https://github.com/joseph-ehler/intelligence-studio#readme",
   "bugs": {
-    "url": "https://github.com/joseph-ehler/forms-studio/issues"
+    "url": "https://github.com/joseph-ehler/intelligence-studio/issues"
   },
   "peerDependencies": {
     "zod": "^3.22.0"

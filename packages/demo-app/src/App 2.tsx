@@ -33,7 +33,7 @@ import {
   
   // Interactive
   Button,
-} from '@joseph-ehler/wizard-react'
+} from '@intstudio/ds'
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('home')
