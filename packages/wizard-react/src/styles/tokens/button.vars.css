@@ -19,11 +19,13 @@
     --ds-button-height-sm: 2.5rem;   /* 40px = 10 * 4px - mobile stays touch-friendly */
     --ds-button-height-md: 3rem;     /* 48px = 12 * 4px */
     --ds-button-height-lg: 3.5rem;   /* 56px = 14 * 4px */
+    --ds-button-height-xl: 4rem;     /* 64px = 16 * 4px */
     
     /* Desktop (Strategic sizing) - Auto-adapts with A11Y scale */
     --ds-button-height-sm-desktop: calc(2.25rem * var(--ds-density-multiplier));  /* 36px base → 42-48px for A11Y */
     --ds-button-height-md-desktop: var(--ds-touch-target);  /* 44px base → 48-64px for A11Y (WCAG AA default) */
     --ds-button-height-lg-desktop: calc(3rem * var(--ds-density-multiplier));     /* 48px base → 56-72px for A11Y */
+    --ds-button-height-xl-desktop: calc(3.5rem * var(--ds-density-multiplier));   /* 56px base → 66-84px for A11Y */
     
     /* Padding */
     --ds-button-px-sm: var(--ds-space-3);   /* 12px */
@@ -167,6 +169,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  align-self: center; /* Prevent parent grid/flex from stretching height */
   gap: var(--ds-space-2);
   
   /* Sizing (mobile-first) */
@@ -261,6 +264,19 @@
   }
 }
 
+.ds-btn--xl {
+  min-height: var(--ds-button-height-xl);
+  min-width: var(--ds-button-min-width-lg); /* Reuse lg min-width */
+  padding: 0 var(--ds-button-px-lg);        /* Reuse lg padding */
+  font-size: calc(var(--ds-button-font-lg) * 1.125); /* 20.25px */
+}
+
+@media (min-width: 768px) {
+  .ds-btn--xl {
+    min-height: var(--ds-button-height-xl-desktop);
+  }
+}
+
 /* Full width */
 .ds-btn--full {
   width: 100%;
@@ -278,6 +294,10 @@
 
 .ds-btn--icon.ds-btn--lg {
   min-width: var(--ds-button-height-lg);
+}
+
+.ds-btn--icon.ds-btn--xl {
+  min-width: var(--ds-button-height-xl);
 }
 
 /* ==========================================
