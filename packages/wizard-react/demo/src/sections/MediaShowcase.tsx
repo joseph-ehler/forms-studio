@@ -271,7 +271,7 @@ export function MediaShowcase() {
                 <Picture
                   alt={`Gallery item ${i}`}
                   img={{
-                    src: `https://images.unsplash.com/photo-${1618005182384 + i}-a83a8bd57fbe?w=400&h=267&fit=crop`,
+                    src: `https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=400&h=267&fit=crop&seed=${i}`,
                   }}
                 />
               </MediaContainer>
