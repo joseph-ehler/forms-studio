@@ -41,6 +41,7 @@ import './ds-grid.css'
 import './ds-inputs.css'
 import './ds-prose.css'
 import './ds-icons.css'
+import './ds-media.css'
 
 // Brand CSS (optional - for static brands)
 // import '../styles/brands/brand-acme.css'
