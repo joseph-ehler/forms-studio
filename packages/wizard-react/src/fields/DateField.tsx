@@ -214,7 +214,7 @@ export const DateField: React.FC<FieldComponentProps> = ({
                     >
                       {({ refs, floatingStyles, isPositioned, EventWrapper }) => (
                         <div ref={refs.setFloating} style={floatingStyles}>
-                          <EventWrapper className="z-50 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden">
+                          <EventWrapper className="z-50 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 flex flex-col overflow-hidden">
                             {/* Calendar Body */}
                             <div
                               ref={contentRef}

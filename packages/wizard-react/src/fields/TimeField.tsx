@@ -125,6 +125,12 @@ export const TimeField: React.FC<FieldComponentProps> = ({
             updateFieldValue(newHour, minute)
           }
 
+          const handleClear = () => {
+            setHour(0)
+            setMinute(0)
+            field.onChange('00:00')
+          }
+
           // Wheel Picker Component with Momentum Physics
           const WheelPicker = ({ value, onChange, max, label }: { value: number; onChange: (v: number) => void; max: number; label: string }) => {
             const [isDragging, setIsDragging] = React.useState(false)
@@ -445,7 +451,7 @@ export const TimeField: React.FC<FieldComponentProps> = ({
 
                         {/* Footer */}
                         <PickerFooter
-                          onClear={() => field.onChange(null)}
+                          onClear={handleClear}
                           onDone={() => close('select')}
                           size="default"
                         />
@@ -468,10 +474,10 @@ export const TimeField: React.FC<FieldComponentProps> = ({
                       {({ refs, floatingStyles, EventWrapper }) => (
                         <div ref={refs.setFloating} style={floatingStyles}>
                           <EventWrapper 
-                            className="z-50 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 p-4"
+                            className="z-50 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 flex flex-col overflow-hidden"
                             style={{ width: 'auto', minWidth: '320px' }}
                           >
-                          <div ref={contentRef} className="space-y-4">
+                          <div ref={contentRef} className="flex-1 overflow-y-auto p-4 space-y-4">
                             {/* Format Toggle */}
                             <div className="flex items-center justify-between pb-2 border-b border-gray-200">
                               <span className="text-sm font-medium text-gray-700">Time Format</span>
@@ -534,14 +540,14 @@ export const TimeField: React.FC<FieldComponentProps> = ({
                                 </div>
                               )}
                             </div>
-
-                            {/* Footer */}
-                            <PickerFooter
-                              onClear={() => field.onChange(null)}
-                              onDone={() => close('select')}
-                              size="default"
-                            />
                           </div>
+
+                          {/* Footer */}
+                          <PickerFooter
+                            onClear={handleClear}
+                            onDone={() => close('select')}
+                            size="default"
+                          />
                           </EventWrapper>
                         </div>
                       )}
