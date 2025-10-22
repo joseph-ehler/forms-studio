@@ -19,7 +19,7 @@ export interface OverlayCollisionOptions {
   hide?: boolean
 }
 
-export interface OverlayPickerProps {
+export interface OverlayPickerCoreProps {
   // Control
   open?: boolean
   defaultOpen?: boolean

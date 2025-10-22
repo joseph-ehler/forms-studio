@@ -23,7 +23,7 @@ import { mergeFieldConfig } from './utils/field-json-config'
 import { getAriaProps, getLabelProps, getDescriptionProps } from './utils/a11y-helpers'
 import { DayPicker } from 'react-day-picker'
 import { format, isValid } from 'date-fns'
-import { OverlayPickerCore, OverlaySheet, OverlayPositioner, PickerFooter } from '../components/overlay'
+import { OverlayPickerCore, OverlaySheet, OverlayPicker, CalendarSkin, PickerFooter } from '../components/overlay'
 import { useDeviceType } from '../hooks/useDeviceType'
 
 // Local (tz-safe) conversion helpers
@@ -194,61 +194,40 @@ export const DateField: React.FC<FieldComponentProps> = ({
 
                   {/* Desktop Popover */}
                   {!isMobile && isOpen && (
-                    <OverlayPositioner
+                    <OverlayPicker
                       open={isOpen}
                       anchor={triggerRef.current}
+                      onOpenChange={(open) => {
+                        if (!open) close('outside')
+                      }}
                       placement="bottom-start"
-                      offset={6}
-                      strategy="fixed"
-                      sameWidth={true}
-                      maxHeight={560}
-                      collision={{ flip: true, shift: true, size: true }}
-                    >
-                      {({ refs, floatingStyles, EventWrapper, maxHeightPx }) => (
-                        <div
-                          ref={refs.setFloating as any}
-                          style={floatingStyles}
-                          data-overlay="picker"
-                          className="z-50 bg-white rounded-md shadow-lg ring-1 ring-black/10 flex flex-col overflow-hidden"
-                        >
-                          <EventWrapper className="flex-1 flex flex-col min-h-0">
-                            {/* Calendar Body */}
-                            <div
-                              ref={contentRef}
-                              className="flex-1 min-h-0 overflow-auto p-4"
-                            >
-                            <div className="flex justify-center">
-                              <DayPicker
-                                mode="single"
-                                selected={selectedDate}
-                                onSelect={handleDateSelect}
-                                disabled={[
-                                  ...(disabledDates || []),
-                                  ...(minDate ? [{ before: minDate }] : []),
-                                  ...(maxDate ? [{ after: maxDate }] : []),
-                                ]}
-                                classNames={{
-                                  day: 'fs-day',
-                                  day_selected: 'fs-selected',
-                                  day_today: 'fs-today',
-                                  day_disabled: 'fs-disabled',
-                                }}
-                              />
-                            </div>
-                          </div>
-
-                          {/* Footer */}
-                          <div className="flex-shrink-0 border-t border-gray-200 p-3">
-                            <PickerFooter
-                              onClear={() => field.onChange(null)}
-                              onDone={() => close('select')}
-                              size="small"
-                            />
-                          </div>
-                        </EventWrapper>
+                      sameWidth
+                      hardMaxHeight={560}
+                      content={
+                        <div ref={contentRef} className="p-4">
+                          <CalendarSkin
+                            mode="single"
+                            selected={selectedDate}
+                            onSelect={handleDateSelect}
+                            disabled={[
+                              ...(disabledDates || []),
+                              ...(minDate ? [{ before: minDate }] : []),
+                              ...(maxDate ? [{ after: maxDate }] : []),
+                            ]}
+                            fromDate={minDate}
+                            toDate={maxDate}
+                            numberOfMonths={1}
+                          />
                         </div>
-                      )}
-                    </OverlayPositioner>
+                      }
+                      footer={
+                        <PickerFooter
+                          onClear={() => field.onChange(null)}
+                          onDone={() => close('select')}
+                          size="small"
+                        />
+                      }
+                    />
                   )}
                 </>
               )}

@@ -39,21 +39,23 @@ export const PickerFooter: React.FC<PickerFooterProps> = ({
     : 'flex gap-3'
 
   return (
-    <div className={containerClass}>
-      <button
-        type="button"
-        onClick={onClear}
-        className={clearButtonClass}
-      >
-        {clearLabel}
-      </button>
-      <button
-        type="button"
-        onClick={onDone}
-        className={doneButtonClass}
-      >
-        {doneLabel}
-      </button>
+    <div className="border-t border-gray-200 p-3 bg-white">
+      <div className={containerClass}>
+        <button
+          type="button"
+          onClick={onClear}
+          className={clearButtonClass}
+        >
+          {clearLabel}
+        </button>
+        <button
+          type="button"
+          onClick={onDone}
+          className={doneButtonClass}
+        >
+          {doneLabel}
+        </button>
+      </div>
     </div>
   )
 }

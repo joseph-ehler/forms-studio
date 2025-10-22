@@ -6,14 +6,14 @@
  */
 
 import React, { useEffect, useRef, useState, useCallback } from 'react'
-import type { OverlayPickerProps, OverlayCloseReason } from './types'
+import type { OverlayPickerCoreProps, OverlayCloseReason } from './types'
 
-export interface OverlayPickerCoreProps extends Omit<OverlayPickerProps, 'children'> {
+export interface OverlayPickerCoreComponentProps extends Omit<OverlayPickerCoreProps, 'children'> {
   id?: string
   children: React.ReactNode | ((context: OverlayContextValue) => React.ReactNode)
 }
 
-export const OverlayPickerCore: React.FC<OverlayPickerCoreProps> = ({
+export const OverlayPickerCore: React.FC<OverlayPickerCoreComponentProps> = ({
   open: controlledOpen,
   defaultOpen = false,
   onOpenChange,
