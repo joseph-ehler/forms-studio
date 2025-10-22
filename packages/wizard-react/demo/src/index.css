@@ -378,19 +378,21 @@ body :not(.rdp-root) button[aria-pressed="true"] {
 }
 
 /* =================================================================
-   FINAL OVERRIDE - Range middle dates MUST be transparent
-   This rule is at the END to win over ALL previous blue fills
+   NUCLEAR FINAL OVERRIDE - Range middle dates MUST be transparent
+   Maximum possible specificity - this MUST win over everything
    
    CRITICAL: Middle range buttons should be invisible, only the
    light blue band on the cell should show through
 ================================================================= */
-.rdp-root td.rdp-day_range_middle:not(.rdp-day_range_start):not(.rdp-day_range_end) button.rdp-day_button,
-.rdp-root td.rdp-day_range_middle:not(.rdp-day_range_start):not(.rdp-day_range_end) > button,
-.rdp-root td[data-day-range="middle"]:not([data-day-range="start"]):not([data-day-range="end"]) button,
-.rdp-root [role="gridcell"].rdp-day_range_middle button,
-.rdp-root [role="gridcell"][data-day-range="middle"] button,
-.rdp-root .rdp-day_range_middle button,
-.rdp-root [data-day-range="middle"] button {
+html body .rdp-root td.rdp-day_range_middle:not(.rdp-day_range_start):not(.rdp-day_range_end) button.rdp-day_button,
+html body .rdp-root td.rdp-day_range_middle:not(.rdp-day_range_start):not(.rdp-day_range_end) > button,
+html body .rdp-root td.rdp-day_range_middle button.rdp-day_button,
+html body .rdp-root td.rdp-day_range_middle > button,
+html body .rdp-root td[data-day-range="middle"] button,
+html body .rdp-root [role="gridcell"].rdp-day_range_middle button,
+html body .rdp-root [role="gridcell"][data-day-range="middle"] button,
+html body .rdp-root .rdp-day_range_middle button,
+html body .rdp-root [data-day-range="middle"] button {
   background-color: transparent !important;
   background: transparent !important;
   background-image: none !important;
@@ -401,12 +403,17 @@ body :not(.rdp-root) button[aria-pressed="true"] {
   outline: none !important;
 }
 
-/* Also on hover - middle dates should stay transparent */
-.rdp-root td.rdp-day_range_middle button:hover,
-.rdp-root .rdp-day_range_middle button:hover,
-.rdp-root [data-day-range="middle"] button:hover {
+/* Also on hover and any state - middle dates ALWAYS transparent */
+html body .rdp-root td.rdp-day_range_middle button:hover,
+html body .rdp-root td.rdp-day_range_middle button:active,
+html body .rdp-root td.rdp-day_range_middle button:focus,
+html body .rdp-root .rdp-day_range_middle button,
+html body .rdp-root .rdp-day_range_middle button:hover,
+html body .rdp-root [data-day-range="middle"] button,
+html body .rdp-root [data-day-range="middle"] button:hover {
   background-color: transparent !important;
   background: transparent !important;
+  background-image: none !important;
   color: rgb(17, 24, 39) !important;
   border: none !important;
 }
