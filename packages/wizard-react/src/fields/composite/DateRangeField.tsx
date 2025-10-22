@@ -251,6 +251,13 @@ export const DateRangeField: React.FC<FieldComponentProps> = ({
                       onClose={() => close('outside')}
                       maxHeight={560}
                       aria-labelledby={`${name}-label`}
+                      footer={
+                        <PickerFooter
+                          onClear={() => field.onChange(null)}
+                          onDone={() => close('select')}
+                          size="default"
+                        />
+                      }
                     >
                       {/* Presets */}
                       {presets.length > 0 && (
@@ -282,13 +289,6 @@ export const DateRangeField: React.FC<FieldComponentProps> = ({
                           numberOfMonths={1}
                         />
                       </div>
-
-                      {/* Footer */}
-                      <PickerFooter
-                        onClear={() => field.onChange(null)}
-                        onDone={() => close('select')}
-                        size="default"
-                      />
                     </OverlaySheet>
                   )}
 

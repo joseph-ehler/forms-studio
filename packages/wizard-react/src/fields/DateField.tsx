@@ -162,6 +162,13 @@ export const DateField: React.FC<FieldComponentProps> = ({
                       onClose={() => close('outside')}
                       maxHeight={560}
                       aria-labelledby={`${name}-label`}
+                      footer={
+                        <PickerFooter
+                          onClear={() => field.onChange(null)}
+                          onDone={() => close('select')}
+                          size="default"
+                        />
+                      }
                     >
                       {/* Calendar Body */}
                       <div className="px-4 py-6 flex justify-center">
@@ -180,15 +187,6 @@ export const DateField: React.FC<FieldComponentProps> = ({
                             day_today: 'fs-today',
                             day_disabled: 'fs-disabled',
                           }}
-                        />
-                      </div>
-
-                      {/* Footer */}
-                      <div className="shrink-0 border-t border-gray-200 p-4">
-                        <PickerFooter
-                          onClear={() => field.onChange(null)}
-                          onDone={() => close('select')}
-                          size="default"
                         />
                       </div>
                     </OverlaySheet>

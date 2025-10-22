@@ -384,6 +384,13 @@ export const TimeField: React.FC<FieldComponentProps> = ({
                       onClose={() => close('outside')}
                       maxHeight={560}
                       aria-labelledby={`${name}-label`}
+                      footer={
+                        <PickerFooter
+                          onClear={handleClear}
+                          onDone={() => close('select')}
+                          size="default"
+                        />
+                      }
                     >
                       <div ref={contentRef} className="p-4 space-y-4">
                         {/* Format Toggle */}
@@ -447,15 +454,6 @@ export const TimeField: React.FC<FieldComponentProps> = ({
                               </div>
                             </div>
                           )}
-                        </div>
-
-                        {/* Footer */}
-                        <div className="border-t border-gray-200 p-4">
-                          <PickerFooter
-                            onClear={handleClear}
-                            onDone={() => close('select')}
-                            size="default"
-                          />
                         </div>
                       </div>
                     </OverlaySheet>

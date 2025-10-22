@@ -111,7 +111,7 @@ export const OverlayPositioner: React.FC<OverlayPositionerProps> = ({
         e.nativeEvent.stopImmediatePropagation()
       }}
       className={className}
-      style={style}
+      style={{ height: '100%', ...style }}
     >
       {children}
     </div>
