@@ -29,6 +29,8 @@ export const OverlayPositioner: React.FC<OverlayPositionerProps> = ({
   maxHeight = 560,
   children,
 }) => {
+  const calculatedMaxHeightRef = React.useRef<number>(maxHeight)
+  
   // Build middleware array based on options
   const middleware = useMemo<Middleware[]>(() => {
     const mw: Middleware[] = []
@@ -58,8 +60,9 @@ export const OverlayPositioner: React.FC<OverlayPositionerProps> = ({
               })
             }
 
-            // Constrain max height
+            // Constrain max height and store it
             const maxH = Math.min(maxHeight, availableHeight - 16)
+            calculatedMaxHeightRef.current = maxH
             Object.assign(elements.floating.style, {
               maxHeight: `${maxH}px`,
             })
@@ -87,6 +90,12 @@ export const OverlayPositioner: React.FC<OverlayPositionerProps> = ({
       reference: anchor,
     },
   })
+
+  // Merge calculated maxHeight into floatingStyles
+  const enhancedFloatingStyles = {
+    ...floatingStyles,
+    maxHeight: calculatedMaxHeightRef.current ? `${calculatedMaxHeightRef.current}px` : floatingStyles.maxHeight,
+  }
 
   // Don't render if not open
   if (!open) return null
@@ -118,5 +127,5 @@ export const OverlayPositioner: React.FC<OverlayPositionerProps> = ({
   )
 
   // Provide positioning data to children
-  return <>{children({ refs, floatingStyles, isPositioned, EventWrapper })}</>
+  return <>{children({ refs, floatingStyles: enhancedFloatingStyles, isPositioned, EventWrapper })}</>
 }
