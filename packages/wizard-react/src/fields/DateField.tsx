@@ -220,6 +220,9 @@ export const DateField: React.FC<FieldComponentProps> = ({
                         <div
                           ref={refs.setFloating}
                           style={floatingStyles}
+                          onClick={(e) => e.stopPropagation()}
+                          onMouseDown={(e) => e.stopPropagation()}
+                          onMouseUp={(e) => e.stopPropagation()}
                           className="z-50 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden"
                         >
                           {/* Calendar Body */}
