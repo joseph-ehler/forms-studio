@@ -2,7 +2,8 @@
   "extends": [
     "./.eslintrc.focus-rules.json",
     "./.eslintrc.semantic-sizing.json",
-    "./.eslintrc.density-rules.json"
+    "./.eslintrc.density-rules.json",
+    "./.eslintrc.button-size.json"
   ],
   "rules": {
     "no-console": ["warn", { "allow": ["warn", "error", "group", "groupEnd"] }],

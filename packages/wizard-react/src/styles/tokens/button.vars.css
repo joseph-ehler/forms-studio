@@ -16,14 +16,14 @@
        ========================================== */
     
     /* Mobile-first (touch-friendly) - 4px system */
-    --ds-button-height-sm: 2.5rem;   /* 40px = 10 * 4px */
+    --ds-button-height-sm: 2.5rem;   /* 40px = 10 * 4px - mobile stays touch-friendly */
     --ds-button-height-md: 3rem;     /* 48px = 12 * 4px */
     --ds-button-height-lg: 3.5rem;   /* 56px = 14 * 4px */
     
-    /* Desktop (WCAG AA: 44px minimum) - Auto-adapts with A11Y scale */
-    --ds-button-height-sm-desktop: 2.5rem;             /* 40px = 10 * 4px */
-    --ds-button-height-md-desktop: var(--ds-touch-target);  /* 44px base, 48-64px for A11Y */
-    --ds-button-height-lg-desktop: 3rem;               /* 48px = 12 * 4px */
+    /* Desktop (Strategic sizing) - Auto-adapts with A11Y scale */
+    --ds-button-height-sm-desktop: calc(2.25rem * var(--ds-density-multiplier));  /* 36px base → 42-48px for A11Y */
+    --ds-button-height-md-desktop: var(--ds-touch-target);  /* 44px base → 48-64px for A11Y (WCAG AA default) */
+    --ds-button-height-lg-desktop: calc(3rem * var(--ds-density-multiplier));     /* 48px base → 56-72px for A11Y */
     
     /* Padding */
     --ds-button-px-sm: var(--ds-space-3);   /* 12px */

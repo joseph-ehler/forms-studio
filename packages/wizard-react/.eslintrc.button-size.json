@@ -1,0 +1,19 @@
+{
+  "rules": {
+    "no-restricted-syntax": [
+      "error",
+      {
+        "selector": "JSXOpeningElement[name.name='Button'] > JSXAttribute[name.name='size'][value.value='sm']",
+        "message": "⚠️ Small buttons (size='sm') should ONLY be used for secondary actions (Clear, Cancel, Close, Chips). Use default (md) for primary actions. Small buttons are 36px and scale to 42-48px for A11Y users."
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": ["**/PickerFooter.tsx", "**/Chip*.tsx", "**/Table*.tsx"],
+      "rules": {
+        "no-restricted-syntax": "off"
+      }
+    }
+  ]
+}
