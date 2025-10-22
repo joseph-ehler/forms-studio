@@ -1,0 +1,23 @@
+{
+  "rules": {
+    "no-restricted-syntax": [
+      "error",
+      {
+        "selector": "JSXElement[openingElement.name.name='MediaContainer'] > JSXElement[openingElement.name.name='div']",
+        "message": "⚠️ MediaContainer children must be Picture/Video/img/video - not wrapped in divs. Wrapper divs break sizing (collapses to 3.5px). Pass media elements directly."
+      },
+      {
+        "selector": "CallExpression[callee.object.name='React'][callee.property.name='cloneElement'] > :matches(MemberExpression[object.name='props'][property.name='children']) > JSXElement[openingElement.name.name='MediaContainer']",
+        "message": "⚠️ Don't wrap MediaContainer children with cloneElement - pass media directly"
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": ["**/MediaContainer.tsx", "**/MediaContainer.stories.tsx"],
+      "rules": {
+        "no-restricted-syntax": "off"
+      }
+    }
+  ]
+}

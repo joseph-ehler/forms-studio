@@ -211,10 +211,15 @@ export { Divider } from './Divider'      // Border separator
 export { Spacer } from './Spacer'        // Explicit spacing
 
 // Media Primitives (Images, Video, Aspect Ratios)
-export { MediaContainer } from './MediaContainer' // Smart figure with ratio/caption/overlay
+// Media Components
+export { MediaContainer } from './MediaContainer'
 export type { MediaContainerProps } from './MediaContainer'
-export { Picture } from './Picture'      // Responsive image with art direction
+export { Picture } from './Picture'
 export type { PictureProps } from './Picture'
+
+// Debug utilities (tree-shaken in production)
+export { debugMediaContainer } from './media-debug'
+
 export { VideoPlayer } from './VideoPlayer' // Accessible HTML5 video
 export type { VideoPlayerProps } from './VideoPlayer'
 

@@ -1,15 +1,42 @@
 /**
- * MediaContainer Styles
+ * MediaContainer Styles - Critical Sizing Rules
  * 
- * Ensures Picture/Video children fill the container correctly
+ * These rules fix a 3-part sizing collapse issue discovered through
+ * systematic console-first debugging. DO NOT REMOVE without understanding
+ * the full context documented in commit history.
+ * 
+ * Bug History:
+ * 1. Wrapper div with invalid objectFit style → removed from component
+ * 2. Figure collapsed to 3.55px (no intrinsic width) → fixed with width: 100%
+ * 3. Picture stayed display: inline → fixed with display: block
+ * 4. Grid items had 40px margins → fixed with margin: 0 in grids
  */
 
-/* Figure fills parent width (all content is absolute positioned, so no intrinsic width) */
+/* 
+ * CRITICAL: Figure needs width: 100%
+ * 
+ * Why? All content inside MediaContainer is position: absolute (removed from flow).
+ * Block elements with no flow content collapse to minimal width (~3.5px).
+ * Setting width: 100% forces figure to fill parent, allowing aspect-ratio to work.
+ * 
+ * Without this: Figure = 3.5px × 2px (collapsed)
+ * With this: Figure = 872px × 490px (correct 16:9)
+ */
 .ds-media-container {
   width: 100%;
 }
 
-/* Remove margins when inside grid (grid gap handles spacing) */
+/* 
+ * CRITICAL: Remove margins in grids
+ * 
+ * Why? Grid gap handles spacing between items. External margins on grid items
+ * push elements outside grid boundaries, causing horizontal overflow.
+ * 
+ * Bug: MediaContainers had margin: 16px 40px
+ * Result: 3rd item extended 40px past grid edge (1138px vs 1098px boundary)
+ * 
+ * Grid gap is the ONLY spacing mechanism for grid items.
+ */
 .ds-grid > .ds-media-container,
 .ds-grid .ds-media-container {
   margin: 0;

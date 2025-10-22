@@ -3,7 +3,8 @@
     "./.eslintrc.focus-rules.json",
     "./.eslintrc.semantic-sizing.json",
     "./.eslintrc.density-rules.json",
-    "./.eslintrc.button-size.json"
+    "./.eslintrc.button-size.json",
+    "./.eslintrc.media-rules.json"
   ],
   "rules": {
     "no-console": ["warn", { "allow": ["warn", "error", "group", "groupEnd"] }],

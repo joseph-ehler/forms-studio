@@ -103,6 +103,9 @@ export function MediaContainer({
     <figure
       className={`ds-media-container ${className}`}
       style={containerStyles}
+      data-ratio={ratio}
+      data-max-width={maxWidth}
+      data-clickable={clickable ? 'true' : undefined}
       {...(clickable ? { tabIndex: 0, onFocus: (e) => Object.assign(e.currentTarget.style, focusStyles) } : {})}
       {...props}
     >
