@@ -124,7 +124,7 @@ export default function App() {
               <Body>
                 This demo showcases our <strong>god-tier design system</strong> with:
               </Body>
-              <Stack spacing="compact">
+              <Stack spacing="tight">
                 <Body size="sm">✅ Typography System (Display, Heading, Body)</Body>
                 <Body size="sm">✅ Surface System (Box, Card, Container, Stack, Grid)</Body>
                 <Body size="sm">✅ Button System (8 variants)</Body>
@@ -149,7 +149,7 @@ export default function App() {
 function HomeView({ onOpenSheet }: { onOpenSheet: () => void }) {
   return (
     <Container maxWidth="max">
-      <Stack spacing="loose">
+      <Stack spacing="relaxed">
         {/* Hero Section */}
         <Box padding="loose" style={{ textAlign: 'center' }}>
           <Display size="lg" style={{ marginBottom: 16 }}>
@@ -173,7 +173,7 @@ function HomeView({ onOpenSheet }: { onOpenSheet: () => void }) {
         
         {/* Feature Cards */}
         <Heading size="lg" style={{ textAlign: 'center' }}>Features</Heading>
-        <Grid cols={{ mobile: 1, tablet: 2, desktop: 3 }} gap="normal">
+        <Grid cols={{ mobile: 1, tablet: 2, desktop: 3 }} gap="md">
           <FeatureCard 
             title="Typography" 
             description="Fluid, responsive text scales for every use case"
@@ -214,7 +214,7 @@ function HomeView({ onOpenSheet }: { onOpenSheet: () => void }) {
             <Heading size="md">Button Variants</Heading>
             <Body variant="secondary">All 8 variants in action</Body>
             <Divider />
-            <Grid cols={{ mobile: 1, tablet: 2 }} gap="normal">
+            <Grid cols={{ mobile: 1, tablet: 2 }} gap="md">
               <Button variant="primary">Primary</Button>
               <Button variant="secondary">Secondary</Button>
               <Button variant="ghost">Ghost</Button>
@@ -235,22 +235,22 @@ function HomeView({ onOpenSheet }: { onOpenSheet: () => void }) {
 function ComponentsView() {
   return (
     <Container maxWidth="max">
-      <Stack spacing="loose">
+      <Stack spacing="relaxed">
         <Heading size="xl">Surface Components</Heading>
         
         {/* Cards */}
         <Box>
           <Heading size="md">Cards</Heading>
           <Spacer size="sm" />
-          <Grid cols={{ mobile: 1, tablet: 2 }} gap="normal">
+          <Grid cols={{ mobile: 1, tablet: 2 }} gap="md">
             <Card>
-              <Stack spacing="compact">
+              <Stack spacing="tight">
                 <Heading size="sm">Default Card</Heading>
                 <Body size="sm">Flat design with subtle background</Body>
               </Stack>
             </Card>
             <Card variant="glass">
-              <Stack spacing="compact">
+              <Stack spacing="tight">
                 <Heading size="sm">Glass Card</Heading>
                 <Body size="sm">Frosted glass effect</Body>
               </Stack>
@@ -263,7 +263,7 @@ function ComponentsView() {
           <Stack spacing="normal">
             <Heading size="md">Stack Spacing</Heading>
             <Divider />
-            <Stack spacing="compact">
+            <Stack spacing="tight">
               <Body size="sm" variant="muted">Compact spacing</Body>
               <Body size="sm" variant="muted">Perfect for lists</Body>
               <Body size="sm" variant="muted">Tight vertical rhythm</Body>
@@ -274,7 +274,7 @@ function ComponentsView() {
               <Body size="sm">Default for most content</Body>
             </Stack>
             <Divider />
-            <Stack spacing="loose">
+            <Stack spacing="relaxed">
               <Body size="sm">Loose spacing</Body>
               <Body size="sm">Breathable sections</Body>
             </Stack>
@@ -285,7 +285,7 @@ function ComponentsView() {
         <Box>
           <Heading size="md">Responsive Grid</Heading>
           <Spacer size="sm" />
-          <Grid cols={{ mobile: 2, tablet: 3, desktop: 4 }} gap="compact">
+          <Grid cols={{ mobile: 2, tablet: 3, desktop: 4 }} gap="sm">
             {[1, 2, 3, 4, 5, 6, 7, 8].map(i => (
               <Card key={i} style={{ textAlign: 'center', padding: '1rem' }}>
                 <Body size="sm">Item {i}</Body>
@@ -299,7 +299,7 @@ function ComponentsView() {
           <Stack spacing="normal">
             <Heading size="md">Button Sizes</Heading>
             <Divider />
-            <Stack spacing="compact">
+            <Stack spacing="tight">
               <Button size="sm">Small</Button>
               <Button size="md">Medium (default)</Button>
               <Button size="lg">Large</Button>
@@ -313,7 +313,7 @@ function ComponentsView() {
           <Stack spacing="normal">
             <Heading size="md">Button States</Heading>
             <Divider />
-            <Grid cols={{ mobile: 1, tablet: 2 }} gap="compact">
+            <Grid cols={{ mobile: 1, tablet: 2 }} gap="sm">
               <Button>Normal</Button>
               <Button disabled>Disabled</Button>
               <Button loading>Loading</Button>
@@ -330,7 +330,7 @@ function ComponentsView() {
 function TypographyView() {
   return (
     <Container maxWidth="prose">
-      <Stack spacing="loose">
+      <Stack spacing="relaxed">
         {/* Display */}
         <Box>
           <Label>Display (Marketing)</Label>
@@ -368,7 +368,7 @@ function TypographyView() {
         {/* Variants */}
         <Box>
           <Label>Text Variants</Label>
-          <Stack spacing="compact">
+          <Stack spacing="tight">
             <Body variant="primary">Primary text (default)</Body>
             <Body variant="secondary">Secondary text</Body>
             <Body variant="muted">Muted text</Body>
@@ -405,7 +405,7 @@ function TypographyView() {
 function FeatureCard({ title, description, icon }: { title: string; description: string; icon: string }) {
   return (
     <Card>
-      <Stack spacing="compact">
+      <Stack spacing="tight">
         <div style={{ fontSize: '2rem' }}>{icon}</div>
         <Heading size="sm">{title}</Heading>
         <Body size="sm" variant="secondary">{description}</Body>
