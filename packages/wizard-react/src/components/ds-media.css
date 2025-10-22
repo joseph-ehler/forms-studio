@@ -4,6 +4,11 @@
  * Ensures Picture/Video children fill the container correctly
  */
 
+/* Figure fills parent width (all content is absolute positioned, so no intrinsic width) */
+.ds-media-container {
+  width: 100%;
+}
+
 /* Content wrapper fills the figure */
 .ds-media-container__content {
   position: absolute;
