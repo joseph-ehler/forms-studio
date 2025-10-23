@@ -30,6 +30,7 @@
     "refine:dry": "node scripts/refiner/index.mjs",
     "refine:run": "node scripts/refiner/index.mjs --apply",
     "analyze:field": "node scripts/analyzer/field-analyzer.mjs",
+    "analyze:batch": "node scripts/analyzer/analyze-batch.mjs",
     "spec:from-analysis": "node scripts/analyzer/to-spec.mjs",
     "spec:validate": "node scripts/process/validate-spec.mjs",
     "field:new": "node scripts/process/field-from-spec-v2.mjs",
