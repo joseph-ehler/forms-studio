@@ -74,7 +74,7 @@ export * from './white-label'
 // 🔧 UTILS (public utilities only)
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-export { type LayoutPreset } from './utils'
+// export { type LayoutPreset } from './utils';  // TODO: Add back when utils exports it
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // 🎭 TOKENS (optional typed tokens map)

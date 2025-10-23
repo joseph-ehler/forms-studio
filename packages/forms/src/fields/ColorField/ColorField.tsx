@@ -53,7 +53,6 @@ export function ColorField<T extends FieldValues = FieldValues>({
             onChange={(e) => field.onChange(e.target.value)}
             onBlur={field.onBlur}
             required={required}
-            disabled={disabled}
             style={{
               width: '100%',
               padding: '8px 12px',
