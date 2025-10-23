@@ -10,12 +10,12 @@ import { Controller, type FieldValues } from 'react-hook-form';
 import type { FieldComponentProps } from '../../form-core/types';
 import { FormLabel, FormHelperText, Stack } from '@intstudio/ds';
 
-export interface ColorFieldProps<T extends FieldValues = FieldValues>
-  extends Omit<FieldComponentProps<T>, 'placeholder'> {
-  label?: string;  // Field label
-  description?: string;  // Helper text
-  required?: boolean;  // Required field indicator
-  disabled?: boolean;  // Disabled state
+export interface ColorFieldProps<T extends FieldValues = FieldValues> extends
+  Omit<FieldComponentProps<T>, 'placeholder'> {
+  label?: string; // Field label
+  description?: string; // Helper text
+  required?: boolean; // Required field indicator
+  disabled?: boolean; // Disabled state
 }
 
 export function ColorField<T extends FieldValues = FieldValues>({
@@ -33,50 +33,50 @@ export function ColorField<T extends FieldValues = FieldValues>({
 
   return (
     <Stack spacing="tight">
-      {label && (
-        <FormLabel htmlFor={name} required={required} size="md">
+      {label &&
+      <FormLabel htmlFor={name} required={required} size="md">
           {label}
         </FormLabel>
-      )}
+      }
 
       <Controller
         name={name as any}
         control={control as any}
-        render={({ field }) => (
-          <input
-            type="color"
-            id={name}
-            disabled={disabled}
-            required={required}
-            aria-invalid={hasError || undefined}
-            aria-describedby={description ? `${name}-desc` : undefined}
-            value={field.value ?? "#000000"}
-            onChange={(e) => field.onChange(e.target.value)}
-            onBlur={field.onBlur}
-            style={{
-              width: '100%',
-              padding: '8px 12px',
-              border: hasError ? '1px solid #ef4444' : '1px solid #d1d5db',
-              borderRadius: '6px',
-              fontSize: '14px',
-            }}
-          />
-        )}
-      />
+        render={({ field }) =>
+        <input
+          type="color"
+          id={name}
+          disabled={disabled}
+          required={required}
+          aria-invalid={hasError || undefined}
+          aria-describedby={description ? `${name}-desc` : undefined}
+          value={field.value ?? "#000000"}
+          onChange={(e) => field.onChange(e.target.value)}
+          onBlur={field.onBlur} className="ds-input w-full" />
 
-      {description && (
-        <div id={`${name}-desc`}>
+
+
+
+
+
+
+
+        } />
+
+
+      {description &&
+      <div id={`${name}-desc`}>
           <FormHelperText size="sm" aria-live="polite">
             {description}
           </FormHelperText>
         </div>
-      )}
+      }
 
-      {hasError && errorMessage && (
-        <FormHelperText variant="error" size="sm" aria-live="polite">
+      {hasError && errorMessage &&
+      <FormHelperText variant="error" size="sm" aria-live="polite">
           {errorMessage}
         </FormHelperText>
-      )}
-    </Stack>
-  );
+      }
+    </Stack>);
+
 }

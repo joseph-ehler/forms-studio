@@ -55,14 +55,14 @@ export function UrlField<T extends FieldValues = FieldValues>({
           aria-describedby={description ? `${name}-desc` : undefined}
           value={field.value ?? ""}
           onChange={(e) => field.onChange(e.target.value)}
-          onBlur={field.onBlur}
-          style={{
-            width: '100%',
-            padding: '8px 12px',
-            border: hasError ? '1px solid #ef4444' : '1px solid #d1d5db',
-            borderRadius: '6px',
-            fontSize: '14px'
-          }} />
+          onBlur={field.onBlur} className="ds-input w-full" />
+
+
+
+
+
+
+
 
         } />
 

@@ -17,7 +17,7 @@ export function CheckboxField<T extends FieldValues = FieldValues>({
   label,
   required,
   disabled,
-  description,
+  description
 }: Omit<FieldComponentProps<T>, 'placeholder'>) {
   const hasError = Boolean((errors as any)?.[name]);
   const errorMessage = (errors as any)?.[name]?.message;
@@ -27,58 +27,58 @@ export function CheckboxField<T extends FieldValues = FieldValues>({
       <Controller
         name={name as any}
         control={control as any}
-        render={({ field }) => (
-          <label 
-            htmlFor={name}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-              cursor: disabled ? 'not-allowed' : 'pointer',
-              opacity: disabled ? 0.6 : 1,
-            }}
-          >
-            <input
-              type="checkbox"
-              id={name}
-              disabled={disabled}
-              aria-invalid={hasError || undefined}
-              aria-describedby={description ? `${name}-desc` : undefined}
-              aria-required={required || undefined}
-              checked={field.value ?? false}
-              onChange={(e) => {
-                field.onChange(e.target.checked);
-              }}
-              onBlur={field.onBlur}
-              style={{
-                width: '18px',
-                height: '18px',
-                cursor: disabled ? 'not-allowed' : 'pointer',
-              }}
-            />
-            {label && (
-              <span style={{ fontSize: '14px' }}>
-                {label}
-                {required && <span style={{ color: '#ef4444', marginLeft: '4px' }}>*</span>}
-              </span>
-            )}
-          </label>
-        )}
-      />
+        render={({ field }) =>
+        <label
+          htmlFor={name}>
 
-      {description && (
-        <div id={`${name}-desc`}>
+
+
+
+
+
+
+
+            <input
+            type="checkbox"
+            id={name}
+            disabled={disabled}
+            aria-invalid={hasError || undefined}
+            aria-describedby={description ? `${name}-desc` : undefined}
+            aria-required={required || undefined}
+            checked={field.value ?? false}
+            onChange={(e) => {
+              field.onChange(e.target.checked);
+            }}
+            onBlur={field.onBlur} className="ds-input w-full" />
+
+
+
+
+
+
+            {label &&
+          <span>
+                {label}
+                {required && <span>*</span>}
+              </span>
+          }
+          </label>
+        } />
+
+
+      {description &&
+      <div id={`${name}-desc`}>
           <FormHelperText size="sm" aria-live="polite">
             {description}
           </FormHelperText>
         </div>
-      )}
+      }
       
-      {hasError && errorMessage && (
-        <FormHelperText variant="error" size="sm" aria-live="polite">
+      {hasError && errorMessage &&
+      <FormHelperText variant="error" size="sm" aria-live="polite">
           {errorMessage as string}
         </FormHelperText>
-      )}
-    </Stack>
-  );
+      }
+    </Stack>);
+
 }

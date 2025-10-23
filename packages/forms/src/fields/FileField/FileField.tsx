@@ -57,14 +57,14 @@ export function FileField<T extends FieldValues = FieldValues>({
           onChange={(e) => field.onChange(e.target.files)}
           onBlur={field.onBlur}
           accept={accept}
-          multiple={multiple}
-          style={{
-            width: '100%',
-            padding: '8px 12px',
-            border: hasError ? '1px solid #ef4444' : '1px solid #d1d5db',
-            borderRadius: '6px',
-            fontSize: '14px'
-          }} />
+          multiple={multiple} className="ds-input w-full" />
+
+
+
+
+
+
+
 
         } />
 

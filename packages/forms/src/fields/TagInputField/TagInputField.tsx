@@ -10,10 +10,10 @@ import { Controller, type FieldValues } from 'react-hook-form';
 import type { FieldComponentProps } from '../../form-core/types';
 import { FormLabel, FormHelperText, Stack } from '@intstudio/ds';
 
-export interface TagInputFieldProps<T extends FieldValues = FieldValues>
-  extends Omit<FieldComponentProps<T>, 'placeholder'> {
-  separator?: string;  // Tag separator character
-  maxTags?: number;  // Maximum number of tags allowed
+export interface TagInputFieldProps<T extends FieldValues = FieldValues> extends
+  Omit<FieldComponentProps<T>, 'placeholder'> {
+  separator?: string; // Tag separator character
+  maxTags?: number; // Maximum number of tags allowed
 }
 
 export function TagInputField<T extends FieldValues = FieldValues>({
@@ -25,7 +25,7 @@ export function TagInputField<T extends FieldValues = FieldValues>({
   disabled,
   description,
   separator = ',',
-  maxTags = 10,
+  maxTags = 10
 }: TagInputFieldProps<T>) {
   const err = (errors as any)?.[name];
   const hasError = Boolean(err);
@@ -33,50 +33,50 @@ export function TagInputField<T extends FieldValues = FieldValues>({
 
   return (
     <Stack spacing="tight">
-      {label && (
-        <FormLabel htmlFor={name} required={required} size="md">
+      {label &&
+      <FormLabel htmlFor={name} required={required} size="md">
           {label}
         </FormLabel>
-      )}
+      }
 
       <Controller
         name={name as any}
         control={control as any}
-        render={({ field }) => (
-          <input
-            type="text"
-            id={name}
-            placeholder={`Enter tags separated by ${separator}`}
-            disabled={disabled}
-            aria-invalid={hasError || undefined}
-            aria-describedby={description ? `${name}-desc` : undefined}
-            value={field.value ?? ''}
-            onChange={(e) => field.onChange(e.target.value)}
-            onBlur={field.onBlur}
-            style={{
-              width: '100%',
-              padding: '8px 12px',
-              border: hasError ? '1px solid #ef4444' : '1px solid #d1d5db',
-              borderRadius: '6px',
-              fontSize: '14px',
-            }}
-          />
-        )}
-      />
+        render={({ field }) =>
+        <input
+          type="text"
+          id={name}
+          placeholder={`Enter tags separated by ${separator}`}
+          disabled={disabled}
+          aria-invalid={hasError || undefined}
+          aria-describedby={description ? `${name}-desc` : undefined}
+          value={field.value ?? ''}
+          onChange={(e) => field.onChange(e.target.value)}
+          onBlur={field.onBlur} className="ds-input w-full" />
 
-      {description && (
-        <div id={`${name}-desc`}>
+
+
+
+
+
+
+
+        } />
+
+
+      {description &&
+      <div id={`${name}-desc`}>
           <FormHelperText size="sm" aria-live="polite">
             {description}
           </FormHelperText>
         </div>
-      )}
+      }
 
-      {hasError && errorMessage && (
-        <FormHelperText variant="error" size="sm" aria-live="polite">
+      {hasError && errorMessage &&
+      <FormHelperText variant="error" size="sm" aria-live="polite">
           {errorMessage}
         </FormHelperText>
-      )}
-    </Stack>
-  );
+      }
+    </Stack>);
+
 }

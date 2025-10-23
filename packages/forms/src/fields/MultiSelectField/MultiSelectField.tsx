@@ -58,14 +58,14 @@ export function MultiSelectField<T extends FieldValues = FieldValues>({
           onChange={(e) => field.onChange(e.target.value)}
           onBlur={field.onBlur}
 
-          size={size}
-          style={{
-            width: '100%',
-            padding: '8px 12px',
-            border: hasError ? '1px solid #ef4444' : '1px solid #d1d5db',
-            borderRadius: '6px',
-            fontSize: '14px'
-          }} />
+          size={size} className="ds-input w-full" />
+
+
+
+
+
+
+
 
         } />
 

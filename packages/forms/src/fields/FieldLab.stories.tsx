@@ -9,25 +9,25 @@ import type { Meta, StoryObj } from '@storybook/react';
 
 const meta: Meta = {
   title: 'Forms/Field Lab',
-  tags: ['autodocs'],
+  tags: ['autodocs']
 };
 
 export default meta;
 type Story = StoryObj;
 
 export const Placeholder: Story = {
-  render: () => (
-    <div style={{ padding: 24, maxWidth: 600, margin: '0 auto' }}>
+  render: () =>
+  <div>
       <h2>Field Lab - Coming Soon</h2>
-      <p style={{ color: '#666' }}>
+      <p>
         Fields will be added here as they're migrated from DS to Forms.
       </p>
-      <p style={{ color: '#666' }}>
+      <p>
         Use <code>pnpm process:migrate-batch</code> to migrate fields.
       </p>
-    </div>
-  ),
+    </div>,
+
   parameters: {
-    layout: 'fullscreen',
-  },
+    layout: 'fullscreen'
+  }
 };

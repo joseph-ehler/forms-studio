@@ -18,57 +18,57 @@ export function TimeField<T extends FieldValues = FieldValues>({
   required,
   disabled,
   description,
-  placeholder,
+  placeholder
 }: FieldComponentProps<T>) {
   const hasError = Boolean((errors as any)?.[name]);
   const errorMessage = (errors as any)?.[name]?.message;
 
   return (
     <Stack spacing="tight">
-      {label && (
-        <FormLabel htmlFor={name} required={required} size="md">
+      {label &&
+      <FormLabel htmlFor={name} required={required} size="md">
           {label}
         </FormLabel>
-      )}
+      }
 
       <Controller
         name={name as any}
         control={control as any}
-        render={({ field }) => (
-          <input
-            type="time"
-            id={name}
-            placeholder={placeholder}
-            disabled={disabled}
-            aria-invalid={hasError || undefined}
-            aria-describedby={description ? `${name}-desc` : undefined}
-            value={field.value ?? ''}
-            onChange={(e) => field.onChange(e.target.value)}
-            onBlur={field.onBlur}
-            style={{
-              width: '100%',
-              padding: '8px 12px',
-              border: hasError ? '1px solid #ef4444' : '1px solid #d1d5db',
-              borderRadius: '6px',
-              fontSize: '14px',
-            }}
-          />
-        )}
-      />
+        render={({ field }) =>
+        <input
+          type="time"
+          id={name}
+          placeholder={placeholder}
+          disabled={disabled}
+          aria-invalid={hasError || undefined}
+          aria-describedby={description ? `${name}-desc` : undefined}
+          value={field.value ?? ''}
+          onChange={(e) => field.onChange(e.target.value)}
+          onBlur={field.onBlur} className="ds-input w-full" />
 
-      {description && (
-        <div id={`${name}-desc`}>
+
+
+
+
+
+
+
+        } />
+
+
+      {description &&
+      <div id={`${name}-desc`}>
           <FormHelperText size="sm" aria-live="polite">
             {description}
           </FormHelperText>
         </div>
-      )}
+      }
       
-      {hasError && errorMessage && (
-        <FormHelperText variant="error" size="sm" aria-live="polite">
+      {hasError && errorMessage &&
+      <FormHelperText variant="error" size="sm" aria-live="polite">
           {errorMessage as string}
         </FormHelperText>
-      )}
-    </Stack>
-  );
+      }
+    </Stack>);
+
 }
