@@ -28,10 +28,10 @@
 import { glob } from 'glob';
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import { filterDomProps } from './transforms/filter-dom-props.mjs';
+import { filterDomPropsV1_1 } from './transforms/filter-dom-props-v1.1.mjs';
 
 const TRANSFORMS = [
-  filterDomProps({ htmlAllowlistByTypePath: 'scripts/refiner/maps/html-allowlist.json' }),
+  filterDomPropsV1_1(), // v1.1: AST-based auto-fix for prop leakage
   // Future transforms:
   // normalizeImports({ canonical: { useMotion: '@intstudio/ds/utils' } }),
   // hardenA11y(),

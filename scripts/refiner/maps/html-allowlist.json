@@ -12,6 +12,8 @@
     "readOnly",
     "autoFocus",
     "tabIndex",
+    "role",
+    "htmlFor",
     "aria-label",
     "aria-labelledby",
     "aria-describedby",
@@ -79,6 +81,7 @@
       "type",
       "value",
       "defaultValue",
+      "placeholder",
       "min",
       "max",
       "step"
@@ -88,6 +91,7 @@
       "type",
       "value",
       "defaultValue",
+      "placeholder",
       "min",
       "max",
       "step"
