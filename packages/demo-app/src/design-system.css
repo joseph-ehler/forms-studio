@@ -1,3 +1,9 @@
+/**
+ * CSS Cascade Layers - Define layer order FIRST
+ * This MUST come before any @layer usage
+ */
+@layer tokens, brand, base, atoms, layout, patterns, utils;
+
 /* src/components/ds-typography.css */
 .ds-label {
   font-family: var(--ds-font-body, "Inter", system-ui, -apple-system, sans-serif);
