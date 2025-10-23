@@ -153,17 +153,26 @@ ${Array.from(uniqueProps.values()).map(p => `  ${p.name}?: ${p.type};  // ${p.de
 }`;
   
   // Build function params (single declaration, with defaults)
-  const paramsList = [
+  // Base FieldComponentProps - always included
+  const baseParams = [
     'name',
     'control',
     'errors',
+    'label',
+    'required',
+    'disabled',
+    'description',
   ];
   
-  // Add props with defaults
+  // Add field-specific props with defaults
   const propsWithDefaults = [];
   const propsWithoutDefaults = [];
   
+  // Filter out base props from uniqueProps to avoid duplicates
+  const basePropNames = new Set(baseParams);
   Array.from(uniqueProps.values()).forEach(p => {
+    if (basePropNames.has(p.name)) return; // Skip base props
+    
     if (p.default !== undefined) {
       propsWithDefaults.push(`${p.name} = ${quoteDefault(p.default)}`);
     } else {
@@ -171,7 +180,7 @@ ${Array.from(uniqueProps.values()).map(p => `  ${p.name}?: ${p.type};  // ${p.de
     }
   });
   
-  const allParams = [...paramsList, ...propsWithoutDefaults, ...propsWithDefaults].join(',\n  ');
+  const allParams = [...baseParams, ...propsWithoutDefaults, ...propsWithDefaults].join(',\n  ');
   
   // Build value coercion
   const valueCoercion = value?.coercion || 'e.target.value';
