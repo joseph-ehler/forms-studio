@@ -1,0 +1,10 @@
+{
+  "plugins": [
+    "remark-preset-lint-recommended",
+    "remark-frontmatter",
+    ["remark-validate-links", { "repository": false }],
+    ["remark-lint-list-item-indent", "space"],
+    ["remark-lint-maximum-line-length", false],
+    ["remark-lint-no-duplicate-headings", false]
+  ]
+}

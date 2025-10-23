@@ -1,0 +1,67 @@
+name: Nightly Sweeper
+
+on:
+  schedule:
+    - cron: '0 4 * * *'  # 4 AM UTC daily
+  workflow_dispatch:  # Manual trigger
+
+jobs:
+  sweep:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: pnpm/action-setup@v3
+        with: 
+          version: 8
+      
+      - uses: actions/setup-node@v4
+        with: 
+          node-version: 20
+          cache: 'pnpm'
+      
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      
+      - name: Run Knip (unused exports/files)
+        run: |
+          pnpm dlx knip --reporter json > .reports/knip.json || true
+          echo "📦 Knip results saved"
+      
+      - name: Run ts-prune (dead TypeScript exports)
+        run: |
+          pnpm dlx ts-prune > .reports/ts-prune.txt || true
+          echo "🌳 ts-prune results saved"
+      
+      - name: Run Madge (circular dependencies)
+        run: |
+          pnpm dlx madge packages --circular --json > .reports/madge.json || true
+          echo "🔄 Madge results saved"
+      
+      - name: Check broken links in docs
+        run: |
+          pnpm dlx linkinator docs --skip node_modules --format json > .reports/links.json || true
+          echo "🔗 Link check results saved"
+      
+      - name: Create Sweeper PR
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: 'chore(sweep): nightly cleanup findings'
+          title: '🤖 Nightly Sweeper Results'
+          body: |
+            ## 🌙 Nightly Sweep Findings
+            
+            Automated cleanup check found the following:
+            
+            - 📦 **Knip:** Unused files/exports
+            - 🌳 **ts-prune:** Dead TypeScript code
+            - 🔄 **Madge:** Circular dependencies
+            - 🔗 **Linkinator:** Broken documentation links
+            
+            Review the attached reports and address as needed.
+            
+            Reports are in `.reports/` directory.
+          branch: sweeper/nightly-${{ github.run_number }}
+          labels: chore, sweeper, automated
+          assignees: joseph-ehler
