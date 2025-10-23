@@ -1,0 +1,85 @@
+name: EmailFieldEnhanced
+type: email
+specVersion: "1.2"
+description: Email input with async validation and telemetry (God Tier demo)
+
+# ========================================
+# VALIDATION (sync + async)
+# ========================================
+validation:
+  sync:
+    required: true
+    email: true
+    minLength: 8
+  async:
+    - id: unique-email
+      debounceMs: 300
+      url: /api/users/check-email
+      method: GET
+      queryKey: email
+      onFailMessage: "This email is already registered."
+
+# ========================================
+# UI HINTS
+# ========================================
+ui:
+  size: md
+  density: cozy
+  iconLeft: mail
+  fullWidth: true
+
+# ========================================
+# TELEMETRY (observability)
+# ========================================
+telemetry:
+  enabled: true
+  events:
+    - focus
+    - blur
+    - validate
+  pii: hash  # Privacy-aware: hash email before sending
+
+# ========================================
+# PERFORMANCE
+# ========================================
+perf:
+  budgetMs: 50
+  debounceChangeMs: 100
+  idleValidation: true
+
+# ========================================
+# SECURITY
+# ========================================
+security:
+  sanitize: true
+  allowListPattern: null
+
+# ========================================
+# I18N
+# ========================================
+i18n:
+  messagesKey: forms.email
+
+# ========================================
+# ARIA
+# ========================================
+aria:
+  live: polite
+  invalid: hasError
+  describedby: description
+
+# ========================================
+# METADATA
+# ========================================
+metadata:
+  batch: 7
+  difficulty: complex
+  added: "2025-10-23"
+
+# ========================================
+# FACADE
+# ========================================
+facade:
+  enabled: true
+  removal: v2.0.0
+  codemod: pnpm codemod:fields
