@@ -1,6 +1,26 @@
 # Canonical import map + folder boundaries
 # This enforces import hygiene across the entire repo
 
+# Root file boundaries - ONLY orchestration and docs index allowed
+root:
+  allow:
+    - "^README\\.md$"
+    - "^CONTRIBUTING\\.md$"
+    - "^SECURITY\\.md$"
+    - "^CODE_OF_CONDUCT\\.md$"
+    - "^LICENSE$"
+    - "^CHANGELOG\\.md$"
+    - "^\\.(husky|github|changeset|vscode)/.*"
+    - "^(pnpm-workspace\\.yaml|turbo\\.json|tsconfig\\.base\\.json|repo\\.rules\\.yaml|repo\\.imports\\.yaml|\\.editorconfig|\\.gitattributes|\\.gitignore)$"
+  deny:
+    - "^[A-Z_]+\\.md$"  # PHASE_*.md, AUTOMAGIC_*.md etc → docs/
+    - "^.*\\.(sh|js|mjs|ts|tsx)$"  # scripts → scripts/
+  suggest:
+    "^PHASE_.*\\.md$": "docs/handbook/"
+    "^[A-Z_]+\\.md$": "docs/handbook/"
+    "^.*\\.sh$": "scripts/"
+    "^.*\\.(js|mjs|ts)$": "scripts/"
+
 packages:
   ds:
     roots:

@@ -1,6 +1,12 @@
 #!/usr/bin/env sh
 . "$(dirname "$0")/_/husky.sh"
 
+# Repo boundaries: enforce folder structure
+node scripts/hygiene/repo-steward.mjs || exit 1
+
+# Docs autostow: move misplaced docs to correct location
+node scripts/hygiene/docs-autostow.mjs || true
+
 # Import hygiene: check imports & regenerate barrels
 pnpm imports:check || exit 1
 pnpm barrels
