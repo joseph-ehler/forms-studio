@@ -303,14 +303,8 @@ export function ${name}<T extends FieldValues = FieldValues>({
         control={control as any}
         render={({ field }) => (
           <input
+            className="ds-input w-full"
 ${allDomProps}
-            style={{
-              width: '100%',
-              padding: '8px 12px',
-              border: hasError ? '1px solid #ef4444' : '1px solid #d1d5db',
-              borderRadius: '6px',
-              fontSize: '14px',
-            }}
           />
         )}
       />

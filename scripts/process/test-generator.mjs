@@ -235,6 +235,7 @@ export function ${name}<T extends FieldValues = FieldValues>({
           <input
             type="${inputType}"
             id={name}
+            className="ds-input w-full"
             disabled={disabled}
             aria-invalid={hasError || undefined}
             aria-describedby={description ? \`\${name}-desc\` : undefined}
@@ -242,13 +243,6 @@ ${domProps}
             value={field.value ?? ${defaultValue}}
             onChange={(e) => field.onChange(e.target.value)}
             onBlur={field.onBlur}
-            style={{
-              width: '100%',
-              padding: '8px 12px',
-              border: hasError ? '1px solid #ef4444' : '1px solid #d1d5db',
-              borderRadius: '6px',
-              fontSize: '14px',
-            }}
           />
         )}
       />

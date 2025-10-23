@@ -93,11 +93,12 @@ export function generateCompositeField(spec, allowlist) {
           name={\`\${name}.${part.name}\` as any}
           control={control as any}
           render={({ field }) => (
-            <div style={{ flex: 1 }}>
+            <div className="flex-1">
               ${part.label ? `<FormLabel htmlFor={\`\${name}-${part.name}\`} size="sm">${partLabel}</FormLabel>` : ''}
               <input
                 type="${partType}"
                 id={\`\${name}-${part.name}\`}
+                className="ds-input w-full"
                 disabled={disabled}
                 aria-invalid={hasError || undefined}
                 aria-describedby={description ? \`\${name}-desc\` : undefined}
@@ -105,18 +106,11 @@ export function generateCompositeField(spec, allowlist) {
                 value={field.value ?? ${partDefault}}
                 onChange={(e) => field.onChange(${partCoercion})}
                 onBlur={field.onBlur}
-                style={{
-                  width: '100%',
-                  padding: '8px 12px',
-                  border: hasError ? '1px solid #ef4444' : '1px solid #d1d5db',
-                  borderRadius: '6px',
-                  fontSize: '14px',
-                }}
               />
             </div>
           )}
         />
-        ${showSeparator ? `<span style={{ padding: '0 8px', alignSelf: 'center' }}>${separator}</span>` : ''}`;
+        ${showSeparator ? `<span className="px-2 self-center">${separator}</span>` : ''}`;
   }).join('\n');
 
   // Build error aggregation
@@ -162,7 +156,7 @@ export function ${name}<T extends FieldValues = FieldValues>({
       )}
 
       {/* Composite parts - ${layout} layout */}
-      <div style={{ display: 'flex', flexDirection: '${layout === 'stack' ? 'column' : 'row'}', gap: '${gapToSpacing(gap) === 'tight' ? '8px' : gapToSpacing(gap) === 'relaxed' ? '16px' : '12px'}', alignItems: '${layout === 'row' ? 'flex-start' : 'stretch'}' }}>
+      <div className="flex ${layout === 'stack' ? 'flex-col' : 'flex-row'} ${gapToSpacing(gap) === 'tight' ? 'gap-2' : gapToSpacing(gap) === 'relaxed' ? 'gap-4' : 'gap-3'} ${layout === 'row' ? 'items-start' : 'items-stretch'}">
 ${partRenders}
       </div>
 
