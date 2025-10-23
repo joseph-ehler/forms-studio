@@ -1,8 +1,13 @@
 /**
  * Design System CSS Import
  * 
- * Imports all design system styles for the demo app.
+ * Imports all design system styles from the DS package source.
+ * This ensures we always get the latest styles with proper @layer wrapping.
  */
 
-/* Import local copy */
-@import './design-system.css';
+/* Layer declaration FIRST */
+@import '@intstudio/ds/src/styles/layers.css';
+
+/* Then import all component styles */
+@import '@intstudio/ds/src/styles/components/ds-typography.css';
+@import '@intstudio/ds/src/styles/components/ds-inputs.css';
