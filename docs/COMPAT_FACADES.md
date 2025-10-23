@@ -22,6 +22,9 @@ This document tracks all deprecated re-exports in `@intstudio/ds/fields/*` that 
 | EmailField | `packages/ds/src/fields/EmailField.ts` | `@intstudio/forms/fields` | 2025-10-23 | v2.0.0 | `pnpm codemod:fields` |
 | TelField | `packages/ds/src/fields/TelField.ts` | `@intstudio/forms/fields` | 2025-10-23 | v2.0.0 | `pnpm codemod:fields` |
 | UrlField | `packages/ds/src/fields/UrlField.ts` | `@intstudio/forms/fields` | 2025-10-23 | v2.0.0 | `pnpm codemod:fields` |
+| FileField | `packages/ds/src/fields/FileField.ts` | `@intstudio/forms/fields` | 2025-10-23 | v2.0.0 | `pnpm codemod:fields` |
+| MultiSelectField | `packages/ds/src/fields/MultiSelectField.ts` | `@intstudio/forms/fields` | 2025-10-23 | v2.0.0 | `pnpm codemod:fields` |
+| ToggleField | `packages/ds/src/fields/ToggleField.ts` | `@intstudio/forms/fields` | 2025-10-23 | v2.0.0 | `pnpm codemod:fields` |
 
 ## Removal Process
 

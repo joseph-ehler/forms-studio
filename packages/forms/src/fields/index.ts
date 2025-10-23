@@ -20,3 +20,6 @@ export * from './ColorField';
 export * from './EmailField';
 export * from './TelField';
 export * from './UrlField';
+export * from './FileField';
+export * from './MultiSelectField';
+export * from './ToggleField';

@@ -1,0 +1,29 @@
+name: FileField
+type: file
+specVersion: "1.0"
+description: File upload with native file input
+metadata:
+  batch: 6
+  difficulty: simple
+  added: "2025-10-23"
+props:
+  - name: accept
+    type: string
+    required: false
+    description: File types to accept (e.g., "image/*")
+  - name: multiple
+    type: boolean
+    required: false
+    default: false
+    description: Allow multiple file selection
+value:
+  default: ""
+  coercion: e.target.files
+aria:
+  live: polite
+  invalid: hasError
+  describedby: description
+facade:
+  enabled: true
+  removal: v2.0.0
+  codemod: pnpm codemod:fields
