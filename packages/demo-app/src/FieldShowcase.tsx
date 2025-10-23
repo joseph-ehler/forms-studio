@@ -15,6 +15,7 @@ import { Stack, Heading, Body, Card, AppProvider } from '@intstudio/ds';
 import {
   TextField,
   EmailField,
+  EmailEnhancedField,
   NumberField,
   UrlField,
   TelField,
@@ -41,6 +42,7 @@ import {
 const schema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
   email: z.string().email('Invalid email address'),
+  emailEnhanced: z.string().email('Invalid email address').optional().or(z.literal('')),
   age: z.coerce.number().min(18, 'Must be 18 or older'),
   website: z.string().url('Must be a valid URL').optional().or(z.literal('')),
   phone: z.string().optional(),
@@ -71,6 +73,7 @@ export function FieldShowcase() {
     defaultValues: {
       name: '',
       email: '',
+      emailEnhanced: '',
       age: 0,
       website: '',
       phone: '',
@@ -134,6 +137,14 @@ export function FieldShowcase() {
                 label="Email *"
                 required
                 description="We'll never share your email"
+              />
+              
+              <EmailEnhancedField
+                name="emailEnhanced"
+                control={control}
+                errors={errors}
+                label="Email Enhanced (⚡ Telemetry Enabled)"
+                description="Focus/blur this field and check console for telemetry events"
               />
               
               <NumberField
