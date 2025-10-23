@@ -18,6 +18,10 @@ This document tracks all deprecated re-exports in `@intstudio/ds/fields/*` that 
 | RangeField | `packages/ds/src/fields/RangeField.ts` | `@intstudio/forms/fields` | 2025-10-23 | v2.0.0 | `pnpm codemod:fields` |
 | DateTimeField | `packages/ds/src/fields/DateTimeField.ts` | `@intstudio/forms/fields` | 2025-10-23 | v2.0.0 | `pnpm codemod:fields` |
 | TagInputField | `packages/ds/src/fields/TagInputField.ts` | `@intstudio/forms/fields` | 2025-10-23 | v2.0.0 | `pnpm codemod:fields` |
+| ColorField | `packages/ds/src/fields/ColorField.ts` | `@intstudio/forms/fields` | 2025-10-23 | v2.0.0 | `pnpm codemod:fields` |
+| EmailField | `packages/ds/src/fields/EmailField.ts` | `@intstudio/forms/fields` | 2025-10-23 | v2.0.0 | `pnpm codemod:fields` |
+| TelField | `packages/ds/src/fields/TelField.ts` | `@intstudio/forms/fields` | 2025-10-23 | v2.0.0 | `pnpm codemod:fields` |
+| UrlField | `packages/ds/src/fields/UrlField.ts` | `@intstudio/forms/fields` | 2025-10-23 | v2.0.0 | `pnpm codemod:fields` |
 
 ## Removal Process
 

@@ -16,3 +16,7 @@ export * from './SliderField';
 export * from './RangeField';
 export * from './DateTimeField';
 export * from './TagInputField';
+export * from './ColorField';
+export * from './EmailField';
+export * from './TelField';
+export * from './UrlField';

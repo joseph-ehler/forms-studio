@@ -40,6 +40,14 @@ export { RangeField } from '@intstudio/forms/fields';
 export { DateTimeField } from '@intstudio/forms/fields';
 // @ts-ignore
 export { TagInputField } from '@intstudio/forms/fields';
+// @ts-ignore
+export { ColorField } from '@intstudio/forms/fields';
+// @ts-ignore
+export { EmailField } from '@intstudio/forms/fields';
+// @ts-ignore
+export { TelField } from '@intstudio/forms/fields';
+// @ts-ignore
+export { UrlField } from '@intstudio/forms/fields';
 // Future batches will be added here...
 // Batch 4: SliderField, RangeField, DateTimeField, TagInputField
 // Batch 5: ColorField, FileField, etc.
