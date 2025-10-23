@@ -26,6 +26,7 @@ This document tracks all deprecated re-exports in `@intstudio/ds/fields/*` that 
 | MultiSelectField | `packages/ds/src/fields/MultiSelectField.ts` | `@intstudio/forms/fields` | 2025-10-23 | v2.0.0 | `pnpm codemod:fields` |
 | ToggleField | `packages/ds/src/fields/ToggleField.ts` | `@intstudio/forms/fields` | 2025-10-23 | v2.0.0 | `pnpm codemod:fields` |
 | LocationField | `packages/ds/src/fields/LocationField.ts` | `@intstudio/forms/fields` | 2025-10-23 | v2.0.0 | `pnpm codemod:fields` |
+| RangeCompositeField | `packages/ds/src/fields/RangeCompositeField.ts` | `@intstudio/forms/fields` | 2025-10-23 | v2.0.0 | `pnpm codemod:fields` |
 
 ## Removal Process
 

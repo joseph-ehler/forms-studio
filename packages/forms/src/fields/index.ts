@@ -24,3 +24,4 @@ export * from './FileField';
 export * from './MultiSelectField';
 export * from './ToggleField';
 export * from './LocationField';
+export * from './RangeCompositeField';

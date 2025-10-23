@@ -1,0 +1,30 @@
+name: RangeCompositeField
+type: composite
+specVersion: "1.0"
+description: Min-max range selector with two number inputs
+metadata:
+  batch: 6
+  difficulty: complex
+  added: "2025-10-23"
+composite:
+  layout: row
+  gap: tight
+  separator: "to"
+  parts:
+    - name: min
+      type: number
+      label: Min
+    - name: max
+      type: number
+      label: Max
+value:
+  default: "{ min: 0, max: 100 }"
+  structure: composite
+aria:
+  live: polite
+  invalid: hasError
+  describedby: description
+facade:
+  enabled: true
+  removal: v2.0.0
+  codemod: pnpm codemod:fields
