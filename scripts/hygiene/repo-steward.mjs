@@ -4,8 +4,8 @@
  * 
  * Rules:
  * 1. Root only hosts orchestration (package.json, turbo.json, etc) and README
- * 2. All docs go to docs/ or packages/*/docs/
- * 3. All scripts go to scripts/ or packages/*/scripts/
+ * 2. All docs go to docs/ or packages/STAR/docs/
+ * 3. All scripts go to scripts/ or packages/STAR/scripts/
  * 4. No stray files at root
  */
 
