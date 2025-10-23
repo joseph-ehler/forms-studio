@@ -1,4 +1,5 @@
 /** @refiner(filter-dom-props@1.1.0 applied 2025-10-23) */
+/** @refiner(filter-dom-props@1.1.0 applied 2025-10-23) */
 /**
  * MultiSelectField Component
  * 
@@ -56,7 +57,7 @@ export function MultiSelectField<T extends FieldValues = FieldValues>({
           value={field.value ?? ""}
           onChange={(e) => field.onChange(e.target.value)}
           onBlur={field.onBlur}
-          multiple={multiple}
+
           size={size}
           style={{
             width: '100%',
