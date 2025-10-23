@@ -25,7 +25,7 @@ export function ColorField<T extends FieldValues = FieldValues>({
   label,
   description,
   required = false,
-  disabled = false,
+  disabled = false
 }: ColorFieldProps<T>) {
   const err = (errors as any)?.[name];
   const hasError = Boolean(err);
@@ -52,6 +52,8 @@ export function ColorField<T extends FieldValues = FieldValues>({
             value={field.value ?? "#000000"}
             onChange={(e) => field.onChange(e.target.value)}
             onBlur={field.onBlur}
+            required={required}
+            disabled={disabled}
             style={{
               width: '100%',
               padding: '8px 12px',
