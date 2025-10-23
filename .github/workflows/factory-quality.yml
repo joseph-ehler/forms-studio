@@ -1,0 +1,67 @@
+name: Factory Quality Gates
+
+on:
+  pull_request:
+    paths:
+      - 'packages/forms/src/fields/**'
+      - 'scripts/generator/**'
+      - 'scripts/refiner/**'
+      - 'specs/fields/**'
+
+jobs:
+  factory-checks:
+    name: Generator + Refiner + Build
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+      
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      
+      - name: 🧪 Generator Self-Test
+        run: pnpm generator:test
+      
+      - name: 🔍 Refiner Dry-Run (enforce standards)
+        run: |
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "📊 REFINER DRY-RUN: Checking for pattern violations"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          pnpm refine:dry --scope="packages/forms/src/fields/**/*.tsx"
+          
+          # Fail if Refiner reports any violations
+          if [ $? -ne 0 ]; then
+            echo "❌ Refiner found violations. Run 'pnpm refine:run' locally to fix."
+            exit 1
+          fi
+          
+          echo "✅ No pattern violations detected!"
+      
+      - name: 🏗️ Build All Packages
+        run: pnpm -w build
+      
+      - name: 📊 Report Status
+        if: always()
+        run: |
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "📊 FACTORY QUALITY GATE RESULTS"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo ""
+          echo "Generator Test: ${{ steps.generator.outcome }}"
+          echo "Refiner Check: ${{ steps.refiner.outcome }}"
+          echo "Build: ${{ steps.build.outcome }}"
+          echo ""
+          echo "All checks must pass before merge."
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"

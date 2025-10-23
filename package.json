@@ -29,6 +29,8 @@
     "preflight:green": "node scripts/hygiene/preflight-green.mjs",
     "refine:dry": "node scripts/refiner/index.mjs",
     "refine:run": "node scripts/refiner/index.mjs --apply",
+    "analyze:field": "node scripts/analyzer/field-analyzer.mjs",
+    "spec:from-analysis": "node scripts/analyzer/to-spec.mjs",
     "spec:validate": "node scripts/process/validate-spec.mjs",
     "field:new": "node scripts/process/field-from-spec-v2.mjs",
     "field:new:v1": "node scripts/process/field-from-spec.mjs",
