@@ -19,7 +19,7 @@
   ],
   "scripts": {
     "build": "tsup src/index.ts --format esm,cjs --dts --clean",
-    "postbuild": "node scripts/check-size.mjs",
+    "postbuild": "node scripts/check-size.mjs && node ../../scripts/hygiene/check-import-canonical.mjs",
     "dev": "tsup src/index.ts --format esm,cjs --dts --watch",
     "typecheck": "tsc --noEmit",
     "guard:ds": "node scripts/guard-ds.js",

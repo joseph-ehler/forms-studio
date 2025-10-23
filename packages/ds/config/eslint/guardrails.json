@@ -1,0 +1,39 @@
+{
+  "extends": [
+    "../../.eslintrc.import-hygiene.json",
+    "./.eslintrc.focus-rules.json",
+    "./.eslintrc.semantic-sizing.json",
+    "./.eslintrc.density-rules.json",
+    "./.eslintrc.button-size.json",
+    "./.eslintrc.media-rules.json"
+  ],
+  "rules": {
+    "no-console": ["warn", { "allow": ["warn", "error", "group", "groupEnd"] }],
+    "no-debugger": "error",
+    "prefer-const": "error",
+    "no-var": "error"
+  },
+  "overrides": [
+    {
+      "files": ["**/*.tsx", "**/*.ts"],
+      "rules": {
+        "@typescript-eslint/no-explicit-any": "warn",
+        "@typescript-eslint/explicit-function-return-type": "off",
+        "@typescript-eslint/explicit-module-boundary-types": "off"
+      }
+    },
+    {
+      "files": ["**/tests/**/*.ts", "**/tests/**/*.tsx", "**/*.spec.ts", "**/*.test.ts"],
+      "rules": {
+        "no-restricted-syntax": "off",
+        "no-restricted-properties": "off"
+      }
+    },
+    {
+      "files": ["**/lib/**/*.ts", "**/utils/**/*.ts"],
+      "rules": {
+        "no-console": "off"
+      }
+    }
+  ]
+}

@@ -1,0 +1,255 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://intstudio.com/schemas/field-spec-v1.json",
+  "title": "Field Specification Schema",
+  "description": "YAML schema for field component generation",
+  "type": "object",
+  "required": ["name", "type", "description"],
+  "properties": {
+    "specVersion": {
+      "type": "string",
+      "description": "Schema version",
+      "enum": ["1.0"],
+      "default": "1.0"
+    },
+    "name": {
+      "type": "string",
+      "description": "Field component name (PascalCase, must end with 'Field')",
+      "pattern": "^[A-Z][a-zA-Z0-9]*Field$"
+    },
+    "category": {
+      "type": "string",
+      "description": "Field category",
+      "enum": ["input", "select", "composite", "custom"]
+    },
+    "type": {
+      "type": "string",
+      "description": "HTML input type or 'composite' for multi-part fields",
+      "enum": [
+        "text", "number", "email", "tel", "url", "password",
+        "date", "time", "datetime-local", "month", "week",
+        "color", "range", "file",
+        "checkbox", "radio",
+        "textarea", "select",
+        "composite", "custom"
+      ]
+    },
+    "description": {
+      "type": "string",
+      "description": "Brief field description"
+    },
+    "props": {
+      "type": "array",
+      "description": "Custom props (beyond FieldComponentProps)",
+      "items": {
+        "type": "object",
+        "required": ["name", "type"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Prop name (camelCase)"
+          },
+          "type": {
+            "type": "string",
+            "description": "TypeScript type"
+          },
+          "default": {
+            "description": "Default value"
+          },
+          "description": {
+            "type": "string",
+            "description": "Prop description"
+          },
+          "optional": {
+            "type": "boolean",
+            "description": "Is prop optional?",
+            "default": false
+          }
+        }
+      }
+    },
+    "composite": {
+      "type": "object",
+      "description": "Composite field configuration (multi-part fields like RangeField)",
+      "required": ["parts"],
+      "properties": {
+        "parts": {
+          "type": "array",
+          "description": "Field parts (e.g., min/max for range)",
+          "items": {
+            "type": "object",
+            "required": ["name", "type"],
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Part name (e.g., 'min', 'max')"
+              },
+              "type": {
+                "type": "string",
+                "description": "HTML input type for this part"
+              },
+              "label": {
+                "type": "string",
+                "description": "ARIA label for this part"
+              },
+              "props": {
+                "type": "object",
+                "description": "Props specific to this part"
+              }
+            }
+          },
+          "minItems": 2
+        },
+        "layout": {
+          "type": "string",
+          "description": "Layout style for parts",
+          "enum": ["row", "grid", "stack"],
+          "default": "row"
+        },
+        "gap": {
+          "type": "string",
+          "description": "Gap between parts",
+          "enum": ["none", "tight", "normal", "loose"],
+          "default": "normal"
+        },
+        "separator": {
+          "type": "string",
+          "description": "Optional text between parts (e.g., 'to')"
+        },
+        "validation": {
+          "type": "string",
+          "description": "Cross-part validation (e.g., 'min <= max')"
+        }
+      }
+    },
+    "value": {
+      "type": "object",
+      "description": "Value handling configuration",
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "TypeScript type for value"
+        },
+        "coercion": {
+          "type": "string",
+          "description": "Value coercion expression (e.g., 'Number(e.target.value)')"
+        },
+        "default": {
+          "type": "string",
+          "description": "Default value expression"
+        },
+        "structure": {
+          "type": "string",
+          "description": "Value structure",
+          "enum": ["primitive", "composite", "array", "object"]
+        },
+        "validation": {
+          "type": "string",
+          "description": "Runtime validation expression"
+        }
+      }
+    },
+    "aria": {
+      "type": "object",
+      "description": "ARIA attributes configuration",
+      "properties": {
+        "live": {
+          "type": "string",
+          "enum": ["off", "polite", "assertive"]
+        },
+        "invalid": {
+          "type": "string",
+          "description": "Expression for aria-invalid"
+        },
+        "describedby": {
+          "type": "string",
+          "description": "Expression for aria-describedby"
+        }
+      }
+    },
+    "stories": {
+      "type": "array",
+      "description": "Storybook stories to generate",
+      "items": {
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "props": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    "tests": {
+      "type": "array",
+      "description": "Test cases to generate",
+      "items": {
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "facade": {
+      "type": "object",
+      "description": "DS façade configuration",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "removal": {
+          "type": "string",
+          "description": "Removal version (e.g., 'v2.0.0')"
+        },
+        "codemod": {
+          "type": "string",
+          "description": "Migration command"
+        }
+      }
+    },
+    "pattern": {
+      "type": "object",
+      "description": "Pattern compliance",
+      "properties": {
+        "extends": {
+          "type": "string",
+          "description": "Base pattern to follow"
+        },
+        "loc_target": {
+          "type": "string",
+          "description": "Target LOC range (e.g., '80-120')"
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Tracking metadata",
+      "properties": {
+        "batch": {
+          "type": "integer",
+          "description": "Batch number"
+        },
+        "difficulty": {
+          "type": "string",
+          "enum": ["simple", "medium", "complex"]
+        },
+        "estimate_minutes": {
+          "type": "integer",
+          "description": "Estimated implementation time"
+        },
+        "added": {
+          "type": "string",
+          "format": "date",
+          "description": "Date added (YYYY-MM-DD)"
+        }
+      }
+    }
+  }
+}

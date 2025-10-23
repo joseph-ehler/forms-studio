@@ -1,0 +1,193 @@
+{
+  "$schema": "../../_schemas/html-allowlist.schema.json",
+  "description": "HTML attribute allowlists by input type. Only these props should be passed to DOM elements.",
+  
+  "common": [
+    "id",
+    "name",
+    "className",
+    "style",
+    "disabled",
+    "required",
+    "readOnly",
+    "autoFocus",
+    "tabIndex",
+    "aria-label",
+    "aria-labelledby",
+    "aria-describedby",
+    "aria-invalid",
+    "aria-required",
+    "aria-disabled",
+    "aria-readonly",
+    "aria-live",
+    "aria-atomic",
+    "aria-relevant",
+    "data-testid",
+    "onFocus",
+    "onBlur",
+    "onChange",
+    "onClick",
+    "onKeyDown",
+    "onKeyUp",
+    "onKeyPress"
+  ],
+  
+  "byType": {
+    "text": [
+      "type",
+      "value",
+      "defaultValue",
+      "placeholder",
+      "maxLength",
+      "minLength",
+      "pattern",
+      "size",
+      "autoComplete",
+      "autoCapitalize",
+      "autoCorrect",
+      "spellCheck",
+      "inputMode",
+      "enterKeyHint"
+    ],
+    
+    "number": [
+      "type",
+      "value",
+      "defaultValue",
+      "placeholder",
+      "min",
+      "max",
+      "step",
+      "inputMode"
+    ],
+    
+    "range": [
+      "type",
+      "value",
+      "defaultValue",
+      "min",
+      "max",
+      "step",
+      "list",
+      "aria-valuemin",
+      "aria-valuemax",
+      "aria-valuenow",
+      "aria-valuetext"
+    ],
+    
+    "date": [
+      "type",
+      "value",
+      "defaultValue",
+      "min",
+      "max",
+      "step"
+    ],
+    
+    "time": [
+      "type",
+      "value",
+      "defaultValue",
+      "min",
+      "max",
+      "step"
+    ],
+    
+    "datetime-local": [
+      "type",
+      "value",
+      "defaultValue",
+      "min",
+      "max",
+      "step"
+    ],
+    
+    "email": [
+      "type",
+      "value",
+      "defaultValue",
+      "placeholder",
+      "multiple",
+      "maxLength",
+      "pattern",
+      "autoComplete",
+      "inputMode"
+    ],
+    
+    "tel": [
+      "type",
+      "value",
+      "defaultValue",
+      "placeholder",
+      "maxLength",
+      "pattern",
+      "autoComplete",
+      "inputMode"
+    ],
+    
+    "url": [
+      "type",
+      "value",
+      "defaultValue",
+      "placeholder",
+      "maxLength",
+      "pattern",
+      "autoComplete",
+      "inputMode"
+    ],
+    
+    "color": [
+      "type",
+      "value",
+      "defaultValue",
+      "list"
+    ],
+    
+    "file": [
+      "type",
+      "accept",
+      "multiple",
+      "capture"
+    ],
+    
+    "checkbox": [
+      "type",
+      "checked",
+      "defaultChecked",
+      "value"
+    ],
+    
+    "radio": [
+      "type",
+      "checked",
+      "defaultChecked",
+      "value"
+    ],
+    
+    "select": [
+      "value",
+      "defaultValue",
+      "multiple",
+      "size"
+    ],
+    
+    "textarea": [
+      "value",
+      "defaultValue",
+      "placeholder",
+      "rows",
+      "cols",
+      "maxLength",
+      "minLength",
+      "wrap",
+      "autoComplete",
+      "spellCheck"
+    ]
+  },
+  
+  "notes": {
+    "customProps": "Props NOT in this allowlist are field-specific logic props (e.g., separator, maxTags, minBound). These should NEVER be passed to DOM elements.",
+    "usage": "Generator filters props before spreading onto <input>. Refiner strips custom props from existing fields.",
+    "maintenance": "When adding new input types, update this file. Run pnpm refine:run to apply to all fields."
+  }
+}

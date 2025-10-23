@@ -1,0 +1,68 @@
+# Field Specification: DateTimeField
+# Native datetime-local input
+
+specVersion: "1.0"
+name: DateTimeField
+category: input
+type: datetime-local  # HTML input type
+description: "Date and time picker using native datetime-local input"
+
+# Props (extends FieldComponentProps)
+props:
+  - name: min
+    type: string
+    default: undefined
+    description: "Minimum datetime (ISO format)"
+  
+  - name: max
+    type: string
+    default: undefined
+    description: "Maximum datetime (ISO format)"
+
+# Value handling
+value:
+  type: string
+  coercion: "e.target.value"
+  default: "''"
+
+# ARIA attributes
+aria:
+  live: "polite"
+  invalid: "hasError"
+  describedby: "description"
+
+# Stories to generate
+stories:
+  - name: "Default"
+    props:
+      label: "Event Date & Time"
+  
+  - name: "With Bounds"
+    props:
+      label: "Appointment"
+      min: "2025-01-01T09:00"
+      max: "2025-12-31T17:00"
+
+# Tests to generate
+tests:
+  - name: "renders with label"
+  - name: "shows error message"
+  - name: "handles disabled state"
+
+# Façade settings
+facade:
+  enabled: true
+  removal: "v2.0.0"
+  codemod: "pnpm codemod:fields"
+
+# Pattern compliance
+pattern:
+  extends: "TextField"
+  loc_target: "75-100"
+
+# Metadata
+metadata:
+  batch: 4
+  difficulty: "simple"
+  estimate_minutes: 15
+  added: "2025-10-23"

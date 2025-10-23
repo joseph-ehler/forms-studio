@@ -1,0 +1,91 @@
+# Field Specification: RangeField
+# Min/Max pair for ranges
+
+specVersion: "1.0"
+name: RangeField
+category: input
+type: composite  # Two number inputs
+description: "Range selector with min and max values"
+
+# Composite configuration
+composite:
+  parts:
+    - name: min
+      type: number
+      label: "Minimum value"
+    - name: max
+      type: number
+      label: "Maximum value"
+  layout: row
+  gap: normal
+  separator: "to"
+  validation: "min <= max"
+
+# Props
+props:
+  - name: minBound
+    type: number
+    default: 0
+    description: "Minimum allowed value"
+  
+  - name: maxBound
+    type: number
+    default: 100
+    description: "Maximum allowed value"
+  
+  - name: step
+    type: number
+    default: 1
+    description: "Step increment"
+
+# Value handling (composite)
+value:
+  type: "{ min: number; max: number }"
+  structure: "composite"
+  validation: "min <= max"
+  default: "{ min: minBound ?? 0, max: maxBound ?? 100 }"
+
+# ARIA
+aria:
+  live: "polite"
+  invalid: "hasError"
+  describedby: "description"
+
+# Stories
+stories:
+  - name: "Default"
+    props:
+      label: "Price Range"
+      minBound: 0
+      maxBound: 1000
+      step: 10
+  
+  - name: "With Values"
+    props:
+      label: "Age Range"
+      minBound: 0
+      maxBound: 100
+
+# Tests
+tests:
+  - name: "renders two inputs"
+  - name: "enforces min <= max"
+  - name: "shows error message"
+  - name: "handles disabled state"
+
+# Façade
+facade:
+  enabled: true
+  removal: "v2.0.0"
+
+# Pattern
+pattern:
+  extends: "NumberField"
+  loc_target: "100-140"
+
+# Metadata
+metadata:
+  batch: 4
+  difficulty: "medium"
+  estimate_minutes: 25
+  added: "2025-10-23"

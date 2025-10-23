@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Theme Debug Script</title>
+  <style>
+    body { font-family: monospace; padding: 20px; }
+    button { margin: 5px; padding: 10px; }
+    pre { background: #f5f5f5; padding: 15px; border-radius: 5px; }
+    .issue { color: red; font-weight: bold; }
+    .ok { color: green; }
+  </style>
+</head>
+<body>
+  <h2>🔍 Theme System Debugger</h2>
+  <p>Run this in your browser console to check theme CSS variables:</p>
+  
+  <pre>
+// PASTE THIS IN CONSOLE:
+
+function debugThemeVariables() {
+  const root = document.documentElement;
+  const brand = root.dataset.brand || 'default';
+  const theme = root.dataset.theme || 'light';
+  const computedStyle = getComputedStyle(root);
+  
+  console.group(`🎨 Theme Debug: brand="${brand}", theme="${theme}"`);
+  
+  // Critical variables that MUST be defined
+  const criticalVars = [
+    '--ds-color-text-primary',
+    '--ds-color-text-secondary',
+    '--ds-color-text-muted',
+    '--ds-color-surface-base',
+    '--ds-color-surface-subtle',
+    '--ds-color-surface-raised',
+    '--ds-color-border-subtle',
+    '--ds-color-border-strong',
+    '--ds-color-primary-bg',
+    '--ds-color-primary-text',
+  ];
+  
+  console.log('Checking critical CSS variables:');
+  
+  let missingCount = 0;
+  criticalVars.forEach(varName => {
+    const value = computedStyle.getPropertyValue(varName).trim();
+    
+    if (!value || value === '') {
+      console.error(`❌ MISSING: ${varName}`);
+      missingCount++;
+    } else {
+      console.log(`✅ ${varName}: ${value}`);
+    }
+  });
+  
+  if (missingCount > 0) {
+    console.error(`\n🚨 PROBLEM FOUND: ${missingCount} critical variables are missing!`);
+    console.log(`\nThis means the theme="${theme}" + brand="${brand}" combination is incomplete.`);
+    console.log(`\nExpected behavior:`);
+    console.log(`- Default brand: Has full dark mode styles ✅`);
+    console.log(`- Other brands: Only override brand colors, missing neutrals ❌`);
+  } else {
+    console.log(`\n✅ All critical variables are defined!`);
+  }
+  
+  console.groupEnd();
+}
+
+// Test all combinations:
+console.log('🧪 Testing all brand × theme combinations:\n');
+
+['default', 'acme', 'techcorp', 'sunset'].forEach(brand => {
+  ['light', 'dark'].forEach(theme => {
+    document.documentElement.dataset.brand = brand;
+    document.documentElement.dataset.theme = theme;
+    debugThemeVariables();
+  });
+});
+  </pre>
+
+  <h3>Instructions:</h3>
+  <ol>
+    <li>Open your playground at http://localhost:5173</li>
+    <li>Open browser DevTools (F12)</li>
+    <li>Copy the script above</li>
+    <li>Paste in Console</li>
+    <li>Press Enter</li>
+    <li>Report which combinations show ❌ MISSING errors</li>
+  </ol>
+
+  <h3>Expected Result:</h3>
+  <p class="issue">❌ ACME + Dark: Missing neutral colors (text-secondary, surface-base, etc.)</p>
+  <p class="issue">❌ TechCorp + Dark: Same missing variables</p>
+  <p class="issue">❌ Sunset + Dark: Same missing variables</p>
+  <p class="ok">✅ Default + Dark: All variables present</p>
+</body>
+</html>

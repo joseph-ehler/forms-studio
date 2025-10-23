@@ -27,7 +27,26 @@ const SRC_GLOBS = [
   '!**/dist/**',
   '!**/*.d.ts',
   '!**/*.stories.*',
+  '!packages/ds/demo/**',
+  '!packages/**/.reports/**',
+  '!**/*.test.ts',
+  '!**/*.test.tsx',
+  '!**/*.spec.ts',
+  '!**/*.spec.tsx',
 ];
+
+// Additional runtime filter for vendored/symlinked packages
+function shouldCheck(file) {
+  // Ignore node_modules (vendored packages)
+  if (file.includes('/node_modules/')) return false;
+  // Ignore demo files
+  if (file.includes('/demo/')) return false;
+  // Ignore test files
+  if (file.match(/\.(test|spec)\.(ts|tsx)$/)) return false;
+  // Ignore type-test files (they test API surface)
+  if (file.includes('/type-tests/')) return false;
+  return true;
+}
 
 const fileList = globSync(SRC_GLOBS, { dot: false });
 
@@ -65,6 +84,8 @@ function detectPkg(file) {
 let totalFixed = 0;
 
 for (const file of fileList) {
+  // Skip vendored/test/demo files
+  if (!shouldCheck(file)) continue;
   const pkgKey = detectPkg(file);
   if (!pkgKey) continue;
   
@@ -75,6 +96,13 @@ for (const file of fileList) {
     const m = line.match(RE_IMPORT);
     if (!m) return;
     const spec = m[1];
+
+    // ALLOWLIST: Canonical re-exports (single source of truth)
+    // packages/ds/src/utils/index.ts is allowed to re-export TRANSITION_TOKENS
+    // This makes ../utils the canonical import source for useMotion
+    if (file.endsWith('/utils/index.ts') && spec === '../tokens/transitions' && line.includes('export')) {
+      return; // Skip - this is an intentional canonical re-export
+    }
 
     // deny rules
     if (violates(pkgKey, spec)) {
@@ -88,6 +116,20 @@ for (const file of fileList) {
         problems.push({ file, line: i + 1, spec, fixed, msg: `Non-conforming import` });
       } else {
         problems.push({ file, line: i + 1, spec, msg: `Violates deny rule (no auto-fix)` });
+      }
+    }
+
+    // DS utils special case: transitions re-export
+    // Note: useMotion transitions canonical source is @intstudio/ds/utils
+    if (file.startsWith('packages/ds/src/utils/') && spec === '../tokens/transitions') {
+      const target = '../utils';
+      if (FIX) {
+        src[i] = line.replace(spec, target);
+        changed = true;
+        totalFixed++;
+        console.log(`  ↑ ${file}:${i + 1}  "${spec}" → "${target}" (useMotion: canonical is @intstudio/ds/utils)`);
+      } else {
+        problems.push({ file, line: i + 1, spec, fixed: target, msg: `Use @intstudio/ds/utils for transitions` });
       }
     }
 

@@ -52,6 +52,7 @@ packages:
       "^@intstudio/ds/src/utils/.*": "@intstudio/ds/utils"
       "^../components": "@intstudio/ds/primitives"  # Temp: redirect old imports
       "^../lib/(.*)": "@intstudio/ds/utils"        # Temp: redirect lib shims
+      "^../tokens/transitions": "@intstudio/ds/utils"  # Canonical: transitions via utils namespace
     prefer:
       # Upgrade relative paths to package imports
       "^../primitives/.*": "@intstudio/ds/primitives"

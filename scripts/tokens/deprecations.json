@@ -1,0 +1,9 @@
+{
+  "$schema": "./deprecations.schema.json",
+  "$comment": "Token deprecation map. Old token → New token. CSS aliases auto-generated.",
+  "examples": {
+    "COLOR_TOKENS.primary.main": "COLOR_TOKENS.interactive.primary",
+    "SPACING_TOKENS.gutter": "SPACING_TOKENS.space.6"
+  },
+  "deprecations": {}
+}

@@ -1,0 +1,9 @@
+{
+  "$schema": "https://json.schemastore.org/tsd",
+  "directory": "src/type-tests",
+  "compilerOptions": {
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true
+  }
+}

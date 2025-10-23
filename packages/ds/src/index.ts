@@ -42,6 +42,10 @@ import './styles/components/ds-icons.css'
 
 export * from './primitives'
 
+// Typography primitives (for form fields)
+export { FormLabel, FormHelperText } from './components/typography'
+export type { FormLabelProps, FormHelperTextProps } from './components/typography'
+
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // 📐 PATTERNS (composed layouts)
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

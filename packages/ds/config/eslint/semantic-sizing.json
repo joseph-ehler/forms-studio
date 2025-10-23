@@ -1,0 +1,23 @@
+{
+  "rules": {
+    "no-restricted-syntax": [
+      "error",
+      {
+        "selector": "JSXAttribute[name.name='size'][value.expression.value=/^(xs|sm|md|lg|xl|2xl|3xl)$/]",
+        "message": "⚠️  Consider using importance prop instead of size for better A11Y scaling. size='md' → importance='primary'"
+      },
+      {
+        "selector": "CallExpression[callee.name='getSemanticSize'] > :not(Literal):not(Identifier)",
+        "message": "❌ getSemanticSize() expects importance string literal: 'critical', 'primary', 'secondary', 'tertiary', 'minor'"
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": ["**/lib/semanticSizing.ts", "**/semanticSizing.test.ts"],
+      "rules": {
+        "no-restricted-syntax": "off"
+      }
+    }
+  ]
+}

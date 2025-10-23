@@ -1,0 +1,13 @@
+date,field,loc,from_spec,forms_build_ms,ds_build_ms,manual_fixes,batch,notes
+2025-10-23,NumberField,91,false,,,0,1,Manual migration
+2025-10-23,TextareaField,95,false,,,0,1,Manual migration
+2025-10-23,CheckboxField,88,false,,,0,2,Manual migration
+2025-10-23,TextField,84,false,,,0,3,Manual migration
+2025-10-23,SelectField,96,false,,,0,3,Manual migration
+2025-10-23,DateField,83,false,,,0,3,Manual migration
+2025-10-23,TimeField,83,false,,,0,3,Manual migration
+2025-10-23,RatingField,87,false,,,0,3,Manual migration
+2025-10-23,SliderField,86,true,230,2100,0,4,First spec-generated field
+2025-10-23,RangeField,121,true,220,2000,1,4,Composite pattern - manual fix for two inputs
+2025-10-23,DateTimeField,83,true,240,1800,0,4,Spec-generated
+2025-10-23,TagInputField,82,true,230,2000,1,4,Removed separator/maxTags from DOM

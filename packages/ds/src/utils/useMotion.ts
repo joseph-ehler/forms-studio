@@ -11,7 +11,7 @@
  */
 
 import { useState, useEffect } from 'react';
-import { TRANSITION_TOKENS } from '../tokens/transitions';
+import { transitions } from '.';
 
 interface MotionConfig {
   duration: {
@@ -21,7 +21,7 @@ interface MotionConfig {
     slow: number;
     slower: number;
   };
-  easing: typeof TRANSITION_TOKENS.easing;
+  easing: typeof transitions.TRANSITION_TOKENS.easing;
   prefersReduced: boolean;
 }
 
@@ -59,16 +59,16 @@ export function useMotion(): MotionConfig {
         slower: 0,
       }
     : {
-        instant: parseInt(TRANSITION_TOKENS.duration.instant),
-        fast: parseInt(TRANSITION_TOKENS.duration.fast),
-        normal: parseInt(TRANSITION_TOKENS.duration.normal),
-        slow: parseInt(TRANSITION_TOKENS.duration.slow),
-        slower: parseInt(TRANSITION_TOKENS.duration.slower),
+        instant: parseInt(transitions.TRANSITION_TOKENS.duration.instant),
+        fast: parseInt(transitions.TRANSITION_TOKENS.duration.fast),
+        normal: parseInt(transitions.TRANSITION_TOKENS.duration.normal),
+        slow: parseInt(transitions.TRANSITION_TOKENS.duration.slow),
+        slower: parseInt(transitions.TRANSITION_TOKENS.duration.slower),
       };
   
   return {
     duration,
-    easing: TRANSITION_TOKENS.easing,
+    easing: transitions.TRANSITION_TOKENS.easing,
     prefersReduced,
   };
 }

@@ -1,0 +1,31 @@
+{
+  "rules": {
+    "no-restricted-syntax": [
+      "error",
+      {
+        "selector": "Literal[value=/^\\d+(px|rem|em)$/]",
+        "message": "❌ Use density tokens instead of hardcoded spacing: --ds-space-* or --ds-padding-*"
+      },
+      {
+        "selector": "JSXAttribute[name.name='style'] Property[key.name='gap'] Literal",
+        "message": "❌ Use Stack spacing prop instead of inline gap styles"
+      },
+      {
+        "selector": "JSXAttribute[name.name='style'] Property[key.name='padding'] Literal",
+        "message": "❌ Use Box/Card padding prop instead of inline padding styles"
+      },
+      {
+        "selector": "JSXAttribute[name.name='style'] Property[key.name='minHeight'][value.value=/44px|48px|56px|64px/]",
+        "message": "⚠️  Use --ds-touch-target token for touch target heights (auto-adapts to A11Y scale)"
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": ["**/styles/tokens/**/*.css", "**/lib/densityAdapter.ts"],
+      "rules": {
+        "no-restricted-syntax": "off"
+      }
+    }
+  ]
+}
