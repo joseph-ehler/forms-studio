@@ -9,9 +9,16 @@
 # ============================================
 # DEFAULT SETTINGS BY FIELD TYPE
 # ============================================
+# 
+# Based on batch analysis of 23 fields:
+# - 21/23 (91%) are simple text-like inputs
+# - 100% use Controller, FormLabel, FormHelperText, Stack
+# - 100% have name, control, errors, label, description, required, disabled props
+# - 39% have placeholder prop
 
 defaults:
   # All text-like inputs (text, email, tel, url, etc.)
+  # Archetype: Simple Text (21 fields, 91% of codebase)
   text:
     ui:
       variant: default
@@ -24,9 +31,18 @@ defaults:
     accessibility:
       label: true
       description: true
+      htmlFor: true  # FormLabel must have htmlFor={name}
+      ariaDescribedBy: true  # Inputs should link to helper text
+      ariaInvalid: true  # Inputs should indicate error state
     performance:
       debounce: 0
       lazy: false
+    structure:
+      # Every field follows this 3-component pattern
+      wrapper: Stack
+      label: FormLabel
+      control: Controller  # RHF integration
+      helper: FormHelperText
   
   # Email-specific defaults
   email:

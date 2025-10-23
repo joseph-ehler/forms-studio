@@ -33,16 +33,24 @@ export function RatingField<T extends FieldValues = FieldValues>({
   return (
     <Stack spacing="tight">
       {label &&
-      <FormLabel htmlFor={name} required={required} size="md">
-          {label}
-        </FormLabel>
+      <div id={`${name}-label`}>
+          <FormLabel htmlFor={name} required={required} size="md">
+            {label}
+          </FormLabel>
+        </div>
       }
 
       <Controller
         name={name as any}
         control={control as any}
         render={({ field }) =>
-        <div role="radiogroup" aria-labelledby={name}>
+        <div 
+            role="radiogroup" 
+            aria-labelledby={`${name}-label`}
+            aria-describedby={description ? `${name}-desc` : undefined}
+            aria-invalid={hasError || undefined}
+            aria-errormessage={hasError ? `${name}-err` : undefined}
+          >
             {Array.from({ length: max }).map((_, i) => {
             const val = i + 1;
             const id = `${name}-${val}`;
@@ -76,9 +84,11 @@ export function RatingField<T extends FieldValues = FieldValues>({
       }
 
       {hasError && errorMessage &&
-      <FormHelperText variant="error" size="sm" aria-live="polite">
-          {errorMessage}
-        </FormHelperText>
+      <div id={`${name}-err`}>
+          <FormHelperText variant="error" size="sm" aria-live="polite">
+            {errorMessage}
+          </FormHelperText>
+        </div>
       }
     </Stack>);
 
