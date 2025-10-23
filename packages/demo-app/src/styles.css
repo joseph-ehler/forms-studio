@@ -1,13 +1,18 @@
 /**
  * Design System CSS Import
  * 
- * Imports all design system styles from the DS package source.
+ * Imports all design system styles from the DS package source using relative paths.
  * This ensures we always get the latest styles with proper @layer wrapping.
  */
 
 /* Layer declaration FIRST */
-@import '@intstudio/ds/src/styles/layers.css';
+@import '../../ds/src/styles/layers.css';
 
-/* Then import all component styles */
-@import '@intstudio/ds/src/styles/components/ds-typography.css';
-@import '@intstudio/ds/src/styles/components/ds-inputs.css';
+/* Then import all component styles with @layer wrappers */
+@import '../../ds/src/styles/components/ds-typography.css';
+@import '../../ds/src/styles/components/ds-inputs.css';
+
+/* Import all token files */
+@import '../../ds/src/styles/tokens/color.vars.css';
+@import '../../ds/src/styles/tokens/typography.vars.css';
+@import '../../ds/src/styles/tokens/surface.vars.css';
