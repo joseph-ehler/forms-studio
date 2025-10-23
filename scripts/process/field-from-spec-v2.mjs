@@ -1,14 +1,21 @@
 #!/usr/bin/env node
 /**
- * Field from Spec v2.0 - Meta-Generator (GOD TIER)
+ * Field from Spec v2.2 - Meta-Generator (GOD TIER)
  * 
  * Generates bulletproof field code from YAML specs.
- * Fixes from Batch 5 learnings:
+ * 
+ * v2.0 Fixes:
  * - No duplicate parameter declarations
  * - Filters props via html-allowlist before JSX emission
  * - Quotes all default literal values
  * - No duplicate JSX attributes
  * - Includes all spec props in destructure
+ * 
+ * v2.1 Fixes:
+ * - Base props always included in function signature
+ * 
+ * v2.2 Features:
+ * - Composite field support (multi-part inputs)
  * 
  * Usage: node scripts/process/field-from-spec-v2.mjs SliderField
  */
@@ -17,6 +24,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import yaml from 'js-yaml';
 import { validateSpec } from './validate-spec.mjs';
+import { generateCompositeField } from './generate-composite-v2.2.mjs';
 
 const ROOT = process.cwd();
 const fieldName = process.argv[2];
@@ -124,11 +132,51 @@ function quoteDefault(value) {
   return JSON.stringify(value);
 }
 
+/**
+ * Update fields barrel export
+ */
+function updateFieldsIndex(name) {
+  const barrelPath = path.join(ROOT, 'packages/forms/src/fields/index.ts');
+  const barrel = fs.readFileSync(barrelPath, 'utf8');
+  if (!barrel.includes(`export * from './${name}';`)) {
+    fs.appendFileSync(barrelPath, `export * from './${name}';\n`);
+    console.log(`   ✅ Updated: packages/forms/src/fields/index.ts`);
+  }
+}
+
 function generateFormsField(spec, allowlist) {
   const { name, type, props = [], value, aria, description } = spec;
   
+  // ============================================================
+  // COMPOSITE FIELDS - Use dedicated generator
+  // ============================================================
+  if (type === 'composite') {
+    const implementation = generateCompositeField(spec, allowlist);
+    
+    // Write to file
+    const fieldDir = path.join(ROOT, `packages/forms/src/fields/${name}`);
+    fs.mkdirSync(fieldDir, { recursive: true });
+    
+    const fieldPath = path.join(fieldDir, `${name}.tsx`);
+    fs.writeFileSync(fieldPath, implementation);
+    console.log(`   ✅ Created: ${fieldPath}`);
+    
+    // Create barrel export
+    const barrelPath = path.join(fieldDir, 'index.ts');
+    fs.writeFileSync(barrelPath, `export { ${name} } from './${name}';\nexport type { ${name}Props } from './${name}';\n`);
+    
+    // Update main fields index
+    updateFieldsIndex(name);
+    
+    return;
+  }
+  
+  // ============================================================
+  // SIMPLE FIELDS - Use existing logic
+  // ============================================================
+  
   // Determine HTML input type
-  const inputType = type === 'composite' ? 'number' : type;
+  const inputType = type;
   
   // Get allowed DOM props for this input type
   const allowedProps = getAllowedProps(inputType, allowlist);

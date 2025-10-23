@@ -54,6 +54,8 @@ export { FileField } from '@intstudio/forms/fields';
 export { MultiSelectField } from '@intstudio/forms/fields';
 // @ts-ignore
 export { ToggleField } from '@intstudio/forms/fields';
+// @ts-ignore
+export { LocationField } from '@intstudio/forms/fields';
 // Future batches will be added here...
 // Batch 4: SliderField, RangeField, DateTimeField, TagInputField
 // Batch 5: ColorField, FileField, etc.

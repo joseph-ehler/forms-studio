@@ -23,3 +23,4 @@ export * from './UrlField';
 export * from './FileField';
 export * from './MultiSelectField';
 export * from './ToggleField';
+export * from './LocationField';
