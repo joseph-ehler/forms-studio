@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Refiner v1 - Retroactive Code Upgrades
+ * Refiner v1.2 - Retroactive Code Upgrades
  * 
  * The "Service Bay" for the factory system.
  * Applies pattern upgrades to all existing fields retroactively.
@@ -14,9 +14,8 @@
  *   pnpm refine:run --scope=packages/forms/src/fields/TextField/**  # Specific files
  * 
  * Transforms:
- * - filter-dom-props: Remove custom props from DOM elements
- * - normalize-imports: Canonical import paths
- * - harden-a11y: Add missing ARIA attributes
+ * - v1.1: filter-dom-props - Remove custom props from DOM elements
+ * - v1.2: dedupe-jsx-attrs - Remove duplicate JSX attributes
  * 
  * Safe & Idempotent:
  * - Running twice yields no changes
@@ -29,9 +28,11 @@ import { glob } from 'glob';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { filterDomPropsV1_1 } from './transforms/filter-dom-props-v1.1.mjs';
+import { dedupeJSXAttributesV1_2 } from './transforms/dedupe-jsx-attrs-v1.2.mjs';
 
 const TRANSFORMS = [
   filterDomPropsV1_1(), // v1.1: AST-based auto-fix for prop leakage
+  dedupeJSXAttributesV1_2(), // v1.2: Remove duplicate JSX attributes
   // Future transforms:
   // normalizeImports({ canonical: { useMotion: '@intstudio/ds/utils' } }),
   // hardenA11y(),
@@ -45,7 +46,7 @@ export async function run({ dryRun = true, scope = 'packages/forms/src/**/*.{ts,
   const startTime = Date.now();
   
   console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-  console.log(`🔧 REFINER v1 - ${dryRun ? 'DRY RUN' : 'APPLYING CHANGES'}`);
+  console.log(`🔧 REFINER v1.2 - ${dryRun ? 'DRY RUN' : 'APPLYING CHANGES'}`);
   console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
   console.log('');
   console.log(`Scope: ${scope}`);
