@@ -1,4 +1,4 @@
-name: EmailFieldEnhanced
+name: EmailEnhancedField
 type: email
 specVersion: "1.2"
 description: Email input with async validation and telemetry (God Tier demo)
@@ -52,7 +52,6 @@ perf:
 # ========================================
 security:
   sanitize: true
-  allowListPattern: null
 
 # ========================================
 # I18N

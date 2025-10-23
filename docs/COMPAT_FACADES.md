@@ -28,6 +28,7 @@ This document tracks all deprecated re-exports in `@intstudio/ds/fields/*` that 
 | LocationField | `packages/ds/src/fields/LocationField.ts` | `@intstudio/forms/fields` | 2025-10-23 | v2.0.0 | `pnpm codemod:fields` |
 | RangeCompositeField | `packages/ds/src/fields/RangeCompositeField.ts` | `@intstudio/forms/fields` | 2025-10-23 | v2.0.0 | `pnpm codemod:fields` |
 | SignatureField | `packages/ds/src/fields/SignatureField.ts` | `@intstudio/forms/fields` | 2025-10-23 | v2.0.0 | `pnpm codemod:fields` |
+| EmailEnhancedField | `packages/ds/src/fields/EmailEnhancedField.ts` | `@intstudio/forms/fields` | 2025-10-23 | v2.0.0 | `pnpm codemod:fields` |
 
 ## Removal Process
 

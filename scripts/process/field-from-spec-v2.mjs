@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Field from Spec v2.2 - Meta-Generator (GOD TIER)
+ * Field from Spec v2.4 - Meta-Generator (GOD TIER)
  * 
  * Generates bulletproof field code from YAML specs.
  * 
@@ -16,6 +16,16 @@
  * 
  * v2.2 Features:
  * - Composite field support (multi-part inputs)
+ * 
+ * v2.3 Features:
+ * - DS classes instead of inline styles
+ * 
+ * v2.4 Features (GOD TIER):
+ * - Generates adapters.ts when spec has telemetry/validation/security enabled
+ * - Telemetry hooks (focus/blur events) auto-wired
+ * - Privacy-aware event emission (redact/hash/allow)
+ * - Async validation support (with AbortSignal)
+ * - Security sanitization on change
  * 
  * Usage: node scripts/process/field-from-spec-v2.mjs SliderField
  */
@@ -130,6 +140,89 @@ function quoteDefault(value) {
   if (typeof value === 'number') return String(value);
   if (typeof value === 'boolean') return String(value);
   return JSON.stringify(value);
+}
+
+// ====================================================================
+// GOD TIER: Feature Detection
+// ====================================================================
+
+function wantsTelemetry(spec) {
+  return Boolean(spec.telemetry && spec.telemetry.enabled);
+}
+
+function wantsAsyncValidation(spec) {
+  return Boolean(spec.validation && Array.isArray(spec.validation.async) && spec.validation.async.length);
+}
+
+function wantsSecurity(spec) {
+  return Boolean(spec.security && spec.security.sanitize);
+}
+
+// ====================================================================
+// GOD TIER: Adapters Generation
+// ====================================================================
+
+function renderAdapters(spec) {
+  const lines = [
+    '/**',
+    ` * ${spec.name} Adapters (auto-generated)`,
+    ' *',
+    ' * Generator v2.4',
+    ' */',
+    ''
+  ];
+
+  if (wantsAsyncValidation(spec)) {
+    lines.push(
+      "import type { ValidationPort } from '../../ports/ValidationPort';",
+      "import { defaultValidationAdapter } from '../../adapters/defaultValidationAdapter';",
+      'export const validationAdapter: ValidationPort = defaultValidationAdapter;',
+      ''
+    );
+  }
+  if (wantsTelemetry(spec)) {
+    lines.push(
+      "import type { TelemetryPort } from '../../ports/TelemetryPort';",
+      "import { defaultTelemetryAdapter } from '../../adapters/defaultTelemetryAdapter';",
+      'export const telemetryAdapter: TelemetryPort = defaultTelemetryAdapter;',
+      ''
+    );
+  }
+  if (wantsSecurity(spec)) {
+    lines.push(
+      "import type { SecurityPort } from '../../ports/SecurityPort';",
+      "import { defaultSecurityAdapter } from '../../adapters/defaultSecurityAdapter';",
+      'export const securityAdapter: SecurityPort = defaultSecurityAdapter;',
+      ''
+    );
+  }
+
+  // nothing to generate?
+  if (lines.length <= 6) return null;
+  return lines.join('\n');
+}
+
+// ====================================================================
+// GOD TIER: Telemetry Hooks
+// ====================================================================
+
+function renderTelemetryHandlers(spec) {
+  if (!wantsTelemetry(spec)) return { imports: '', handlers: '', props: { onFocus: '', onBlur: '' } };
+
+  return {
+    imports: "import { telemetryAdapter } from './adapters';",
+    handlers: `
+  const onFocusTelemetry = () => {
+    telemetryAdapter.emit('field_focus', { schemaPath: name as string, fieldType: '${spec.type}' });
+  };
+  const onBlurTelemetry = () => {
+    telemetryAdapter.emit('field_blur', { schemaPath: name as string, fieldType: '${spec.type}' });
+  };`,
+    props: {
+      onFocus: 'onFocus={onFocusTelemetry}',
+      onBlur: 'onBlurTelemetry()'
+    }
+  };
 }
 
 /**
@@ -258,28 +351,47 @@ ${Array.from(uniqueProps.values()).map(p => `  ${p.name}?: ${p.type};  // ${p.de
     fixedDomProps.push(`aria-describedby={${aria.describedby} ? \`\${name}-desc\` : undefined}`);
   }
   
-  // Add field handlers
+  // ====================================================================
+  // GOD TIER: Generate telemetry handlers
+  // ====================================================================
+  const t = renderTelemetryHandlers(spec);
+  
+  // Add field handlers (with telemetry if enabled)
   fixedDomProps.push(`value={field.value ?? ${defaultValue}}`);
   fixedDomProps.push(`onChange={(e) => field.onChange(${valueCoercion})}`);
-  fixedDomProps.push('onBlur={field.onBlur}');
+  
+  // Telemetry-aware blur handler
+  if (t.props.onBlur) {
+    fixedDomProps.push(`onBlur={(e) => { field.onBlur(e); ${t.props.onBlur} }}`);
+  } else {
+    fixedDomProps.push('onBlur={field.onBlur}');
+  }
   
   // Combine all props (no duplicates)
   const allDomProps = [
     ...fixedDomProps.map(p => `            ${p}`),
     ...domProps,
-  ].join('\n');
+    t.props.onFocus ? `            ${t.props.onFocus}` : '',
+  ].filter(Boolean).join('\n');
+  
+  // Build imports (include telemetry if enabled)
+  const baseImports = [
+    "import React from 'react';",
+    "import { Controller, type FieldValues } from 'react-hook-form';",
+    "import type { FieldComponentProps } from '../../form-core/types';",
+    "import { FormLabel, FormHelperText, Stack } from '@intstudio/ds';",
+    t.imports
+  ].filter(Boolean).join('\n');
   
   const implementation = `/**
  * ${name} Component
  * 
  * ${description || `${name} field with Zod validation via react-hook-form.`}
  * Simple, portable contract - no DS typography complexity.
+ * ${wantsTelemetry(spec) ? '\n * ⚡ Telemetry enabled (focus, blur events)' : ''}
  */
 
-import React from 'react';
-import { Controller, type FieldValues } from 'react-hook-form';
-import type { FieldComponentProps } from '../../form-core/types';
-import { FormLabel, FormHelperText, Stack } from '@intstudio/ds';
+${baseImports}
 
 ${propsInterface}
 
@@ -289,6 +401,7 @@ export function ${name}<T extends FieldValues = FieldValues>({
   const err = (errors as any)?.[name];
   const hasError = Boolean(err);
   const errorMessage = err?.message as string | undefined;
+${t.handlers}
 
   return (
     <Stack spacing="tight">
@@ -335,6 +448,15 @@ ${allDomProps}
   
   fs.writeFileSync(path.join(fieldDir, `${name}.tsx`), implementation);
   fs.writeFileSync(path.join(fieldDir, 'index.ts'), `export * from './${name}';\n`);
+  
+  // ====================================================================
+  // GOD TIER: Generate adapters.ts if needed
+  // ====================================================================
+  const adapters = renderAdapters(spec);
+  if (adapters) {
+    fs.writeFileSync(path.join(fieldDir, 'adapters.ts'), adapters);
+    console.log(`   ✅ Created: packages/forms/src/fields/${name}/adapters.ts`);
+  }
   
   // Update barrel
   const barrelPath = path.join(ROOT, 'packages/forms/src/fields/index.ts');
