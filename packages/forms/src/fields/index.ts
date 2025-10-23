@@ -27,4 +27,3 @@ export * from './LocationField';
 export * from './RangeCompositeField';
 export * from './SignatureField';
 export * from './EmailEnhancedField';
-export * from './TestOverlayField';
