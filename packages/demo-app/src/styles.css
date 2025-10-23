@@ -1,18 +1,37 @@
 /**
  * Design System CSS Import
  * 
- * Imports all design system styles from the DS package source using relative paths.
- * This ensures we always get the latest styles with proper @layer wrapping.
+ * Imports ALL design system styles from DS source with proper @layer wrappers.
  */
 
-/* Layer declaration FIRST */
+/* 1. Layer declaration MUST come first */
 @import '../../ds/src/styles/layers.css';
 
-/* Then import all component styles with @layer wrappers */
-@import '../../ds/src/styles/components/ds-typography.css';
-@import '../../ds/src/styles/components/ds-inputs.css';
-
-/* Import all token files */
+/* 2. Tokens (in @layer tokens) */
 @import '../../ds/src/styles/tokens/color.vars.css';
 @import '../../ds/src/styles/tokens/typography.vars.css';
 @import '../../ds/src/styles/tokens/surface.vars.css';
+@import '../../ds/src/styles/tokens/button.vars.css';
+@import '../../ds/src/styles/tokens/shell.vars.css';
+@import '../../ds/src/styles/tokens/input.vars.css';
+@import '../../ds/src/styles/tokens/layout.vars.css';
+@import '../../ds/src/styles/tokens/density.vars.css';
+@import '../../ds/src/styles/tokens/a11y.vars.css';
+
+/* 3. Components (in @layer atoms) */
+@import '../../ds/src/styles/components/ds-typography.css';
+@import '../../ds/src/styles/components/ds-inputs.css';
+@import '../../ds/src/styles/components/ds-grid.css';
+@import '../../ds/src/styles/components/ds-form-layout.css';
+@import '../../ds/src/styles/components/ds-icons.css';
+@import '../../ds/src/styles/components/ds-media.css';
+@import '../../ds/src/styles/components/ds-prose.css';
+@import '../../ds/src/styles/components/ds-section.css';
+@import '../../ds/src/styles/components/ds-fab.css';
+
+/* 4. Overlay/Calendar components */
+@import '../../ds/src/components/overlay/ds-calendar.css';
+@import '../../ds/src/components/overlay/ds-calendar.tokens.css';
+
+/* 5. Motion */
+@import '../../ds/src/styles/motion.css';
