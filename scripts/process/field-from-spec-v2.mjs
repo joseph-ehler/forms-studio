@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Field from Spec v2.4 - Meta-Generator (GOD TIER)
+ * Field from Spec v2.5 - Meta-Generator (GOD TIER)
  * 
  * Generates bulletproof field code from YAML specs.
  * 
@@ -26,6 +26,12 @@
  * - Privacy-aware event emission (redact/hash/allow)
  * - Async validation support (with AbortSignal)
  * - Security sanitization on change
+ * 
+ * v2.5 Features (SELF-IMPROVING):
+ * - Reads factory-overlays.yaml for type-specific defaults
+ * - Deep merges overlay defaults with spec (spec wins)
+ * - New fields auto-inherit patterns from batch analysis
+ * - DRY configuration at scale
  * 
  * Usage: node scripts/process/field-from-spec-v2.mjs SliderField
  */
@@ -64,14 +70,41 @@ if (!validation.valid) {
 }
 
 // Load spec
-const spec = yaml.load(fs.readFileSync(specPath, 'utf8'));
+const rawSpec = yaml.load(fs.readFileSync(specPath, 'utf8'));
+
+// Load factory overlays (defaults by type)
+const overlaysPath = path.join(ROOT, 'factory-overlays.yaml');
+let overlays = { defaults: {} };
+if (fs.existsSync(overlaysPath)) {
+  overlays = yaml.load(fs.readFileSync(overlaysPath, 'utf8'));
+}
+
+// Deep merge: overlay defaults → spec (spec wins)
+function deepMerge(target, source) {
+  const result = { ...target };
+  for (const key in source) {
+    if (source[key] && typeof source[key] === 'object' && !Array.isArray(source[key])) {
+      result[key] = deepMerge(target[key] || {}, source[key]);
+    } else if (source[key] !== undefined) {
+      result[key] = source[key];
+    }
+  }
+  return result;
+}
+
+const typeDefaults = overlays.defaults?.[rawSpec.type] || {};
+const spec = deepMerge(typeDefaults, rawSpec);
+
+if (Object.keys(typeDefaults).length > 0) {
+  console.log(`📦 Merged factory overlays for type '${rawSpec.type}'`);
+}
 
 // Load HTML allowlist for prop filtering
 const allowlistPath = path.join(ROOT, 'scripts/refiner/maps/html-allowlist.json');
 const allowlist = JSON.parse(fs.readFileSync(allowlistPath, 'utf8'));
 
 console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-console.log(`🏭 Generating ${fieldName} from spec (v2.0)...`);
+console.log(`🏭 Generating ${fieldName} from spec (v2.5)...`);
 console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
 console.log('');
 
