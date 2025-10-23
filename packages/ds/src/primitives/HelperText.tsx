@@ -2,7 +2,7 @@
  * FormHelperText Component (Compatibility Wrapper)
  * 
  * DEPRECATED: This is a compatibility wrapper.
- * New code should import from: import { FormHelperText } from './typography'
+ * New code should import from: import { FormHelperText } from '../components/typography'
  * 
  * This wrapper maintains backward compatibility while using
  * the new typography primitive under the hood.
@@ -15,8 +15,8 @@
  */
 
 import React from 'react'
-import { FormHelperText as FormHelperTextPrimitive } from './typography'
-import type { HelperVariant } from './typography'
+import { FormHelperText as FormHelperTextPrimitive } from '../components/typography'
+import type { HelperVariant } from '../components/typography'
 
 interface FormHelperTextProps {
   variant?: 'default' | 'error' | 'success' | 'warning'
@@ -63,8 +63,8 @@ const ICON_MAP = {
 }
 
 /**
- * @deprecated Import from './typography' instead:
- * import { FormHelperText } from './typography'
+ * @deprecated Import from '../components/typography' instead:
+ * import { FormHelperText } from '../components/typography'
  */
 export const HelperText: React.FC<FormHelperTextProps> = ({
   variant = 'default',

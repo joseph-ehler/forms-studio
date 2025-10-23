@@ -21,8 +21,8 @@
 
 import React, { useEffect, useState } from 'react'
 import { Container } from './Container'
-import type { LayoutPreset } from '../lib/layoutConfig'
-import { resolveTone, getToneStyles, type Tone } from '../lib/toneResolver'
+import type { LayoutPreset } from '../utils/layoutConfig'
+import { resolveTone, getToneStyles, type Tone } from '../white-label/toneResolver'
 
 type BgTone = 'transparent' | 'base' | 'subtle' | 'elevated' | 'primary' | 'accent'
 type ThemeTone = 'auto' | 'light' | 'dark'

@@ -1,14 +1,88 @@
 /**
- * @joseph.ehler/wizard-react
+ * @intstudio/ds - Design System Studio
  * 
- * React runtime for Forms Studio wizard engine.
- * Render any JSON field type with React Hook Form + Zod validation.
+ * PUBLIC API
  * 
- * PLUS: Complete Design System (Typography, Surface, Shell, Buttons)
+ * This barrel defines what external consumers can import.
+ * Keep this minimal and stable. Use internal.ts for test-only exports.
  */
 
-// Design System Components (NEW!)
-export * from './components'
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// 🎨 STYLES (CSS @layer system)
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+import './styles/layers.css'            // @layer definition
+import './styles/tokens/color.vars.css'
+import './styles/tokens/typography.vars.css'
+import './styles/tokens/surface.vars.css'
+import './styles/tokens/button.vars.css'
+import './styles/tokens/input.vars.css'
+import './styles/tokens/layout.vars.css'
+import './styles/tokens/media.vars.css'
+import './styles/tokens/section.vars.css'
+import './styles/tokens/shell.vars.css'
+import './styles/tokens/fab.vars.css'
+import './styles/tokens/density.vars.css'
+import './styles/tokens/a11y.vars.css'
+
+// Component skins
+import './styles/components/ds-typography.css'
+import './styles/components/ds-inputs.css'
+import './styles/components/ds-grid.css'
+import './styles/components/ds-form-layout.css'
+import './styles/components/ds-media.css'
+import './styles/components/ds-section.css'
+import './styles/components/ds-prose.css'
+import './styles/components/ds-fab.css'
+import './styles/components/ds-icons.css'
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// 📦 PRIMITIVES (basic building blocks)
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+export * from './primitives'
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// 📐 PATTERNS (composed layouts)
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+export * from './patterns'
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// 🏠 SHELL (app shell components)
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+export * from './shell'
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// ♿ A11Y (accessibility layer)
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+export * from './a11y'
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// 🎨 WHITE-LABEL (brand system)
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+export * from './white-label'
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// 🔧 UTILS (public utilities only)
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+export { type LayoutPreset } from './utils'
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// 🎭 TOKENS (optional typed tokens map)
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+// TODO: Create unified tokens object
+// export { tokens } from './tokens'
+export * from './tokens'  // Export individual token modules for now
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// 📝 FIELDS (temporary - will move to @intstudio/forms)
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 // Core renderer
 export * from './renderer/FormScreen'
@@ -16,10 +90,9 @@ export * from './renderer/FormScreen'
 // Field system
 export { FieldRegistry, registerFields } from './fields/registry'
 export { registerDefaultFields } from './fields/createField'
+export type { FieldComponent, FieldComponentProps, FieldFactory } from './fields/types'
 
-// ========================================
-// FOUNDATION FIELDS (Working)
-// ========================================
+// Foundation fields
 export * from './fields/TextField'
 export * from './fields/TextareaField'
 export * from './fields/NumberField'
@@ -40,9 +113,7 @@ export { RatingField } from './fields/RatingField'
 export { RepeaterField } from './fields/RepeaterField'
 export { SignatureField } from './fields/SignatureField'
 
-// ========================================
-// COMPOSITE FIELDS (ALL 13 COMPLETE! 🎉)
-// ========================================
+// Composite fields
 export { EmailField } from './fields/composite/EmailField'
 export { PasswordField } from './fields/composite/PasswordField'
 export { SearchField } from './fields/composite/SearchField'
@@ -57,20 +128,6 @@ export { NPSField } from './fields/composite/NPSField'
 export { AddressField } from './fields/composite/AddressField'
 export { RankField } from './fields/composite/RankField'
 
-// ========================================
-// PARKED FIELDS (Being Fixed)
-// ========================================
-// Moved to src/fields/_parked/ and src/fields/composite/_parked/
-// Will re-introduce one at a time after fixing:
-// Foundation: ColorField, RatingField, RangeField, RepeaterField, SignatureField
-// Composite: EmailField, SearchField, MatrixField, PasswordField, OTPField, TableField
-//           PhoneField, DateRangeField, CurrencyField, AddressField, NPSField, 
-//           RankField, RadioGroupField
-
-// ========================================
-// INFRASTRUCTURE & UTILITIES
-// ========================================
-export * from './components'
+// Validation & RHF
 export * from './validation/mapJsonValidationToZod'
 export * from './rhf/zodResolver'
-export type { FieldComponent, FieldComponentProps, FieldFactory } from './fields/types'

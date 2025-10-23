@@ -21,7 +21,7 @@
  */
 
 import React from 'react'
-import './ds-grid.css'
+import '../styles/components/ds-grid.css'
 
 interface GridProps {
   columns?: 1 | 2 | 3 | 4

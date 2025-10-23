@@ -9,7 +9,7 @@
 import React from 'react';
 import { useTypography } from './TypographyProvider';
 import type { LabelSize } from '../../tokens/typography';
-import '../ds-typography.css';
+import '../../styles/components/ds-typography.css';
 
 export interface FormLabelProps {
   /** Label text content */

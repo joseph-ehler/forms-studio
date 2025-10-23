@@ -5,10 +5,10 @@
  */
 
 export { FormLayout } from './FormLayout'
-export type { FormLayoutProps } from './FormLayout'
+// export type { FormLayoutProps } from './FormLayout'  // Not exported by component
 
 export { FieldWrapper } from './FieldWrapper'
-export type { FieldWrapperProps } from './FieldWrapper'
+// export type { FieldWrapperProps } from './FieldWrapper'  // Not exported by component
 
 // TODO: Add more patterns
 // - PageStack

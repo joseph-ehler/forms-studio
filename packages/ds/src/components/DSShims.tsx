@@ -9,8 +9,8 @@
  */
 
 import * as React from 'react'
-import { Stack as StackPrimitive } from './Stack'
-import { Grid as GridPrimitive } from './Grid'
+import { Stack as StackPrimitive } from '../primitives/Stack'
+import { Grid as GridPrimitive } from '../primitives/Grid'
 
 // Map short spacing tokens to DS tokens
 const SPACING_MAP = {

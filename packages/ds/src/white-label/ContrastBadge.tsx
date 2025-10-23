@@ -10,7 +10,7 @@
  */
 
 import React from 'react'
-import { useContrastGuard } from '../lib/useContrastGuard'
+import { useContrastGuard } from './useContrastGuard'
 
 export interface ContrastBadgeProps {
   /** Position on screen */

@@ -22,8 +22,8 @@
  */
 
 import React, { useEffect, useState } from 'react'
-import { Stack } from './Stack'
-import { layoutPresets, type LayoutPreset } from '../lib/layoutConfig'
+import { Stack } from '../primitives/Stack'
+import { layoutPresets, type LayoutPreset } from '../utils/layoutConfig'
 
 type FormSpacing = 'tight' | 'normal' | 'relaxed'
 type FormWidth = 'sm' | 'md' | 'lg' | 'xl' | '2xl' | 'narrow' | 'comfy' | 'inherit'

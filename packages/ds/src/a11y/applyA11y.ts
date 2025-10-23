@@ -6,7 +6,7 @@
  */
 
 import type { A11yProfile, TouchTarget } from './a11yProfiles'
-import { getDensityFromA11yScale, getTouchTargetFromA11yScale, DENSITY_MULTIPLIERS } from './densityAdapter'
+import { getDensityFromA11yScale, getTouchTargetFromA11yScale, DENSITY_MULTIPLIERS } from '../utils/densityAdapter'
 
 const STORAGE_KEY = 'ds-a11y-preferences'
 
