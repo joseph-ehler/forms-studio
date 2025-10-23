@@ -1,5 +1,9 @@
 #!/usr/bin/env sh
 . "$(dirname "$0")/_/husky.sh"
 
+# Import hygiene: check imports & regenerate barrels
+pnpm imports:check || exit 1
+pnpm barrels
+
 # Lint staged files; fail fast
 pnpm -w lint-staged

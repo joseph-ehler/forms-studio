@@ -1,0 +1,83 @@
+# Canonical import map + folder boundaries
+# This enforces import hygiene across the entire repo
+
+packages:
+  ds:
+    roots:
+      - packages/ds/src
+    canonical:
+      # high-level barrels
+      - from: "^@intstudio/ds$"
+        allow: ["^@intstudio/ds$"]
+      # sub-barrels (preferred)
+      - from: "^@intstudio/ds/(primitives|patterns|shell|a11y|white-label|utils)$"
+        allow:
+          - "^@intstudio/ds/primitives$"
+          - "^@intstudio/ds/patterns$"
+          - "^@intstudio/ds/shell$"
+          - "^@intstudio/ds/a11y$"
+          - "^@intstudio/ds/white-label$"
+          - "^@intstudio/ds/utils$"
+    deny:
+      - "^@intstudio/ds/src/.*"         # no deep package internals
+      - "^packages/ds/src/.*"           # no workspace relative deep import
+      - "^[.]{2,}/(?!compat|lib)"       # block cross-area relative hopping (except temp shims)
+    map:
+      # Auto-fix map (deep -> barrel)
+      "^@intstudio/ds/src/primitives/.*": "@intstudio/ds/primitives"
+      "^@intstudio/ds/src/patterns/.*": "@intstudio/ds/patterns"
+      "^@intstudio/ds/src/shell/.*": "@intstudio/ds/shell"
+      "^@intstudio/ds/src/a11y/.*": "@intstudio/ds/a11y"
+      "^@intstudio/ds/src/white-label/.*": "@intstudio/ds/white-label"
+      "^@intstudio/ds/src/utils/.*": "@intstudio/ds/utils"
+      "^../components": "@intstudio/ds/primitives"  # Temp: redirect old imports
+      "^../lib/(.*)": "@intstudio/ds/utils"        # Temp: redirect lib shims
+    prefer:
+      # Upgrade relative paths to package imports
+      "^../primitives/.*": "@intstudio/ds/primitives"
+      "^../patterns/.*": "@intstudio/ds/patterns"
+      "^../shell/.*": "@intstudio/ds/shell"
+      "^../a11y/.*": "@intstudio/ds/a11y"
+      "^../white-label/.*": "@intstudio/ds/white-label"
+      "^../utils/.*": "@intstudio/ds/utils"
+
+  forms:
+    roots: [packages/forms/src]
+    deny:
+      - "^packages/ds/.*"               # must use public DS barrels
+      - "^@intstudio/ds/src/.*"         # no deep DS imports
+    prefer:
+      "^../primitives/.*": "@intstudio/ds/primitives"
+      "^../patterns/.*": "@intstudio/ds/patterns"
+
+barrels:
+  # Where to generate canonical barrels from
+  - folder: packages/ds/src/primitives
+    outfile: packages/ds/src/primitives/index.ts
+    include: ["*.tsx"]
+    exclude: ["**/__tests__/**", "**/*.stories.*", "**/*internal*.tsx", "DSShims.tsx"]
+
+  - folder: packages/ds/src/patterns
+    outfile: packages/ds/src/patterns/index.ts
+    include: ["*.tsx"]
+    exclude: ["**/__tests__/**", "**/*.stories.*"]
+
+  - folder: packages/ds/src/shell
+    outfile: packages/ds/src/shell/index.ts
+    include: ["*.tsx"]
+    exclude: ["**/__tests__/**", "**/*.stories.*", "**/*internal*.tsx"]
+
+  - folder: packages/ds/src/a11y
+    outfile: packages/ds/src/a11y/index.ts
+    include: ["*.ts", "*.tsx"]
+    exclude: ["**/__tests__/**", "**/*.stories.*"]
+
+  - folder: packages/ds/src/white-label
+    outfile: packages/ds/src/white-label/index.ts
+    include: ["*.ts", "*.tsx"]
+    exclude: ["**/__tests__/**", "**/*.stories.*"]
+
+  - folder: packages/ds/src/utils
+    outfile: packages/ds/src/utils/index.ts
+    include: ["*.ts", "*.tsx"]
+    exclude: ["**/__tests__/**"]
