@@ -27,6 +27,7 @@ interface StackProps {
   spacing?: StackSpacing
   direction?: StackDirection
   align?: StackAlign
+  wrap?: boolean
   children: React.ReactNode
   className?: string
   style?: React.CSSProperties
@@ -36,6 +37,7 @@ export const Stack: React.FC<StackProps> = ({
   spacing = 'normal',
   direction = 'column',
   align = 'stretch',
+  wrap = false,
   children,
   className = '',
   style = {},
@@ -51,6 +53,7 @@ export const Stack: React.FC<StackProps> = ({
     display: 'flex',
     flexDirection: direction,
     alignItems: align,
+    flexWrap: wrap ? 'wrap' : 'nowrap',
     gap: gapValue,
     ...style,
   }
