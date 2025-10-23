@@ -26,7 +26,7 @@
  */
 
 import React from 'react'
-import { layoutPresets, type LayoutPreset } from '../utils/layoutConfig'
+import { layoutPresets, type LayoutPreset } from '@intstudio/ds/utils'
 import '../styles/components/ds-prose.css'
 
 interface ProseProps {

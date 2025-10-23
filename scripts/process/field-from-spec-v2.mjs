@@ -41,6 +41,7 @@ import path from 'node:path';
 import yaml from 'js-yaml';
 import { validateSpec } from './validate-spec.mjs';
 import { generateCompositeField } from './generate-composite-v2.2.mjs';
+import { CheckboxRecipe } from '../../packages/forms/src/factory/recipes/CheckboxRecipe.js';
 
 const ROOT = process.cwd();
 const fieldName = process.argv[2];
@@ -149,6 +150,30 @@ console.log('');
 // ====================================================================
 // GENERATORS
 // ====================================================================
+
+/**
+ * Select recipe based on field type
+ * Routes type-specific fields to specialized recipes
+ */
+function selectRecipe(spec) {
+  const type = (spec?.type || '').toLowerCase();
+  
+  // Type-specific recipes
+  if (type === 'checkbox' || type === 'boolean') {
+    return CheckboxRecipe;
+  }
+  
+  // Future: add more recipes here
+  // if (type === 'toggle') return ToggleRecipe;
+  // if (type === 'rating') return RatingRecipe;
+  // if (type === 'slider' || type === 'range') return SliderRecipe;
+  // if (type === 'file') return FileUploadRecipe;
+  // if (type === 'color') return ColorPickerRecipe;
+  // if (type === 'select' && spec.ui?.multiple) return MultiSelectRecipe;
+  
+  // Standard text inputs use existing inline generator
+  return null;
+}
 
 /**
  * Get allowed DOM props for a given input type
@@ -295,6 +320,27 @@ function generateFormsField(spec, allowlist) {
     updateFieldsIndex(name);
     
     return;
+  }
+  
+  // ============================================================
+  // TYPE-SPECIFIC RECIPES - Route by field type
+  // ============================================================
+  const recipe = selectRecipe(spec);
+  if (recipe) {
+    const implementation = recipe(spec);
+    
+    // Write to file
+    const fieldDir = path.join(ROOT, `packages/forms/src/fields/${name}`);
+    fs.mkdirSync(fieldDir, { recursive: true });
+    fs.writeFileSync(path.join(fieldDir, `${name}.tsx`), implementation);
+    fs.writeFileSync(path.join(fieldDir, 'index.ts'), `export * from './${name}';\n`);
+    
+    // Update main fields index
+    updateFieldsIndex(name);
+    
+    console.log(`   ✅ Created (via ${recipe.name || 'recipe'}): packages/forms/src/fields/${name}/${name}.tsx`);
+    console.log(`   ✅ Updated: packages/forms/src/fields/index.ts`);
+    return; // Exit early - recipe handled everything
   }
   
   // ============================================================

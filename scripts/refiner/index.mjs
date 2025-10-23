@@ -36,6 +36,7 @@ import { noInlineStylesV1_0 } from './transforms/no-inline-styles-v1.0.mjs';
 import { labelContractV1_0 } from './transforms/label-contract-v1.0.mjs';
 import { telemetryPresenceV1_0 } from './transforms/telemetry-presence-v1.0.mjs';
 import { ariaCompletenessV1_0 } from './transforms/aria-completeness-v1.0.mjs';
+import { enforceCheckboxPrimitiveV1_0 } from './transforms/enforce-checkbox-primitive-v1.0.mjs';
 
 const TRANSFORMS = [
   filterDomPropsV1_1(), // v1.1: AST-based auto-fix for prop leakage
@@ -44,6 +45,7 @@ const TRANSFORMS = [
   labelContractV1_0(), // v1.3: Accessibility contract (auto-fix)
   telemetryPresenceV1_0(), // v1.3: Telemetry wiring check (report-only)
   ariaCompletenessV1_0(), // v1.4: Complete ARIA implementation (report-only)
+  enforceCheckboxPrimitiveV1_0(), // v1.5: Enforce .ds-checkbox for checkboxes (auto-fix)
   // Future transforms:
   // normalizeImports({ canonical: { useMotion: '@intstudio/ds/utils' } }),
   // extractComposite(),

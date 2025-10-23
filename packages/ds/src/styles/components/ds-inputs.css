@@ -6,6 +6,9 @@
  * Import ONCE in primitives, NEVER in fields.
  */
 
+/* Import checkbox primitive (Phase 1 beautification) */
+@import './ds-checkbox.css';
+
 @layer atoms {
 /* ===== Base Input Styles ===== */
 

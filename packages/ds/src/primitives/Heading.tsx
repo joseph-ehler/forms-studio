@@ -22,7 +22,7 @@
  */
 
 import React, { useEffect, useState } from 'react'
-import { type Importance, SEMANTIC_SIZES, A11Y_IMPORTANCE_MULTIPLIERS, sizeToImportance } from '../utils/semanticSizing'
+import { type Importance, SEMANTIC_SIZES, A11Y_IMPORTANCE_MULTIPLIERS, sizeToImportance } from '@intstudio/ds/utils'
 
 interface HeadingProps {
   /** Semantic importance (recommended) */

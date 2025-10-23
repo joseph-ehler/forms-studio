@@ -15,8 +15,8 @@
  */
 
 import React from 'react'
-import { FormHelperText as FormHelperTextPrimitive } from '../components/typography/FormHelperTextPrimitive'
-import type { HelperVariant } from '../components/typography/FormHelperTextPrimitive'
+import { FormHelperText as FormHelperTextPrimitive } from '@intstudio/ds/primitives/typography/FormHelperTextPrimitive'
+import type { HelperVariant } from '@intstudio/ds/primitives/typography/FormHelperTextPrimitive'
 
 interface FormHelperTextProps {
   variant?: 'default' | 'error' | 'success' | 'warning'

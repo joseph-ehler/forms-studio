@@ -15,7 +15,7 @@
  */
 
 import React from 'react'
-import { FormLabel as FormLabelPrimitive } from '../components/typography/FormLabelPrimitive'
+import { FormLabel as FormLabelPrimitive } from '@intstudio/ds/primitives/typography/FormLabelPrimitive'
 
 interface FormLabelProps {
   htmlFor?: string
