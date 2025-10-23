@@ -1,0 +1,43 @@
+name: DS CI
+
+on:
+  push:
+    paths: ['packages/ds/**', '.github/workflows/ds-ci.yml']
+  pull_request:
+    paths: ['packages/ds/**', '.github/workflows/ds-ci.yml']
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: pnpm/action-setup@v3
+        with: 
+          version: 8
+      
+      - uses: actions/setup-node@v4
+        with: 
+          node-version: 20
+          cache: 'pnpm'
+      
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      
+      - name: Build DS
+        run: pnpm -F @intstudio/ds build
+      
+      - name: Size budgets
+        run: node packages/ds/scripts/check-size.mjs
+      
+      - name: TypeScript check
+        run: pnpm -F @intstudio/ds typecheck
+      
+      - name: Install Playwright
+        run: pnpm -F @intstudio/ds exec playwright install --with-deps chromium
+      
+      - name: Run smoke tests
+        run: pnpm -F @intstudio/ds test:smoke
+      
+      - name: Dependency boundaries
+        run: pnpm -F @intstudio/ds run guard:ds || true
