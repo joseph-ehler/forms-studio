@@ -52,6 +52,40 @@ jobs:
       - name: 🏗️ Build All Packages
         run: pnpm -w build
       
+      - name: 🔬 Compliance Guard (batch analysis)
+        run: |
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "🔬 BATCH ANALYSIS: Verifying compliance baseline"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          
+          pnpm analyze:batch "packages/forms/src/fields/**/*.tsx" 2>/dev/null > tmp/compliance-report.json
+          
+          # Assert baseline metrics (prevent regression)
+          FULL_COMPLIANCE=$(jq '.aggregate.compliance.fullCompliance' tmp/compliance-report.json)
+          NO_INLINE_STYLES=$(jq '.aggregate.compliance.noInlineStyles' tmp/compliance-report.json)
+          RHF_INTEGRATION=$(jq '.aggregate.compliance.rhfIntegration' tmp/compliance-report.json)
+          
+          echo "Full Compliance: $FULL_COMPLIANCE/23"
+          echo "No Inline Styles: $NO_INLINE_STYLES/23"
+          echo "RHF Integration: $RHF_INTEGRATION/23"
+          
+          if [ "$FULL_COMPLIANCE" -lt 23 ]; then
+            echo "❌ Compliance regression detected! Expected 23, got $FULL_COMPLIANCE"
+            exit 1
+          fi
+          
+          if [ "$NO_INLINE_STYLES" -lt 23 ]; then
+            echo "❌ Inline styles detected! Expected 0, found violations"
+            exit 1
+          fi
+          
+          if [ "$RHF_INTEGRATION" -lt 23 ]; then
+            echo "❌ RHF integration regression! Expected 23, got $RHF_INTEGRATION"
+            exit 1
+          fi
+          
+          echo "✅ All compliance metrics meet baseline!"
+      
       - name: 📊 Report Status
         if: always()
         run: |

@@ -35,16 +35,17 @@ import { dedupeJSXAttributesV1_2 } from './transforms/dedupe-jsx-attrs-v1.2.mjs'
 import { noInlineStylesV1_0 } from './transforms/no-inline-styles-v1.0.mjs';
 import { labelContractV1_0 } from './transforms/label-contract-v1.0.mjs';
 import { telemetryPresenceV1_0 } from './transforms/telemetry-presence-v1.0.mjs';
+import { ariaCompletenessV1_0 } from './transforms/aria-completeness-v1.0.mjs';
 
 const TRANSFORMS = [
   filterDomPropsV1_1(), // v1.1: AST-based auto-fix for prop leakage
   dedupeJSXAttributesV1_2(), // v1.2: Remove duplicate JSX attributes
-  noInlineStylesV1_0(), // v1.3: Enforce DS classes (report-only)
-  labelContractV1_0(), // v1.3: Accessibility contract (report-only)
+  noInlineStylesV1_0(), // v1.3: Enforce DS classes (auto-fix)
+  labelContractV1_0(), // v1.3: Accessibility contract (auto-fix)
   telemetryPresenceV1_0(), // v1.3: Telemetry wiring check (report-only)
+  ariaCompletenessV1_0(), // v1.4: Complete ARIA implementation (report-only)
   // Future transforms:
   // normalizeImports({ canonical: { useMotion: '@intstudio/ds/utils' } }),
-  // hardenA11y(),
   // extractComposite(),
 ];
 
