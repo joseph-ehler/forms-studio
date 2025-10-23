@@ -1,6 +1,9 @@
 #!/usr/bin/env sh
 . "$(dirname "$0")/_/husky.sh"
 
+# Name Police: enforce filename conventions
+node scripts/hygiene/name-police.mjs || exit 1
+
 # Repo boundaries: enforce folder structure
 node scripts/hygiene/repo-steward.mjs || exit 1
 

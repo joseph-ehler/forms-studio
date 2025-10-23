@@ -21,6 +21,7 @@
     "barrels": "node scripts/barrelize.mjs",
     "docs:autostow": "node scripts/hygiene/docs-autostow.mjs",
     "docs:lint": "node scripts/hygiene/docs-lint.mjs",
+    "name-police": "node scripts/hygiene/name-police.mjs",
     "repo:steward": "node scripts/hygiene/repo-steward.mjs",
     "repo:cleanup": "./scripts/cleanup-repo.sh",
     "guard": "pnpm repo:steward && pnpm imports:check && pnpm depgraph:check",
