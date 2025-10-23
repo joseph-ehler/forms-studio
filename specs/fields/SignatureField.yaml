@@ -1,0 +1,20 @@
+name: SignatureField
+type: text
+specVersion: "1.0"
+description: Signature field placeholder (composite support needed)
+metadata:
+  batch: 6
+  difficulty: complex
+  added: "2025-10-23"
+  note: "Composite pattern not yet implemented - using text as placeholder"
+props: []
+value:
+  default: ""
+aria:
+  live: polite
+  invalid: hasError
+  describedby: description
+facade:
+  enabled: true
+  removal: v2.0.0
+  codemod: pnpm codemod:fields
