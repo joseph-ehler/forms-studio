@@ -2,6 +2,7 @@
   "name": "@intelligence-studio/forms-studio",
   "version": "0.2.1",
   "private": true,
+  "type": "module",
   "description": "AI-authorable, privacy-first, JSON-driven forms & wizard engine",
   "workspaces": [
     "packages/*",
@@ -47,6 +48,7 @@
     "@babel/traverse": "^7.28.5",
     "@babel/types": "^7.28.5",
     "@changesets/cli": "^2.27.1",
+    "@eslint/js": "^9.38.0",
     "@playwright/test": "^1.56.1",
     "@types/node": "^20.11.0",
     "ajv": "^8.17.1",
@@ -54,6 +56,7 @@
     "cspell": "^9.2.2",
     "danger": "^13.0.4",
     "dependency-cruiser": "^17.1.0",
+    "eslint": "^9",
     "fast-glob": "^3.3.3",
     "glob": "^11.0.3",
     "husky": "^9.1.7",
@@ -68,6 +71,7 @@
     "tsup": "^8.0.2",
     "turbo": "^1.13.0",
     "typescript": "^5.4.5",
+    "typescript-eslint": "^8.46.2",
     "vitest": "^1.5.0"
   },
   "packageManager": "pnpm@8.15.0",
