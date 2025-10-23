@@ -177,16 +177,20 @@ ${Array.from(uniqueProps.values()).map(p => `  ${p.name}?: ${p.type};  // ${p.de
   const valueCoercion = value?.coercion || 'e.target.value';
   const defaultValue = value?.default !== undefined ? quoteDefault(value.default) : "''";
   
-  // Filter props to only those allowed on the DOM element
+  // Fixed props that we always emit explicitly (exclude from filtered props)
+  const fixedPropNames = new Set(['type', 'id', 'disabled', 'required', 'value', 'onChange', 'onBlur', 'aria-invalid', 'aria-describedby']);
+  
+  // Filter props to only those allowed on the DOM element AND not already in fixed props
   const domProps = Array.from(uniqueProps.values())
-    .filter(p => allowedProps.has(p.name))
+    .filter(p => allowedProps.has(p.name) && !fixedPropNames.has(p.name))
     .map(p => `            ${p.name}={${p.name}}`);
   
-  // Always add these DOM props
+  // Always add these DOM props (these are in fixedPropNames, won't be duplicated)
   const fixedDomProps = [
     `type="${inputType}"`,
     'id={name}',
     'disabled={disabled}',
+    'required={required}',
   ];
   
   // Add ARIA props if specified

@@ -47,12 +47,12 @@ export function ColorField<T extends FieldValues = FieldValues>({
             type="color"
             id={name}
             disabled={disabled}
+            required={required}
             aria-invalid={hasError || undefined}
             aria-describedby={description ? `${name}-desc` : undefined}
             value={field.value ?? "#000000"}
             onChange={(e) => field.onChange(e.target.value)}
             onBlur={field.onBlur}
-            required={required}
             style={{
               width: '100%',
               padding: '8px 12px',
