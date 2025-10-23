@@ -1,0 +1,2421 @@
+{
+  "metadata": {
+    "pattern": "packages/forms/src/fields/**/*.tsx",
+    "filesFound": 23,
+    "filesAnalyzed": 23,
+    "timestamp": "2025-10-23T20:39:15.053Z",
+    "version": "1.0"
+  },
+  "aggregate": {
+    "totals": {
+      "filesAnalyzed": 23,
+      "usesController": 23,
+      "usesRHF": 23,
+      "hasDSPrimitives": 23,
+      "hasInlineStyles": 0,
+      "hasErrorHandling": 23,
+      "hasLabel": 23,
+      "hasDescription": 23
+    },
+    "compliance": {
+      "fullCompliance": 23,
+      "rhfIntegration": 23,
+      "dsComponents": 23,
+      "ariaLabels": 23,
+      "ariaDescriptions": 23,
+      "ariaInvalid": 23,
+      "errorHandling": 23,
+      "noInlineStyles": 23
+    },
+    "patterns": {
+      "domElements": [
+        {
+          "key": "div",
+          "count": 23,
+          "percentage": "44.2%"
+        },
+        {
+          "key": "input",
+          "count": 21,
+          "percentage": "40.4%"
+        },
+        {
+          "key": "span",
+          "count": 3,
+          "percentage": "5.8%"
+        },
+        {
+          "key": "label",
+          "count": 2,
+          "percentage": "3.8%"
+        },
+        {
+          "key": "textarea",
+          "count": 1,
+          "percentage": "1.9%"
+        },
+        {
+          "key": "select",
+          "count": 1,
+          "percentage": "1.9%"
+        },
+        {
+          "key": "option",
+          "count": 1,
+          "percentage": "1.9%"
+        }
+      ],
+      "dsPrimitives": [
+        {
+          "key": "FormLabel",
+          "count": 23,
+          "percentage": "33.3%"
+        },
+        {
+          "key": "FormHelperText",
+          "count": 23,
+          "percentage": "33.3%"
+        },
+        {
+          "key": "Stack",
+          "count": 23,
+          "percentage": "33.3%"
+        }
+      ],
+      "rhfImports": [
+        {
+          "key": "Controller",
+          "count": 23,
+          "percentage": "50.0%"
+        },
+        {
+          "key": "FieldValues",
+          "count": 23,
+          "percentage": "50.0%"
+        }
+      ],
+      "fieldTypes": [
+        {
+          "key": "text",
+          "count": 12,
+          "percentage": "52.2%"
+        },
+        {
+          "key": "email",
+          "count": 2,
+          "percentage": "8.7%"
+        },
+        {
+          "key": "date",
+          "count": 2,
+          "percentage": "8.7%"
+        },
+        {
+          "key": "url",
+          "count": 1,
+          "percentage": "4.3%"
+        },
+        {
+          "key": "time",
+          "count": 1,
+          "percentage": "4.3%"
+        },
+        {
+          "key": "textarea",
+          "count": 1,
+          "percentage": "4.3%"
+        },
+        {
+          "key": "tel",
+          "count": 1,
+          "percentage": "4.3%"
+        },
+        {
+          "key": "select",
+          "count": 1,
+          "percentage": "4.3%"
+        },
+        {
+          "key": "number",
+          "count": 1,
+          "percentage": "4.3%"
+        },
+        {
+          "key": "color",
+          "count": 1,
+          "percentage": "4.3%"
+        }
+      ],
+      "commonProps": [
+        {
+          "key": "name",
+          "count": 23,
+          "percentage": "10.8%"
+        },
+        {
+          "key": "control",
+          "count": 23,
+          "percentage": "10.8%"
+        },
+        {
+          "key": "errors",
+          "count": 23,
+          "percentage": "10.8%"
+        },
+        {
+          "key": "required",
+          "count": 23,
+          "percentage": "10.8%"
+        },
+        {
+          "key": "disabled",
+          "count": 23,
+          "percentage": "10.8%"
+        },
+        {
+          "key": "label",
+          "count": 23,
+          "percentage": "10.8%"
+        },
+        {
+          "key": "description",
+          "count": 23,
+          "percentage": "10.8%"
+        },
+        {
+          "key": "field",
+          "count": 23,
+          "percentage": "10.8%"
+        },
+        {
+          "key": "placeholder",
+          "count": 9,
+          "percentage": "4.2%"
+        },
+        {
+          "key": "max",
+          "count": 3,
+          "percentage": "1.4%"
+        },
+        {
+          "key": "multiple",
+          "count": 3,
+          "percentage": "1.4%"
+        },
+        {
+          "key": "min",
+          "count": 2,
+          "percentage": "0.9%"
+        },
+        {
+          "key": "step",
+          "count": 2,
+          "percentage": "0.9%"
+        },
+        {
+          "key": "rows",
+          "count": 1,
+          "percentage": "0.5%"
+        },
+        {
+          "key": "pattern",
+          "count": 1,
+          "percentage": "0.5%"
+        },
+        {
+          "key": "separator",
+          "count": 1,
+          "percentage": "0.5%"
+        },
+        {
+          "key": "maxTags",
+          "count": 1,
+          "percentage": "0.5%"
+        },
+        {
+          "key": "options",
+          "count": 1,
+          "percentage": "0.5%"
+        },
+        {
+          "key": "minBound",
+          "count": 1,
+          "percentage": "0.5%"
+        },
+        {
+          "key": "maxBound",
+          "count": 1,
+          "percentage": "0.5%"
+        },
+        {
+          "key": "size",
+          "count": 1,
+          "percentage": "0.5%"
+        },
+        {
+          "key": "accept",
+          "count": 1,
+          "percentage": "0.5%"
+        }
+      ]
+    },
+    "outliers": {
+      "noController": [],
+      "inlineStyles": [],
+      "missingHtmlFor": [],
+      "missingErrorHandling": [],
+      "noDSPrimitives": []
+    },
+    "archetypes": {
+      "simpleText": {
+        "count": 21,
+        "examples": [
+          {
+            "component": "ToggleField",
+            "type": "text",
+            "file": "packages/forms/src/fields/ToggleField/ToggleField.tsx"
+          },
+          {
+            "component": "UrlField",
+            "type": "url",
+            "file": "packages/forms/src/fields/UrlField/UrlField.tsx"
+          },
+          {
+            "component": "TimeField",
+            "type": "time",
+            "file": "packages/forms/src/fields/TimeField/TimeField.tsx"
+          }
+        ]
+      },
+      "simpleBoolean": {
+        "count": 0,
+        "examples": []
+      },
+      "select": {
+        "count": 1,
+        "examples": [
+          {
+            "component": "SelectField",
+            "type": "select",
+            "file": "packages/forms/src/fields/SelectField/SelectField.tsx"
+          }
+        ]
+      },
+      "composite": {
+        "count": 0,
+        "examples": []
+      },
+      "custom": {
+        "count": 0,
+        "examples": []
+      }
+    },
+    "recommendations": []
+  },
+  "reports": [
+    {
+      "file": "packages/forms/src/fields/ToggleField/ToggleField.tsx",
+      "component": "ToggleField",
+      "analysis": {
+        "rhf": {
+          "usesController": true,
+          "imports": [
+            "Controller",
+            "FieldValues"
+          ]
+        },
+        "ui": {
+          "domElements": [
+            "input",
+            "div"
+          ],
+          "dsPrimitives": [
+            "FormLabel",
+            "FormHelperText",
+            "Stack"
+          ],
+          "guessedType": "text"
+        },
+        "props": [
+          "name",
+          "control",
+          "errors",
+          "required",
+          "disabled",
+          "label",
+          "description",
+          "field"
+        ],
+        "aria": {
+          "hasHtmlFor": true,
+          "hasAriaDescribedBy": true,
+          "hasAriaInvalid": true,
+          "hasAriaRequired": false,
+          "hasAriaLabel": false
+        },
+        "patterns": {
+          "hasInlineStyles": false,
+          "usesStyleProp": false,
+          "hasErrorHandling": true,
+          "hasDescription": true,
+          "hasLabel": true,
+          "hasRequired": true,
+          "hasDisabled": true
+        },
+        "exports": [
+          "ToggleField"
+        ]
+      },
+      "compliance": {
+        "rhfIntegration": "✅",
+        "dsComponents": "✅",
+        "ariaLabels": "✅",
+        "ariaDescriptions": "✅",
+        "ariaInvalid": "✅",
+        "errorHandling": "✅",
+        "noInlineStyles": "✅"
+      },
+      "issues": [],
+      "recommendations": [],
+      "suggestedSpec": {
+        "name": "ToggleField",
+        "specVersion": "1.2",
+        "ui": {
+          "behavior": "text",
+          "inputType": "text"
+        },
+        "validation": {
+          "required": true,
+          "rules": {}
+        },
+        "telemetry": {
+          "enabled": false,
+          "events": [
+            "focus",
+            "blur",
+            "validate"
+          ],
+          "pii": "hash"
+        },
+        "accessibility": {
+          "label": true,
+          "description": true
+        }
+      }
+    },
+    {
+      "file": "packages/forms/src/fields/UrlField/UrlField.tsx",
+      "component": "UrlField",
+      "analysis": {
+        "rhf": {
+          "usesController": true,
+          "imports": [
+            "Controller",
+            "FieldValues"
+          ]
+        },
+        "ui": {
+          "domElements": [
+            "input",
+            "div"
+          ],
+          "dsPrimitives": [
+            "FormLabel",
+            "FormHelperText",
+            "Stack"
+          ],
+          "guessedType": "url"
+        },
+        "props": [
+          "name",
+          "control",
+          "errors",
+          "label",
+          "description",
+          "required",
+          "disabled",
+          "placeholder",
+          "field"
+        ],
+        "aria": {
+          "hasHtmlFor": true,
+          "hasAriaDescribedBy": true,
+          "hasAriaInvalid": true,
+          "hasAriaRequired": false,
+          "hasAriaLabel": false
+        },
+        "patterns": {
+          "hasInlineStyles": false,
+          "usesStyleProp": false,
+          "hasErrorHandling": true,
+          "hasDescription": true,
+          "hasLabel": true,
+          "hasRequired": true,
+          "hasDisabled": true
+        },
+        "exports": [
+          "UrlField"
+        ]
+      },
+      "compliance": {
+        "rhfIntegration": "✅",
+        "dsComponents": "✅",
+        "ariaLabels": "✅",
+        "ariaDescriptions": "✅",
+        "ariaInvalid": "✅",
+        "errorHandling": "✅",
+        "noInlineStyles": "✅"
+      },
+      "issues": [],
+      "recommendations": [],
+      "suggestedSpec": {
+        "name": "UrlField",
+        "specVersion": "1.2",
+        "ui": {
+          "behavior": "text",
+          "inputType": "url"
+        },
+        "validation": {
+          "required": true,
+          "rules": {}
+        },
+        "telemetry": {
+          "enabled": false,
+          "events": [
+            "focus",
+            "blur",
+            "validate"
+          ],
+          "pii": "hash"
+        },
+        "accessibility": {
+          "label": true,
+          "description": true
+        }
+      }
+    },
+    {
+      "file": "packages/forms/src/fields/TimeField/TimeField.tsx",
+      "component": "TimeField",
+      "analysis": {
+        "rhf": {
+          "usesController": true,
+          "imports": [
+            "Controller",
+            "FieldValues"
+          ]
+        },
+        "ui": {
+          "domElements": [
+            "input",
+            "div"
+          ],
+          "dsPrimitives": [
+            "FormLabel",
+            "FormHelperText",
+            "Stack"
+          ],
+          "guessedType": "time"
+        },
+        "props": [
+          "name",
+          "control",
+          "errors",
+          "label",
+          "required",
+          "disabled",
+          "description",
+          "placeholder",
+          "field"
+        ],
+        "aria": {
+          "hasHtmlFor": true,
+          "hasAriaDescribedBy": true,
+          "hasAriaInvalid": true,
+          "hasAriaRequired": false,
+          "hasAriaLabel": false
+        },
+        "patterns": {
+          "hasInlineStyles": false,
+          "usesStyleProp": false,
+          "hasErrorHandling": true,
+          "hasDescription": true,
+          "hasLabel": true,
+          "hasRequired": true,
+          "hasDisabled": true
+        },
+        "exports": [
+          "TimeField"
+        ]
+      },
+      "compliance": {
+        "rhfIntegration": "✅",
+        "dsComponents": "✅",
+        "ariaLabels": "✅",
+        "ariaDescriptions": "✅",
+        "ariaInvalid": "✅",
+        "errorHandling": "✅",
+        "noInlineStyles": "✅"
+      },
+      "issues": [],
+      "recommendations": [],
+      "suggestedSpec": {
+        "name": "TimeField",
+        "specVersion": "1.2",
+        "ui": {
+          "behavior": "text",
+          "inputType": "time"
+        },
+        "validation": {
+          "required": true,
+          "rules": {}
+        },
+        "telemetry": {
+          "enabled": false,
+          "events": [
+            "focus",
+            "blur",
+            "validate"
+          ],
+          "pii": "hash"
+        },
+        "accessibility": {
+          "label": true,
+          "description": true
+        }
+      }
+    },
+    {
+      "file": "packages/forms/src/fields/TextareaField/TextareaField.tsx",
+      "component": "TextareaField",
+      "analysis": {
+        "rhf": {
+          "usesController": true,
+          "imports": [
+            "Controller",
+            "FieldValues"
+          ]
+        },
+        "ui": {
+          "domElements": [
+            "textarea",
+            "div"
+          ],
+          "dsPrimitives": [
+            "FormLabel",
+            "FormHelperText",
+            "Stack"
+          ],
+          "guessedType": "textarea"
+        },
+        "props": [
+          "name",
+          "control",
+          "errors",
+          "label",
+          "required",
+          "disabled",
+          "description",
+          "placeholder",
+          "rows",
+          "field"
+        ],
+        "aria": {
+          "hasHtmlFor": true,
+          "hasAriaDescribedBy": true,
+          "hasAriaInvalid": true,
+          "hasAriaRequired": false,
+          "hasAriaLabel": false
+        },
+        "patterns": {
+          "hasInlineStyles": false,
+          "usesStyleProp": false,
+          "hasErrorHandling": true,
+          "hasDescription": true,
+          "hasLabel": true,
+          "hasRequired": true,
+          "hasDisabled": true
+        },
+        "exports": [
+          "TextareaField"
+        ]
+      },
+      "compliance": {
+        "rhfIntegration": "✅",
+        "dsComponents": "✅",
+        "ariaLabels": "✅",
+        "ariaDescriptions": "✅",
+        "ariaInvalid": "✅",
+        "errorHandling": "✅",
+        "noInlineStyles": "✅"
+      },
+      "issues": [],
+      "recommendations": [],
+      "suggestedSpec": {
+        "name": "TextareaField",
+        "specVersion": "1.2",
+        "ui": {
+          "behavior": "textarea",
+          "inputType": "textarea"
+        },
+        "validation": {
+          "required": true,
+          "rules": {}
+        },
+        "telemetry": {
+          "enabled": false,
+          "events": [
+            "focus",
+            "blur",
+            "validate"
+          ],
+          "pii": "hash"
+        },
+        "accessibility": {
+          "label": true,
+          "description": true
+        }
+      }
+    },
+    {
+      "file": "packages/forms/src/fields/TextField/TextField.tsx",
+      "component": "TextField",
+      "analysis": {
+        "rhf": {
+          "usesController": true,
+          "imports": [
+            "Controller",
+            "FieldValues"
+          ]
+        },
+        "ui": {
+          "domElements": [
+            "input",
+            "div"
+          ],
+          "dsPrimitives": [
+            "FormLabel",
+            "FormHelperText",
+            "Stack"
+          ],
+          "guessedType": "text"
+        },
+        "props": [
+          "name",
+          "control",
+          "errors",
+          "label",
+          "required",
+          "disabled",
+          "description",
+          "placeholder",
+          "field"
+        ],
+        "aria": {
+          "hasHtmlFor": true,
+          "hasAriaDescribedBy": true,
+          "hasAriaInvalid": true,
+          "hasAriaRequired": false,
+          "hasAriaLabel": false
+        },
+        "patterns": {
+          "hasInlineStyles": false,
+          "usesStyleProp": false,
+          "hasErrorHandling": true,
+          "hasDescription": true,
+          "hasLabel": true,
+          "hasRequired": true,
+          "hasDisabled": true
+        },
+        "exports": [
+          "TextField"
+        ]
+      },
+      "compliance": {
+        "rhfIntegration": "✅",
+        "dsComponents": "✅",
+        "ariaLabels": "✅",
+        "ariaDescriptions": "✅",
+        "ariaInvalid": "✅",
+        "errorHandling": "✅",
+        "noInlineStyles": "✅"
+      },
+      "issues": [],
+      "recommendations": [],
+      "suggestedSpec": {
+        "name": "TextField",
+        "specVersion": "1.2",
+        "ui": {
+          "behavior": "text",
+          "inputType": "text"
+        },
+        "validation": {
+          "required": true,
+          "rules": {}
+        },
+        "telemetry": {
+          "enabled": false,
+          "events": [
+            "focus",
+            "blur",
+            "validate"
+          ],
+          "pii": "hash"
+        },
+        "accessibility": {
+          "label": true,
+          "description": true
+        }
+      }
+    },
+    {
+      "file": "packages/forms/src/fields/TelField/TelField.tsx",
+      "component": "TelField",
+      "analysis": {
+        "rhf": {
+          "usesController": true,
+          "imports": [
+            "Controller",
+            "FieldValues"
+          ]
+        },
+        "ui": {
+          "domElements": [
+            "input",
+            "div"
+          ],
+          "dsPrimitives": [
+            "FormLabel",
+            "FormHelperText",
+            "Stack"
+          ],
+          "guessedType": "tel"
+        },
+        "props": [
+          "name",
+          "control",
+          "errors",
+          "label",
+          "description",
+          "pattern",
+          "required",
+          "disabled",
+          "placeholder",
+          "field"
+        ],
+        "aria": {
+          "hasHtmlFor": true,
+          "hasAriaDescribedBy": true,
+          "hasAriaInvalid": true,
+          "hasAriaRequired": false,
+          "hasAriaLabel": false
+        },
+        "patterns": {
+          "hasInlineStyles": false,
+          "usesStyleProp": false,
+          "hasErrorHandling": true,
+          "hasDescription": true,
+          "hasLabel": true,
+          "hasRequired": true,
+          "hasDisabled": true
+        },
+        "exports": [
+          "TelField"
+        ]
+      },
+      "compliance": {
+        "rhfIntegration": "✅",
+        "dsComponents": "✅",
+        "ariaLabels": "✅",
+        "ariaDescriptions": "✅",
+        "ariaInvalid": "✅",
+        "errorHandling": "✅",
+        "noInlineStyles": "✅"
+      },
+      "issues": [],
+      "recommendations": [],
+      "suggestedSpec": {
+        "name": "TelField",
+        "specVersion": "1.2",
+        "ui": {
+          "behavior": "text",
+          "inputType": "tel"
+        },
+        "validation": {
+          "required": true,
+          "rules": {}
+        },
+        "telemetry": {
+          "enabled": false,
+          "events": [
+            "focus",
+            "blur",
+            "validate"
+          ],
+          "pii": "hash"
+        },
+        "accessibility": {
+          "label": true,
+          "description": true
+        }
+      }
+    },
+    {
+      "file": "packages/forms/src/fields/TagInputField/TagInputField.tsx",
+      "component": "TagInputField",
+      "analysis": {
+        "rhf": {
+          "usesController": true,
+          "imports": [
+            "Controller",
+            "FieldValues"
+          ]
+        },
+        "ui": {
+          "domElements": [
+            "input",
+            "div"
+          ],
+          "dsPrimitives": [
+            "FormLabel",
+            "FormHelperText",
+            "Stack"
+          ],
+          "guessedType": "text"
+        },
+        "props": [
+          "name",
+          "control",
+          "errors",
+          "label",
+          "required",
+          "disabled",
+          "description",
+          "separator",
+          "maxTags",
+          "field"
+        ],
+        "aria": {
+          "hasHtmlFor": true,
+          "hasAriaDescribedBy": true,
+          "hasAriaInvalid": true,
+          "hasAriaRequired": false,
+          "hasAriaLabel": false
+        },
+        "patterns": {
+          "hasInlineStyles": false,
+          "usesStyleProp": false,
+          "hasErrorHandling": true,
+          "hasDescription": true,
+          "hasLabel": true,
+          "hasRequired": true,
+          "hasDisabled": true
+        },
+        "exports": [
+          "TagInputField"
+        ]
+      },
+      "compliance": {
+        "rhfIntegration": "✅",
+        "dsComponents": "✅",
+        "ariaLabels": "✅",
+        "ariaDescriptions": "✅",
+        "ariaInvalid": "✅",
+        "errorHandling": "✅",
+        "noInlineStyles": "✅"
+      },
+      "issues": [],
+      "recommendations": [],
+      "suggestedSpec": {
+        "name": "TagInputField",
+        "specVersion": "1.2",
+        "ui": {
+          "behavior": "text",
+          "inputType": "text"
+        },
+        "validation": {
+          "required": true,
+          "rules": {}
+        },
+        "telemetry": {
+          "enabled": false,
+          "events": [
+            "focus",
+            "blur",
+            "validate"
+          ],
+          "pii": "hash"
+        },
+        "accessibility": {
+          "label": true,
+          "description": true
+        }
+      }
+    },
+    {
+      "file": "packages/forms/src/fields/SignatureField/SignatureField.tsx",
+      "component": "SignatureField",
+      "analysis": {
+        "rhf": {
+          "usesController": true,
+          "imports": [
+            "Controller",
+            "FieldValues"
+          ]
+        },
+        "ui": {
+          "domElements": [
+            "input",
+            "div"
+          ],
+          "dsPrimitives": [
+            "FormLabel",
+            "FormHelperText",
+            "Stack"
+          ],
+          "guessedType": "text"
+        },
+        "props": [
+          "name",
+          "control",
+          "errors",
+          "label",
+          "required",
+          "disabled",
+          "description",
+          "field"
+        ],
+        "aria": {
+          "hasHtmlFor": true,
+          "hasAriaDescribedBy": true,
+          "hasAriaInvalid": true,
+          "hasAriaRequired": false,
+          "hasAriaLabel": false
+        },
+        "patterns": {
+          "hasInlineStyles": false,
+          "usesStyleProp": false,
+          "hasErrorHandling": true,
+          "hasDescription": true,
+          "hasLabel": true,
+          "hasRequired": true,
+          "hasDisabled": true
+        },
+        "exports": [
+          "SignatureField"
+        ]
+      },
+      "compliance": {
+        "rhfIntegration": "✅",
+        "dsComponents": "✅",
+        "ariaLabels": "✅",
+        "ariaDescriptions": "✅",
+        "ariaInvalid": "✅",
+        "errorHandling": "✅",
+        "noInlineStyles": "✅"
+      },
+      "issues": [],
+      "recommendations": [],
+      "suggestedSpec": {
+        "name": "SignatureField",
+        "specVersion": "1.2",
+        "ui": {
+          "behavior": "text",
+          "inputType": "text"
+        },
+        "validation": {
+          "required": true,
+          "rules": {}
+        },
+        "telemetry": {
+          "enabled": false,
+          "events": [
+            "focus",
+            "blur",
+            "validate"
+          ],
+          "pii": "hash"
+        },
+        "accessibility": {
+          "label": true,
+          "description": true
+        }
+      }
+    },
+    {
+      "file": "packages/forms/src/fields/SliderField/SliderField.tsx",
+      "component": "SliderField",
+      "analysis": {
+        "rhf": {
+          "usesController": true,
+          "imports": [
+            "Controller",
+            "FieldValues"
+          ]
+        },
+        "ui": {
+          "domElements": [
+            "input",
+            "div"
+          ],
+          "dsPrimitives": [
+            "FormLabel",
+            "FormHelperText",
+            "Stack"
+          ],
+          "guessedType": "text"
+        },
+        "props": [
+          "name",
+          "control",
+          "errors",
+          "label",
+          "required",
+          "disabled",
+          "description",
+          "min",
+          "max",
+          "step",
+          "field"
+        ],
+        "aria": {
+          "hasHtmlFor": true,
+          "hasAriaDescribedBy": true,
+          "hasAriaInvalid": true,
+          "hasAriaRequired": false,
+          "hasAriaLabel": false
+        },
+        "patterns": {
+          "hasInlineStyles": false,
+          "usesStyleProp": false,
+          "hasErrorHandling": true,
+          "hasDescription": true,
+          "hasLabel": true,
+          "hasRequired": true,
+          "hasDisabled": true
+        },
+        "exports": [
+          "SliderField"
+        ]
+      },
+      "compliance": {
+        "rhfIntegration": "✅",
+        "dsComponents": "✅",
+        "ariaLabels": "✅",
+        "ariaDescriptions": "✅",
+        "ariaInvalid": "✅",
+        "errorHandling": "✅",
+        "noInlineStyles": "✅"
+      },
+      "issues": [],
+      "recommendations": [],
+      "suggestedSpec": {
+        "name": "SliderField",
+        "specVersion": "1.2",
+        "ui": {
+          "behavior": "text",
+          "inputType": "text"
+        },
+        "validation": {
+          "required": true,
+          "rules": {}
+        },
+        "telemetry": {
+          "enabled": false,
+          "events": [
+            "focus",
+            "blur",
+            "validate"
+          ],
+          "pii": "hash"
+        },
+        "accessibility": {
+          "label": true,
+          "description": true
+        }
+      }
+    },
+    {
+      "file": "packages/forms/src/fields/SelectField/SelectField.tsx",
+      "component": "SelectField",
+      "analysis": {
+        "rhf": {
+          "usesController": true,
+          "imports": [
+            "Controller",
+            "FieldValues"
+          ]
+        },
+        "ui": {
+          "domElements": [
+            "select",
+            "option",
+            "div"
+          ],
+          "dsPrimitives": [
+            "FormLabel",
+            "FormHelperText",
+            "Stack"
+          ],
+          "guessedType": "select"
+        },
+        "props": [
+          "name",
+          "control",
+          "errors",
+          "label",
+          "required",
+          "disabled",
+          "description",
+          "placeholder",
+          "options",
+          "field"
+        ],
+        "aria": {
+          "hasHtmlFor": true,
+          "hasAriaDescribedBy": true,
+          "hasAriaInvalid": true,
+          "hasAriaRequired": false,
+          "hasAriaLabel": false
+        },
+        "patterns": {
+          "hasInlineStyles": false,
+          "usesStyleProp": false,
+          "hasErrorHandling": true,
+          "hasDescription": true,
+          "hasLabel": true,
+          "hasRequired": true,
+          "hasDisabled": true
+        },
+        "exports": [
+          "SelectField"
+        ]
+      },
+      "compliance": {
+        "rhfIntegration": "✅",
+        "dsComponents": "✅",
+        "ariaLabels": "✅",
+        "ariaDescriptions": "✅",
+        "ariaInvalid": "✅",
+        "errorHandling": "✅",
+        "noInlineStyles": "✅"
+      },
+      "issues": [],
+      "recommendations": [],
+      "suggestedSpec": {
+        "name": "SelectField",
+        "specVersion": "1.2",
+        "ui": {
+          "behavior": "select",
+          "inputType": "select"
+        },
+        "validation": {
+          "required": true,
+          "rules": {}
+        },
+        "telemetry": {
+          "enabled": false,
+          "events": [
+            "focus",
+            "blur",
+            "validate"
+          ],
+          "pii": "hash"
+        },
+        "accessibility": {
+          "label": true,
+          "description": true
+        }
+      }
+    },
+    {
+      "file": "packages/forms/src/fields/RatingField/RatingField.tsx",
+      "component": "RatingField",
+      "analysis": {
+        "rhf": {
+          "usesController": true,
+          "imports": [
+            "Controller",
+            "FieldValues"
+          ]
+        },
+        "ui": {
+          "domElements": [
+            "div",
+            "label",
+            "input"
+          ],
+          "dsPrimitives": [
+            "FormLabel",
+            "FormHelperText",
+            "Stack"
+          ],
+          "guessedType": "text"
+        },
+        "props": [
+          "name",
+          "control",
+          "errors",
+          "label",
+          "required",
+          "disabled",
+          "description",
+          "max",
+          "field"
+        ],
+        "aria": {
+          "hasHtmlFor": true,
+          "hasAriaDescribedBy": true,
+          "hasAriaInvalid": true,
+          "hasAriaRequired": false,
+          "hasAriaLabel": false
+        },
+        "patterns": {
+          "hasInlineStyles": false,
+          "usesStyleProp": false,
+          "hasErrorHandling": true,
+          "hasDescription": true,
+          "hasLabel": true,
+          "hasRequired": true,
+          "hasDisabled": true
+        },
+        "exports": [
+          "RatingField"
+        ]
+      },
+      "compliance": {
+        "rhfIntegration": "✅",
+        "dsComponents": "✅",
+        "ariaLabels": "✅",
+        "ariaDescriptions": "✅",
+        "ariaInvalid": "✅",
+        "errorHandling": "✅",
+        "noInlineStyles": "✅"
+      },
+      "issues": [],
+      "recommendations": [],
+      "suggestedSpec": {
+        "name": "RatingField",
+        "specVersion": "1.2",
+        "ui": {
+          "behavior": "text",
+          "inputType": "text"
+        },
+        "validation": {
+          "required": true,
+          "rules": {}
+        },
+        "telemetry": {
+          "enabled": false,
+          "events": [
+            "focus",
+            "blur",
+            "validate"
+          ],
+          "pii": "hash"
+        },
+        "accessibility": {
+          "label": true,
+          "description": true
+        }
+      }
+    },
+    {
+      "file": "packages/forms/src/fields/RangeField/RangeField.tsx",
+      "component": "RangeField",
+      "analysis": {
+        "rhf": {
+          "usesController": true,
+          "imports": [
+            "Controller",
+            "FieldValues"
+          ]
+        },
+        "ui": {
+          "domElements": [
+            "div",
+            "input",
+            "span"
+          ],
+          "dsPrimitives": [
+            "FormLabel",
+            "FormHelperText",
+            "Stack"
+          ],
+          "guessedType": "text"
+        },
+        "props": [
+          "name",
+          "control",
+          "errors",
+          "label",
+          "required",
+          "disabled",
+          "description",
+          "minBound",
+          "maxBound",
+          "step",
+          "field"
+        ],
+        "aria": {
+          "hasHtmlFor": true,
+          "hasAriaDescribedBy": true,
+          "hasAriaInvalid": true,
+          "hasAriaRequired": false,
+          "hasAriaLabel": true
+        },
+        "patterns": {
+          "hasInlineStyles": false,
+          "usesStyleProp": false,
+          "hasErrorHandling": true,
+          "hasDescription": true,
+          "hasLabel": true,
+          "hasRequired": true,
+          "hasDisabled": true
+        },
+        "exports": [
+          "RangeField"
+        ]
+      },
+      "compliance": {
+        "rhfIntegration": "✅",
+        "dsComponents": "✅",
+        "ariaLabels": "✅",
+        "ariaDescriptions": "✅",
+        "ariaInvalid": "✅",
+        "errorHandling": "✅",
+        "noInlineStyles": "✅"
+      },
+      "issues": [],
+      "recommendations": [],
+      "suggestedSpec": {
+        "name": "RangeField",
+        "specVersion": "1.2",
+        "ui": {
+          "behavior": "text",
+          "inputType": "text"
+        },
+        "validation": {
+          "required": true,
+          "rules": {}
+        },
+        "telemetry": {
+          "enabled": false,
+          "events": [
+            "focus",
+            "blur",
+            "validate"
+          ],
+          "pii": "hash"
+        },
+        "accessibility": {
+          "label": true,
+          "description": true
+        }
+      }
+    },
+    {
+      "file": "packages/forms/src/fields/RangeCompositeField/RangeCompositeField.tsx",
+      "component": "RangeCompositeField",
+      "analysis": {
+        "rhf": {
+          "usesController": true,
+          "imports": [
+            "Controller",
+            "FieldValues"
+          ]
+        },
+        "ui": {
+          "domElements": [
+            "div",
+            "input",
+            "span"
+          ],
+          "dsPrimitives": [
+            "FormLabel",
+            "FormHelperText",
+            "Stack"
+          ],
+          "guessedType": "text"
+        },
+        "props": [
+          "name",
+          "control",
+          "errors",
+          "label",
+          "required",
+          "disabled",
+          "description",
+          "field"
+        ],
+        "aria": {
+          "hasHtmlFor": true,
+          "hasAriaDescribedBy": true,
+          "hasAriaInvalid": true,
+          "hasAriaRequired": false,
+          "hasAriaLabel": false
+        },
+        "patterns": {
+          "hasInlineStyles": false,
+          "usesStyleProp": false,
+          "hasErrorHandling": true,
+          "hasDescription": true,
+          "hasLabel": true,
+          "hasRequired": true,
+          "hasDisabled": true
+        },
+        "exports": [
+          "RangeCompositeField"
+        ]
+      },
+      "compliance": {
+        "rhfIntegration": "✅",
+        "dsComponents": "✅",
+        "ariaLabels": "✅",
+        "ariaDescriptions": "✅",
+        "ariaInvalid": "✅",
+        "errorHandling": "✅",
+        "noInlineStyles": "✅"
+      },
+      "issues": [],
+      "recommendations": [],
+      "suggestedSpec": {
+        "name": "RangeCompositeField",
+        "specVersion": "1.2",
+        "ui": {
+          "behavior": "text",
+          "inputType": "text"
+        },
+        "validation": {
+          "required": true,
+          "rules": {}
+        },
+        "telemetry": {
+          "enabled": false,
+          "events": [
+            "focus",
+            "blur",
+            "validate"
+          ],
+          "pii": "hash"
+        },
+        "accessibility": {
+          "label": true,
+          "description": true
+        }
+      }
+    },
+    {
+      "file": "packages/forms/src/fields/NumberField/NumberField.tsx",
+      "component": "NumberField",
+      "analysis": {
+        "rhf": {
+          "usesController": true,
+          "imports": [
+            "Controller",
+            "FieldValues"
+          ]
+        },
+        "ui": {
+          "domElements": [
+            "input",
+            "div"
+          ],
+          "dsPrimitives": [
+            "FormLabel",
+            "FormHelperText",
+            "Stack"
+          ],
+          "guessedType": "number"
+        },
+        "props": [
+          "name",
+          "control",
+          "errors",
+          "label",
+          "required",
+          "disabled",
+          "description",
+          "placeholder",
+          "field"
+        ],
+        "aria": {
+          "hasHtmlFor": true,
+          "hasAriaDescribedBy": true,
+          "hasAriaInvalid": true,
+          "hasAriaRequired": false,
+          "hasAriaLabel": false
+        },
+        "patterns": {
+          "hasInlineStyles": false,
+          "usesStyleProp": false,
+          "hasErrorHandling": true,
+          "hasDescription": true,
+          "hasLabel": true,
+          "hasRequired": true,
+          "hasDisabled": true
+        },
+        "exports": [
+          "NumberField"
+        ]
+      },
+      "compliance": {
+        "rhfIntegration": "✅",
+        "dsComponents": "✅",
+        "ariaLabels": "✅",
+        "ariaDescriptions": "✅",
+        "ariaInvalid": "✅",
+        "errorHandling": "✅",
+        "noInlineStyles": "✅"
+      },
+      "issues": [],
+      "recommendations": [],
+      "suggestedSpec": {
+        "name": "NumberField",
+        "specVersion": "1.2",
+        "ui": {
+          "behavior": "text",
+          "inputType": "number"
+        },
+        "validation": {
+          "required": true,
+          "rules": {}
+        },
+        "telemetry": {
+          "enabled": false,
+          "events": [
+            "focus",
+            "blur",
+            "validate"
+          ],
+          "pii": "hash"
+        },
+        "accessibility": {
+          "label": true,
+          "description": true
+        }
+      }
+    },
+    {
+      "file": "packages/forms/src/fields/MultiSelectField/MultiSelectField.tsx",
+      "component": "MultiSelectField",
+      "analysis": {
+        "rhf": {
+          "usesController": true,
+          "imports": [
+            "Controller",
+            "FieldValues"
+          ]
+        },
+        "ui": {
+          "domElements": [
+            "input",
+            "div"
+          ],
+          "dsPrimitives": [
+            "FormLabel",
+            "FormHelperText",
+            "Stack"
+          ],
+          "guessedType": "text"
+        },
+        "props": [
+          "name",
+          "control",
+          "errors",
+          "required",
+          "disabled",
+          "label",
+          "description",
+          "size",
+          "multiple",
+          "field"
+        ],
+        "aria": {
+          "hasHtmlFor": true,
+          "hasAriaDescribedBy": true,
+          "hasAriaInvalid": true,
+          "hasAriaRequired": false,
+          "hasAriaLabel": false
+        },
+        "patterns": {
+          "hasInlineStyles": false,
+          "usesStyleProp": false,
+          "hasErrorHandling": true,
+          "hasDescription": true,
+          "hasLabel": true,
+          "hasRequired": true,
+          "hasDisabled": true
+        },
+        "exports": [
+          "MultiSelectField"
+        ]
+      },
+      "compliance": {
+        "rhfIntegration": "✅",
+        "dsComponents": "✅",
+        "ariaLabels": "✅",
+        "ariaDescriptions": "✅",
+        "ariaInvalid": "✅",
+        "errorHandling": "✅",
+        "noInlineStyles": "✅"
+      },
+      "issues": [],
+      "recommendations": [],
+      "suggestedSpec": {
+        "name": "MultiSelectField",
+        "specVersion": "1.2",
+        "ui": {
+          "behavior": "text",
+          "inputType": "text"
+        },
+        "validation": {
+          "required": true,
+          "rules": {}
+        },
+        "telemetry": {
+          "enabled": false,
+          "events": [
+            "focus",
+            "blur",
+            "validate"
+          ],
+          "pii": "hash"
+        },
+        "accessibility": {
+          "label": true,
+          "description": true
+        }
+      }
+    },
+    {
+      "file": "packages/forms/src/fields/LocationField/LocationField.tsx",
+      "component": "LocationField",
+      "analysis": {
+        "rhf": {
+          "usesController": true,
+          "imports": [
+            "Controller",
+            "FieldValues"
+          ]
+        },
+        "ui": {
+          "domElements": [
+            "div",
+            "input"
+          ],
+          "dsPrimitives": [
+            "FormLabel",
+            "FormHelperText",
+            "Stack"
+          ],
+          "guessedType": "text"
+        },
+        "props": [
+          "name",
+          "control",
+          "errors",
+          "label",
+          "required",
+          "disabled",
+          "description",
+          "field"
+        ],
+        "aria": {
+          "hasHtmlFor": true,
+          "hasAriaDescribedBy": true,
+          "hasAriaInvalid": true,
+          "hasAriaRequired": false,
+          "hasAriaLabel": false
+        },
+        "patterns": {
+          "hasInlineStyles": false,
+          "usesStyleProp": false,
+          "hasErrorHandling": true,
+          "hasDescription": true,
+          "hasLabel": true,
+          "hasRequired": true,
+          "hasDisabled": true
+        },
+        "exports": [
+          "LocationField"
+        ]
+      },
+      "compliance": {
+        "rhfIntegration": "✅",
+        "dsComponents": "✅",
+        "ariaLabels": "✅",
+        "ariaDescriptions": "✅",
+        "ariaInvalid": "✅",
+        "errorHandling": "✅",
+        "noInlineStyles": "✅"
+      },
+      "issues": [],
+      "recommendations": [],
+      "suggestedSpec": {
+        "name": "LocationField",
+        "specVersion": "1.2",
+        "ui": {
+          "behavior": "text",
+          "inputType": "text"
+        },
+        "validation": {
+          "required": true,
+          "rules": {}
+        },
+        "telemetry": {
+          "enabled": false,
+          "events": [
+            "focus",
+            "blur",
+            "validate"
+          ],
+          "pii": "hash"
+        },
+        "accessibility": {
+          "label": true,
+          "description": true
+        }
+      }
+    },
+    {
+      "file": "packages/forms/src/fields/FileField/FileField.tsx",
+      "component": "FileField",
+      "analysis": {
+        "rhf": {
+          "usesController": true,
+          "imports": [
+            "Controller",
+            "FieldValues"
+          ]
+        },
+        "ui": {
+          "domElements": [
+            "input",
+            "div"
+          ],
+          "dsPrimitives": [
+            "FormLabel",
+            "FormHelperText",
+            "Stack"
+          ],
+          "guessedType": "text"
+        },
+        "props": [
+          "name",
+          "control",
+          "errors",
+          "required",
+          "disabled",
+          "label",
+          "description",
+          "accept",
+          "multiple",
+          "field"
+        ],
+        "aria": {
+          "hasHtmlFor": true,
+          "hasAriaDescribedBy": true,
+          "hasAriaInvalid": true,
+          "hasAriaRequired": false,
+          "hasAriaLabel": false
+        },
+        "patterns": {
+          "hasInlineStyles": false,
+          "usesStyleProp": false,
+          "hasErrorHandling": true,
+          "hasDescription": true,
+          "hasLabel": true,
+          "hasRequired": true,
+          "hasDisabled": true
+        },
+        "exports": [
+          "FileField"
+        ]
+      },
+      "compliance": {
+        "rhfIntegration": "✅",
+        "dsComponents": "✅",
+        "ariaLabels": "✅",
+        "ariaDescriptions": "✅",
+        "ariaInvalid": "✅",
+        "errorHandling": "✅",
+        "noInlineStyles": "✅"
+      },
+      "issues": [],
+      "recommendations": [],
+      "suggestedSpec": {
+        "name": "FileField",
+        "specVersion": "1.2",
+        "ui": {
+          "behavior": "text",
+          "inputType": "text"
+        },
+        "validation": {
+          "required": true,
+          "rules": {}
+        },
+        "telemetry": {
+          "enabled": false,
+          "events": [
+            "focus",
+            "blur",
+            "validate"
+          ],
+          "pii": "hash"
+        },
+        "accessibility": {
+          "label": true,
+          "description": true
+        }
+      }
+    },
+    {
+      "file": "packages/forms/src/fields/EmailField/EmailField.tsx",
+      "component": "EmailField",
+      "analysis": {
+        "rhf": {
+          "usesController": true,
+          "imports": [
+            "Controller",
+            "FieldValues"
+          ]
+        },
+        "ui": {
+          "domElements": [
+            "input",
+            "div"
+          ],
+          "dsPrimitives": [
+            "FormLabel",
+            "FormHelperText",
+            "Stack"
+          ],
+          "guessedType": "email"
+        },
+        "props": [
+          "name",
+          "control",
+          "errors",
+          "label",
+          "description",
+          "required",
+          "disabled",
+          "multiple",
+          "placeholder",
+          "field"
+        ],
+        "aria": {
+          "hasHtmlFor": true,
+          "hasAriaDescribedBy": true,
+          "hasAriaInvalid": true,
+          "hasAriaRequired": false,
+          "hasAriaLabel": false
+        },
+        "patterns": {
+          "hasInlineStyles": false,
+          "usesStyleProp": false,
+          "hasErrorHandling": true,
+          "hasDescription": true,
+          "hasLabel": true,
+          "hasRequired": true,
+          "hasDisabled": true
+        },
+        "exports": [
+          "EmailField"
+        ]
+      },
+      "compliance": {
+        "rhfIntegration": "✅",
+        "dsComponents": "✅",
+        "ariaLabels": "✅",
+        "ariaDescriptions": "✅",
+        "ariaInvalid": "✅",
+        "errorHandling": "✅",
+        "noInlineStyles": "✅"
+      },
+      "issues": [],
+      "recommendations": [],
+      "suggestedSpec": {
+        "name": "EmailField",
+        "specVersion": "1.2",
+        "ui": {
+          "behavior": "text",
+          "inputType": "email"
+        },
+        "validation": {
+          "required": true,
+          "rules": {}
+        },
+        "telemetry": {
+          "enabled": false,
+          "events": [
+            "focus",
+            "blur",
+            "validate"
+          ],
+          "pii": "hash"
+        },
+        "accessibility": {
+          "label": true,
+          "description": true
+        }
+      }
+    },
+    {
+      "file": "packages/forms/src/fields/DateTimeField/DateTimeField.tsx",
+      "component": "DateTimeField",
+      "analysis": {
+        "rhf": {
+          "usesController": true,
+          "imports": [
+            "Controller",
+            "FieldValues"
+          ]
+        },
+        "ui": {
+          "domElements": [
+            "input",
+            "div"
+          ],
+          "dsPrimitives": [
+            "FormLabel",
+            "FormHelperText",
+            "Stack"
+          ],
+          "guessedType": "date"
+        },
+        "props": [
+          "name",
+          "control",
+          "errors",
+          "label",
+          "required",
+          "disabled",
+          "description",
+          "min",
+          "max",
+          "field"
+        ],
+        "aria": {
+          "hasHtmlFor": true,
+          "hasAriaDescribedBy": true,
+          "hasAriaInvalid": true,
+          "hasAriaRequired": false,
+          "hasAriaLabel": false
+        },
+        "patterns": {
+          "hasInlineStyles": false,
+          "usesStyleProp": false,
+          "hasErrorHandling": true,
+          "hasDescription": true,
+          "hasLabel": true,
+          "hasRequired": true,
+          "hasDisabled": true
+        },
+        "exports": [
+          "DateTimeField"
+        ]
+      },
+      "compliance": {
+        "rhfIntegration": "✅",
+        "dsComponents": "✅",
+        "ariaLabels": "✅",
+        "ariaDescriptions": "✅",
+        "ariaInvalid": "✅",
+        "errorHandling": "✅",
+        "noInlineStyles": "✅"
+      },
+      "issues": [],
+      "recommendations": [],
+      "suggestedSpec": {
+        "name": "DateTimeField",
+        "specVersion": "1.2",
+        "ui": {
+          "behavior": "text",
+          "inputType": "date"
+        },
+        "validation": {
+          "required": true,
+          "rules": {}
+        },
+        "telemetry": {
+          "enabled": false,
+          "events": [
+            "focus",
+            "blur",
+            "validate"
+          ],
+          "pii": "hash"
+        },
+        "accessibility": {
+          "label": true,
+          "description": true
+        }
+      }
+    },
+    {
+      "file": "packages/forms/src/fields/DateField/DateField.tsx",
+      "component": "DateField",
+      "analysis": {
+        "rhf": {
+          "usesController": true,
+          "imports": [
+            "Controller",
+            "FieldValues"
+          ]
+        },
+        "ui": {
+          "domElements": [
+            "input",
+            "div"
+          ],
+          "dsPrimitives": [
+            "FormLabel",
+            "FormHelperText",
+            "Stack"
+          ],
+          "guessedType": "date"
+        },
+        "props": [
+          "name",
+          "control",
+          "errors",
+          "label",
+          "required",
+          "disabled",
+          "description",
+          "placeholder",
+          "field"
+        ],
+        "aria": {
+          "hasHtmlFor": true,
+          "hasAriaDescribedBy": true,
+          "hasAriaInvalid": true,
+          "hasAriaRequired": false,
+          "hasAriaLabel": false
+        },
+        "patterns": {
+          "hasInlineStyles": false,
+          "usesStyleProp": false,
+          "hasErrorHandling": true,
+          "hasDescription": true,
+          "hasLabel": true,
+          "hasRequired": true,
+          "hasDisabled": true
+        },
+        "exports": [
+          "DateField"
+        ]
+      },
+      "compliance": {
+        "rhfIntegration": "✅",
+        "dsComponents": "✅",
+        "ariaLabels": "✅",
+        "ariaDescriptions": "✅",
+        "ariaInvalid": "✅",
+        "errorHandling": "✅",
+        "noInlineStyles": "✅"
+      },
+      "issues": [],
+      "recommendations": [],
+      "suggestedSpec": {
+        "name": "DateField",
+        "specVersion": "1.2",
+        "ui": {
+          "behavior": "text",
+          "inputType": "date"
+        },
+        "validation": {
+          "required": true,
+          "rules": {}
+        },
+        "telemetry": {
+          "enabled": false,
+          "events": [
+            "focus",
+            "blur",
+            "validate"
+          ],
+          "pii": "hash"
+        },
+        "accessibility": {
+          "label": true,
+          "description": true
+        }
+      }
+    },
+    {
+      "file": "packages/forms/src/fields/ColorField/ColorField.tsx",
+      "component": "ColorField",
+      "analysis": {
+        "rhf": {
+          "usesController": true,
+          "imports": [
+            "Controller",
+            "FieldValues"
+          ]
+        },
+        "ui": {
+          "domElements": [
+            "input",
+            "div"
+          ],
+          "dsPrimitives": [
+            "FormLabel",
+            "FormHelperText",
+            "Stack"
+          ],
+          "guessedType": "color"
+        },
+        "props": [
+          "name",
+          "control",
+          "errors",
+          "label",
+          "description",
+          "required",
+          "disabled",
+          "field"
+        ],
+        "aria": {
+          "hasHtmlFor": true,
+          "hasAriaDescribedBy": true,
+          "hasAriaInvalid": true,
+          "hasAriaRequired": false,
+          "hasAriaLabel": false
+        },
+        "patterns": {
+          "hasInlineStyles": false,
+          "usesStyleProp": false,
+          "hasErrorHandling": true,
+          "hasDescription": true,
+          "hasLabel": true,
+          "hasRequired": true,
+          "hasDisabled": true
+        },
+        "exports": [
+          "ColorField"
+        ]
+      },
+      "compliance": {
+        "rhfIntegration": "✅",
+        "dsComponents": "✅",
+        "ariaLabels": "✅",
+        "ariaDescriptions": "✅",
+        "ariaInvalid": "✅",
+        "errorHandling": "✅",
+        "noInlineStyles": "✅"
+      },
+      "issues": [],
+      "recommendations": [],
+      "suggestedSpec": {
+        "name": "ColorField",
+        "specVersion": "1.2",
+        "ui": {
+          "behavior": "text",
+          "inputType": "color"
+        },
+        "validation": {
+          "required": true,
+          "rules": {}
+        },
+        "telemetry": {
+          "enabled": false,
+          "events": [
+            "focus",
+            "blur",
+            "validate"
+          ],
+          "pii": "hash"
+        },
+        "accessibility": {
+          "label": true,
+          "description": true
+        }
+      }
+    },
+    {
+      "file": "packages/forms/src/fields/EmailEnhancedField/EmailEnhancedField.tsx",
+      "component": "EmailEnhancedField",
+      "analysis": {
+        "rhf": {
+          "usesController": true,
+          "imports": [
+            "Controller",
+            "FieldValues"
+          ]
+        },
+        "ui": {
+          "domElements": [
+            "input",
+            "div"
+          ],
+          "dsPrimitives": [
+            "FormLabel",
+            "FormHelperText",
+            "Stack"
+          ],
+          "guessedType": "email"
+        },
+        "props": [
+          "name",
+          "control",
+          "errors",
+          "label",
+          "required",
+          "disabled",
+          "description",
+          "field"
+        ],
+        "aria": {
+          "hasHtmlFor": true,
+          "hasAriaDescribedBy": true,
+          "hasAriaInvalid": true,
+          "hasAriaRequired": false,
+          "hasAriaLabel": false
+        },
+        "patterns": {
+          "hasInlineStyles": false,
+          "usesStyleProp": false,
+          "hasErrorHandling": true,
+          "hasDescription": true,
+          "hasLabel": true,
+          "hasRequired": true,
+          "hasDisabled": true
+        },
+        "exports": [
+          "EmailEnhancedField"
+        ]
+      },
+      "compliance": {
+        "rhfIntegration": "✅",
+        "dsComponents": "✅",
+        "ariaLabels": "✅",
+        "ariaDescriptions": "✅",
+        "ariaInvalid": "✅",
+        "errorHandling": "✅",
+        "noInlineStyles": "✅"
+      },
+      "issues": [],
+      "recommendations": [],
+      "suggestedSpec": {
+        "name": "EmailEnhancedField",
+        "specVersion": "1.2",
+        "ui": {
+          "behavior": "text",
+          "inputType": "email"
+        },
+        "validation": {
+          "required": true,
+          "rules": {}
+        },
+        "telemetry": {
+          "enabled": false,
+          "events": [
+            "focus",
+            "blur",
+            "validate"
+          ],
+          "pii": "hash"
+        },
+        "accessibility": {
+          "label": true,
+          "description": true
+        }
+      }
+    },
+    {
+      "file": "packages/forms/src/fields/CheckboxField/CheckboxField.tsx",
+      "component": "CheckboxField",
+      "analysis": {
+        "rhf": {
+          "usesController": true,
+          "imports": [
+            "Controller",
+            "FieldValues"
+          ]
+        },
+        "ui": {
+          "domElements": [
+            "label",
+            "input",
+            "span",
+            "div"
+          ],
+          "dsPrimitives": [
+            "FormLabel",
+            "FormHelperText",
+            "Stack"
+          ],
+          "guessedType": "text"
+        },
+        "props": [
+          "name",
+          "control",
+          "errors",
+          "label",
+          "required",
+          "disabled",
+          "description",
+          "field"
+        ],
+        "aria": {
+          "hasHtmlFor": true,
+          "hasAriaDescribedBy": true,
+          "hasAriaInvalid": true,
+          "hasAriaRequired": true,
+          "hasAriaLabel": false
+        },
+        "patterns": {
+          "hasInlineStyles": false,
+          "usesStyleProp": false,
+          "hasErrorHandling": true,
+          "hasDescription": true,
+          "hasLabel": true,
+          "hasRequired": true,
+          "hasDisabled": true
+        },
+        "exports": [
+          "CheckboxField"
+        ]
+      },
+      "compliance": {
+        "rhfIntegration": "✅",
+        "dsComponents": "✅",
+        "ariaLabels": "✅",
+        "ariaDescriptions": "✅",
+        "ariaInvalid": "✅",
+        "errorHandling": "✅",
+        "noInlineStyles": "✅"
+      },
+      "issues": [],
+      "recommendations": [],
+      "suggestedSpec": {
+        "name": "CheckboxField",
+        "specVersion": "1.2",
+        "ui": {
+          "behavior": "text",
+          "inputType": "text"
+        },
+        "validation": {
+          "required": true,
+          "rules": {}
+        },
+        "telemetry": {
+          "enabled": false,
+          "events": [
+            "focus",
+            "blur",
+            "validate"
+          ],
+          "pii": "hash"
+        },
+        "accessibility": {
+          "label": true,
+          "description": true
+        }
+      }
+    }
+  ]
+}
