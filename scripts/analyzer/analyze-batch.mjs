@@ -22,9 +22,11 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { execSync } from 'node:child_process';
 
-const pattern = process.argv[2] || 'packages/forms/src/fields/**/*.tsx';
+const args = process.argv.slice(2);
+const quiet = args.includes('--quiet');
+const pattern = args.find(arg => !arg.startsWith('--')) || 'packages/forms/src/fields/**/*.tsx';
 
-console.error(`🔍 Analyzing batch: ${pattern}\n`);
+if (!quiet) console.error(`🔍 Analyzing batch: ${pattern}\n`);
 
 // Find all matching files (exclude stories, tests, index)
 const files = await glob(pattern, {
@@ -37,7 +39,7 @@ const files = await glob(pattern, {
   ],
 });
 
-console.error(`Found ${files.length} files\n`);
+if (!quiet) console.error(`Found ${files.length} files\n`);
 
 // Analyze each file
 const reports = [];
@@ -56,7 +58,7 @@ for (const file of files) {
     analyzed++;
     
     // Progress indicator
-    if (analyzed % 5 === 0) {
+    if (!quiet && analyzed % 5 === 0) {
       console.error(`Analyzed ${analyzed}/${files.length} files...`);
     }
   } catch (error) {
@@ -64,8 +66,10 @@ for (const file of files) {
   }
 }
 
-console.error(`\n✅ Analyzed ${analyzed} files\n`);
-console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
+if (!quiet) {
+  console.error(`\n✅ Analyzed ${files.length} files\n`);
+  console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
+}
 
 // ============================================
 // AGGREGATE ANALYSIS

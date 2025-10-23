@@ -31,7 +31,7 @@
     "refine:run": "node scripts/refiner/index.mjs --apply",
     "analyze:field": "node scripts/analyzer/field-analyzer.mjs",
     "analyze:batch": "node scripts/analyzer/analyze-batch.mjs",
-    "analyze:verify": "node scripts/analyzer/analyze-batch.mjs \"packages/forms/src/fields/**/*.tsx\" 2>/dev/null | jq '.aggregate'",
+    "analyze:verify": "node scripts/analyzer/analyze-batch.mjs --quiet \"packages/forms/src/fields/**/*.tsx\"",
     "spec:from-analysis": "node scripts/analyzer/to-spec.mjs",
     "spec:validate": "node scripts/process/validate-spec.mjs",
     "field:new": "node scripts/process/field-from-spec-v2.mjs",
