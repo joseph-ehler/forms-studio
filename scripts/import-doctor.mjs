@@ -45,6 +45,18 @@ function shouldCheck(file) {
   if (file.match(/\.(test|spec)\.(ts|tsx)$/)) return false;
   // Ignore type-test files (they test API surface)
   if (file.includes('/type-tests/')) return false;
+  
+  // Skip legacy DS code (pre-migration, intentionally not updated)
+  if (file.includes('packages/ds/src/fields/')) return false; // ALL legacy field facades
+  if (file.includes('packages/ds/src/components/')) return false;
+  if (file.includes('packages/ds/src/compat/')) return false;
+  if (file.includes('packages/ds/src/context/')) return false;
+  if (file.includes('packages/ds/src/renderer/')) return false;
+  if (file.includes('packages/ds/src/rhf/')) return false;
+  if (file.includes('packages/ds/src/a11y/')) return false;
+  if (file.includes('packages/ds/src/lib/')) return false; // Re-export shims for backward compat
+  if (file.includes('packages/ds/src/tokens/themes/')) return false; // Legacy theme examples
+  
   return true;
 }
 

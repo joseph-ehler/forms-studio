@@ -3,7 +3,7 @@
  * Do not edit manually - run `pnpm barrels` to regenerate
  */
 
-export * from './AppContext';
+export { AppContext } from './AppContext';
 export { AppShell } from './AppShell';
 export { BottomNav } from './BottomNav';
 export { Drawer } from './Drawer';

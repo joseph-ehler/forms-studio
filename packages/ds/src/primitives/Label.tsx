@@ -2,7 +2,7 @@
  * FormLabel Component (Compatibility Wrapper)
  * 
  * DEPRECATED: This is a compatibility wrapper.
- * New code should import from: import { FormLabel } from '../components/typography'
+ * New code should import from: import { FormLabel } from '@intstudio/ds/primitives/typography'
  * 
  * This wrapper maintains backward compatibility while using
  * the new typography primitive under the hood.
@@ -15,7 +15,7 @@
  */
 
 import React from 'react'
-import { FormLabel as FormLabelPrimitive } from '../components/typography'
+import { FormLabel as FormLabelPrimitive } from '@intstudio/ds/primitives/typography'
 
 interface FormLabelProps {
   htmlFor?: string
@@ -29,7 +29,7 @@ interface FormLabelProps {
 
 /**
  * @deprecated Import from '../components/typography' instead:
- * import { FormLabel } from '../components/typography'
+ * import { FormLabel } from '@intstudio/ds/primitives/typography'
  */
 export const Label: React.FC<FormLabelProps> = ({
   htmlFor,

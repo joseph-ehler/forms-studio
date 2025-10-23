@@ -3,7 +3,7 @@
  * Do not edit manually - run `pnpm barrels` to regenerate
  */
 
-export * from './ContrastBadge';
-export * from './contrastValidator';
-export * from './toneResolver';
-export * from './useContrastGuard';
+export { ContrastBadge } from './ContrastBadge';
+export { contrastValidator } from './contrastValidator';
+export { toneResolver } from './toneResolver';
+export { useContrastGuard } from './useContrastGuard';

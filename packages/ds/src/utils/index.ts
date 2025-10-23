@@ -3,12 +3,9 @@
  * Do not edit manually - run `pnpm barrels` to regenerate
  */
 
-export * from './debug-typography';
-export * from './densityAdapter';
-export * from './layoutConfig';
-export * from './rtl';
-export * from './semanticSizing';
-export * from './useMotion';
-
-// Re-export transitions as canonical namespace (tree-shakeable)
-export * as transitions from '../tokens/transitions';
+export { debug-typography } from './debug-typography';
+export { densityAdapter } from './densityAdapter';
+export { layoutConfig } from './layoutConfig';
+export { rtl } from './rtl';
+export { semanticSizing } from './semanticSizing';
+export { useMotion } from './useMotion';

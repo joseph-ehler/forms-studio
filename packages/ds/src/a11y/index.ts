@@ -3,8 +3,8 @@
  * Do not edit manually - run `pnpm barrels` to regenerate
  */
 
-export * from './a11y-validator';
-export * from './a11yProfiles';
-export * from './applyA11y';
-export * from './input-modality';
-export * from './sr-announce';
+export { a11y-validator } from './a11y-validator';
+export { a11yProfiles } from './a11yProfiles';
+export { applyA11y } from './applyA11y';
+export { input-modality } from './input-modality';
+export { sr-announce } from './sr-announce';
