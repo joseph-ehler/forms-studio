@@ -171,7 +171,7 @@ export function FieldShowcase() {
               {/* SelectField temporarily disabled - needs options prop */}
               
               {/* BOOLEAN INPUTS */}
-              <Heading level="3">Boolean Inputs (2)</Heading>
+              <Heading level="h3">Boolean Inputs (2)</Heading>
               
               <CheckboxField
                 name="terms"
@@ -189,7 +189,7 @@ export function FieldShowcase() {
               />
               
               {/* DATE/TIME INPUTS */}
-              <Heading level="3">Date & Time Inputs (3)</Heading>
+              <Heading level="h3">Date & Time Inputs (3)</Heading>
               
               <DateField
                 name="birthdate"
@@ -215,7 +215,7 @@ export function FieldShowcase() {
               />
               
               {/* SPECIAL INPUTS */}
-              <Heading level="3">Special Inputs (4)</Heading>
+              <Heading level="h3">Special Inputs (4)</Heading>
               
               <ColorField
                 name="favoriteColor"
@@ -244,7 +244,7 @@ export function FieldShowcase() {
               {/* MultiSelectField temporarily disabled - needs options prop */}
               
               {/* RANGE INPUTS */}
-              <Heading level="3">Range Inputs (3)</Heading>
+              <Heading level="h3">Range Inputs (3)</Heading>
               
               <RangeField
                 name="volume"
@@ -271,7 +271,7 @@ export function FieldShowcase() {
               />
               
               {/* COMPOSITE INPUTS */}
-              <Heading level="3">Composite Inputs (3)</Heading>
+              <Heading level="h3">Composite Inputs (3)</Heading>
               
               <LocationField
                 name="location"
