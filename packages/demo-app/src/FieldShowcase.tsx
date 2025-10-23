@@ -11,7 +11,7 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Stack, Heading, Body, Card } from '@intstudio/ds';
+import { Stack, Heading, Body, Card, AppProvider } from '@intstudio/ds';
 import {
   TextField,
   EmailField,
@@ -101,7 +101,8 @@ export function FieldShowcase() {
   };
 
   return (
-    <div style={{ padding: '24px', maxWidth: '800px', margin: '0 auto' }}>
+    <AppProvider theme="light">
+      <div style={{ padding: '24px', maxWidth: '800px', margin: '0 auto' }}>
       <Stack spacing="relaxed">
         <div>
           <Heading level="h1">Field Showcase</Heading>
@@ -318,6 +319,7 @@ export function FieldShowcase() {
           </pre>
         </Card>
       </Stack>
-    </div>
+      </div>
+    </AppProvider>
   );
 }
