@@ -9,8 +9,8 @@
     "specVersion": {
       "type": "string",
       "description": "Schema version",
-      "enum": ["1.0"],
-      "default": "1.0"
+      "enum": ["1.0", "1.2"],
+      "default": "1.2"
     },
     "name": {
       "type": "string",
@@ -249,6 +249,109 @@
           "format": "date",
           "description": "Date added (YYYY-MM-DD)"
         }
+      }
+    },
+    "validation": {
+      "type": "object",
+      "description": "Validation configuration (sync + async)",
+      "properties": {
+        "sync": {
+          "type": "object",
+          "description": "Synchronous validation rules (Zod)",
+          "properties": {
+            "required": { "type": "boolean" },
+            "email": { "type": "boolean" },
+            "url": { "type": "boolean" },
+            "minLength": { "type": "integer" },
+            "maxLength": { "type": "integer" },
+            "min": { "type": "number" },
+            "max": { "type": "number" },
+            "pattern": { "type": "string", "description": "Regex pattern" }
+          }
+        },
+        "async": {
+          "type": "array",
+          "description": "Asynchronous validation rules (API checks)",
+          "items": {
+            "type": "object",
+            "required": ["id", "url"],
+            "properties": {
+              "id": { "type": "string", "description": "Unique validator ID" },
+              "debounceMs": { "type": "integer", "default": 300 },
+              "url": { "type": "string", "description": "Validation endpoint" },
+              "method": { "type": "string", "enum": ["GET", "POST"], "default": "GET" },
+              "queryKey": { "type": "string", "description": "Query param name" },
+              "onFailMessage": { "type": "string", "description": "Error message on fail" }
+            }
+          }
+        }
+      }
+    },
+    "ui": {
+      "type": "object",
+      "description": "UI hints and behavior selectors",
+      "properties": {
+        "behavior": {
+          "type": "string",
+          "description": "Selects UX recipe",
+          "enum": ["default", "async-search", "drag-drop", "currency", "masked"]
+        },
+        "size": { "type": "string", "enum": ["sm", "md", "lg"], "default": "md" },
+        "variant": { "type": "string", "enum": ["default", "quiet", "danger"], "default": "default" },
+        "density": { "type": "string", "enum": ["compact", "cozy", "comfortable"], "default": "cozy" },
+        "searchable": { "type": "boolean", "description": "Enable search (for select)" },
+        "showShortcut": { "type": "boolean", "description": "Show presets (for date)" },
+        "iconLeft": { "type": "string", "description": "Icon name (maps to DS tokens)" },
+        "prefix": { "type": "string", "description": "Text prefix (e.g., '$')" },
+        "suffix": { "type": "string", "description": "Text suffix (e.g., 'kg')" },
+        "fullWidth": { "type": "boolean", "default": true }
+      }
+    },
+    "telemetry": {
+      "type": "object",
+      "description": "Telemetry configuration (observability)",
+      "properties": {
+        "enabled": { "type": "boolean", "default": false },
+        "events": {
+          "type": "array",
+          "description": "Events to emit",
+          "items": {
+            "type": "string",
+            "enum": ["focus", "blur", "change", "validate", "submit"]
+          }
+        },
+        "pii": {
+          "type": "string",
+          "enum": ["redact", "hash", "allow"],
+          "default": "redact",
+          "description": "Privacy handling for value"
+        }
+      }
+    },
+    "perf": {
+      "type": "object",
+      "description": "Performance budgets and optimization",
+      "properties": {
+        "budgetMs": { "type": "integer", "default": 50, "description": "Max render time (ms)" },
+        "debounceChangeMs": { "type": "integer", "default": 50, "description": "Change event throttle (ms)" },
+        "idleValidation": { "type": "boolean", "default": true, "description": "Validate on idle" }
+      }
+    },
+    "i18n": {
+      "type": "object",
+      "description": "Internationalization configuration",
+      "properties": {
+        "messagesKey": { "type": "string", "description": "Locale bundle key (e.g., 'forms.email')" },
+        "numberFormat": { "type": "string", "description": "Number formatting locale" },
+        "dateFormat": { "type": "string", "description": "Date formatting pattern" }
+      }
+    },
+    "security": {
+      "type": "object",
+      "description": "Security configuration",
+      "properties": {
+        "sanitize": { "type": "boolean", "default": true, "description": "Enable XSS protection" },
+        "allowListPattern": { "type": "string", "description": "Regex allowlist for input" }
       }
     }
   }
