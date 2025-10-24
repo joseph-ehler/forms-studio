@@ -3,10 +3,14 @@
  * 
  * Applies to all packages and apps.
  * Enforces migration boundaries: fields ONLY in @intstudio/forms.
+ * Enforces token usage: NO hard-coded colors/shadows/radii.
  */
 
 module.exports = {
   root: true,
+  extends: [
+    './.eslintrc.token-enforcement.json'
+  ],
   rules: {
     // Belt + suspenders: block DS fields imports everywhere
     'no-restricted-imports': ['error', {
