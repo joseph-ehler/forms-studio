@@ -353,7 +353,6 @@ export function SelectField({
               }} />
 
             }
-            </div>
 
             {/* Description */}
             {description &&

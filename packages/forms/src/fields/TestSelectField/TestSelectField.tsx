@@ -9,21 +9,20 @@
 
 import React from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
-import type { Control, FieldValues } from 'react-hook-form';
+import type { Control } from 'react-hook-form';
 import { SimpleListRecipe } from '../../factory/recipes/SimpleListRecipe';
-import { FormLabel } from '../../components/FormLabel/FormLabel';
 
-export interface TestSelectFieldProps<T extends FieldValues = FieldValues> {
+export interface TestSelectFieldProps {
   name: string;
   label?: string;
   description?: string;
   required?: boolean;
   disabled?: boolean;
-  control?: Control<T>;
+  control?: Control;
   defaultValue?: string;
 }
 
-export const TestSelectField = <T extends FieldValues = FieldValues>({
+export const TestSelectField: React.FC<TestSelectFieldProps> = ({
   name,
   label = "Choose Option",
   description = "Test field for recipe-based generation",
@@ -31,9 +30,10 @@ export const TestSelectField = <T extends FieldValues = FieldValues>({
   disabled = false,
   control: externalControl,
   defaultValue
-}: TestSelectFieldProps<T>) => {
-  const formContext = useFormContext<T>();
+}) => {
+  const formContext = useFormContext();
   const control = externalControl || formContext?.control;
+  const [isOpen, setIsOpen] = React.useState(false);
   
   if (!control) {
     throw new Error('TestSelectField must be used within a form context or receive control prop');
@@ -47,7 +47,7 @@ export const TestSelectField = <T extends FieldValues = FieldValues>({
         "density": "cozy",
         "size": "md",
         "searchable": true,
-        "behavior": "default",
+        "behavior": "default" as const,
         "focusSearchOnOpen": true,
         "multiple": false,
         "placeholder": "Select an option...",
@@ -128,7 +128,7 @@ export const TestSelectField = <T extends FieldValues = FieldValues>({
   };
   
   // Get recipe components
-  const { Trigger, Overlay } = SimpleListRecipe(recipeCtx);
+  const { Trigger, Overlay } = SimpleListRecipe(recipeCtx as any);
   
   return (
     <Controller
@@ -142,9 +142,9 @@ export const TestSelectField = <T extends FieldValues = FieldValues>({
         return (
           <div className="field-wrapper">
             {label && (
-              <FormLabel htmlFor={name} required={required} size="md">
-                {label}
-              </FormLabel>
+              <label htmlFor={name} className="ds-label">
+                {label}{required && <span aria-label="required"> *</span>}
+              </label>
             )}
             
             <Trigger 
@@ -154,9 +154,9 @@ export const TestSelectField = <T extends FieldValues = FieldValues>({
             />
             
             <Overlay
+              open={isOpen}
+              onClose={() => setIsOpen(false)}
               field={field}
-              hasError={hasError}
-              disabled={disabled}
             />
             
             {description && (
