@@ -12,7 +12,27 @@
 import React, { useState, useMemo, useRef, useCallback } from 'react';
 import { Controller, type Control, type FieldErrors, type FieldValues } from 'react-hook-form';
 import { FormLabel, FormHelperText } from '@intstudio/ds';
-import { ChevronDown, X, Search } from 'lucide-react';
+
+// Simple SVG icons
+const ChevronDown = ({ size = 20, style = {} }: { size?: number; style?: React.CSSProperties }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={style}>
+    <polyline points="6 9 12 15 18 9" />
+  </svg>
+);
+
+const X = ({ size = 16 }: { size?: number }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <line x1="18" y1="6" x2="6" y2="18" />
+    <line x1="6" y1="6" x2="18" y2="18" />
+  </svg>
+);
+
+const Search = ({ size = 16, style = {} }: { size?: number; style?: React.CSSProperties }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={style}>
+    <circle cx="11" cy="11" r="8" />
+    <path d="m21 21-4.35-4.35" />
+  </svg>
+);
 
 // Types
 export interface SelectOption {
@@ -161,22 +181,17 @@ export function SelectField({
                 aria-describedby={description ? `${name}-desc` : undefined}
                 onClick={() => setIsOpen(!isOpen)}
                 onKeyDown={handleKeyDown}
+                className="ds-input"
                 style={{
-                  width: '100%',
-                  minHeight: '48px',
+                  position: 'relative',
                   padding: '12px 40px 12px 16px',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'space-between',
-                  background: 'var(--ds-color-surface-base)',
-                  border: `1px solid ${hasError ? 'var(--ds-color-state-danger)' : 'var(--ds-color-border-subtle)'}`,
-                  borderRadius: '6px',
                   color: field.value ? 'var(--ds-color-text-primary)' : 'var(--ds-color-text-muted)',
-                  fontSize: '16px',
                   textAlign: 'left',
                   cursor: disabled ? 'not-allowed' : 'pointer',
-                  opacity: disabled ? 0.5 : 1,
-                  transition: 'border-color 150ms ease',
+                  border: hasError ? '2px solid var(--ds-color-state-danger)' : undefined,
                 }}
               >
                 <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
