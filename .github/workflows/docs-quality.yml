@@ -1,0 +1,29 @@
+name: Docs Quality
+
+on:
+  pull_request:
+    paths: ['**/*.md']
+
+jobs:
+  lint:
+    name: Markdown Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Lint markdown files
+        run: npx markdownlint "**/*.md" --ignore node_modules --ignore "**/node_modules/**"
+  
+  links:
+    name: Check Links
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Check links
+        uses: lycheeverse/lychee-action@v1
+        with:
+          args: --no-progress --verbose --exclude-path node_modules "**/*.md"
+          fail: true
