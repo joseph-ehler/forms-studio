@@ -1,0 +1,69 @@
+# TestSelectField - Proof of Concept for Recipe System
+# Generated field should use SimpleListRecipe for overlay behavior
+
+name: TestSelectField
+type: select
+label: Choose Option
+description: Test field for recipe-based generation
+required: false
+disabled: false
+
+# Options configuration
+ui:
+  behavior: default
+  searchable: true
+  focusSearchOnOpen: true
+  multiple: false
+  placeholder: Select an option...
+  clearable: true
+  emptyState:
+    message: No options available
+    icon: search
+
+# Static options (for testing)
+options:
+  - value: "option-1"
+    label: "First Option"
+    description: "This is the first option"
+  
+  - value: "option-2"
+    label: "Second Option"
+    description: "This is the second option"
+  
+  - value: "option-3"
+    label: "Third Option"
+    description: "This is the third option"
+    disabled: true
+  
+  - value: "option-4"
+    label: "Fourth Option"
+  
+  - value: "option-5"
+    label: "Fifth Option"
+
+# Validation (optional)
+validation:
+  required: false
+
+# Default value
+value:
+  default: ""
+
+# Accessibility
+aria:
+  label: Choose Option
+  describedby: ""
+
+# Telemetry (disabled for test)
+telemetry:
+  enabled: false
+
+# Security (disabled for test)
+security:
+  sanitize: false
+
+# Factory metadata
+factory:
+  version: "2.6"
+  recipe: auto
+  ignoreTransforms: []

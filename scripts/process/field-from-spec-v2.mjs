@@ -41,8 +41,11 @@ import path from 'node:path';
 import yaml from 'js-yaml';
 import { validateSpec } from './validate-spec.mjs';
 import { generateCompositeField } from './generate-composite-v2.2.mjs';
-import { CheckboxRecipe } from '../../packages/forms/src/factory/recipes/CheckboxRecipe.js';
-import { ToggleRecipe } from '../../packages/forms/src/factory/recipes/ToggleRecipe.js';
+// Note: Recipe imports commented out - they're TypeScript files
+// The generator will reference them in generated code, not execute them
+// import { CheckboxRecipe } from '../../packages/forms/src/factory/recipes/CheckboxRecipe.js';
+// import { ToggleRecipe } from '../../packages/forms/src/factory/recipes/ToggleRecipe.js';
+// import { SimpleListRecipe } from '../../packages/forms/src/factory/recipes/SimpleListRecipe.js';
 
 const ROOT = process.cwd();
 const fieldName = process.argv[2];
@@ -153,30 +156,186 @@ console.log('');
 // ====================================================================
 
 /**
- * Select recipe based on field type
- * Routes type-specific fields to specialized recipes
+ * Select recipe based on field type + ui.behavior
+ * Returns recipe name (string) for code generation
  */
 function selectRecipe(spec) {
   const type = (spec?.type || '').toLowerCase();
+  const behavior = spec?.ui?.behavior;
   
-  // Type-specific recipes
+  // Type-specific recipes (inline controls)
   if (type === 'checkbox' || type === 'boolean') {
-    return CheckboxRecipe;
+    return 'CheckboxRecipe';
   }
   
   if (type === 'toggle' || type === 'switch') {
-    return ToggleRecipe;
+    return 'ToggleRecipe';
   }
   
-  // Future: add more recipes here
-  // if (type === 'rating') return RatingRecipe;
-  // if (type === 'slider' || type === 'range') return SliderRecipe;
-  // if (type === 'file') return FileUploadRecipe;
-  // if (type === 'color') return ColorPickerRecipe;
-  // if (type === 'select' && spec.ui?.multiple) return MultiSelectRecipe;
+  // SELECT FIELD RECIPES (overlay-based)
+  if (type === 'select') {
+    // Multi-select with checkboxes
+    if (spec?.ui?.multiple) {
+      // return 'MultiSelectRecipe'; // TODO: Complete MultiSelectRecipe first
+      return 'SimpleListRecipe'; // Fallback for now
+    }
+    
+    // Async search with virtualization
+    if (behavior === 'async-search') {
+      // return 'AsyncSearchSelectRecipe'; // TODO: Not implemented yet
+      return 'SimpleListRecipe'; // Fallback for now
+    }
+    
+    // Tag selection (chips)
+    if (behavior === 'tag-select') {
+      // return 'TagSelectRecipe'; // TODO: Not implemented yet
+      return 'SimpleListRecipe'; // Fallback for now
+    }
+    
+    // Default: simple list with optional search
+    return 'SimpleListRecipe';
+  }
   
-  // Standard text inputs use existing inline generator
+  // DATE FIELD RECIPES
+  if (type === 'date') {
+    // return 'DatePickerRecipe'; // TODO: Not implemented yet
+    return null; // For now, use legacy generator
+  }
+  
+  // Future recipes:
+  // if (type === 'rating') return 'RatingRecipe';
+  // if (type === 'slider' || type === 'range') return 'SliderRecipe';
+  // if (type === 'file') return 'FileUploadRecipe';
+  
+  // No recipe available - use legacy generator
   return null;
+}
+
+/**
+ * Create recipe context from spec
+ */
+function createRecipeContext(spec) {
+  return {
+    spec,
+    overlays: overlays.defaults || {},
+    ports: {
+      // TODO: Wire actual ports when available
+      optionSource: null,
+      telemetry: null
+    },
+    env: {
+      isMobile: false // Generator context - always desktop
+    },
+    // Note: control will be provided at runtime by Controller
+    control: null
+  };
+}
+
+/**
+ * Generate field component from recipe
+ * Wraps recipe Trigger/Overlay in a proper field component
+ */
+function generateFieldFromRecipe(spec, recipeName) {
+  const { name, label, description, required, disabled, type } = spec;
+  
+  return `/**
+ * ${name} - Generated from spec with ${type} recipe
+ * 
+ * This field uses the recipe system for overlay behavior.
+ * DO NOT edit directly - regenerate from spec!
+ * 
+ * Generator: v2.6 (recipe-based)
+ */
+
+import React from 'react';
+import { Controller, useFormContext } from 'react-hook-form';
+import type { Control, FieldValues } from 'react-hook-form';
+import { ${recipeName} } from '../../factory/recipes/${recipeName}';
+import { FormLabel } from '../../components/FormLabel/FormLabel';
+
+export interface ${name}Props<T extends FieldValues = FieldValues> {
+  name: string;
+  label?: string;
+  description?: string;
+  required?: boolean;
+  disabled?: boolean;
+  control?: Control<T>;
+  defaultValue?: string;
+}
+
+export const ${name} = <T extends FieldValues = FieldValues>({
+  name,
+  label = ${JSON.stringify(label || '')},
+  description = ${JSON.stringify(description || '')},
+  required = ${required || false},
+  disabled = ${disabled || false},
+  control: externalControl,
+  defaultValue
+}: ${name}Props<T>) => {
+  const formContext = useFormContext<T>();
+  const control = externalControl || formContext?.control;
+  
+  if (!control) {
+    throw new Error('${name} must be used within a form context or receive control prop');
+  }
+  
+  // Create recipe context
+  const recipeCtx = {
+    spec: ${JSON.stringify(spec, null, 2).split('\n').map((line, i) => i === 0 ? line : '    ' + line).join('\n')},
+    overlays: {},
+    ports: {},
+    env: { isMobile: false },
+    control
+  };
+  
+  // Get recipe components
+  const { Trigger, Overlay } = ${recipeName}(recipeCtx);
+  
+  return (
+    <Controller
+      name={name}
+      control={control}
+      defaultValue={defaultValue}
+      rules={{ required: required ? 'This field is required' : undefined }}
+      render={({ field, fieldState }) => {
+        const hasError = !!fieldState.error;
+        
+        return (
+          <div className="field-wrapper">
+            {label && (
+              <FormLabel htmlFor={name} required={required} size="md">
+                {label}
+              </FormLabel>
+            )}
+            
+            <Trigger 
+              field={field}
+              hasError={hasError}
+              disabled={disabled}
+            />
+            
+            <Overlay
+              field={field}
+              hasError={hasError}
+              disabled={disabled}
+            />
+            
+            {description && (
+              <p className="ds-helper-text">{description}</p>
+            )}
+            
+            {hasError && fieldState.error?.message && (
+              <p className="ds-error-text" role="alert">
+                {fieldState.error.message}
+              </p>
+            )}
+          </div>
+        );
+      }}
+    />
+  );
+};
+`;
 }
 
 /**
@@ -331,12 +490,16 @@ function generateFormsField(spec, allowlist) {
   // ============================================================
   const recipe = selectRecipe(spec);
   if (recipe) {
-    const implementation = recipe(spec);
+    // Create recipe context
+    const ctx = createRecipeContext(spec);
+    
+    // Generate field wrapper component
+    const fieldComponent = generateFieldFromRecipe(spec, recipe);
     
     // Write to file
     const fieldDir = path.join(ROOT, `packages/forms/src/fields/${name}`);
     fs.mkdirSync(fieldDir, { recursive: true });
-    fs.writeFileSync(path.join(fieldDir, `${name}.tsx`), implementation);
+    fs.writeFileSync(path.join(fieldDir, `${name}.tsx`), fieldComponent, 'utf8');
     fs.writeFileSync(path.join(fieldDir, 'index.ts'), `export * from './${name}';\n`);
     
     // Update main fields index
