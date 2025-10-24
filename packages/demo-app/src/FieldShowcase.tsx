@@ -197,7 +197,8 @@ export function FieldShowcase() {
                 name="notifications"
                 control={control}
                 errors={errors}
-                label="Enable notifications"
+                label="🔔 Enable notifications"
+                description="Get notified about important updates"
               />
               
               {/* DATE/TIME INPUTS */}
