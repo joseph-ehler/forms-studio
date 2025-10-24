@@ -42,9 +42,9 @@
     padding: 0;
     
     /* Track (pill shape) */
-    background: var(--ds-color-neutral-300);
-    border: 1px solid var(--ds-color-neutral-400);
-    border-radius: var(--ds-toggle-height);
+    background: var(--ds-color-border-strong);
+    border: 1px solid var(--ds-color-border-strong);
+    border-radius: 999px;
     
     /* Interaction */
     cursor: pointer;
@@ -80,12 +80,12 @@
   /* Checked (ON) */
   .ds-toggle:checked {
     background: var(--ds-color-primary-bg);
-    border-color: var(--ds-color-primary-border);
+    border-color: var(--ds-color-primary-bg);
   }
   
   .ds-toggle:checked::before {
-    /* Slide thumb to right */
-    transform: translateX(calc(var(--ds-toggle-width, 40px) - var(--ds-toggle-height, 22px) + 2px));
+    /* Slide thumb to right (with padding on both sides) */
+    transform: translateX(calc(var(--ds-toggle-width, 40px) - var(--ds-toggle-height, 22px)));
   }
   
   /* Focus (keyboard navigation) */
@@ -96,11 +96,11 @@
   
   /* Hover */
   .ds-toggle:hover:not(:disabled) {
-    border-color: var(--ds-color-neutral-500);
+    opacity: 0.8;
   }
   
   .ds-toggle:checked:hover:not(:disabled) {
-    background: var(--ds-color-primary-hover);
+    background: var(--ds-color-primary-bg-hover);
   }
   
   /* Disabled */
