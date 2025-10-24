@@ -26,6 +26,7 @@ import {
   OverlayList,
   Option
 } from '@intstudio/ds/primitives/overlay';
+import { useOverlayKeys, useFocusReturn } from './hooks';
 
 export const SimpleListRecipe: Recipe = (ctx) => {
   const { spec, env } = ctx;
@@ -75,51 +76,8 @@ export const SimpleListRecipe: Recipe = (ctx) => {
     }
   }, [isOpen, searchable, focusSearchOnOpen]);
   
-  // Keyboard navigation
-  const handleKeyDown = (e: React.KeyboardEvent, field: any) => {
-    switch (e.key) {
-      case 'ArrowDown':
-        e.preventDefault();
-        setHighlightedIndex((prev) =>
-          Math.min(prev + 1, filteredOptions.length - 1)
-        );
-        break;
-      
-      case 'ArrowUp':
-        e.preventDefault();
-        setHighlightedIndex((prev) => Math.max(prev - 1, 0));
-        break;
-      
-      case 'Enter':
-        if (isOpen && filteredOptions[highlightedIndex]) {
-          e.preventDefault();
-          const option = filteredOptions[highlightedIndex];
-          if (!option.disabled) {
-            field.onChange(option.value);
-            setIsOpen(false);
-            setSearchQuery('');
-          }
-        }
-        break;
-      
-      case 'Escape':
-        e.preventDefault();
-        setIsOpen(false);
-        setSearchQuery('');
-        triggerRef.current?.focus();
-        break;
-      
-      case 'Home':
-        e.preventDefault();
-        setHighlightedIndex(0);
-        break;
-      
-      case 'End':
-        e.preventDefault();
-        setHighlightedIndex(filteredOptions.length - 1);
-        break;
-    }
-  };
+  // Auto-return focus to trigger when overlay closes
+  useFocusReturn(triggerRef, isOpen);
   
   // Helper to get selected label
   const getSelectedLabel = (value: string | undefined) => {
@@ -130,42 +88,84 @@ export const SimpleListRecipe: Recipe = (ctx) => {
   
   /* ===== Trigger Component ===== */
   
-  const Trigger: React.FC<any> = ({ field, hasError, disabled }) => (
-    <div className="ds-input-wrap">
-      <button
-        ref={triggerRef}
-        type="button"
-        id={spec.name}
-        disabled={disabled}
-        aria-haspopup="listbox"
-        aria-expanded={isOpen}
-        aria-invalid={hasError || undefined}
-        data-placeholder={!field.value || undefined}
-        onClick={() => setIsOpen(!isOpen)}
-        onKeyDown={(e) => handleKeyDown(e, field)}
-        className="ds-select-trigger"
-      >
-        <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-          {getSelectedLabel(field.value)}
+  const Trigger: React.FC<any> = ({ field, hasError, disabled }) => {
+    // Keyboard navigation hook
+    const handleKeyDown = useOverlayKeys({
+      count: filteredOptions.length,
+      activeIndex: highlightedIndex,
+      setActiveIndex: setHighlightedIndex,
+      onSelect: (index) => {
+        const option = filteredOptions[index];
+        if (!option.disabled) {
+          field.onChange(option.value);
+          setIsOpen(false);
+          setSearchQuery('');
+        }
+      },
+      onClose: () => {
+        setIsOpen(false);
+        setSearchQuery('');
+      },
+      isOpen
+    });
+    
+    return (
+      <div className="ds-input-wrap">
+        <button
+          ref={triggerRef}
+          type="button"
+          id={spec.name}
+          disabled={disabled}
+          aria-haspopup="listbox"
+          aria-expanded={isOpen}
+          aria-invalid={hasError || undefined}
+          data-placeholder={!field.value || undefined}
+          onClick={() => setIsOpen(!isOpen)}
+          onKeyDown={handleKeyDown}
+          className="ds-select-trigger"
+        >
+          <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+            {getSelectedLabel(field.value)}
+          </span>
+        </button>
+        
+        {/* Chevron adornment */}
+        <span className="ds-input-adorn-right" aria-hidden="true">
+          <ChevronDown
+            size={20}
+            style={{
+              transform: `rotate(${isOpen ? '180deg' : '0deg'})`,
+              transition: 'transform 200ms ease'
+            }}
+          />
         </span>
-      </button>
-      
-      {/* Chevron adornment */}
-      <span className="ds-input-adorn-right" aria-hidden="true">
-        <ChevronDown
-          size={20}
-          style={{
-            transform: `rotate(${isOpen ? '180deg' : '0deg'})`,
-            transition: 'transform 200ms ease'
-          }}
-        />
-      </span>
-    </div>
-  );
+      </div>
+    );
+  };
   
   /* ===== Overlay Component ===== */
   
   const Overlay: React.FC<any> = ({ open, onClose, field }) => {
+    // Keyboard navigation hook (same as Trigger)
+    const handleKeyDown = useOverlayKeys({
+      count: filteredOptions.length,
+      activeIndex: highlightedIndex,
+      setActiveIndex: setHighlightedIndex,
+      onSelect: (index) => {
+        const option = filteredOptions[index];
+        if (!option.disabled) {
+          field.onChange(option.value);
+          setIsOpen(false);
+          setSearchQuery('');
+        }
+      },
+      onClose: () => {
+        setIsOpen(false);
+        setSearchQuery('');
+      },
+      isOpen: open
+    });
+    
     if (!open) return null;
     
     // TODO: Use OverlayPrimitive/SheetPrimitive based on env.isMobile
@@ -214,7 +214,7 @@ export const SimpleListRecipe: Recipe = (ctx) => {
                   placeholder="Search..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  onKeyDown={(e) => handleKeyDown(e, field)}
+                  onKeyDown={handleKeyDown}
                 />
                 <span className="ds-input-adorn-left" aria-hidden="true">
                   <Search size={16} />
