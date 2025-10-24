@@ -22,11 +22,13 @@ import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { ChevronDown, Search } from 'lucide-react';
 import type { Recipe } from './types';
 import {
+  ResponsiveOverlay,
   OverlayHeader,
   OverlayContent,
+  OverlayFooter,
   OverlayList,
-  Option } from
-'@intstudio/ds/primitives/overlay';
+  Option
+} from '@intstudio/ds/primitives/overlay';
 import { useOverlayKeys, useFocusReturn } from './hooks';
 
 export const SimpleListRecipe: Recipe = (ctx) => {
@@ -147,7 +149,7 @@ export const SimpleListRecipe: Recipe = (ctx) => {
   /* ===== Overlay Component ===== */
 
   const Overlay: React.FC<any> = ({ open, onClose, field }) => {
-    // Keyboard navigation hook (same as Trigger)
+    // Keyboard navigation hook (for content)
     const handleKeyDown = useOverlayKeys({
       count: filteredOptions.length,
       activeIndex: highlightedIndex,
@@ -167,95 +169,65 @@ export const SimpleListRecipe: Recipe = (ctx) => {
       isOpen: open
     });
 
-    if (!open) return null;
-
-    // TODO: Use OverlayPrimitive/SheetPrimitive based on env.isMobile
-    // For now, simple absolute positioning (will upgrade to primitives)
-
     return (
-      <>
-        {/* Backdrop */}
-        <div
-          onClick={onClose}
-          style={{
-            position: 'fixed',
-            inset: 0,
-            zIndex: 999
-          }} />
-
-        
-        {/* Overlay content */}
-        <div
-          role="listbox"
-          aria-label={`${label || spec.name} options`}
-          style={{
-            position: 'absolute',
-            top: 'calc(100% + 4px)',
-            left: 0,
-            right: 0,
-            zIndex: 1000,
-            background: 'var(--ds-color-surface-base)',
-            border: '1px solid var(--ds-color-border-subtle)',
-            borderRadius: '8px',
-            maxHeight: '320px',
-            display: 'flex',
-            flexDirection: 'column',
-            overflow: 'hidden',
-            boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
-          }}>
-
-          {/* Search header */}
-          {searchable &&
+      <ResponsiveOverlay
+        open={open}
+        onClose={onClose}
+        triggerRef={triggerRef}
+        role="listbox"
+        ariaLabel={`${label || spec.name} options`}
+        {...spec.ui?.overlay}
+      >
+        {/* Search header */}
+        {searchable && (
           <OverlayHeader>
-              <div className="ds-input-wrap">
-                <input
+            <div className="ds-input-wrap">
+              <input
                 ref={searchRef}
-
                 className="ds-input ds-input--sm ds-input--pad-left"
-
-
+                placeholder="Search..."
+                value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                onKeyDown={handleKeyDown} />
-
-                <span className="ds-input-adorn-left" aria-hidden="true">
-                  <Search size={16} />
-                </span>
-              </div>
-            </OverlayHeader>
-          }
-          
-          {/* Options list */}
-          <OverlayContent>
-            {filteredOptions.length === 0 ?
+                onKeyDown={handleKeyDown}
+              />
+              <span className="ds-input-adorn-left" aria-hidden="true">
+                <Search size={16} />
+              </span>
+            </div>
+          </OverlayHeader>
+        )}
+        
+        {/* Options list */}
+        <OverlayContent>
+          {filteredOptions.length === 0 ? (
             <div style={{ padding: '16px', textAlign: 'center', color: 'var(--ds-color-text-muted)' }}>
-                No results for "{searchQuery}"
-              </div> :
-
+              No results for "{searchQuery}"
+            </div>
+          ) : (
             <OverlayList>
-                {filteredOptions.map((option, index) =>
-              <Option
-                key={option.value}
-                value={option.value}
-                label={option.label}
-                description={option.description}
-                selected={field.value === option.value}
-                disabled={option.disabled}
-                highlighted={index === highlightedIndex}
-                onSelect={(value) => {
-                  field.onChange(value);
-                  setIsOpen(false);
-                  setSearchQuery('');
-                  triggerRef.current?.focus();
-                }}
-                onMouseEnter={() => setHighlightedIndex(index)} />
-
-              )}
-              </OverlayList>
-            }
-          </OverlayContent>
-        </div>
-      </>);
-
+              {filteredOptions.map((option, index) => (
+                <Option
+                  key={option.value}
+                  value={option.value}
+                  label={option.label}
+                  description={option.description}
+                  selected={field.value === option.value}
+                  disabled={option.disabled}
+                  highlighted={index === highlightedIndex}
+                  onSelect={(value) => {
+                    field.onChange(value);
+                    setIsOpen(false);
+                    setSearchQuery('');
+                    triggerRef.current?.focus();
+                  }}
+                  onMouseEnter={() => setHighlightedIndex(index)}
+                />
+              ))}
+            </OverlayList>
+          )}
+        </OverlayContent>
+      </ResponsiveOverlay>
+    );
   };
 
   return { Trigger, Overlay };

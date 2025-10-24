@@ -22,12 +22,13 @@ import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { ChevronDown, Search, X } from 'lucide-react';
 import type { Recipe } from './types';
 import {
+  ResponsiveOverlay,
   OverlayHeader,
   OverlayContent,
   OverlayFooter,
   OverlayList,
-  Option } from
-'@intstudio/ds/primitives/overlay';
+  Option
+} from '@intstudio/ds/primitives/overlay';
 import { useOverlayKeys, useFocusReturn } from './hooks';
 
 export const MultiSelectRecipe: Recipe = (ctx) => {
@@ -218,8 +219,6 @@ export const MultiSelectRecipe: Recipe = (ctx) => {
   /* ===== Overlay Component ===== */
 
   const Overlay: React.FC<any> = ({ open, onClose, field }) => {
-    if (!open) return null;
-
     // Keyboard navigation hook for overlay (search input + list)
     const handleKeyDown = useOverlayKeys({
       count: filteredOptions.length,
@@ -238,41 +237,16 @@ export const MultiSelectRecipe: Recipe = (ctx) => {
       isOpen: open
     });
 
-    // TODO: Use OverlayPrimitive/SheetPrimitive based on env.isMobile
-    // For now, simple absolute positioning
-
     return (
-      <>
-        {/* Backdrop */}
-        <div
-          onClick={onClose}
-          style={{
-            position: 'fixed',
-            inset: 0,
-            zIndex: 999
-          }} />
-
-        
-        {/* Overlay content */}
-        <div
-          role="listbox"
-          aria-label={`${label || spec.name} options`}
-          aria-multiselectable="true"
-          style={{
-            position: 'absolute',
-            top: 'calc(100% + 4px)',
-            left: 0,
-            right: 0,
-            zIndex: 1000,
-            background: 'var(--ds-color-surface-base)',
-            border: '1px solid var(--ds-color-border-subtle)',
-            borderRadius: '8px',
-            maxHeight: '400px',
-            display: 'flex',
-            flexDirection: 'column',
-            overflow: 'hidden',
-            boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
-          }}>
+      <ResponsiveOverlay
+        open={open}
+        onClose={onClose}
+        triggerRef={triggerRef}
+        role="listbox"
+        ariaLabel={`${label || spec.name} options`}
+        ariaMultiselectable={true}
+        {...spec.ui?.overlay}
+      >
 
           {/* Search header */}
           {searchable &&
@@ -284,8 +258,11 @@ export const MultiSelectRecipe: Recipe = (ctx) => {
                 className="ds-input ds-input--sm ds-input--pad-left"
 
 
+                placeholder="Search..."
+                value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                onKeyDown={(e) => handleKeyDown(e, field)} />
+                onKeyDown={handleKeyDown}
+              />
 
                 <span className="ds-input-adorn-left" aria-hidden="true">
                   <Search size={16} />
@@ -408,8 +385,8 @@ export const MultiSelectRecipe: Recipe = (ctx) => {
               Apply
             </button>
           </OverlayFooter>
-        </div>
-      </>);
+      </ResponsiveOverlay>
+    );
 
   };
 
