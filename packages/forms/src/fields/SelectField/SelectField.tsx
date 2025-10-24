@@ -311,7 +311,7 @@ export function SelectField({
                   aria-disabled={option.disabled}
                   disabled={option.disabled}
                   onClick={() => !option.disabled && handleSelect(option.value, field.onChange)}
-
+                  onMouseEnter={() => setHighlightedIndex(index)}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' && !option.disabled) {
                       e.preventDefault();
