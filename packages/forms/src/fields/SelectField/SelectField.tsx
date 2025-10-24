@@ -184,8 +184,10 @@ export function SelectField({
               onClick={() => setIsOpen(!isOpen)}
               onKeyDown={handleKeyDown}
               className="ds-select-trigger"
+              data-open={isOpen || undefined}
               style={{
-                paddingRight: '40px', // Space for chevron icon only
+                paddingRight: '40px', // Space for chevron icon
+                paddingLeft: '16px',  // Proper left padding
               }}>
 
                 <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
@@ -270,7 +272,7 @@ export function SelectField({
 
                         <input
                     ref={searchInputRef}
-                    type="text"
+                    type="search"
                     role="searchbox"
                     aria-label="Filter options"
                     placeholder="Search..."
@@ -279,15 +281,9 @@ export function SelectField({
                       setSearchQuery(e.target.value);
                       setHighlightedIndex(0);
                     }}
-                    autoFocus
+                    className="ds-input ds-input--sm"
                     style={{
-                      width: '100%',
-                      height: '36px',
-                      padding: '0 12px 0 36px',
-                      border: '1px solid var(--ds-color-border-subtle)',
-                      borderRadius: '4px',
-                      fontSize: '14px',
-                      outline: 'none'
+                      paddingLeft: '36px', // Space for search icon
                     }} />
 
                       </div>

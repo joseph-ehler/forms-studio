@@ -241,6 +241,12 @@
   border-color: var(--ds-color-primary-bg);
 }
 
+/* Keep focus ring visible when overlay is open */
+.ds-select-trigger[data-open="true"] {
+  box-shadow: 0 0 0 2px var(--ds-color-primary-bg);
+  border-color: var(--ds-color-primary-bg);
+}
+
 /* Disabled */
 .ds-select-trigger:disabled {
   background-color: var(--ds-color-surface-subtle);
