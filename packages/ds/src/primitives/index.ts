@@ -25,3 +25,23 @@ export { Spacer } from './Spacer';
 export { Stack } from './Stack';
 export { Text } from './Text';
 export { VideoPlayer } from './VideoPlayer';
+
+// Overlay system (responsive popover/sheet)
+export {
+  ResponsiveOverlay,
+  OverlayHeader,
+  OverlayContent,
+  OverlayFooter,
+  OverlayList,
+  OverlayGrid,
+  Option
+} from './overlay';
+export type {
+  ResponsiveOverlayProps,
+  OverlayHeaderProps,
+  OverlayContentProps,
+  OverlayFooterProps,
+  OverlayListProps,
+  OverlayGridProps,
+  OptionProps
+} from './overlay';

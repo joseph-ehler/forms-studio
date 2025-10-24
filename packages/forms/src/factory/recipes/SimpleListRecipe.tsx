@@ -28,7 +28,7 @@ import {
   OverlayFooter,
   OverlayList,
   Option
-} from '@intstudio/ds/primitives/overlay';
+} from '@intstudio/ds';
 import { useOverlayKeys, useFocusReturn } from './hooks';
 
 export const SimpleListRecipe: Recipe = (ctx) => {
