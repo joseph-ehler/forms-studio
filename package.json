@@ -9,7 +9,9 @@
     "typecheck": "pnpm -r --filter './packages/**' typecheck",
     "play": "pnpm --filter playground dev",
     "clean": "rm -rf **/dist **/node_modules",
-    "validate:docs": "node scripts/validate-docs.mjs"
+    "validate:docs": "node scripts/validate-docs.mjs",
+    "setup:hooks": "bash scripts/setup-hooks.sh",
+    "postinstall": "bash scripts/setup-hooks.sh"
   },
   "devDependencies": {
     "typescript": "^5.9.3"
