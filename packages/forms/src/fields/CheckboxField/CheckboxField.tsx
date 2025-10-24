@@ -41,9 +41,11 @@ export function CheckboxField<T extends FieldValues = FieldValues>({
           <label
             htmlFor={name}
             style={{ 
-              display: 'flex', 
+              display: 'inline-flex', 
               alignItems: 'center', 
-              gap: '0.5rem', 
+              gap: '0.75rem',
+              minHeight: '44px',
+              padding: '8px 0',
               cursor: disabled ? 'not-allowed' : 'pointer' 
             }}
           >

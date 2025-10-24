@@ -33,10 +33,11 @@ export function ToggleField({
         render={({ field }) =>
         <div
           style={{
-            display: 'flex',
+            display: 'inline-flex',
             alignItems: 'center',
             gap: '0.75rem',
-            minHeight: '44px'
+            minHeight: '44px',
+            padding: '11px 0',
           }}>
 
             <input

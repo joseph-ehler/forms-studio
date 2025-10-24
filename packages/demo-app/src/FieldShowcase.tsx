@@ -333,10 +333,10 @@ export function FieldShowcase() {
               
               {/* SUBMIT */}
               <div style={{ marginTop: '24px', display: 'flex', gap: '16px' }}>
-                <button type="submit" style={{ padding: '10px 20px', background: '#3b82f6', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontSize: '14px', fontWeight: 500 }}>
+                <button type="submit" style={{ padding: '12px 20px', minHeight: '44px', background: '#2563eb', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontSize: '14px', fontWeight: 500 }}>
                   Submit Form
                 </button>
-                <button type="button" onClick={() => console.log('Current values:', values)} style={{ padding: '10px 20px', background: '#6b7280', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontSize: '14px', fontWeight: 500 }}>
+                <button type="button" onClick={() => console.log('Current values:', values)} style={{ padding: '12px 20px', minHeight: '44px', background: '#6b7280', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontSize: '14px', fontWeight: 500 }}>
                   Log Values
                 </button>
               </div>
