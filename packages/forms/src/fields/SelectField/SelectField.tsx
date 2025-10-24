@@ -173,26 +173,19 @@ export function SelectField({
             <div style={{ position: 'relative', marginTop: label ? '8px' : 0 }}>
               <button
               ref={triggerRef}
-
+              type="button"
               id={name}
               disabled={disabled}
               aria-haspopup="listbox"
               aria-expanded={isOpen}
               aria-invalid={hasError || undefined}
               aria-describedby={description ? `${name}-desc` : undefined}
+              data-placeholder={!field.value || undefined}
               onClick={() => setIsOpen(!isOpen)}
               onKeyDown={handleKeyDown}
-              className="ds-input"
+              className="ds-select-trigger"
               style={{
-                position: 'relative',
-                padding: '12px 40px 12px 16px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                color: field.value ? 'var(--ds-color-text-primary)' : 'var(--ds-color-text-muted)',
-                textAlign: 'left',
-                cursor: disabled ? 'not-allowed' : 'pointer',
-                border: hasError ? '2px solid var(--ds-color-state-danger)' : undefined
+                paddingRight: '40px', // Space for chevron icon only
               }}>
 
                 <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>

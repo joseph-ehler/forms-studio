@@ -201,6 +201,66 @@
   font-size: 18px;
 }
 
+/* ===== Select Trigger (button styled as input) ===== */
+
+.ds-select-trigger {
+  /* Inherit all input styles */
+  width: 100%;
+  min-height: 48px;
+  padding: var(--ds-space-3) var(--ds-space-4);
+  font-family: var(--ds-font-body, "Inter", system-ui, -apple-system, sans-serif);
+  font-size: 16px;
+  line-height: 1.5;
+  border: 1px solid var(--ds-color-border-subtle);
+  border-radius: 6px;
+  background-color: var(--ds-color-surface-base);
+  color: var(--ds-color-text-primary);
+  box-shadow: none;
+  text-align: start;
+  transition: background-color 150ms ease, border-color 150ms ease, box-shadow 150ms ease;
+  appearance: none;
+  outline: none;
+  
+  /* Button-specific */
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ds-space-2);
+}
+
+/* Hover */
+.ds-select-trigger:hover:not(:disabled):not(:focus) {
+  background-color: var(--ds-color-surface-subtle);
+  border-color: var(--ds-color-border-strong);
+}
+
+/* Focus */
+.ds-select-trigger:focus {
+  box-shadow: 0 0 0 2px var(--ds-color-primary-bg);
+  border-color: var(--ds-color-primary-bg);
+}
+
+/* Disabled */
+.ds-select-trigger:disabled {
+  background-color: var(--ds-color-surface-subtle);
+  color: var(--ds-color-text-muted);
+  cursor: not-allowed;
+  opacity: 0.6;
+  border-style: dashed;
+}
+
+/* Error state */
+.ds-select-trigger[aria-invalid="true"] {
+  border-color: var(--ds-color-state-danger);
+  background-color: rgba(239, 68, 68, 0.05);
+}
+
+/* Placeholder text (no value selected) */
+.ds-select-trigger[data-placeholder="true"] {
+  color: var(--ds-color-text-muted);
+}
+
 /* ===== Input Type Variants ===== */
 
 /* Search input */
