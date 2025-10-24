@@ -157,7 +157,7 @@ export const SizeVariants: Story = {
         <div>
           <h3 style={{ marginBottom: '0.5rem', fontSize: '0.875rem', fontWeight: 600 }}>Small</h3>
           <label style={{ display: 'inline-flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer' }}>
-            <input type="checkbox" role="switch" className="ds-toggle ds-toggle ds-toggle ds-toggle ds-toggle--sm" />
+            <input type="checkbox" role="switch" className="ds-toggle ds-toggle ds-toggle ds-toggle ds-toggle ds-toggle--sm" />
             <span>Small toggle (32×18px)</span>
           </label>
         </div>
@@ -175,7 +175,7 @@ export const SizeVariants: Story = {
         <div>
           <h3 style={{ marginBottom: '0.5rem', fontSize: '0.875rem', fontWeight: 600 }}>Large</h3>
           <label style={{ display: 'inline-flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer' }}>
-            <input type="checkbox" role="switch" className="ds-toggle ds-toggle ds-toggle ds-toggle ds-toggle--lg" />
+            <input type="checkbox" role="switch" className="ds-toggle ds-toggle ds-toggle ds-toggle ds-toggle ds-toggle--lg" />
             <span>Large toggle (48×26px)</span>
           </label>
         </div>
@@ -202,7 +202,7 @@ export const WithoutLabel: Story = {
           <input
             type="checkbox"
             role="switch"
-            className="ds-toggle ds-toggle ds-toggle ds-toggle"
+            className="ds-toggle ds-toggle ds-toggle ds-toggle ds-toggle"
             aria-label="Enable notifications" />
 
         </label>

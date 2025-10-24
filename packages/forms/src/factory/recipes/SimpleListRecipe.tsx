@@ -1,3 +1,4 @@
+/** @refiner(filter-dom-props@1.1.0 applied 2025-10-24) */
 /**
  * SimpleListRecipe
  * 
@@ -24,8 +25,8 @@ import {
   OverlayHeader,
   OverlayContent,
   OverlayList,
-  Option
-} from '@intstudio/ds/primitives/overlay';
+  Option } from
+'@intstudio/ds/primitives/overlay';
 import { useOverlayKeys, useFocusReturn } from './hooks';
 
 export const SimpleListRecipe: Recipe = (ctx) => {
@@ -36,58 +37,58 @@ export const SimpleListRecipe: Recipe = (ctx) => {
     options = [],
     ui = {}
   } = spec;
-  
+
   const {
     searchable = false,
     focusSearchOnOpen = true,
     inlineThreshold = 4
   } = ui;
-  
+
   // Render inline list if below threshold
   const shouldRenderInline = options.length <= inlineThreshold;
-  
+
   // Shared state
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [highlightedIndex, setHighlightedIndex] = useState(0);
-  
+
   const triggerRef = useRef<HTMLButtonElement>(null);
   const searchRef = useRef<HTMLInputElement>(null);
-  
+
   // Filter options by search query
   const filteredOptions = useMemo(() => {
     if (!searchQuery) return options;
     const query = searchQuery.toLowerCase();
-    return options.filter(opt =>
-      opt.label.toLowerCase().includes(query) ||
-      opt.value.toLowerCase().includes(query)
+    return options.filter((opt) =>
+    opt.label.toLowerCase().includes(query) ||
+    opt.value.toLowerCase().includes(query)
     );
   }, [options, searchQuery]);
-  
+
   // Reset highlight when filtered list changes
   useEffect(() => {
     setHighlightedIndex(0);
   }, [filteredOptions]);
-  
+
   // Focus search input when overlay opens
   useEffect(() => {
     if (isOpen && searchable && focusSearchOnOpen) {
       searchRef.current?.focus();
     }
   }, [isOpen, searchable, focusSearchOnOpen]);
-  
+
   // Auto-return focus to trigger when overlay closes
   useFocusReturn(triggerRef, isOpen);
-  
+
   // Helper to get selected label
   const getSelectedLabel = (value: string | undefined) => {
     if (!value) return placeholder;
-    const selected = options.find(opt => opt.value === value);
+    const selected = options.find((opt) => opt.value === value);
     return selected?.label || value;
   };
-  
+
   /* ===== Trigger Component ===== */
-  
+
   const Trigger: React.FC<any> = ({ field, hasError, disabled }) => {
     // Keyboard navigation hook
     const handleKeyDown = useOverlayKeys({
@@ -108,12 +109,12 @@ export const SimpleListRecipe: Recipe = (ctx) => {
       },
       isOpen
     });
-    
+
     return (
       <div className="ds-input-wrap">
         <button
           ref={triggerRef}
-          type="button"
+
           id={spec.name}
           disabled={disabled}
           aria-haspopup="listbox"
@@ -122,8 +123,8 @@ export const SimpleListRecipe: Recipe = (ctx) => {
           data-placeholder={!field.value || undefined}
           onClick={() => setIsOpen(!isOpen)}
           onKeyDown={handleKeyDown}
-          className="ds-select-trigger"
-        >
+          className="ds-select-trigger">
+
           <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
             {getSelectedLabel(field.value)}
           </span>
@@ -136,15 +137,15 @@ export const SimpleListRecipe: Recipe = (ctx) => {
             style={{
               transform: `rotate(${isOpen ? '180deg' : '0deg'})`,
               transition: 'transform 200ms ease'
-            }}
-          />
+            }} />
+
         </span>
-      </div>
-    );
+      </div>);
+
   };
-  
+
   /* ===== Overlay Component ===== */
-  
+
   const Overlay: React.FC<any> = ({ open, onClose, field }) => {
     // Keyboard navigation hook (same as Trigger)
     const handleKeyDown = useOverlayKeys({
@@ -165,12 +166,12 @@ export const SimpleListRecipe: Recipe = (ctx) => {
       },
       isOpen: open
     });
-    
+
     if (!open) return null;
-    
+
     // TODO: Use OverlayPrimitive/SheetPrimitive based on env.isMobile
     // For now, simple absolute positioning (will upgrade to primitives)
-    
+
     return (
       <>
         {/* Backdrop */}
@@ -180,8 +181,8 @@ export const SimpleListRecipe: Recipe = (ctx) => {
             position: 'fixed',
             inset: 0,
             zIndex: 999
-          }}
-        />
+          }} />
+
         
         {/* Overlay content */}
         <div
@@ -201,61 +202,61 @@ export const SimpleListRecipe: Recipe = (ctx) => {
             flexDirection: 'column',
             overflow: 'hidden',
             boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
-          }}
-        >
+          }}>
+
           {/* Search header */}
-          {searchable && (
-            <OverlayHeader>
+          {searchable &&
+          <OverlayHeader>
               <div className="ds-input-wrap">
                 <input
-                  ref={searchRef}
-                  type="search"
-                  className="ds-input ds-input--sm ds-input--pad-left"
-                  placeholder="Search..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                />
+                ref={searchRef}
+
+                className="ds-input ds-input--sm ds-input--pad-left"
+
+
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyDown={handleKeyDown} />
+
                 <span className="ds-input-adorn-left" aria-hidden="true">
                   <Search size={16} />
                 </span>
               </div>
             </OverlayHeader>
-          )}
+          }
           
           {/* Options list */}
           <OverlayContent>
-            {filteredOptions.length === 0 ? (
-              <div style={{ padding: '16px', textAlign: 'center', color: 'var(--ds-color-text-muted)' }}>
+            {filteredOptions.length === 0 ?
+            <div style={{ padding: '16px', textAlign: 'center', color: 'var(--ds-color-text-muted)' }}>
                 No results for "{searchQuery}"
-              </div>
-            ) : (
-              <OverlayList>
-                {filteredOptions.map((option, index) => (
-                  <Option
-                    key={option.value}
-                    value={option.value}
-                    label={option.label}
-                    description={option.description}
-                    selected={field.value === option.value}
-                    disabled={option.disabled}
-                    highlighted={index === highlightedIndex}
-                    onSelect={(value) => {
-                      field.onChange(value);
-                      setIsOpen(false);
-                      setSearchQuery('');
-                      triggerRef.current?.focus();
-                    }}
-                    onMouseEnter={() => setHighlightedIndex(index)}
-                  />
-                ))}
+              </div> :
+
+            <OverlayList>
+                {filteredOptions.map((option, index) =>
+              <Option
+                key={option.value}
+                value={option.value}
+                label={option.label}
+                description={option.description}
+                selected={field.value === option.value}
+                disabled={option.disabled}
+                highlighted={index === highlightedIndex}
+                onSelect={(value) => {
+                  field.onChange(value);
+                  setIsOpen(false);
+                  setSearchQuery('');
+                  triggerRef.current?.focus();
+                }}
+                onMouseEnter={() => setHighlightedIndex(index)} />
+
+              )}
               </OverlayList>
-            )}
+            }
           </OverlayContent>
         </div>
-      </>
-    );
+      </>);
+
   };
-  
+
   return { Trigger, Overlay };
 };
