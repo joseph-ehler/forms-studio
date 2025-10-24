@@ -105,14 +105,11 @@
   box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
 }
 
-/* HTML5 Validation */
-.ds-input:invalid:not(:focus):not(:placeholder-shown) {
-  border-color: var(--ds-color-state-danger);
-}
-
-.ds-input:valid:not(:focus):not(:placeholder-shown):not([type="email"]):not([type="url"]) {
-  border-color: var(--ds-color-state-success);
-}
+/* HTML5 Validation - DISABLED BY DEFAULT
+ * Use explicit .ds-input--error/success classes instead.
+ * Native :valid/:invalid are too aggressive and show on empty fields.
+ * Fields should validate via React Hook Form, not HTML5 pseudo-classes.
+ */
 
 /* ===== Special States ===== */
 
