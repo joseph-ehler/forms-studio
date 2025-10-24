@@ -204,10 +204,6 @@ export const ResponsiveOverlay: React.FC<ResponsiveOverlayProps> = ({
           aria-label={ariaLabel}
           aria-labelledby={ariaLabelledBy}
           aria-multiselectable={ariaMultiselectable}
-          onPointerDown={sheetGestures.onPointerDown}
-          onPointerMove={sheetGestures.onPointerMove}
-          onPointerUp={sheetGestures.onPointerUp}
-          onPointerCancel={sheetGestures.onPointerCancel}
           style={{
             position: 'fixed',
             bottom: 0,
@@ -223,14 +219,17 @@ export const ResponsiveOverlay: React.FC<ResponsiveOverlayProps> = ({
             maxHeight: '90vh',
             transform: `translateY(${sheetGestures.translateY}px)`,
             transition: sheetGestures.isAnimating ? 'transform 300ms cubic-bezier(0.32, 0.72, 0, 1)' : 'none',
-            paddingBottom: `max(env(safe-area-inset-bottom), ${sheetGestures.keyboardOffset}px)`,
-            touchAction: 'none'
+            paddingBottom: `max(env(safe-area-inset-bottom), ${sheetGestures.keyboardOffset}px)`
           }}
         >
           {/* Drag handle */}
           {dragHandle && (
             <div
               aria-label="Drag to expand or collapse"
+              onPointerDown={sheetGestures.onPointerDown}
+              onPointerMove={sheetGestures.onPointerMove}
+              onPointerUp={sheetGestures.onPointerUp}
+              onPointerCancel={sheetGestures.onPointerCancel}
               style={{
                 width: '100%',
                 display: 'flex',
@@ -250,7 +249,7 @@ export const ResponsiveOverlay: React.FC<ResponsiveOverlayProps> = ({
           )}
           
           {/* Children (Header/Content/Footer) */}
-          <div ref={contentRef} style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+          <div ref={contentRef} style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
             {children}
           </div>
         </div>
