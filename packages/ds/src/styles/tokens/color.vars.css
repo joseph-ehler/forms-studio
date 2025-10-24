@@ -157,6 +157,7 @@
     --ds-color-primary-bg:        var(--tw-blue-600);
     --ds-color-primary-bg-hover:  var(--tw-blue-700);
     --ds-color-primary-bg-active: var(--tw-blue-800);
+    --ds-color-primary-bg-subtle: rgba(37, 99, 235, 0.08); /* Light hover/highlight */
     --ds-color-primary-text:      #ffffff;
     --ds-color-primary-ring:      var(--tw-blue-500);
     
@@ -219,6 +220,7 @@
     --ds-color-primary-bg:        var(--tw-blue-500);
     --ds-color-primary-bg-hover:  var(--tw-blue-600);
     --ds-color-primary-bg-active: var(--tw-blue-700);
+    --ds-color-primary-bg-subtle: rgba(59, 130, 246, 0.12); /* Light hover/highlight (dark mode) */
     --ds-color-primary-text:      #000000;
     --ds-color-primary-ring:      var(--tw-blue-400);
     
