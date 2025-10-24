@@ -1,0 +1,15 @@
+# Documentation ownership
+# https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Monorepo-level documentation
+/docs/**                      @josephehler
+/.cascade/**                  @josephehler
+
+# Package-specific documentation  
+/packages/ds/docs/**          @josephehler
+/packages/core/docs/**        @josephehler
+/packages/ui-bridge/docs/**   @josephehler
+
+# Configuration files
+/.github/**                   @josephehler
+/scripts/**                   @josephehler

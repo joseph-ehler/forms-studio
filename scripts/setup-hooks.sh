@@ -1,40 +1,45 @@
 #!/bin/bash
 # Setup Git hooks for documentation validation
-#
-# This script installs the pre-commit hook that validates
-# documentation placement automatically.
+# Enhanced version with staged-file support
 
 HOOK_DIR=".git/hooks"
 HOOK_FILE="$HOOK_DIR/pre-commit"
 
 echo "🔧 Setting up Git hooks..."
 
-# Check if .git exists
 if [ ! -d ".git" ]; then
   echo "❌ Error: Not a Git repository"
-  echo "   Run this from the repository root"
   exit 1
 fi
 
-# Create hook
 cat > "$HOOK_FILE" << 'EOF'
 #!/bin/sh
-# Pre-commit hook: Validate documentation placement
+# Pre-commit hook: Validate documentation placement (staged files only)
 #
-# This prevents markdown files from being committed to root directories.
-# Runs automatically before every commit.
+# Fast validation - only checks files being committed
+# Full scan runs in CI
 #
 # To bypass (emergency only): git commit --no-verify
 
 echo "🔍 Validating documentation placement..."
 
-# Run validation
-node scripts/validate-docs.mjs
+# Get staged .md files
+CHANGED=$(git diff --cached --name-only --diff-filter=ACMR | grep '\.md$' | tr '\n' ' ')
 
-# Check exit code
-if [ $? -ne 0 ]; then
+if [ -z "$CHANGED" ]; then
+  echo "✅ No markdown files staged"
+  exit 0
+fi
+
+echo "📄 Checking $(echo $CHANGED | wc -w) staged file(s)..."
+
+# Validate staged files only (fast)
+node scripts/validate-docs.mjs --paths "$CHANGED"
+STATUS=$?
+
+if [ $STATUS -ne 0 ]; then
   echo ""
-  echo "❌ Commit blocked: Documentation placement violations found"
+  echo "❌ Commit blocked: Documentation placement violations"
   echo ""
   echo "Fix the violations above, then try again."
   echo "Emergency bypass: git commit --no-verify (not recommended)"
@@ -45,14 +50,13 @@ echo "✅ Documentation validation passed"
 exit 0
 EOF
 
-# Make executable
 chmod +x "$HOOK_FILE"
 
-echo "✅ Git hooks installed successfully!"
+echo "✅ Git hooks installed!"
 echo ""
-echo "Pre-commit hook will now:"
-echo "  • Validate docs placement before every commit"
-echo "  • Block commits with root-level markdown files"
-echo "  • Run automatically (set it and forget it)"
+echo "Pre-commit hook will:"
+echo "  • Validate staged .md files only (fast)"
+echo "  • Run automatically before commits"
+echo "  • Block commits with violations"
 echo ""
-echo "To bypass (emergency): git commit --no-verify"
+echo "CI runs full repo scan on PRs (bulletproof)"

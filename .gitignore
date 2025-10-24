@@ -41,3 +41,10 @@ lerna-debug.log*
 # Misc
 .cache/
 *.tsbuildinfo
+
+# Documentation (discourage root-level markdown)
+/*.md
+!/README.md
+!/CHANGELOG.md
+!/LICENSE.md
+!/CONTRIBUTING.md

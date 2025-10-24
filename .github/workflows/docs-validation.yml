@@ -1,0 +1,35 @@
+name: Docs Placement
+
+on:
+  pull_request:
+    paths:
+      - '**/*.md'
+      - 'scripts/validate-docs.mjs'
+  push:
+    branches: [main, develop]
+    paths:
+      - '**/*.md'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+      
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      
+      - name: Validate documentation placement
+        run: node scripts/validate-docs.mjs

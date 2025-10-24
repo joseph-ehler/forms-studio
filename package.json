@@ -11,7 +11,8 @@
     "clean": "rm -rf **/dist **/node_modules",
     "validate:docs": "node scripts/validate-docs.mjs",
     "setup:hooks": "bash scripts/setup-hooks.sh",
-    "postinstall": "bash scripts/setup-hooks.sh"
+    "postinstall": "bash scripts/setup-hooks.sh",
+    "doc:new": "node scripts/doc-new.mjs"
   },
   "devDependencies": {
     "typescript": "^5.9.3"
