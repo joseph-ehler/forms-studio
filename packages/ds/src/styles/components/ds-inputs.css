@@ -235,14 +235,8 @@
   border-color: var(--ds-color-border-strong);
 }
 
-/* Focus */
+/* Focus - Only when trigger has actual keyboard focus */
 .ds-select-trigger:focus {
-  box-shadow: 0 0 0 2px var(--ds-color-primary-bg);
-  border-color: var(--ds-color-primary-bg);
-}
-
-/* Keep focus ring visible when overlay is open */
-.ds-select-trigger[data-open="true"] {
   box-shadow: 0 0 0 2px var(--ds-color-primary-bg);
   border-color: var(--ds-color-primary-bg);
 }

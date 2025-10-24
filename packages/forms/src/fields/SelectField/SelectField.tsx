@@ -184,7 +184,6 @@ export function SelectField({
               onClick={() => setIsOpen(!isOpen)}
               onKeyDown={handleKeyDown}
               className="ds-select-trigger"
-              data-open={isOpen || undefined}
               style={{
                 paddingRight: '40px', // Space for chevron icon
                 paddingLeft: '16px',  // Proper left padding
