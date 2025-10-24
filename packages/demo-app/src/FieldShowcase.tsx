@@ -20,7 +20,6 @@ import {
   UrlField,
   TelField,
   TextareaField,
-  SelectField,
   CheckboxField,
   DateField,
   TimeField,
@@ -37,6 +36,8 @@ import {
   RangeCompositeField,
   SignatureField,
 } from '@intstudio/forms/fields';
+// New SelectField (custom overlay implementation)
+import { SelectField } from '@intstudio/forms/fields/SelectField/SelectField.new';
 
 // Validation schema
 const schema = z.object({
@@ -180,7 +181,28 @@ export function FieldShowcase() {
                 description="Tell us about yourself"
               />
               
-              {/* SelectField temporarily disabled - needs options prop */}
+              <SelectField
+                name="country"
+                control={control}
+                errors={errors}
+                label="Country"
+                placeholder="Select your country"
+                description="Choose your country of residence"
+                searchable
+                clearable
+                options={[
+                  { value: 'us', label: 'United States' },
+                  { value: 'ca', label: 'Canada' },
+                  { value: 'uk', label: 'United Kingdom' },
+                  { value: 'au', label: 'Australia' },
+                  { value: 'de', label: 'Germany' },
+                  { value: 'fr', label: 'France' },
+                  { value: 'jp', label: 'Japan' },
+                  { value: 'br', label: 'Brazil' },
+                  { value: 'in', label: 'India' },
+                  { value: 'cn', label: 'China' },
+                ]}
+              />
               
               {/* BOOLEAN INPUTS */}
               <Heading level="h3">Boolean Inputs (2)</Heading>
