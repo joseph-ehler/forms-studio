@@ -1,8 +1,10 @@
 /**
- * Overlay Primitives - Layout Atoms & Option Component
+ * Overlay Primitives - Layout Atoms & Responsive System
  * 
  * Composable building blocks for overlay content.
  * Used by all overlay recipes in the Forms package.
+ * 
+ * NEW: ResponsiveOverlay - God-tier popover/sheet system
  */
 
 // Layout atoms
@@ -32,3 +34,26 @@ export type {
   OptionProps,
   OptionGroupProps
 } from './Option';
+
+// Responsive Overlay System (NEW - God Tier!)
+export { ResponsiveOverlay } from './ResponsiveOverlay';
+export type { ResponsiveOverlayProps } from './ResponsiveOverlay';
+
+// Supporting hooks (advanced usage)
+export { useSheetGestures } from './useSheetGestures';
+export { usePopoverPosition } from './usePopoverPosition';
+export { useFocusTrap } from './useFocusTrap';
+
+export type {
+  UseSheetGesturesOptions,
+  UseSheetGesturesResult
+} from './useSheetGestures';
+
+export type {
+  UsePopoverPositionOptions,
+  UsePopoverPositionResult
+} from './usePopoverPosition';
+
+export type {
+  UseFocusTrapOptions
+} from './useFocusTrap';
