@@ -1,0 +1,25 @@
+{
+  "files": [
+    ".github/CODEOWNERS",
+    ".markdownlintrc.json",
+    ".eslintrc.js",
+    ".prettierrc.json",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE.md",
+    "CONTRIBUTING.md",
+    "CODE_OF_CONDUCT.md",
+    "SECURITY.md"
+  ],
+  "dirs": [
+    ".cascade",
+    "__tests__",
+    ".github",
+    ".vscode",
+    ".husky"
+  ],
+  "patterns": [
+    "SESSION_",
+    "ADR_"
+  ]
+}

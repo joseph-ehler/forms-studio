@@ -1,0 +1,24 @@
+# Normalize line endings
+* text=auto eol=lf
+
+# Markdown diff
+*.md diff=markdown
+
+# Archives should be treated as binary
+*.gz binary
+*.tar binary
+*.zip binary
+
+# Images
+*.jpg binary
+*.png binary
+*.gif binary
+*.ico binary
+*.svg text
+
+# Fonts
+*.woff binary
+*.woff2 binary
+*.eot binary
+*.ttf binary
+*.otf binary

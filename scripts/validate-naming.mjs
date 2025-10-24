@@ -13,7 +13,7 @@
  *   node scripts/validate-naming.mjs --paths "file1.ts file2.md"
  */
 
-import { readdir, stat } from 'fs/promises';
+import { readdir, stat, readFile } from 'fs/promises';
 import { join, relative, basename, extname, sep } from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
@@ -22,6 +22,16 @@ import { parseArgs } from 'util';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const ROOT = join(__dirname, '..');
+
+// Load exceptions from registry
+const EXCEPTIONS_FILE = join(__dirname, 'validators', '.naming-exceptions.json');
+let LOADED_EXCEPTIONS = { files: [], dirs: [], patterns: [] };
+try {
+  const data = await readFile(EXCEPTIONS_FILE, 'utf8');
+  LOADED_EXCEPTIONS = JSON.parse(data);
+} catch (err) {
+  // File doesn't exist yet, use defaults
+}
 
 // Parse arguments
 const { values } = parseArgs({
@@ -38,28 +48,23 @@ const CONVENTIONS = {
   // Files that SHOULD be kebab-case
   KEBAB_CASE_FILES: /\.(ts|js|mjs|css|md|json|yaml|yml|html|sh)$/,
   
-  // Allowed special files (exact matches)
+  // Allowed special files (loaded from registry + defaults)
   ALLOWED_SPECIAL: new Set([
-    'README.md',
-    'CHANGELOG.md',
-    'LICENSE.md',
-    'CONTRIBUTING.md',
-    'CODE_OF_CONDUCT.md',
-    'SECURITY.md',
-    'TODO.md',
-    'CODEOWNERS',
+    ...LOADED_EXCEPTIONS.files,
     'SESSION',
     'ADR',
   ]),
   
-  // Allowed special directories
+  // Allowed special directories (loaded from registry)
   ALLOWED_DIRS: new Set([
-    '.cascade',
-    '__tests__',
+    ...LOADED_EXCEPTIONS.dirs,
   ]),
   
-  // Allowed patterns for hook files
-  HOOK_PATTERN: /^use[A-Z][a-zA-Z]+\.ts$/,
+  // Allowed patterns (SESSION_, ADR_, etc.)
+  ALLOWED_PATTERNS: LOADED_EXCEPTIONS.patterns || [],
+  
+  // Hook files should be kebab-case like other files
+  // REMOVED: HOOK_PATTERN - hooks follow kebab-case like everything else
   
   // Ignored directories
   IGNORED_DIRS: new Set([
@@ -109,8 +114,8 @@ function validateFileName(filePath) {
   }
   
   // Check for uppercase prefix patterns (SESSION_, ADR_)
-  for (const prefix of CONVENTIONS.ALLOWED_SPECIAL) {
-    if (name.startsWith(prefix + '_')) {
+  for (const prefix of CONVENTIONS.ALLOWED_PATTERNS) {
+    if (name.startsWith(prefix)) {
       return { valid: true };
     }
   }
@@ -128,12 +133,7 @@ function validateFileName(filePath) {
     return { valid: true };
   }
   
-  // React hooks are allowed to be camelCase
-  if (CONVENTIONS.HOOK_PATTERN && CONVENTIONS.HOOK_PATTERN.test(name)) {
-    return { valid: true };
-  }
-  
-  // Other files should be kebab-case
+  // All non-component files should be kebab-case
   if (CONVENTIONS.KEBAB_CASE_FILES.test(name)) {
     if (!isKebabCase(nameWithoutExt)) {
       return {
