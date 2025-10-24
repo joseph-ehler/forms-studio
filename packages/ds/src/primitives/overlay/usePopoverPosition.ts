@@ -101,7 +101,11 @@ export function usePopoverPosition({
     let top = 0;
     let left = 0;
     let width: number | 'auto' = 'auto';
+    let maxWidth: number | undefined;
     let maxHeightValue = maxSpace;
+    
+    // Set reasonable maxWidth to prevent full-screen popovers
+    const defaultMaxWidth = Math.min(480, vw * 0.6); // 480px or 60% viewport
     
     switch (bestPlacement) {
       case 'bottom':
@@ -109,6 +113,9 @@ export function usePopoverPosition({
         left = trigger.left;
         if (fitTrigger) {
           width = trigger.width;
+          maxWidth = trigger.width; // Constrain to trigger width
+        } else {
+          maxWidth = defaultMaxWidth;
         }
         maxHeightValue = spaceBelow;
         break;
@@ -118,6 +125,9 @@ export function usePopoverPosition({
         left = trigger.left;
         if (fitTrigger) {
           width = trigger.width;
+          maxWidth = trigger.width; // Constrain to trigger width
+        } else {
+          maxWidth = defaultMaxWidth;
         }
         maxHeightValue = spaceAbove;
         break;
@@ -125,12 +135,14 @@ export function usePopoverPosition({
       case 'right':
         top = trigger.top;
         left = trigger.right + anchorPadding;
+        maxWidth = defaultMaxWidth;
         maxHeightValue = Math.min(vh - trigger.top - anchorPadding, trigger.height * 3);
         break;
         
       case 'left':
         top = trigger.top;
         left = trigger.left - anchorPadding - containerRect.width;
+        maxWidth = defaultMaxWidth;
         maxHeightValue = Math.min(vh - trigger.top - anchorPadding, trigger.height * 3);
         break;
     }
@@ -166,7 +178,8 @@ export function usePopoverPosition({
     setStyle({
       top: `${top}px`,
       left: `${left}px`,
-      width: width === 'auto' ? 'auto' : `${width}px`,
+      width: width === 'auto' ? undefined : `${width}px`,
+      maxWidth: maxWidth ? `${maxWidth}px` : undefined,
       maxHeight: finalMaxHeight ? `${finalMaxHeight}px` : undefined,
       minWidth: fitTrigger ? `${trigger.width}px` : undefined
     });
