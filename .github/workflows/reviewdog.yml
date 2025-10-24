@@ -1,0 +1,127 @@
+name: Reviewdog
+
+on:
+  pull_request:
+    paths:
+      - '**/*.md'
+      - '**/*.ts'
+      - '**/*.tsx'
+      - '**/*.js'
+      - '**/*.jsx'
+      - '**/*.mjs'
+
+jobs:
+  docs-placement:
+    name: Docs Placement (Reviewdog)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      
+      - name: Run docs validator
+        id: docs-check
+        run: |
+          node scripts/validate-docs.mjs > docs-output.txt 2>&1 || true
+          cat docs-output.txt
+        continue-on-error: true
+      
+      - name: Setup reviewdog
+        if: failure()
+        uses: reviewdog/action-setup@v1
+        with:
+          reviewdog_version: latest
+      
+      - name: Post docs violations
+        if: failure()
+        env:
+          REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cat docs-output.txt | reviewdog -efm="%f:%l:%c: %m" \
+            -name="docs-placement" \
+            -reporter=github-pr-review \
+            -level=error \
+            || true
+
+  naming-conventions:
+    name: Naming Conventions (Reviewdog)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      
+      - name: Run naming validator
+        id: naming-check
+        run: |
+          node scripts/validate-naming.mjs > naming-output.txt 2>&1 || true
+          cat naming-output.txt
+        continue-on-error: true
+      
+      - name: Setup reviewdog
+        if: failure()
+        uses: reviewdog/action-setup@v1
+        with:
+          reviewdog_version: latest
+      
+      - name: Post naming violations
+        if: failure()
+        env:
+          REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cat naming-output.txt | reviewdog -efm="%f:%l:%c: %m" \
+            -name="naming-conventions" \
+            -reporter=github-pr-review \
+            -level=warning \
+            || true
+
+  markdown-lint:
+    name: Markdown Lint (Reviewdog)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Reviewdog - markdownlint
+        uses: reviewdog/action-markdownlint@v0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          reporter: github-pr-review
+          level: warning
+          markdownlint_flags: '**/*.md --ignore node_modules'

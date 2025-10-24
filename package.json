@@ -14,8 +14,8 @@
     "validate:all": "pnpm validate:docs && pnpm validate:naming",
     "lint:md": "markdownlint \"**/*.md\" --ignore node_modules",
     "test:validator": "node scripts/__tests__/validate-docs.test.mjs",
-    "setup:hooks": "bash scripts/setup-hooks.sh",
-    "postinstall": "bash scripts/setup-hooks.sh",
+    "setup:hooks": "node scripts/setup-hooks.mjs",
+    "postinstall": "node scripts/setup-hooks.mjs",
     "doc:new": "node scripts/doc-new.mjs"
   },
   "devDependencies": {

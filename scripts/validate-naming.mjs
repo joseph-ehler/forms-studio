@@ -37,6 +37,8 @@ try {
 const { values } = parseArgs({
   options: {
     paths: { type: 'string' },
+    fix: { type: 'boolean' },
+    'dry-run': { type: 'boolean' },
   },
 });
 
@@ -264,10 +266,63 @@ async function findFiles(dir, files = []) {
 }
 
 /**
+ * Apply fixes by renaming files
+ */
+async function applyFixes(violations) {
+  const { execSync } = await import('child_process');
+  
+  console.log('\n🔧 Applying fixes...\n');
+  
+  let fixedCount = 0;
+  const failed = [];
+  
+  for (const violation of violations) {
+    const oldPath = violation.path;
+    const newPath = join(dirname(oldPath), violation.suggestion);
+    
+    try {
+      if (values['dry-run']) {
+        console.log(`  [DRY-RUN] Would rename: ${oldPath} → ${newPath}`);
+      } else {
+        execSync(`git mv "${oldPath}" "${newPath}"`, { cwd: ROOT });
+        console.log(`  ✅ Renamed: ${oldPath} → ${newPath}`);
+        fixedCount++;
+      }
+    } catch (err) {
+      console.error(`  ❌ Failed to rename ${oldPath}: ${err.message}`);
+      failed.push({ oldPath, newPath, error: err.message });
+    }
+  }
+  
+  if (values['dry-run']) {
+    console.log(`\n📋 Dry-run complete. Would fix ${violations.length} file(s).`);
+    console.log('Run without --dry-run to apply changes.');
+  } else if (fixedCount > 0) {
+    console.log(`\n✅ Fixed ${fixedCount} file(s)!`);
+    if (failed.length > 0) {
+      console.log(`⚠️  Failed to fix ${failed.length} file(s).`);
+    }
+    console.log('\n⚠️  IMPORTANT: You may need to update import paths!');
+    console.log('Run your build to check for broken imports.');
+  }
+  
+  return { fixedCount, failed };
+}
+
+/**
  * Main validation function
  */
 async function validateNaming() {
-  console.log('🔍 Validating file/folder naming conventions...\n');
+  const isFixMode = values.fix || values['dry-run'];
+  
+  if (isFixMode) {
+    console.log('🔧 Running in fix mode...\n');
+    if (values['dry-run']) {
+      console.log('📋 DRY-RUN: No changes will be made\n');
+    }
+  } else {
+    console.log('🔍 Validating file/folder naming conventions...\n');
+  }
   
   let itemsToCheck = [];
   
@@ -303,6 +358,30 @@ async function validateNaming() {
   if (violations.length === 0) {
     console.log('✅ All files and folders follow naming conventions!\n');
     return true;
+  }
+  
+  // If in fix mode, apply fixes
+  if (values.fix || values['dry-run']) {
+    console.log(`📋 Found ${violations.length} naming violation(s)\n`);
+    
+    // Group and show violations
+    const byRule = {};
+    violations.forEach(v => {
+      if (!byRule[v.rule]) byRule[v.rule] = [];
+      byRule[v.rule].push(v);
+    });
+    
+    for (const [rule, items] of Object.entries(byRule)) {
+      console.log(`${rule}: ${items.length} file(s)`);
+    }
+    
+    const { fixedCount, failed } = await applyFixes(violations);
+    
+    if (values['dry-run']) {
+      return false; // Exit with error in dry-run to show what would change
+    }
+    
+    return failed.length === 0;
   }
   
   console.error('❌ Naming convention violations found:\n');

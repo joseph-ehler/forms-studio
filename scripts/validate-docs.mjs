@@ -33,6 +33,7 @@ const ALLOWED_PATTERNS = [
   /^docs\//,
   /^\.cascade\//,
   /^packages\/[^/]+\/docs\//,
+  /^\.github\//,  // Allow GitHub-specific files
 ];
 
 // Explicit exceptions (allowed .md files in roots)
