@@ -35,6 +35,7 @@ import {
   LocationField,
   RangeCompositeField,
   SignatureField,
+  TestSelectField,
 } from '@intstudio/forms/fields';
 import { SelectField } from '../../forms/src/fields/SelectField/SelectField';
 
@@ -201,6 +202,29 @@ export function FieldShowcase() {
                   { value: 'in', label: 'India' },
                   { value: 'cn', label: 'China' },
                 ]}
+              />
+              
+              {/* RECIPE-BASED SELECT */}
+              <Card style={{
+                padding: '16px',
+                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                color: 'white',
+                border: 'none',
+                marginBottom: '16px'
+              }}>
+                <Heading level="h4" style={{ margin: '0 0 8px 0', color: 'white' }}>
+                  🎉 Recipe System Proof of Concept
+                </Heading>
+                <Body style={{ margin: 0, color: 'rgba(255,255,255,0.9)', fontSize: '14px' }}>
+                  Generated via <strong>SimpleListRecipe</strong> with ResponsiveOverlay. Click to see desktop popover or mobile sheet in action!
+                </Body>
+              </Card>
+              
+              <TestSelectField
+                name="testSelect"
+                control={control}
+                label="Test Select (Recipe-Based) 🚀"
+                description="First field generated via the new recipe system!"
               />
               
               {/* BOOLEAN INPUTS */}
