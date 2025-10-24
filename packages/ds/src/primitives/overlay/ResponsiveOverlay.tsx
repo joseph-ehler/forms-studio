@@ -287,7 +287,7 @@ export const ResponsiveOverlay: React.FC<ResponsiveOverlayProps> = ({
           boxShadow: 'var(--ds-shadow-overlay-md)',
           display: 'flex',
           flexDirection: 'column',
-          overflow: 'hidden',
+          minHeight: 0,
           ...popoverPosition.style
         }}
       >
