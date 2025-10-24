@@ -293,7 +293,16 @@ export function SelectField({
               }
 
                   {/* Options List */}
-                  <div className="ds-option-list" style={{ flex: 1 }}>
+                  <div 
+                    className="ds-option-list" 
+                    style={{ 
+                      flex: 1,
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: '2px',
+                      padding: '8px',
+                      overflowY: 'auto'
+                    }}>
 
                     {filteredOptions.length === 0 ? (
                 <div style={{ padding: '16px', textAlign: 'center', color: 'var(--ds-color-text-muted)' }}>
