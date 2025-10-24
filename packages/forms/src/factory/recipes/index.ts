@@ -7,9 +7,9 @@
 
 export * from './types';
 export { SimpleListRecipe } from './SimpleListRecipe';
+export { MultiSelectRecipe } from './MultiSelectRecipe';
 
 // Future recipes (to be implemented):
-// export { MultiSelectRecipe } from './MultiSelectRecipe';
 // export { AsyncSearchSelectRecipe } from './AsyncSearchSelectRecipe';
 // export { DatePickerRecipe } from './DatePickerRecipe';
 // export { DateRangeRecipe } from './DateRangeRecipe';
