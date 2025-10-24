@@ -27,6 +27,7 @@ import {
   OverlayList,
   Option
 } from '@intstudio/ds/primitives/overlay';
+import { useOverlayKeys, useFocusReturn } from './hooks';
 
 export const MultiSelectRecipe: Recipe = (ctx) => {
   const { spec, env } = ctx;
@@ -75,6 +76,9 @@ export const MultiSelectRecipe: Recipe = (ctx) => {
     }
   }, [isOpen, searchable, focusSearchOnOpen]);
   
+  // Auto-return focus to trigger when overlay closes
+  useFocusReturn(triggerRef, isOpen);
+  
   // Toggle selection
   const toggleSelection = (value: string, event?: React.MouseEvent) => {
     const index = filteredOptions.findIndex(opt => opt.value === value);
@@ -114,59 +118,6 @@ export const MultiSelectRecipe: Recipe = (ctx) => {
     field.onChange(selectedValues);
     setIsOpen(false);
     setSearchQuery('');
-    triggerRef.current?.focus();
-  };
-  
-  // Keyboard navigation
-  const handleKeyDown = (e: React.KeyboardEvent, field: any) => {
-    switch (e.key) {
-      case 'ArrowDown':
-        e.preventDefault();
-        setHighlightedIndex((prev) =>
-          Math.min(prev + 1, filteredOptions.length - 1)
-        );
-        break;
-      
-      case 'ArrowUp':
-        e.preventDefault();
-        setHighlightedIndex((prev) => Math.max(prev - 1, 0));
-        break;
-      
-      case 'Enter':
-        if (isOpen && filteredOptions[highlightedIndex]) {
-          e.preventDefault();
-          const option = filteredOptions[highlightedIndex];
-          if (!option.disabled) {
-            toggleSelection(option.value);
-          }
-        }
-        break;
-      
-      case 'Escape':
-        e.preventDefault();
-        setIsOpen(false);
-        setSearchQuery('');
-        triggerRef.current?.focus();
-        break;
-      
-      case 'Home':
-        e.preventDefault();
-        setHighlightedIndex(0);
-        break;
-      
-      case 'End':
-        e.preventDefault();
-        setHighlightedIndex(filteredOptions.length - 1);
-        break;
-      
-      case 'a':
-        // Ctrl+A or Cmd+A: Select all
-        if (e.ctrlKey || e.metaKey) {
-          e.preventDefault();
-          setSelectedValues(filteredOptions.map(opt => opt.value));
-        }
-        break;
-    }
   };
   
   // Get trigger label
@@ -189,6 +140,24 @@ export const MultiSelectRecipe: Recipe = (ctx) => {
       }
     }, [field.value]);
     
+    // Keyboard navigation hook (for multi-select, Enter toggles)
+    const handleKeyDown = useOverlayKeys({
+      count: filteredOptions.length,
+      activeIndex: highlightedIndex,
+      setActiveIndex: setHighlightedIndex,
+      onSelect: (index) => {
+        const option = filteredOptions[index];
+        if (!option.disabled) {
+          toggleSelection(option.value);
+        }
+      },
+      onClose: () => {
+        setIsOpen(false);
+        setSearchQuery('');
+      },
+      isOpen
+    });
+    
     return (
       <div className="ds-input-wrap">
         <button
@@ -201,7 +170,7 @@ export const MultiSelectRecipe: Recipe = (ctx) => {
           aria-invalid={hasError || undefined}
           data-placeholder={!field.value || field.value.length === 0 || undefined}
           onClick={() => setIsOpen(!isOpen)}
-          onKeyDown={(e) => handleKeyDown(e, field)}
+          onKeyDown={handleKeyDown}
           className="ds-select-trigger"
         >
           <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
