@@ -294,7 +294,10 @@ export function SelectField({
                 style={{
                   flex: 1,
                   overflowY: 'auto',
-                  padding: '4px 0'
+                  padding: '8px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '2px'
                 }}>
 
                     {filteredOptions.length === 0 ?
@@ -324,13 +327,10 @@ export function SelectField({
                     padding: '10px 16px',
                     display: 'flex',
                     alignItems: 'center',
-                    background:
-                    index === highlightedIndex ?
-                    'var(--ds-color-primary-bg-subtle)' :
-                    field.value === option.value ?
-                    'var(--ds-color-primary-bg)' :
-                    'transparent',
+                    position: 'relative',
+                    background: field.value === option.value ? 'var(--ds-color-primary-bg)' : 'transparent',
                     border: 'none',
+                    borderRadius: '6px',
                     textAlign: 'left',
                     fontSize: '14px',
                     color:
@@ -343,9 +343,25 @@ export function SelectField({
                     opacity: option.disabled ? 0.5 : 1,
                     transition: 'background 150ms ease'
                   }}>
-
-                          {option.label}
-                        </button>
+                    
+                    {/* Hover scrim - light/dark mode compatible */}
+                    {index === highlightedIndex && !option.disabled && (
+                      <div style={{
+                        position: 'absolute',
+                        inset: 0,
+                        background: field.value === option.value 
+                          ? 'rgba(0, 0, 0, 0.1)' // Darken selected item
+                          : 'var(--ds-color-primary-bg-subtle)', // Subtle highlight for unselected
+                        borderRadius: '6px',
+                        pointerEvents: 'none',
+                        transition: 'background 150ms ease'
+                      }} />
+                    )}
+                    
+                    <span style={{ position: 'relative', zIndex: 1 }}>
+                      {option.label}
+                    </span>
+                  </button>
                 )
                 }
                   </div>
