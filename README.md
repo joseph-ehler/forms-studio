@@ -125,6 +125,28 @@ pnpm test
 pnpm dev
 ```
 
+### **📚 Storybook**
+
+We use a **per-package Storybook architecture** for fast development and clear boundaries:
+
+```bash
+# DS primitives only (fast, isolated)
+pnpm --filter @intstudio/ds storybook
+
+# Form fields only (fast, isolated)
+pnpm --filter @intstudio/forms storybook
+
+# All packages (unified showcase)
+pnpm storybook:all
+```
+
+**Architecture:**
+- Each package has its own Storybook (6006, 6007)
+- Root Storybook composes them (6008) for design review
+- 3x faster HMR, zero coupling between packages
+
+See [Storybook Architecture](docs/architecture/STORYBOOK_ARCHITECTURE.md) for details.
+
 ---
 
 ## 📄 **License**

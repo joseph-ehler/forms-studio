@@ -31,6 +31,30 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
       
+      - name: 🔬 Recipe Validation (Transcendent)
+        run: |
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "🔍 RECIPE VALIDATION: Prevent violations at source"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          pnpm validate:recipes
+          
+          if [ $? -ne 0 ]; then
+            echo "❌ Recipe templates contain violations!"
+            exit 1
+          fi
+      
+      - name: 🧪 Recipe Quality Tests (Closed-Loop)
+        run: |
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "🧪 QUALITY TESTS: Spec → Generate → Refine → Assert"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          pnpm test:recipe-quality
+          
+          if [ $? -ne 0 ]; then
+            echo "❌ Generated code fails quality assertions!"
+            exit 1
+          fi
+      
       - name: 🧪 Generator Self-Test
         run: pnpm generator:test
       

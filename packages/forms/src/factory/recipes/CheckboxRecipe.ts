@@ -112,7 +112,7 @@ export function ${name}<T extends FieldValues = FieldValues>({
             {label && (
               <span style={{ userSelect: 'none' }}>
                 {label}
-                {required && <span style={{ color: 'var(--color-error, #EF4444)', marginLeft: '0.25rem' }}>*</span>}
+                {required && <span style={{ color: 'var(--ds-color-state-danger)', marginLeft: '0.25rem' }}>*</span>}
               </span>
             )}
           </label>

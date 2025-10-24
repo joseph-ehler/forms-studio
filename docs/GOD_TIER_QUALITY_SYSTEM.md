@@ -143,7 +143,7 @@ God Tier Quality ✨    →  Correct, delightful, continuously improving
 4. QUALITY ASSURANCE (Both Lanes)
    
    A) AUTOMATED (Factory + AI):
-      - Refiner checks (ARIA, structure, tokens)
+      - Refiner checks (ARIA, structure, tokens, WCAG contrast)
       - CI validations (Axe, keyboard, build)
       - VRT (contrast, accessibility)
       - Playwright tests (interaction flows)

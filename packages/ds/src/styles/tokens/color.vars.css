@@ -122,7 +122,7 @@
     /* Text */
     --ds-color-text-primary:   var(--tw-neutral-900);
     --ds-color-text-secondary: var(--tw-neutral-600);
-    --ds-color-text-muted:     var(--tw-neutral-500);
+    --ds-color-text-muted:     var(--tw-neutral-600);  /* Was 500 (3.88:1), now 600 (7.81:1) - WCAG AA compliant */
     --ds-color-text-inverted:  #ffffff;
     --ds-color-text-link:      var(--tw-blue-600);
     --ds-color-text-link-hover: var(--tw-blue-700);

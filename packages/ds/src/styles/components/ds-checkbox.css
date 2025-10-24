@@ -88,13 +88,13 @@
   
   /* Invalid state (error) */
   .ds-checkbox[aria-invalid="true"] {
-    border-color: var(--color-error, #EF4444);
+    border-color: var(--color-error, #B91C1C);
   }
   
   .ds-checkbox[aria-invalid="true"]:focus-visible {
     box-shadow: 
-      0 0 0 3px var(--error-ring, rgba(239, 68, 68, 0.3)),
-      0 0 0 1px var(--color-error, #EF4444);
+      0 0 0 3px var(--error-ring, rgba(185, 28, 28, 0.3)),
+      0 0 0 1px var(--color-error, #B91C1C);
   }
   
   /* Indeterminate state (optional - for "select all" scenarios) */

@@ -64,7 +64,7 @@ export function CheckboxField<T extends FieldValues = FieldValues>({
                 {label}
                 {required && (
                   <span style={{ 
-                    color: 'var(--color-error, #EF4444)', 
+                    color: 'var(--ds-color-state-danger)', 
                     marginLeft: '0.25rem' 
                   }}>
                     *

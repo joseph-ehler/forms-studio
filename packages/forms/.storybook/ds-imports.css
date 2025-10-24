@@ -1,0 +1,11 @@
+/* Import DS styles for Storybook */
+@import '../../ds/src/styles/layers.css';
+@import '../../ds/src/styles/tokens/color.vars.css';
+@import '../../ds/src/styles/tokens/typography.vars.css';
+@import '../../ds/src/styles/tokens/surface.vars.css';
+@import '../../ds/src/styles/tokens/button.vars.css';
+@import '../../ds/src/styles/tokens/input.vars.css';
+@import '../../ds/src/styles/tokens/density.vars.css';
+@import '../../ds/src/styles/tokens/a11y.vars.css';
+@import '../../ds/src/styles/components/ds-typography.css';
+@import '../../ds/src/styles/components/ds-inputs.css';

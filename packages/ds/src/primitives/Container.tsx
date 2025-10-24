@@ -26,7 +26,7 @@
  */
 
 import React from 'react'
-import { layoutPresets, type LayoutPreset } from '@intstudio/ds/utils'
+import { layoutPresets, type LayoutPreset } from '../utils'
 
 interface ContainerProps {
   maxWidth?: LayoutPreset | 'full'

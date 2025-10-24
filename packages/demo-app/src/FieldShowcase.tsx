@@ -36,8 +36,7 @@ import {
   RangeCompositeField,
   SignatureField,
 } from '@intstudio/forms/fields';
-// New SelectField (custom overlay implementation)
-import { SelectField } from '@intstudio/forms/fields/SelectField/SelectField.new';
+import { SelectField } from '../../forms/src/fields/SelectField/SelectField';
 
 // Validation schema
 const schema = z.object({

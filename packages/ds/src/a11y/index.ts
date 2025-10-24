@@ -1,9 +1,5 @@
-/**
- * A11y Module Exports
- * Manual barrel - kebab-case filenames need manual exports
- */
-
+export * from './a11y-validator';
 export * from './a11yProfiles';
-export * from './applyA11y';
-// Note: a11y-validator, input-modality, sr-announce have kebab-case names
-// Export individually when needed
+export { applyA11y } from './applyA11y';
+export * from './input-modality';
+export * from './sr-announce';

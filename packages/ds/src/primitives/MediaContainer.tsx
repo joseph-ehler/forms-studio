@@ -17,7 +17,7 @@
  */
 
 import React from 'react'
-import { layoutPresets, type LayoutPreset } from '@intstudio/ds/utils'
+import { layoutPresets, type LayoutPreset } from '../utils'
 
 type AspectRatio = '1:1' | '4:3' | '3:2' | '16:9' | '21:9' | 'auto'
 type ObjectFit = 'cover' | 'contain'
