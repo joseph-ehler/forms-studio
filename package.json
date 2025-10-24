@@ -70,6 +70,7 @@
     "@types/node": "^20.11.0",
     "ajv": "^8.17.1",
     "ajv-formats": "^2.1.1",
+    "autoprefixer": "^10.4.21",
     "concurrently": "^8.2.2",
     "cspell": "^9.2.2",
     "danger": "^13.0.4",
@@ -82,11 +83,13 @@
     "js-yaml": "^4.1.0",
     "lint-staged": "^16.2.5",
     "markdownlint-cli": "^0.45.0",
+    "postcss": "^8.5.6",
     "remark-cli": "^12.0.1",
     "remark-frontmatter": "^5.0.0",
     "remark-preset-lint-recommended": "^7.0.1",
     "remark-validate-links": "^13.1.0",
     "storybook": "^8.6.14",
+    "tailwindcss": "^4.1.16",
     "tsup": "^8.0.2",
     "turbo": "^1.13.0",
     "typescript": "^5.4.5",
@@ -103,5 +106,9 @@
       "pnpm -w eslint --fix",
       "git add"
     ]
+  },
+  "dependencies": {
+    "flowbite": "^3.1.2",
+    "flowbite-react": "^0.12.9"
   }
 }
