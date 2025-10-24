@@ -1,9 +1,0 @@
-#!/usr/bin/env sh
-. "$(dirname "$0")/_/husky.sh"
-
-# Build before pushing (smoke tests run manually)
-pnpm -w build || exit 1
-
-# To run smoke tests manually:
-# Terminal 1: pnpm dev
-# Terminal 2: pnpm test:overlay-smoke
