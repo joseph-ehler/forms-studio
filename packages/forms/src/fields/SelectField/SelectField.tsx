@@ -295,21 +295,23 @@ export function SelectField({
                   {/* Options List */}
                   <div className="ds-option-list" style={{ flex: 1 }}>
 
-                    {filteredOptions.length === 0 ?
+                    {filteredOptions.length === 0 ? (
                 <div style={{ padding: '16px', textAlign: 'center', color: 'var(--ds-color-text-muted)' }}>
                         No results for "{searchQuery}"
-                      </div> :
-
-                filteredOptions.map((option, index) =>
+                      </div>
+                ) : (
+                <>
+                {/* @refiner-ignore filter-dom-props - onMouseEnter needed for hover state */}
+                {filteredOptions.map((option, index) =>
                 <button
                   key={option.value}
-
+                  type="button"
                   role="option"
                   aria-selected={field.value === option.value}
                   aria-disabled={option.disabled}
                   disabled={option.disabled}
                   onClick={() => !option.disabled && handleSelect(option.value, field.onChange)}
-
+                  onMouseEnter={() => setHighlightedIndex(index)}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' && !option.disabled) {
                       e.preventDefault();
@@ -329,6 +331,8 @@ export function SelectField({
                   </button>
                 )
                 }
+                </>
+                )}
                   </div>
                 </div>
             }
