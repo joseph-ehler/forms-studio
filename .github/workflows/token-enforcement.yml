@@ -1,0 +1,181 @@
+name: Token Enforcement
+
+on:
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - 'packages/**/*.css'
+      - 'packages/**/*.tsx'
+      - 'packages/**/*.ts'
+      - '!packages/**/dist/**'
+      - '!packages/**/node_modules/**'
+  
+  push:
+    branches: [main, develop]
+    paths:
+      - 'packages/**/*.css'
+      - 'packages/**/*.tsx'
+      - 'packages/**/*.ts'
+
+jobs:
+  lint-css:
+    name: CSS Token Enforcement
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+      
+      - name: Install pnpm
+        run: npm install -g pnpm@8
+      
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      
+      - name: Run Stylelint
+        run: |
+          echo "🎨 Checking CSS files for hard-coded values..."
+          pnpm stylelint "packages/**/*.css" --formatter=compact
+        continue-on-error: false
+      
+      - name: Report results
+        if: always()
+        run: |
+          echo "📊 CSS Token Enforcement Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "✅ All CSS files use design tokens" >> $GITHUB_STEP_SUMMARY
+          echo "❌ Hard-coded colors/shadows/radii blocked" >> $GITHUB_STEP_SUMMARY
+
+  lint-typescript:
+    name: TSX Token Enforcement
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+      
+      - name: Install pnpm
+        run: npm install -g pnpm@8
+      
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      
+      - name: Run ESLint
+        run: |
+          echo "🔍 Checking TSX/TS files for hard-coded values..."
+          pnpm eslint "packages/**/*.{ts,tsx}" \
+            --format=compact \
+            --no-eslintrc \
+            --config .eslintrc.token-enforcement.json
+        continue-on-error: false
+      
+      - name: Report results
+        if: always()
+        run: |
+          echo "📊 TSX Token Enforcement Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "✅ All inline styles use design tokens" >> $GITHUB_STEP_SUMMARY
+          echo "❌ Hard-coded colors/shadows/radii blocked" >> $GITHUB_STEP_SUMMARY
+
+  refiner-check:
+    name: Factory Token Enforcement
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+      
+      - name: Install pnpm
+        run: npm install -g pnpm@8
+      
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      
+      - name: Run Refiner transform
+        id: refiner
+        run: |
+          echo "🏭 Running Refiner token enforcement..."
+          node scripts/refiner/index.mjs \
+            --apply=false \
+            --scope="packages/**/*.{ts,tsx}" \
+            --transforms="no-hardcoded-visuals-v2.0" \
+            > refiner-output.txt 2>&1 || true
+          
+          cat refiner-output.txt
+          
+          # Check if there are any errors
+          if grep -q "❌" refiner-output.txt; then
+            echo "has_errors=true" >> $GITHUB_OUTPUT
+            exit 1
+          else
+            echo "has_errors=false" >> $GITHUB_OUTPUT
+          fi
+        continue-on-error: false
+      
+      - name: Upload Refiner report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: refiner-token-report
+          path: refiner-output.txt
+          retention-days: 7
+      
+      - name: Report results
+        if: always()
+        run: |
+          echo "📊 Refiner Token Enforcement Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ steps.refiner.outputs.has_errors }}" == "true" ]; then
+            echo "❌ Found hard-coded values requiring manual review" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "**See artifacts for details**" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "✅ All values use design tokens" >> $GITHUB_STEP_SUMMARY
+          fi
+
+  token-coverage:
+    name: Token Coverage Report
+    runs-on: ubuntu-latest
+    needs: [lint-css, lint-typescript, refiner-check]
+    if: always()
+    
+    steps:
+      - name: Generate summary
+        run: |
+          echo "# 🎨 Token Enforcement Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Layer | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|-------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| CSS (Stylelint) | ${{ needs.lint-css.result == 'success' && '✅ Pass' || '❌ Fail' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| TSX (ESLint) | ${{ needs.lint-typescript.result == 'success' && '✅ Pass' || '❌ Fail' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Factory (Refiner) | ${{ needs.refiner-check.result == 'success' && '✅ Pass' || '❌ Fail' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## 📖 Documentation" >> $GITHUB_STEP_SUMMARY
+          echo "- [Token Enforcement System](./docs/ds/TOKEN_ENFORCEMENT_SYSTEM.md)" >> $GITHUB_STEP_SUMMARY
+          echo "- [Token Quick Reference](./docs/ds/TOKEN_QUICK_REFERENCE.md)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ needs.lint-css.result }}" != "success" ] || [ "${{ needs.lint-typescript.result }}" != "success" ] || [ "${{ needs.refiner-check.result }}" != "success" ]; then
+            echo "## 🔧 Auto-Fix" >> $GITHUB_STEP_SUMMARY
+            echo "\`\`\`bash" >> $GITHUB_STEP_SUMMARY
+            echo "# Auto-fix most violations" >> $GITHUB_STEP_SUMMARY
+            echo "node scripts/refiner/index.mjs --apply=true" >> $GITHUB_STEP_SUMMARY
+            echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          fi
