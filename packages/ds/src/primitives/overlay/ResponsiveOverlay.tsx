@@ -189,7 +189,7 @@ export const ResponsiveOverlay: React.FC<ResponsiveOverlayProps> = ({
           style={{
             position: 'fixed',
             inset: 0,
-            background: 'rgba(0, 0, 0, 0.4)',
+            background: 'var(--ds-color-backdrop)',
             zIndex: 1000,
             opacity: sheetGestures.backdropOpacity,
             transition: 'opacity 200ms ease'
@@ -215,8 +215,9 @@ export const ResponsiveOverlay: React.FC<ResponsiveOverlayProps> = ({
             right: 0,
             zIndex: 1001,
             background: 'var(--ds-color-surface-base)',
-            borderRadius: '16px 16px 0 0',
-            boxShadow: '0 -4px 16px rgba(0, 0, 0, 0.2)',
+            borderTopLeftRadius: 'var(--ds-radius-xl)',
+            borderTopRightRadius: 'var(--ds-radius-xl)',
+            boxShadow: 'var(--ds-shadow-overlay-lg)',
             display: 'flex',
             flexDirection: 'column',
             maxHeight: '90vh',
@@ -234,15 +235,15 @@ export const ResponsiveOverlay: React.FC<ResponsiveOverlayProps> = ({
                 width: '100%',
                 display: 'flex',
                 justifyContent: 'center',
-                padding: '12px 0',
+                padding: 'var(--ds-space-3) 0',
                 cursor: 'grab',
                 touchAction: 'none'
               }}
             >
               <div style={{
                 width: '32px',
-                height: '4px',
-                borderRadius: '2px',
+                height: 'var(--ds-space-1)',
+                borderRadius: 'var(--ds-radius-sm)',
                 background: 'var(--ds-color-border-strong)'
               }} />
             </div>
@@ -283,8 +284,8 @@ export const ResponsiveOverlay: React.FC<ResponsiveOverlayProps> = ({
           zIndex: 1000,
           background: 'var(--ds-color-surface-base)',
           border: '1px solid var(--ds-color-border-subtle)',
-          borderRadius: '8px',
-          boxShadow: '0 4px 16px rgba(0, 0, 0, 0.12)',
+          borderRadius: 'var(--ds-radius-md)',
+          boxShadow: 'var(--ds-shadow-overlay-md)',
           display: 'flex',
           flexDirection: 'column',
           overflow: 'hidden',

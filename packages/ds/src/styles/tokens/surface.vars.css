@@ -68,10 +68,20 @@
     
     --ds-shadow-none: none;
     
+    /* Shadow base (RGB form for alpha composition) */
+    --ds-shadow-rgb: 0 0 0;
+    
     /* Overlay shadows (ONLY for modals/popovers that need depth) */
-    --ds-shadow-overlay-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
-    --ds-shadow-overlay-md: 0 4px 16px rgba(0, 0, 0, 0.12);
-    --ds-shadow-overlay-lg: 0 8px 24px rgba(0, 0, 0, 0.16);
+    --ds-shadow-overlay-sm: 0 2px 8px rgba(var(--ds-shadow-rgb), 0.08);
+    --ds-shadow-overlay-md: 0 4px 16px rgba(var(--ds-shadow-rgb), 0.12);
+    --ds-shadow-overlay-lg: 0 8px 24px rgba(var(--ds-shadow-rgb), 0.16);
+    
+    /* ==========================================
+       BACKDROP
+       For overlays, modals, sheets
+       ========================================== */
+    
+    --ds-color-backdrop: rgba(0, 0, 0, 0.4);
     
     /* ==========================================
        GLASS VARIANT
@@ -109,10 +119,14 @@
     --ds-glass-bg: rgba(0, 0, 0, 0.6);
     --ds-glass-border: 1px solid rgba(255, 255, 255, 0.1);
     
-    /* Shadows slightly more pronounced in dark */
-    --ds-shadow-overlay-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
-    --ds-shadow-overlay-md: 0 4px 16px rgba(0, 0, 0, 0.4);
-    --ds-shadow-overlay-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
+    /* Shadow base stays same, but composited shadows are more pronounced */
+    --ds-shadow-rgb: 0 0 0;
+    --ds-shadow-overlay-sm: 0 2px 8px rgba(var(--ds-shadow-rgb), 0.3);
+    --ds-shadow-overlay-md: 0 4px 16px rgba(var(--ds-shadow-rgb), 0.4);
+    --ds-shadow-overlay-lg: 0 8px 24px rgba(var(--ds-shadow-rgb), 0.5);
+    
+    /* Backdrop darker in dark mode for better contrast */
+    --ds-color-backdrop: rgba(0, 0, 0, 0.6);
   }
 }
 
