@@ -33,7 +33,6 @@ export const TestSelectField: React.FC<TestSelectFieldProps> = ({
 }) => {
   const formContext = useFormContext();
   const control = externalControl || formContext?.control;
-  const [isOpen, setIsOpen] = React.useState(false);
   
   if (!control) {
     throw new Error('TestSelectField must be used within a form context or receive control prop');
@@ -153,9 +152,8 @@ export const TestSelectField: React.FC<TestSelectFieldProps> = ({
               disabled={disabled}
             />
             
+            {/* @ts-ignore - Recipe manages state internally */}
             <Overlay
-              open={isOpen}
-              onClose={() => setIsOpen(false)}
               field={field}
             />
             

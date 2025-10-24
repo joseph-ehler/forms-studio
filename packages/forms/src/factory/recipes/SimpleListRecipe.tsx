@@ -148,7 +148,7 @@ export const SimpleListRecipe: Recipe = (ctx) => {
 
   /* ===== Overlay Component ===== */
 
-  const Overlay: React.FC<any> = ({ open, onClose, field }) => {
+  const Overlay: React.FC<{ field: any }> = ({ field }) => {
     // Keyboard navigation hook (for content)
     const handleKeyDown = useOverlayKeys({
       count: filteredOptions.length,
@@ -166,13 +166,13 @@ export const SimpleListRecipe: Recipe = (ctx) => {
         setIsOpen(false);
         setSearchQuery('');
       },
-      isOpen: open
+      isOpen
     });
 
     return (
       <ResponsiveOverlay
-        open={open}
-        onClose={onClose}
+        open={isOpen}
+        onClose={() => setIsOpen(false)}
         triggerRef={triggerRef}
         role="listbox"
         ariaLabel={`${label || spec.name} options`}
