@@ -337,7 +337,7 @@ export function SelectField({
                             alignItems: 'center',
                             background: 
                               index === highlightedIndex 
-                                ? 'var(--ds-color-surface-subtle)' 
+                                ? 'rgba(37, 99, 235, 0.08)' 
                                 : field.value === option.value
                                 ? 'var(--ds-color-primary-bg)'
                                 : 'transparent',
