@@ -18,7 +18,7 @@
  *     inlineThreshold: 4
  */
 
-import React, { useState, useRef, useEffect, useMemo } from 'react';
+import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react';
 import { ChevronDown, Search } from 'lucide-react';
 import type { Recipe } from './types';
 import {
@@ -53,6 +53,7 @@ export const SimpleListRecipe: Recipe = (ctx) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [highlightedIndex, setHighlightedIndex] = useState(0);
+  const hoverTimeoutRef = useRef<number | null>(null);
 
   const triggerRef = useRef<HTMLButtonElement>(null);
   const searchRef = useRef<HTMLInputElement>(null);
@@ -78,6 +79,15 @@ export const SimpleListRecipe: Recipe = (ctx) => {
       searchRef.current?.focus();
     }
   }, [isOpen, searchable, focusSearchOnOpen]);
+  
+  // Cleanup hover timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (hoverTimeoutRef.current) {
+        window.clearTimeout(hoverTimeoutRef.current);
+      }
+    };
+  }, []);
 
   // Auto-return focus to trigger when overlay closes
   useFocusReturn(triggerRef, isOpen);
@@ -176,7 +186,6 @@ export const SimpleListRecipe: Recipe = (ctx) => {
         triggerRef={triggerRef}
         role="listbox"
         ariaLabel={`${label || spec.name} options`}
-        {...spec.ui?.overlay}
       >
         {/* Search header */}
         {searchable && (
@@ -189,6 +198,7 @@ export const SimpleListRecipe: Recipe = (ctx) => {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onKeyDown={handleKeyDown}
+                aria-label="Search options"
               />
               <span className="ds-input-adorn-left" aria-hidden="true">
                 <Search size={16} />
@@ -204,7 +214,7 @@ export const SimpleListRecipe: Recipe = (ctx) => {
               No results for "{searchQuery}"
             </div>
           ) : (
-            <OverlayList>
+            <OverlayList aria-label="Available options">
               {filteredOptions.map((option, index) => (
                 <Option
                   key={option.value}
@@ -214,13 +224,20 @@ export const SimpleListRecipe: Recipe = (ctx) => {
                   selected={field.value === option.value}
                   disabled={option.disabled}
                   highlighted={index === highlightedIndex}
-                  onSelect={(value) => {
+                  onSelect={(value: string) => {
                     field.onChange(value);
                     setIsOpen(false);
                     setSearchQuery('');
                     triggerRef.current?.focus();
                   }}
-                  onMouseEnter={() => setHighlightedIndex(index)}
+                  onMouseEnter={() => {
+                    // Throttle hover updates to prevent glitching
+                    if (hoverTimeoutRef.current) return;
+                    hoverTimeoutRef.current = window.setTimeout(() => {
+                      setHighlightedIndex(index);
+                      hoverTimeoutRef.current = null;
+                    }, 50);
+                  }}
                 />
               ))}
             </OverlayList>
