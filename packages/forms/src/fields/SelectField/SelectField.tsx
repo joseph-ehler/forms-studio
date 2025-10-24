@@ -170,69 +170,62 @@ export function SelectField({
               </FormLabel>
           }
 
-            {/* Trigger Button */}
-            <div style={{ position: 'relative', marginTop: label ? '8px' : 0 }}>
+            {/* Trigger Button (using adornment utilities) */}
+            <div className="ds-input-wrap" style={{ marginTop: label ? '8px' : 0 }}>
               <button
-              ref={triggerRef}
-
-              id={name}
-              disabled={disabled}
-              aria-haspopup="listbox"
-              aria-expanded={isOpen}
-              aria-invalid={hasError || undefined}
-              aria-describedby={description ? `${name}-desc` : undefined}
-              data-placeholder={!field.value || undefined}
-              onClick={() => setIsOpen(!isOpen)}
-              onKeyDown={handleKeyDown}
-              className="ds-select-trigger"
-              style={{
-                paddingRight: '40px', // Space for chevron icon
-                paddingLeft: '16px' // Proper left padding
-              }}>
-
+                ref={triggerRef}
+                type="button"
+                id={name}
+                disabled={disabled}
+                aria-haspopup="listbox"
+                aria-expanded={isOpen}
+                aria-invalid={hasError || undefined}
+                aria-describedby={description ? `${name}-desc` : undefined}
+                data-placeholder={!field.value || undefined}
+                onClick={() => setIsOpen(!isOpen)}
+                onKeyDown={handleKeyDown}
+                className={`ds-select-trigger ${clearable && field.value ? 'ds-input--pad-right' : ''}`}
+              >
                 <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                   {getSelectedLabel(field.value)}
                 </span>
-                
-                {/* Clear button */}
-                {clearable && field.value && !disabled &&
-              <button
-
-                onClick={(e) => handleClear(e, field.onChange)}
-                aria-label="Clear selection"
-                style={{
-                  position: 'absolute',
-                  right: '36px',
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  padding: '4px',
-                  background: 'transparent',
-                  border: 'none',
-                  cursor: 'pointer',
-                  color: 'var(--ds-color-text-muted)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }}>
-
-                    <X size={16} />
-                  </button>
-              }
-                
-                {/* Chevron */}
-                <ChevronDown
-                size={20}
-                style={{
-                  position: 'absolute',
-                  right: '12px',
-                  top: '50%',
-                  transform: `translateY(-50%) rotate(${isOpen ? '180deg' : '0deg'})`,
-                  transition: 'transform 200ms ease',
-                  color: 'var(--ds-color-text-muted)',
-                  pointerEvents: 'none'
-                }} />
-
               </button>
+
+              {/* Clear button (adornment) */}
+              {clearable && field.value && !disabled && (
+                <button
+                  type="button"
+                  onClick={(e) => handleClear(e, field.onChange)}
+                  aria-label="Clear selection"
+                  className="ds-input-adorn-right ds-input-adorn-clickable"
+                  style={{
+                    right: '36px', // Offset for chevron
+                    padding: '4px',
+                    background: 'transparent',
+                    border: 'none',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}
+                >
+                  <X size={16} />
+                </button>
+              )}
+
+              {/* Chevron (adornment) */}
+              <span 
+                className="ds-input-adorn-right"
+                aria-hidden="true"
+              >
+                <ChevronDown
+                  size={20}
+                  style={{
+                    transform: `rotate(${isOpen ? '180deg' : '0deg'})`,
+                    transition: 'transform 200ms ease'
+                  }}
+                />
+              </span>
+            </div>
 
               {/* Overlay */}
               {isOpen &&
