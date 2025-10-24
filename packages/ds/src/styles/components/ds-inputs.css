@@ -13,13 +13,14 @@
 @import './ds-toggle.css';
 
 @layer atoms {
-/* ===== Base Input Styles ===== */
+/* ===== Base Styles (Mirrored: input + trigger) ===== */
 
-.ds-input {
+.ds-input,
+.ds-select-trigger {
   /* Sizing */
   width: 100%;
   min-height: 48px; /* INTERACTIVE_TOKENS.minHeight.mobile */
-  padding: var(--ds-space-3) var(--ds-space-4); /* 12px 16px */
+  padding: var(--ds-space-3, 12px) var(--ds-space-4, 16px);
   
   /* Typography */
   font-family: var(--ds-font-body, "Inter", system-ui, -apple-system, sans-serif);
@@ -37,11 +38,20 @@
   text-align: start; /* Instead of left */
   
   /* Transitions - Using TRANSITION_TOKENS */
-  transition: background-color 150ms ease, border-color 150ms ease, box-shadow 150ms ease;
+  transition: background-color 150ms ease, border-color 150ms ease, box-shadow 150ms ease, color 150ms ease;
   
   /* Reset */
   appearance: none;
   outline: none;
+}
+
+/* Trigger-specific (button behavior) */
+.ds-select-trigger { 
+  cursor: pointer; 
+  display: flex; 
+  align-items: center; 
+  gap: var(--ds-space-2, 8px);
+  justify-content: space-between;
 }
 
 .ds-input::placeholder {
@@ -49,67 +59,138 @@
   opacity: 1;
 }
 
-/* ===== Interactive States ===== */
+/* ===== Adornment Utilities (work for input + trigger) ===== */
 
-/* Hover - Subtle background change, no ring */
-.ds-input:hover:not(:disabled):not(:focus):not(:read-only) {
+.ds-input-wrap { 
+  position: relative; 
+  display: block; 
+}
+
+/* Adornment slots */
+.ds-input-adorn-left,
+.ds-input-adorn-right {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ds-space-2, 8px);
+  color: var(--ds-color-text-muted);
+  pointer-events: none; /* let clicks pass to control */
+}
+
+.ds-input-adorn-left  { left: 12px; }
+.ds-input-adorn-right { right: 12px; }
+
+/* RTL support */
+[dir="rtl"] .ds-input-adorn-left  { left: auto; right: 12px; }
+[dir="rtl"] .ds-input-adorn-right { right: auto; left: 12px; }
+
+/* Padding shifts – reusable on both primitives */
+.ds-input--pad-left  { padding-left: 40px; }
+.ds-input--pad-right { padding-right: 40px; }
+
+/* RTL support for padding */
+[dir="rtl"] .ds-input--pad-left  { padding-left: var(--ds-space-4, 16px); padding-right: 40px; }
+[dir="rtl"] .ds-input--pad-right { padding-right: var(--ds-space-4, 16px); padding-left: 40px; }
+
+/* Optional: clear button/adornment that *is* clickable */
+.ds-input-adorn-clickable { 
+  pointer-events: auto; 
+  cursor: pointer; 
+}
+
+/* ===== Interactive States (Mirrored: input + trigger) ===== */
+
+/* Hover - Subtle background change, no ring (no override if focused or disabled) */
+.ds-input:hover:not(:disabled):not(:focus):not(:read-only),
+.ds-select-trigger:hover:not(:disabled):not(:focus) {
   background-color: var(--ds-color-surface-subtle);
   border-color: var(--ds-color-border-strong);
 }
 
-/* Focus - 2px BLUE ring (reserved for focus only) */
-.ds-input:focus {
-  box-shadow: 0 0 0 2px var(--ds-color-primary-bg);
+/* Focus ring (reserved for focus) */
+.ds-input:focus,
+.ds-select-trigger:focus {
+  outline: none;
   border-color: var(--ds-color-primary-bg);
+  box-shadow: 0 0 0 2px var(--ds-color-primary-bg);
 }
 
-/* ===== Validation States ===== */
+/* Focus-visible (better for keyboard nav) */
+@supports selector(:focus-visible) {
+  .ds-input:focus-visible,
+  .ds-select-trigger:focus-visible {
+    border-color: var(--ds-color-primary-bg);
+    box-shadow: 0 0 0 2px var(--ds-color-primary-bg);
+  }
+  
+  .ds-input:focus:not(:focus-visible),
+  .ds-select-trigger:focus:not(:focus-visible) {
+    box-shadow: none;
+    border-color: var(--ds-color-border-subtle);
+  }
+}
+
+/* ===== Validation States (Mirrored: input + trigger) ===== */
 
 /* Error - Failed validation */
 .ds-input[aria-invalid="true"],
-.ds-input--error {
+.ds-input--error,
+.ds-select-trigger[aria-invalid="true"],
+.ds-select-trigger--error {
   border-color: var(--ds-color-state-danger);
-  background-color: rgba(239, 68, 68, 0.05);
+  background: color-mix(in oklab, var(--ds-color-state-danger) 5%, var(--ds-color-surface-base));
 }
 
 .ds-input[aria-invalid="true"]:focus,
-.ds-input--error:focus {
+.ds-input--error:focus,
+.ds-select-trigger[aria-invalid="true"]:focus,
+.ds-select-trigger--error:focus {
   border-color: var(--ds-color-state-danger);
   box-shadow: 0 0 0 2px var(--ds-color-primary-bg); /* Focus ring always primary */
   animation: shake 0.3s ease-in-out;
 }
 
 .ds-input[aria-invalid="true"]:hover:not(:focus),
-.ds-input--error:hover:not(:focus) {
-  background-color: rgba(239, 68, 68, 0.08); /* Slightly darker error tint on hover */
+.ds-input--error:hover:not(:focus),
+.ds-select-trigger[aria-invalid="true"]:hover:not(:focus),
+.ds-select-trigger--error:hover:not(:focus) {
+  background: color-mix(in oklab, var(--ds-color-state-danger) 8%, var(--ds-color-surface-base));
 }
 
 /* Success - Validated */
-.ds-input--success {
+.ds-input--success,
+.ds-select-trigger--success {
   border-color: var(--ds-color-state-success);
-  background-color: rgba(34, 197, 94, 0.05);
+  background: color-mix(in oklab, var(--ds-color-state-success) 5%, var(--ds-color-surface-base));
 }
 
-.ds-input--success:focus {
+.ds-input--success:focus,
+.ds-select-trigger--success:focus {
   box-shadow: 0 0 0 2px var(--ds-color-primary-bg); /* Focus ring always primary */
 }
 
-.ds-input--success:hover:not(:focus) {
-  background-color: rgba(34, 197, 94, 0.08); /* Slightly darker success tint on hover */
+.ds-input--success:hover:not(:focus),
+.ds-select-trigger--success:hover:not(:focus) {
+  background: color-mix(in oklab, var(--ds-color-state-success) 8%, var(--ds-color-surface-base));
 }
 
 /* Warning - Soft validation */
-.ds-input--warning {
+.ds-input--warning,
+.ds-select-trigger--warning {
   border-color: var(--ds-color-state-warning);
-  background-color: rgba(245, 158, 11, 0.05);
+  background: color-mix(in oklab, var(--ds-color-state-warning) 5%, var(--ds-color-surface-base));
 }
 
-.ds-input--warning:focus {
+.ds-input--warning:focus,
+.ds-select-trigger--warning:focus {
   box-shadow: 0 0 0 2px var(--ds-color-primary-bg); /* Focus ring always primary */
 }
 
-.ds-input--warning:hover:not(:focus) {
-  background-color: rgba(245, 158, 11, 0.08); /* Slightly darker warning tint on hover */
+.ds-input--warning:hover:not(:focus),
+.ds-select-trigger--warning:hover:not(:focus) {
+  background: color-mix(in oklab, var(--ds-color-state-warning) 8%, var(--ds-color-surface-base));
 }
 
 /* HTML5 Validation - DISABLED BY DEFAULT
@@ -118,10 +199,11 @@
  * Fields should validate via React Hook Form, not HTML5 pseudo-classes.
  */
 
-/* ===== Special States ===== */
+/* ===== Special States (Mirrored: input + trigger) ===== */
 
 /* Disabled */
-.ds-input:disabled {
+.ds-input:disabled,
+.ds-select-trigger:disabled {
   background-color: var(--ds-color-surface-subtle);
   color: var(--ds-color-text-muted);
   cursor: not-allowed;
@@ -187,74 +269,29 @@
   }
 }
 
-/* ===== Input Variants ===== */
+/* ===== Size Variants (Mirrored: input + trigger) ===== */
 
-.ds-input--sm {
+.ds-input--sm,
+.ds-select-trigger--sm {
   min-height: 36px;
-  padding: var(--ds-space-2) var(--ds-space-3); /* 8px 12px */
+  padding: var(--ds-space-2, 8px) var(--ds-space-3, 12px);
   font-size: 14px;
 }
 
-.ds-input--lg {
+.ds-input--lg,
+.ds-select-trigger--lg {
   min-height: 52px;
-  padding: var(--ds-space-4) var(--ds-space-5); /* 16px 20px - fixed to 4px grid */
+  padding: var(--ds-space-4, 14px) var(--ds-space-5, 18px);
   font-size: 18px;
 }
 
-/* ===== Select Trigger (button styled as input) ===== */
+/* ===== Loading State (Optional for triggers) ===== */
 
-.ds-select-trigger {
-  /* Inherit all input styles */
-  width: 100%;
-  min-height: 48px;
-  padding: var(--ds-space-3) var(--ds-space-4);
-  font-family: var(--ds-font-body, "Inter", system-ui, -apple-system, sans-serif);
-  font-size: 16px;
-  line-height: 1.5;
-  border: 1px solid var(--ds-color-border-subtle);
-  border-radius: 6px;
-  background-color: var(--ds-color-surface-base);
-  color: var(--ds-color-text-primary);
-  box-shadow: none;
-  text-align: start;
-  transition: background-color 150ms ease, border-color 150ms ease, box-shadow 150ms ease;
-  appearance: none;
-  outline: none;
-  
-  /* Button-specific */
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--ds-space-2);
+.ds-select-trigger--loading {
+  cursor: progress;
 }
 
-/* Hover */
-.ds-select-trigger:hover:not(:disabled):not(:focus) {
-  background-color: var(--ds-color-surface-subtle);
-  border-color: var(--ds-color-border-strong);
-}
-
-/* Focus - Only when trigger has actual keyboard focus */
-.ds-select-trigger:focus {
-  box-shadow: 0 0 0 2px var(--ds-color-primary-bg);
-  border-color: var(--ds-color-primary-bg);
-}
-
-/* Disabled */
-.ds-select-trigger:disabled {
-  background-color: var(--ds-color-surface-subtle);
-  color: var(--ds-color-text-muted);
-  cursor: not-allowed;
-  opacity: 0.6;
-  border-style: dashed;
-}
-
-/* Error state */
-.ds-select-trigger[aria-invalid="true"] {
-  border-color: var(--ds-color-state-danger);
-  background-color: rgba(239, 68, 68, 0.05);
-}
+/* ===== Trigger-Specific Styles ===== */
 
 /* Placeholder text (no value selected) */
 .ds-select-trigger[data-placeholder="true"] {
@@ -623,6 +660,68 @@
   inset: 0;
   border: 1px dashed color-mix(in oklab, var(--ds-color-primary-ring), transparent 70%);
   pointer-events: none;
+}
+
+/* ===== Overlay List Polish ===== */
+
+/* List container */
+.ds-option-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px;
+  overflow-y: auto;
+}
+
+/* List button */
+.ds-option-button {
+  position: relative;
+  min-height: 44px;
+  border-radius: 6px;
+  text-align: left;
+  padding: 10px 16px;
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  transition: background-color 150ms ease, color 150ms ease;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 14px;
+}
+
+/* Selected base */
+.ds-option-button[aria-selected="true"] {
+  background: var(--ds-color-primary-bg);
+  color: var(--ds-color-primary-text);
+}
+
+/* Hover scrim layer */
+.ds-option-button .ds-hover-scrim {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 150ms ease, background-color 150ms ease;
+  border-radius: 6px;
+}
+
+/* Unselected hover highlight */
+.ds-option-button:hover .ds-hover-scrim {
+  opacity: 1;
+  background: var(--ds-color-primary-bg-subtle);
+}
+
+/* Selected hover = darken selected slightly (light/dark safe) */
+.ds-option-button[aria-selected="true"]:hover .ds-hover-scrim {
+  opacity: 1;
+  background: rgba(0,0,0,.10);
+}
+
+/* Disabled options */
+.ds-option-button:disabled,
+.ds-option-button[aria-disabled="true"] {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 } /* End @layer atoms */
