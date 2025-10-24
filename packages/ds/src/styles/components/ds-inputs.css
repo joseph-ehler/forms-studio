@@ -31,13 +31,13 @@
   border-radius: 6px; /* RADIUS_TOKENS.md */
   background-color: var(--ds-color-surface-base);
   color: var(--ds-color-text-primary);
-  box-shadow: none !important; /* FLAT by default */
+  box-shadow: none; /* FLAT by default, rings added on hover/focus */
   
   /* RTL Support - Logical properties */
   text-align: start; /* Instead of left */
   
   /* Transitions - Using TRANSITION_TOKENS */
-  transition: background-color 150ms ease-in-out, border-color 150ms ease-in-out, color 150ms ease-in-out; /* TRANSITION_TOKENS.common.colors */
+  transition: background-color 150ms ease, border-color 150ms ease, box-shadow 150ms ease;
   
   /* Reset */
   appearance: none;
@@ -51,22 +51,14 @@
 
 /* ===== Interactive States ===== */
 
-/* Hover - Visual affordance */
+/* Hover - 2px ring in primary color */
 .ds-input:hover:not(:disabled):not(:focus):not(:read-only) {
-  border-color: var(--ds-color-border-strong);
-  background-color: var(--ds-color-surface-subtle);
+  box-shadow: 0 0 0 2px var(--ds-color-primary-bg);
 }
 
-/* Focus - Ring instead of shadow (FLAT design) */
+/* Focus - 2px ring in primary color (always primary, regardless of validation) */
 .ds-input:focus {
-  border-color: var(--ds-color-border-focus);
-  box-shadow: 0 0 0 3px var(--ds-color-primary-bg-subtle);
-  transform: translateY(-1px);
-}
-
-/* Active - Pressed state */
-.ds-input:active:not(:disabled) {
-  transform: translateY(0);
+  box-shadow: 0 0 0 2px var(--ds-color-primary-bg);
 }
 
 /* ===== Validation States ===== */
@@ -81,8 +73,13 @@
 .ds-input[aria-invalid="true"]:focus,
 .ds-input--error:focus {
   border-color: var(--ds-color-state-danger);
-  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+  box-shadow: 0 0 0 2px var(--ds-color-primary-bg); /* Focus ring always primary */
   animation: shake 0.3s ease-in-out;
+}
+
+.ds-input[aria-invalid="true"]:hover:not(:focus),
+.ds-input--error:hover:not(:focus) {
+  box-shadow: 0 0 0 2px var(--ds-color-state-danger); /* Hover ring matches error color */
 }
 
 /* Success - Validated */
@@ -92,7 +89,11 @@
 }
 
 .ds-input--success:focus {
-  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
+  box-shadow: 0 0 0 2px var(--ds-color-primary-bg); /* Focus ring always primary */
+}
+
+.ds-input--success:hover:not(:focus) {
+  box-shadow: 0 0 0 2px var(--ds-color-state-success); /* Hover ring matches success color */
 }
 
 /* Warning - Soft validation */
@@ -102,7 +103,11 @@
 }
 
 .ds-input--warning:focus {
-  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+  box-shadow: 0 0 0 2px var(--ds-color-primary-bg); /* Focus ring always primary */
+}
+
+.ds-input--warning:hover:not(:focus) {
+  box-shadow: 0 0 0 2px var(--ds-color-state-warning); /* Hover ring matches warning color */
 }
 
 /* HTML5 Validation - DISABLED BY DEFAULT
