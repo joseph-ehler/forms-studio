@@ -44,6 +44,8 @@ import { enforceCheckboxPrimitiveV1_0 } from './transforms/enforce-checkbox-prim
 import { enforceWCAGContrastV1_0 } from './transforms/enforce-wcag-contrast.mjs';
 import { noHardcodedColorsV1_0 } from './transforms/no-hardcoded-colors-v1.0.mjs';
 import { enforceTogglePrimitiveV1_0 } from './transforms/enforce-toggle-primitive-v1.0.mjs';
+import enforceOverlayA11yV1_0 from './transforms/enforce-overlay-a11y-v1.0.mjs';
+import enforceOverlayKeysV1_0 from './transforms/enforce-overlay-keys-v1.0.mjs';
 
 const TRANSFORMS = [
   filterDomPropsV1_1(), // v1.1: AST-based auto-fix for prop leakage
@@ -56,6 +58,8 @@ const TRANSFORMS = [
   enforceCheckboxPrimitiveV1_0(), // v1.5: Enforce .ds-checkbox for checkboxes (auto-fix)
   enforceTogglePrimitiveV1_0(), // v1.7: Enforce .ds-toggle for toggles (auto-fix)
   enforceWCAGContrastV1_0(), // v1.6: WCAG AA contrast validation (report-only)
+  // enforceOverlayA11yV1_0(), // v1.8: Overlay accessibility (report-only + auto-fix) 🆕 DISABLED for now
+  // enforceOverlayKeysV1_0(), // v1.8: Overlay keyboard nav (report-only) 🆕 DISABLED for now
   // Future transforms:
   // normalizeImports({ canonical: { useMotion: '@intstudio/ds/utils' } }),
   // extractComposite(),
