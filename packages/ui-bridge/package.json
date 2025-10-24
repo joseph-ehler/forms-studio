@@ -1,19 +1,42 @@
 {
   "name": "@intstudio/ui-bridge",
   "version": "0.1.0",
+  "description": "Flowbite component wrappers with React Hook Form integration",
   "type": "module",
-  "main": "./src/index.ts",
-  "types": "./src/index.ts",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
-    ".": "./src/index.ts",
-    "./*": "./src/*.tsx"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --format esm,cjs --dts --clean",
+    "dev": "tsup src/index.ts --format esm,cjs --dts --watch",
+    "typecheck": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "react-hook-form": "^7.51.0",
+    "zod": "^3.23.0"
   },
   "dependencies": {
+    "flowbite": "^3.1.2",
     "flowbite-react": "^0.12.9",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "@hookform/resolvers": "^3.3.4"
   },
   "devDependencies": {
-    "typescript": "^5.9.3"
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-hook-form": "^7.51.0",
+    "tsup": "^8.0.2",
+    "typescript": "^5.9.3",
+    "zod": "^3.23.8"
   }
 }

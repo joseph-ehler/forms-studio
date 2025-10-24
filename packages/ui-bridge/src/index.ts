@@ -1,18 +1,25 @@
 /**
- * UI Bridge - Thin wrapper around Flowbite components
- * Provides consistent defaults and easy future swaps
+ * @intstudio/ui-bridge - Flowbite wrappers with RHF
  */
 
-export { Input } from './Input';
-export type { InputProps } from './Input';
+// Form with Zod integration
+export { Form } from './rhf/Form';
+export type { FormProps } from './rhf/Form';
 
-export { Button } from './Button';
-export type { ButtonProps } from './Button';
+// Form fields
+export { Input } from './form/Input';
+export type { InputProps } from './form/Input';
 
-export { Select } from './Select';
-export type { SelectProps } from './Select';
+export { Select } from './form/Select';
+export type { SelectProps } from './form/Select';
 
-// Re-export commonly used Flowbite components directly
+export { Button } from './form/Button';
+export type { ButtonProps } from './form/Button';
+
+// Field utilities
+export { useFieldIds } from './form/Field';
+
+// Re-export commonly used Flowbite components
 export {
   Checkbox,
   Textarea,

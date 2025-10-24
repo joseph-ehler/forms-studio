@@ -1,36 +1,10 @@
 /**
- * @intelligence-studio/wizard-core
- * 
- * Headless wizard engine with expression evaluation, flow validation, and runtime.
- * 
- * @packageDocumentation
+ * @intstudio/core - Schema & form utilities
  */
 
-// Expression Engine
-export {
-  evaluateExpression,
-  type ExpressionContext,
-  type ExpressionResult,
-  type FieldState,
-} from './expression-engine'
+// Schema exports
+export * from './schema/types';
+export * from './schema/helpers';
 
-// Flow Schema & Validation
-export {
-  FlowSchema,
-  ChapterSchema,
-  StepSchema,
-  FieldSchema,
-  ValidationLogicSchema,
-  DataSourceSchema,
-  type FlowConfig,
-  type ChapterConfig,
-  type StepConfig,
-  type FieldConfig,
-  type PrivacyConfig,
-  type DataSourceConfig,
-} from './flow-schema'
-
-export {
-  validateFlow,
-  type ValidationResult,
-} from './flow-validator'
+// Form spec exports  
+export * from './form/spec';

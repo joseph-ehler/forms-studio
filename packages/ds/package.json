@@ -1,7 +1,7 @@
 {
   "name": "@intstudio/ds",
   "version": "0.3.0",
-  "description": "Intelligence Studio Design System - tokens, primitives, patterns, shell components, and accessibility layer",
+  "description": "Intelligence Studio Design System - Route shells, hooks, and design tokens",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -20,16 +20,8 @@
   ],
   "scripts": {
     "build": "tsup src/index.ts --format esm,cjs --dts --clean",
-    "postbuild": "node scripts/check-size.mjs && node ../../scripts/hygiene/check-import-canonical.mjs",
     "dev": "tsup src/index.ts --format esm,cjs --dts --watch",
-    "typecheck": "tsc --noEmit",
-    "guard:ds": "node scripts/guard-ds.js",
-    "guard:atoms": "node scripts/guard-atoms.js",
-    "test:smoke": "playwright test tests/*.spec.ts",
-    "lint:css": "stylelint 'src/**/*.css'",
-    "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build",
-    "precommit": "pnpm run guard:ds && pnpm run guard:atoms && pnpm run typecheck"
+    "typecheck": "tsc --noEmit"
   },
   "keywords": [
     "design-system",
@@ -58,28 +50,14 @@
     "react": "^18.0.0",
     "react-dom": "^18.0.0"
   },
-  "dependencies": {
-    "@floating-ui/react": "^0.27.16",
-    "@headlessui/react": "^2.2.9",
-    "@intstudio/core": "workspace:*",
-    "date-fns": "^4.1.0",
-    "react-colorful": "^5.6.1",
-    "react-day-picker": "^9.11.1"
-  },
+  "dependencies": {},
   "devDependencies": {
-    "@storybook/addon-a11y": "^8.6.14",
-    "@storybook/addon-essentials": "^8.6.14",
-    "@storybook/react": "^8.6.14",
-    "@storybook/react-vite": "^8.6.14",
     "@types/node": "^20.11.0",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-hook-form": "^7.51.0",
-    "storybook": "^8.6.14",
     "tsup": "^8.0.2",
-    "typescript": "^5.4.5",
-    "zod": "^3.22.0"
+    "typescript": "^5.9.3"
   }
 }

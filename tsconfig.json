@@ -1,23 +1,18 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "module": "ESNext",
-    "moduleResolution": "bundler",
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
-    "jsx": "react-jsx",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
     "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true,
+    "jsx": "react-jsx",
     "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true,
+    "skipLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@ds/overlay": ["packages/wizard-react/src/components/overlay/index.ts"],
-      "@ds/typography": ["packages/wizard-react/src/components/typography/index.ts"],
-      "@ds/tokens": ["packages/wizard-react/src/tokens/index.ts"]
+      "@intstudio/ds": ["./packages/ds/src"],
+      "@intstudio/core": ["./packages/core/src"],
+      "@intstudio/ui-bridge": ["./packages/ui-bridge/src"]
     }
   }
 }

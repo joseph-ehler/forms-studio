@@ -1,7 +1,7 @@
 {
   "name": "@intstudio/core",
   "version": "0.1.0",
-  "description": "Headless wizard engine: expression parser, flow runtime, validation",
+  "description": "Core utilities - Zod schemas, form specs, and JSON codecs",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -13,45 +13,17 @@
       "require": "./dist/index.cjs"
     }
   },
-  "files": [
-    "dist",
-    "README.md"
-  ],
   "scripts": {
     "build": "tsup src/index.ts --format esm,cjs --dts --clean",
     "dev": "tsup src/index.ts --format esm,cjs --dts --watch",
-    "test": "vitest run",
-    "test:watch": "vitest",
-    "typecheck": "tsc --noEmit",
-    "clean": "rm -rf dist"
+    "typecheck": "tsc --noEmit"
   },
-  "keywords": [
-    "wizard",
-    "forms",
-    "flow",
-    "expression-engine",
-    "validation",
-    "json-schema"
-  ],
-  "author": "Intelligence Studio",
-  "license": "Apache-2.0",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/joseph-ehler/intelligence-studio.git",
-    "directory": "packages/core"
-  },
-  "homepage": "https://github.com/joseph-ehler/intelligence-studio#readme",
-  "bugs": {
-    "url": "https://github.com/joseph-ehler/intelligence-studio/issues"
-  },
-  "peerDependencies": {
-    "zod": "^3.22.0"
+  "dependencies": {
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/node": "^20.11.0",
     "tsup": "^8.0.2",
-    "typescript": "^5.4.5",
-    "vitest": "^1.5.0",
-    "zod": "^3.22.0"
+    "typescript": "^5.9.3"
   }
 }

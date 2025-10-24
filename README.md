@@ -1,115 +1,28 @@
-# Intelligence Studio
+# Intelligence Studio Forms
 
-**A platform for building beautiful, accessible web applications.**
-
-Intelligence Studio provides enterprise-grade tools for modern web development:
-- **Design System Studio** - Tokens, primitives, patterns, and accessibility
-- **Form Studio** - AI-authorable, privacy-first, JSON-driven forms
-- **Shared Core** - Expression engine, data sources, validation
-
----
-
-## 🎯 **Why Forms Studio?**
-
-### **Your Unfair Advantages**
-
-1. **AI-Authorable** - Flows from a 3-line brief → validated JSON
-2. **Production-Grade Data Layer** - SSRF protection, retry+jitter, circuit breakers, cache, abort signals
-3. **Privacy-First** - Required classification/purpose/retention/allowInAI tags
-4. **Developer-First** - JSON Schema, CLI, SDK, 100% tested
-5. **Self-Host Anywhere** - React, Web Components, Node, Edge, SSR
-
-**They have:** Pretty UIs + SaaS storage + webhooks  
-**We have:** The entire reliability/security/privacy/AI layer they're missing
-
----
+**Fresh, minimal monorepo for building platforms quickly.**
 
 ## 📦 **Packages**
 
-### **Design System Studio**
-```bash
-npm install @intstudio/ds
-```
+### `@intstudio/ds`
+Route shells + hooks + design tokens (your IP)
+- `FullScreenRoute`, `RoutePanel`, `FlowScaffold`
+- `useFocusTrap`, `useSubFlow`, `useOverlayPolicy`
+- Design tokens (colors, spacing, shadows, z-index)
 
-- **Tokens** - Color, typography, spacing, widths
-- **Primitives** - Stack, Grid, Container, Section, Button, Card
-- **Patterns** - Page layouts, card patterns
-- **Shell** - TopBar, Drawer, BottomNav, AppContent
-- **A11y** - Accessibility presets, focus management
-- **White-label** - Brand packs, theme system
+### `@intstudio/core`
+Zod schemas + form specs + utilities
+- Schema-first validation
+- Light JSON form specs (optional)
+- Type-safe helpers
 
-→ [Design System Demo](packages/ds/demo)
-
-### **Form Studio** (Coming Soon)
-```bash
-npm install @intstudio/forms
-```
-
-- AI-authorable JSON flows
-- Privacy-first data handling
-- Enterprise-grade validation
-- Dynamic field registry
-
-### **Core Libraries**
-
-**[@intstudio/core](packages/core)**
-- Expression engine
-- Flow runtime
-- Validation contracts
-
-**[@intstudio/datasources](packages/datasources)**
-- Data source manager
-- SSRF protection
-- Retry + circuit breaker
-- Privacy classification
-
-**[@intstudio/eslint-plugin-cascade](packages/eslint-plugin-cascade)**
-- Design system guardrails
-- Import rules
-- Best practices
-
----
+### `@intstudio/ui-bridge`
+Flowbite wrappers with React Hook Form
+- `Form` (Zod + RHF integration)
+- `Input`, `Select`, `Button` (with label/hint/error)
+- Re-exports of Flowbite components
 
 ## 🚀 **Quick Start**
-
-### **Design System**
-
-```typescript
-import { Stack, Button, Section, Container } from '@intstudio/ds'
-
-export function App() {
-  return (
-    <Section bg="base" paddingY="lg">
-      <Container maxWidth="standard" padding>
-        <Stack spacing="comfortable">
-          <h1>Welcome to Intelligence Studio</h1>
-          <Button size="lg" variant="primary">
-            Get Started
-          </Button>
-        </Stack>
-      </Container>
-    </Section>
-  )
-}
-```
-
-### **Forms** (Coming Soon)
-
-```typescript
-import { FormWizard } from '@intstudio/forms'
-import { createRuntime } from '@intstudio/core'
-import flow from './flow.json'
-
-const runtime = createRuntime({ flow })
-
-export function Wizard() {
-  return <FormWizard runtime={runtime} />
-}
-```
-
----
-
-## 🏗️ **Development**
 
 ```bash
 # Install dependencies
@@ -118,72 +31,72 @@ pnpm install
 # Build all packages
 pnpm build
 
-# Run tests
-pnpm test
-
-# Develop
-pnpm dev
+# Run playground
+pnpm play
 ```
 
-### **📚 Storybook**
+## 💡 **Usage Example**
 
-We use a **per-package Storybook architecture** for fast development and clear boundaries:
+```tsx
+import { FullScreenRoute } from '@intstudio/ds';
+import { Form, Input, Select, Button } from '@intstudio/ui-bridge';
+import { CreateProjectSchema } from '@intstudio/core';
+
+export function CreateProject() {
+  return (
+    <FullScreenRoute ariaLabel="Create project">
+      <div className="max-w-md mx-auto p-6">
+        <Form
+          schema={CreateProjectSchema}
+          defaultValues={{ visibility: 'private' }}
+          onSubmit={(data) => console.log(data)}
+        >
+          <Input name="name" label="Project name" required />
+          <Input name="email" label="Owner email" type="email" />
+          <Select
+            name="visibility"
+            label="Visibility"
+            options={[
+              { value: 'private', label: 'Private' },
+              { value: 'team', label: 'Team' },
+              { value: 'public', label: 'Public' },
+            ]}
+          />
+          <Button type="submit">Create</Button>
+        </Form>
+      </div>
+    </FullScreenRoute>
+  );
+}
+```
+
+## 🎯 **Philosophy**
+
+**Speed > Perfection**
+- Use Flowbite for UI (battle-tested, fast)
+- Custom route shells for app structure
+- Schema-first with Zod (type-safe, validated)
+- AI-friendly (minimal boilerplate)
+
+**What This Is NOT:**
+- ❌ Not a component factory
+- ❌ Not trying to be one-size-fits-all
+- ❌ Not reinventing Flowbite
+
+**What This IS:**
+- ✅ Fast platform for building platforms
+- ✅ Schema-first forms with Zod + RHF
+- ✅ High-value route shells (your IP)
+- ✅ Clean, minimal, organized
+
+## 🔄 **Rollback**
+
+Safety tag created: `pre-nuke-2025-10-24`
 
 ```bash
-# DS primitives only (fast, isolated)
-pnpm --filter @intstudio/ds storybook
-
-# Form fields only (fast, isolated)
-pnpm --filter @intstudio/forms storybook
-
-# All packages (unified showcase)
-pnpm storybook:all
+git checkout pre-nuke-2025-10-24
 ```
 
-**Architecture:**
-- Each package has its own Storybook (6006, 6007)
-- Root Storybook composes them (6008) for design review
-- 3x faster HMR, zero coupling between packages
-
-See [Storybook Architecture](docs/architecture/STORYBOOK_ARCHITECTURE.md) for details.
-
 ---
 
-## 📄 **License**
-
-- **Core packages**: Apache 2.0
-- **UI packages**: MIT
-- **Premium kits**: Commercial (coming soon)
-
----
-
-## 🎉 **Status**
-
-### **Design System Studio**
-✅ Design tokens (color, spacing, typography, widths)  
-✅ Primitives (Stack, Grid, Button, Container, Section, Card, etc.)  
-✅ Patterns (10 layout patterns, 6 card patterns)  
-✅ Shell components (TopBar, Drawer, BottomNav, AppContent)  
-✅ A11y layer (presets, focus management, ARIA)  
-✅ White-label (brand packs, theme system)  
-✅ Guardrails (ESLint rules, Stylelint rules)  
-🚧 Storybook (coming in 2 weeks)  
-🚧 Visual regression tests  
-
-### **Form Studio**
-✅ Expression engine (core logic)  
-✅ Data source manager (79/79 tests)  
-✅ Flow validator  
-🚧 Form components (migrating to use @intstudio/ds)  
-🚧 Field registry  
-🚧 Documentation  
-
-### **v0.3.0** - October 2025
-- Soft-extracted Design System as `@intstudio/ds`
-- Reorganized to platform structure
-- Added comprehensive guardrails
-- Fixed 9 critical bugs (buttons, icons, MediaContainer)  
-
----
-
-**Built with ❤️ by Intelligence Studio**
+**Built for velocity. Optimized for clarity.**
