@@ -1,0 +1,157 @@
+/**
+ * RoutePanel styles
+ * Desktop-first persistent panel (non-modal)
+ * DS tokens only, no magic values
+ */
+
+.ds-route-panel {
+  /* Layout: fixed side panel */
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  width: min(420px, 36vw);
+  
+  /* Visual */
+  background: var(--ds-color-surface-base);
+  box-shadow: var(--ds-shadow-layer-2);
+  
+  /* Stack: panel lane (lower than modal) */
+  z-index: var(--ds-z-lane-panel);
+  
+  /* Grid: header / content */
+  display: grid;
+  grid-template-rows: auto 1fr;
+  
+  /* Non-modal: background stays interactive */
+  pointer-events: auto;
+  
+  /* Focus */
+  outline: none;
+}
+
+/* Position variants */
+.ds-route-panel--right {
+  right: 0;
+  border-left: 1px solid var(--ds-color-border-subtle);
+}
+
+.ds-route-panel--left {
+  left: 0;
+  border-right: 1px solid var(--ds-color-border-subtle);
+}
+
+/* Header */
+.ds-route-panel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ds-space-3);
+  padding: var(--ds-space-4);
+  border-bottom: 1px solid var(--ds-color-border-subtle);
+  background: var(--ds-color-surface-base);
+}
+
+.ds-route-panel__title {
+  flex: 1;
+  margin: 0;
+  font-size: var(--ds-font-size-lg);
+  font-weight: var(--ds-font-weight-semibold);
+  
+  /* Truncate */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ds-route-panel__close {
+  width: var(--ds-touch-target);
+  height: var(--ds-touch-target);
+  flex-shrink: 0;
+  
+  /* Visual */
+  border: none;
+  border-radius: var(--ds-radius-full);
+  background: var(--ds-color-surface-hover);
+  color: var(--ds-color-text);
+  
+  /* Center icon */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--ds-font-size-lg);
+  
+  /* Interaction */
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.ds-route-panel__close:hover {
+  background: var(--ds-color-surface-active);
+}
+
+.ds-route-panel__close:active {
+  transform: scale(0.95);
+}
+
+/* Content */
+.ds-route-panel__content {
+  overflow: auto;
+  padding: var(--ds-space-4);
+  
+  /* Smooth scroll */
+  scroll-behavior: smooth;
+  overscroll-behavior: contain;
+}
+
+/* Mobile: collapse to full-width sheet */
+@media (max-width: 768px) {
+  .ds-route-panel {
+    /* Full width on mobile */
+    width: 100%;
+    left: 0;
+    right: 0;
+    
+    /* Slide up from bottom */
+    top: auto;
+    border-left: none;
+    border-right: none;
+    border-top: 1px solid var(--ds-color-border-subtle);
+    border-radius: var(--ds-radius-lg) var(--ds-radius-lg) 0 0;
+    
+    /* Max height */
+    max-height: 85vh;
+  }
+}
+
+/* RTL support */
+[dir="rtl"] .ds-route-panel--right {
+  right: auto;
+  left: 0;
+  border-left: none;
+  border-right: 1px solid var(--ds-color-border-subtle);
+}
+
+[dir="rtl"] .ds-route-panel--left {
+  left: auto;
+  right: 0;
+  border-right: none;
+  border-left: 1px solid var(--ds-color-border-subtle);
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .ds-route-panel__content {
+    scroll-behavior: auto;
+  }
+  
+  .ds-route-panel__close {
+    transition: none;
+  }
+}
+
+/* Print: hide panels */
+@media print {
+  .ds-route-panel {
+    display: none !important;
+  }
+}

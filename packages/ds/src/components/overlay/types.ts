@@ -80,7 +80,7 @@ export interface OverlayPositionData {
   EventWrapper: React.FC<React.HTMLAttributes<HTMLDivElement>>
 }
 
-export interface OverlaySheetProps {
+export interface SheetDialogProps {
   open: boolean
   onClose: () => void
   maxHeight?: number

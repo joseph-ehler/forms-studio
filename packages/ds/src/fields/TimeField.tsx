@@ -21,7 +21,7 @@ import { FormLabel, FormHelperText } from '../components'
 import { FormStack, FormGrid, Stack } from '../components'
 import { resolveTypographyDisplay, getTypographyFromJSON } from './utils/typography-display'
 import { mergeFieldConfig } from './utils/field-json-config'
-import { OverlayPickerCore, OverlayPicker, OverlaySheet, PickerFooter } from '../components/overlay'
+import { OverlayPickerCore, OverlayPicker, SheetDialog, PickerFooter  } from '../components/overlay'
 import { useDeviceType } from '../hooks/useDeviceType'
 
 export const TimeField: React.FC<FieldComponentProps> = ({
@@ -379,7 +379,7 @@ export const TimeField: React.FC<FieldComponentProps> = ({
 
                   {/* Mobile Sheet */}
                   {isMobile && isOpen && (
-                    <OverlaySheet
+                    <SheetDialog
                       open={isOpen}
                       onClose={() => close('outside')}
                       maxHeight={560}
@@ -456,7 +456,7 @@ export const TimeField: React.FC<FieldComponentProps> = ({
                           )}
                         </div>
                       </div>
-                    </OverlaySheet>
+                    </SheetDialog>
                   )}
 
                   {/* Desktop Popover */}

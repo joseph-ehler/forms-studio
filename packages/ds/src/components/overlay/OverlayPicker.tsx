@@ -287,7 +287,7 @@ export const OverlayPicker: React.FC<OverlayPickerProps> = ({
     ...floatingStyles,
     maxHeight: `${maxHRef.current}px`,
     contain: 'layout',
-    zIndex: getZIndex('overlay'),
+    zIndex: getZIndex('picker'),
     ...style,
   }
 

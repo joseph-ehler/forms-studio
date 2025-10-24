@@ -1,0 +1,51 @@
+/**
+ * FullScreenRoute styles
+ * Macro-level navigation shell
+ * DS tokens only, no magic values
+ */
+
+.ds-fullscreen-route {
+  /* Layout: fixed full-screen */
+  position: fixed;
+  inset: 0;
+  
+  /* Visual */
+  background: var(--ds-color-surface-base);
+  
+  /* Stack */
+  z-index: var(--ds-z-lane-modal);
+  
+  /* Grid: header / content / footer */
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  
+  /* Contain layout shifts */
+  contain: layout size style;
+  
+  /* Accessibility */
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+
+/* Reduced motion: disable animations */
+@media (prefers-reduced-motion: reduce) {
+  .ds-fullscreen-route {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* Mobile: safe area insets */
+@supports (padding: env(safe-area-inset-top)) {
+  .ds-fullscreen-route {
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* Print: hide full-screen routes */
+@media print {
+  .ds-fullscreen-route {
+    display: none !important;
+  }
+}

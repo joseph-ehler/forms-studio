@@ -24,7 +24,7 @@ import { FormLabel, FormHelperText, Stack } from '../components'
 import { resolveTypographyDisplay, getTypographyFromJSON } from './utils/typography-display'
 import { mergeFieldConfig } from './utils/field-json-config'
 import { useDeviceType } from '../hooks/useDeviceType'
-import { OverlayPickerCore, OverlayPicker, OverlaySheet } from '../components/overlay'
+import { OverlayPickerCore, OverlayPicker, SheetDialog  } from '../components/overlay'
 import { PickerList, PickerOption, PickerSearch, PickerEmptyState } from '../components/picker'
 
 export const MultiSelectField: React.FC<FieldComponentProps> = ({
@@ -203,7 +203,7 @@ export const MultiSelectField: React.FC<FieldComponentProps> = ({
                   {/* Content: Sheet on mobile, Popover on desktop */}
                   {isOpen && (
                     presentation === 'sheet' || isMobile ? (
-                      <OverlaySheet
+                      <SheetDialog
                         open={isOpen}
                         onClose={() => close('outside')}
                         maxHeight={ui.maxHeight ?? 560}
@@ -276,7 +276,7 @@ export const MultiSelectField: React.FC<FieldComponentProps> = ({
                             )}
                           </PickerList>
                         </div>
-                      </OverlaySheet>
+                      </SheetDialog>
                     ) : (
                       <OverlayPicker
                         open={isOpen}

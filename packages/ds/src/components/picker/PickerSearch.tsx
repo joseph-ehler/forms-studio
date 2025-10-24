@@ -52,93 +52,81 @@ export const PickerSearch: React.FC<PickerSearchProps> = ({
     inputRef.current?.focus()
   }
 
+  // ACCEPTANCE CRITERIA C: Search input with proper adornment structure
   return (
     <div 
-      className="relative"
+      className="ds-input-wrap"
       onClick={(e) => e.stopPropagation()}
       onMouseDown={(e) => e.stopPropagation()}
     >
-        {/* Search icon */}
-        <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+      {/* Search icon - left adornment */}
+      <span className="ds-input-adorn-left" aria-hidden="true">
+        <svg
+          style={{ width: '20px', height: '20px', color: 'var(--ds-color-text-muted)' }}
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+          />
+        </svg>
+      </span>
+
+      {/* Input with proper padding classes */}
+      <input
+        ref={inputRef}
+        type="search"
+        value={localValue}
+        onChange={(e) => setLocalValue(e.target.value)}
+        onClick={(e) => e.stopPropagation()}
+        onMouseDown={(e) => e.stopPropagation()}
+        placeholder={placeholder}
+        className="ds-input ds-input--sm ds-input--pad-left ds-input--pad-right"
+        aria-label="Search"
+        autoFocus={autoFocus}
+      />
+
+      {/* Clear button - right adornment (clickable) */}
+      {localValue && (
+        <button
+          type="button"
+          className="ds-input-adorn-right ds-input-adorn-clickable"
+          onClick={(e) => {
+            e.stopPropagation()
+            handleClear()
+          }}
+          onMouseDown={(e) => e.stopPropagation()}
+          style={{
+            color: 'var(--ds-color-text-muted)',
+            transition: 'color 150ms',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.color = 'var(--ds-color-text-secondary)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.color = 'var(--ds-color-text-muted)';
+          }}
+          aria-label="Clear search"
+        >
           <svg
-            style={{ width: '20px', height: '20px', color: 'var(--ds-color-text-muted)' }}
+            style={{ width: '20px', height: '20px' }}
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
-            aria-hidden="true"
           >
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
               strokeWidth={2}
-              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              d="M6 18L18 6M6 6l12 12"
             />
           </svg>
-        </div>
-
-        {/* Input */}
-        <input
-          ref={inputRef}
-          type="search"
-          value={localValue}
-          onChange={(e) => setLocalValue(e.target.value)}
-          onClick={(e) => e.stopPropagation()}
-          onMouseDown={(e) => e.stopPropagation()}
-          placeholder={placeholder}
-          className="ds-input"
-          style={{
-            paddingLeft: '40px',  // Space for search icon
-            paddingRight: '40px', // Space for clear button
-          }}
-          aria-label="Search"
-        />
-
-        {/* Clear button */}
-        {localValue && (
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation()
-              handleClear()
-            }}
-            onMouseDown={(e) => e.stopPropagation()}
-            style={{
-              position: 'absolute',
-              top: 0,
-              bottom: 0,
-              right: 0,
-              display: 'flex',
-              alignItems: 'center',
-              paddingRight: '12px',
-              color: 'var(--ds-color-text-muted)',
-              background: 'none',
-              border: 'none',
-              cursor: 'pointer',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.color = 'var(--ds-color-text-secondary)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.color = 'var(--ds-color-text-muted)';
-            }}
-            aria-label="Clear search"
-          >
-            <svg
-              className="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              aria-hidden="true"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
-          </button>
-        )}
+        </button>
+      )}
     </div>
   )
 }

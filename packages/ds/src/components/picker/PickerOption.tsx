@@ -28,6 +28,7 @@ export const PickerOption: React.FC<PickerOptionProps> = ({
 
   const [isHovered, setIsHovered] = React.useState(false);
 
+  // ACCEPTANCE CRITERIA D: List item with hover scrim for proper theme layering
   return (
     <div
       role="option"
@@ -41,36 +42,55 @@ export const PickerOption: React.FC<PickerOptionProps> = ({
       }}
       onMouseLeave={() => setIsHovered(false)}
       style={{
+        position: 'relative',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        padding: '10px 12px',
-        minHeight: '44px',
+        padding: 'var(--ds-space-3, 12px) var(--ds-space-4, 16px)',
+        minBlockSize: '48px',  // WCAG AAA - logical property
         fontSize: '14px',
-        color: 'var(--ds-color-text-primary)',
+        lineHeight: '1.5',
+        borderRadius: 'var(--ds-radius-md, 6px)',
+        textAlign: 'start',
+        color: selected ? 'var(--ds-color-primary-text, white)' : 'var(--ds-color-text-primary)',
         cursor: disabled ? 'not-allowed' : 'pointer',
-        transition: 'all 150ms ease',
-        backgroundColor:
-          selected || active
-            ? 'color-mix(in oklab, var(--ds-color-primary-bg), transparent 90%)'
-            : isHovered && !disabled
-            ? 'var(--ds-color-surface-subtle)'
-            : 'transparent',
+        backgroundColor: selected 
+          ? 'var(--ds-color-primary-bg)' 
+          : 'transparent',
         opacity: disabled ? 0.5 : 1,
+        transition: 'background-color 150ms ease',
       }}
     >
+      {/* Hover scrim - overlays on top for proper theme layering */}
+      <span
+        className="ds-hover-scrim"
+        style={{
+          position: 'absolute',
+          inset: 0,
+          pointerEvents: 'none',
+          opacity: isHovered && !disabled ? 1 : 0,
+          transition: 'opacity 150ms',
+          background: selected 
+            ? 'rgba(0, 0, 0, 0.10)'  // Darken selected items on hover
+            : 'var(--ds-color-primary-bg-subtle, rgba(0, 0, 0, 0.05))',  // Subtle highlight
+          borderRadius: 'inherit',
+        }}
+        aria-hidden="true"
+      />
+
       {/* Content */}
-      <span className="flex-1">{children}</span>
+      <span style={{ position: 'relative', flex: 1 }}>{children}</span>
 
       {/* Selected checkmark */}
       {selected && (
         <svg
           style={{
+            position: 'relative',
             width: '20px',
             height: '20px',
-            color: 'var(--ds-color-primary-bg)',
+            color: 'currentColor',
             flexShrink: 0,
-            marginLeft: '8px',
+            marginInlineStart: 'var(--ds-space-2, 8px)',
           }}
           fill="none"
           viewBox="0 0 24 24"

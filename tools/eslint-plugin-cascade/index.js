@@ -6,6 +6,15 @@
 
 module.exports = {
   rules: {
+    // Sheet system rules
+    'sheet-no-panel-on-dialog': require('./rules/sheet-no-panel-on-dialog'),
+    
+    // Route system rules
+    'routes-require-aria-label': require('./rules/routes-require-aria-label'),
+    
+    // Styling enforcement
+    'no-inline-appearance': require('./rules/no-inline-appearance'),
+    
     /**
      * no-manual-scroll-containers
      * 

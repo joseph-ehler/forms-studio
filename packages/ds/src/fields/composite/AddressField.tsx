@@ -8,7 +8,7 @@
 
 import React, { Fragment, useMemo, useState } from 'react'
 import { Controller } from 'react-hook-form'
-import { OverlayPickerCore, OverlaySheet, OverlayPicker } from '../../components/overlay'
+import { OverlayPickerCore, SheetDialog, OverlayPicker  } from '../../components/overlay'
 import { PickerList, PickerOption, PickerSearch, PickerEmptyState } from '../../components/picker'
 import { useDeviceType } from '../../hooks/useDeviceType'
 
@@ -235,7 +235,7 @@ export const AddressField: React.FC<FieldComponentProps> = ({
 
                           {/* Mobile Sheet */}
                           {isMobile && isOpen && (
-                            <OverlaySheet
+                            <SheetDialog
                               open={isOpen}
                               onClose={() => {
                                 close('outside')
@@ -277,7 +277,7 @@ export const AddressField: React.FC<FieldComponentProps> = ({
                                   })
                                 )}
                               </PickerList>
-                            </OverlaySheet>
+                            </SheetDialog>
                           )}
 
                           {/* Desktop Picker */}
@@ -397,7 +397,7 @@ export const AddressField: React.FC<FieldComponentProps> = ({
 
                           {/* Mobile Sheet */}
                           {isMobile && isOpen && (
-                            <OverlaySheet
+                            <SheetDialog
                               open={isOpen}
                               onClose={() => {
                                 close('outside')
@@ -439,7 +439,7 @@ export const AddressField: React.FC<FieldComponentProps> = ({
                                   })
                                 )}
                               </PickerList>
-                            </OverlaySheet>
+                            </SheetDialog>
                           )}
 
                           {/* Desktop Picker */}

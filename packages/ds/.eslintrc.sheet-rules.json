@@ -1,0 +1,8 @@
+{
+  "plugins": ["./eslint-plugin-ds"],
+  "rules": {
+    "eslint-plugin-ds/no-sheet-dialog-drag-dismiss": "error",
+    "eslint-plugin-ds/panel-no-modal-props": "error",
+    "eslint-plugin-ds/no-manual-overlay-zindex": "error"
+  }
+}

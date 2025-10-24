@@ -23,7 +23,7 @@ import { mergeFieldConfig } from './utils/field-json-config'
 import { getAriaProps, getLabelProps, getDescriptionProps } from './utils/a11y-helpers'
 import { DayPicker } from 'react-day-picker'
 import { format, isValid } from 'date-fns'
-import { OverlayPickerCore, OverlaySheet, OverlayPicker, CalendarSkin, PickerFooter } from '../components/overlay'
+import { OverlayPickerCore, SheetDialog, OverlayPicker, CalendarSkin, PickerFooter  } from '../components/overlay'
 import { useDeviceType } from '../hooks/useDeviceType'
 
 // Local (tz-safe) conversion helpers
@@ -158,7 +158,7 @@ export const DateField: React.FC<FieldComponentProps> = ({
 
                   {/* Mobile Sheet */}
                   {isMobile && isOpen && (
-                    <OverlaySheet
+                    <SheetDialog
                       open={isOpen}
                       onClose={() => close('outside')}
                       maxHeight={560}
@@ -193,7 +193,7 @@ export const DateField: React.FC<FieldComponentProps> = ({
                           }}
                         />
                       </div>
-                    </OverlaySheet>
+                    </SheetDialog>
                   )}
 
                   {/* Desktop Popover */}

@@ -26,9 +26,8 @@ export { Stack } from './Stack';
 export { Text } from './Text';
 export { VideoPlayer } from './VideoPlayer';
 
-// Overlay system (responsive popover/sheet)
+// Overlay system (layout atoms only - ResponsiveOverlay moved to components/overlay)
 export {
-  ResponsiveOverlay,
   OverlayHeader,
   OverlayContent,
   OverlayFooter,
@@ -37,7 +36,6 @@ export {
   Option
 } from './overlay';
 export type {
-  ResponsiveOverlayProps,
   OverlayHeaderProps,
   OverlayContentProps,
   OverlayFooterProps,

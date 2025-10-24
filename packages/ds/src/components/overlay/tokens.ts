@@ -8,11 +8,20 @@
  */
 
 export const OVERLAY_TOKENS = {
-  /** Z-index for all overlay containers (portal + sheet) */
+  // Z-index lanes for different overlay types
+  lanes: {
+    panel: 700,   // Non-modal app panels (map + panel, filters)
+    modal: 900,   // Modal dialogs (field pickers, forms)
+    toast: 1100,  // Toasts, notifications
+  },
+  
+  // Legacy z-index values (deprecated, use lanes instead)
   zIndex: {
-    backdrop: 1000,
+    backdrop: 899,  // Just below modal lane
     overlay: 1001,
-    sheet: 1002,
+    sheet: 900,     // Modal lane
+    picker: 901,    // Modal lane + 1
+    panel: 700,     // Panel lane
   },
 
   /** Default positioning offsets */
@@ -81,10 +90,30 @@ export function getResponsiveMaxHeight(viewportHeight: number): number {
 }
 
 /**
- * Helper to get z-index token (type-safe)
+ * Helper to get overlay z-index token (type-safe)
+ * Use this for overlay-specific layers
  */
-export function getZIndex(layer: keyof typeof OVERLAY_TOKENS.zIndex): number {
+export const getOverlayZIndex = (layer: 'backdrop' | 'sheet' | 'picker' | 'panel' | 'toast'): number => {
+  // Map to lanes for new types
+  if (layer === 'panel') return OVERLAY_TOKENS.lanes.panel
+  if (layer === 'toast') return OVERLAY_TOKENS.lanes.toast
+  
+  // Legacy layers
   return OVERLAY_TOKENS.zIndex[layer]
+}
+
+// Alias for backwards compatibility
+export const getZIndex = getOverlayZIndex
+
+/**
+ * Get z-index for a specific lane with optional offset
+ * Useful for stacking multiple overlays in the same lane
+ */
+export const getZIndexForLane = (
+  lane: 'panel' | 'modal' | 'toast',
+  offset: number = 0
+): number => {
+  return OVERLAY_TOKENS.lanes[lane] + offset
 }
 
 /**

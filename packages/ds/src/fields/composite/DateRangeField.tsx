@@ -15,7 +15,7 @@
 
 import React, { Fragment, useState } from 'react'
 import { Controller } from 'react-hook-form'
-import { OverlayPickerCore, OverlaySheet, OverlayPicker, CalendarSkin, PickerFooter } from '../../components/overlay'
+import { OverlayPickerCore, SheetDialog, OverlayPicker, CalendarSkin, PickerFooter  } from '../../components/overlay'
 import { useDeviceType } from '../../hooks/useDeviceType'
 import { DayPicker, DateRange } from 'react-day-picker'
 import { format, parseISO, startOfDay, endOfDay, startOfWeek, endOfWeek, startOfMonth, endOfMonth, startOfYear, endOfYear } from 'date-fns'
@@ -235,7 +235,7 @@ export const DateRangeField: React.FC<FieldComponentProps> = ({
 
                   {/* Mobile Sheet */}
                   {isMobile && isOpen && (
-                    <OverlaySheet
+                    <SheetDialog
                       open={isOpen}
                       onClose={() => close('outside')}
                       maxHeight={560}
@@ -286,7 +286,7 @@ export const DateRangeField: React.FC<FieldComponentProps> = ({
                           numberOfMonths={1}
                         />
                       </div>
-                    </OverlaySheet>
+                    </SheetDialog>
                   )}
 
                   {/* Desktop Popover */}

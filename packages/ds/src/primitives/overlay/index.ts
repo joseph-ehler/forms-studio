@@ -35,10 +35,6 @@ export type {
   OptionGroupProps
 } from './Option';
 
-// Responsive Overlay System (NEW - God Tier!)
-export { ResponsiveOverlay } from './ResponsiveOverlay';
-export type { ResponsiveOverlayProps } from './ResponsiveOverlay';
-
 // Supporting hooks (advanced usage)
 export { useSheetGestures } from './useSheetGestures';
 export { usePopoverPosition } from './usePopoverPosition';

@@ -8,6 +8,7 @@
 import React, { createContext, useContext, useEffect, useRef, useState, useCallback } from 'react'
 import type { OverlayPickerCoreProps, OverlayCloseReason } from './types'
 import { FocusTrap } from '../../lib/focus'
+import { useScrollLock } from './hooks/useScrollLock'
 
 // Context for automatic contentRef wiring - prevents manual wiring bugs
 interface OverlayContextType {
@@ -16,7 +17,7 @@ interface OverlayContextType {
 
 const OverlayContext = createContext<OverlayContextType | null>(null)
 
-// Export hook for OverlaySheet/OverlayPicker to auto-consume contentRef
+// Export hook for SheetDialog/OverlayPicker to auto-consume contentRef
 export const useOverlayContext = () => useContext(OverlayContext)
 
 export interface OverlayPickerCoreComponentProps extends Omit<OverlayPickerCoreProps, 'children'> {
@@ -58,21 +59,8 @@ export const OverlayPickerCore: React.FC<OverlayPickerCoreComponentProps> = ({
     setOpen(false, reason)
   }, [setOpen])
 
-  // Body scroll lock (only handle scroll, focus is handled by FocusTrap)
-  useEffect(() => {
-    if (isOpen && !allowOutsideScroll) {
-      // Lock body scroll
-      const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth
-      document.body.style.overflow = 'hidden'
-      document.body.style.paddingRight = `${scrollbarWidth}px`
-      
-      return () => {
-        // Unlock body scroll
-        document.body.style.overflow = ''
-        document.body.style.paddingRight = ''
-      }
-    }
-  }, [isOpen, allowOutsideScroll])
+  // Cross-platform scroll lock with iOS-specific strategy
+  useScrollLock(isOpen && !allowOutsideScroll)
 
   // Outside click handling
   const handleOutsideClick = useCallback((e: PointerEvent) => {
@@ -108,7 +96,7 @@ export const OverlayPickerCore: React.FC<OverlayPickerCoreComponentProps> = ({
     closeOnSelect,
   }
 
-  // Separate Context for auto-wiring (OverlaySheet/OverlayPicker consume this)
+  // Separate Context for auto-wiring (SheetDialog/OverlayPicker consume this)
   const autoWireContext = {
     contentRef,
   }

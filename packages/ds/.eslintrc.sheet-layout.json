@@ -1,0 +1,32 @@
+{
+  "plugins": ["@intstudio/cascade"],
+  "rules": {
+    "no-restricted-syntax": [
+      "error",
+      {
+        "selector": "Property[key.name='position'][value.value='absolute'] ~ Property[key.name='right']",
+        "message": "Desktop docked panels must use flexbox (flex-shrink: 0), not absolute positioning. Use position: absolute only inside @media (max-width: 768px)."
+      },
+      {
+        "selector": "Property[key.name='opacity'][value.value='0'] ~ Property[key.name='width'][value.value='0']",
+        "message": "Closed panels must use display: none, not opacity: 0 or width: 0, to prevent layout artifacts during breakpoint transitions."
+      }
+    ],
+    "no-restricted-properties": [
+      "error",
+      {
+        "object": "window",
+        "property": "addEventListener",
+        "message": "Resize handlers must NOT close panels. Keep panels open and let CSS handle mode transitions."
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": ["**/Sheet*.tsx", "**/Docked*.tsx", "**/Panel*.tsx"],
+      "rules": {
+        "@intstudio/sheet-layout-rules": "error"
+      }
+    }
+  ]
+}

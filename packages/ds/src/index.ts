@@ -8,6 +8,13 @@
  */
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// 🎯 PROVIDER (wrap your app)
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+export { DSProvider, useDS, useViewport, useDevicePolicy, useResolvedMode } from './DSProvider'
+export type { DSProviderProps } from './DSProvider'
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // 🎨 STYLES (CSS @layer system)
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -59,6 +66,12 @@ export * from './patterns'
 export * from './shell'
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// 🎭 OVERLAY SYSTEM (field pickers + app panels)
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+export * from './components/overlay'
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // ♿ A11Y (accessibility layer)
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -80,9 +93,9 @@ export * from './white-label'
 // 🎭 TOKENS (optional typed tokens map)
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+// Note: getZIndex is exported from ./components/overlay, not from tokens
 // TODO: Create unified tokens object
 // export { tokens } from './tokens'
-export * from './tokens'  // Export individual token modules for now
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // 📝 FIELDS (temporary - will move to @intstudio/forms)

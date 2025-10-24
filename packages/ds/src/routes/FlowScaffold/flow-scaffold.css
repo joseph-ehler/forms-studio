@@ -1,0 +1,146 @@
+/**
+ * FlowScaffold styles
+ * Meso-level sub-flow navigator (wizard/stepper)
+ * DS tokens only, no magic values
+ */
+
+.ds-flow {
+  /* Layout: full height grid */
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  min-height: 100%;
+  
+  /* Visual */
+  color: var(--ds-color-text);
+  background: var(--ds-color-surface-base);
+}
+
+/* Header */
+.ds-flow__header {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-3);
+  padding: var(--ds-space-4) var(--ds-space-5);
+  background: var(--ds-color-surface-base);
+  border-bottom: 1px solid var(--ds-color-border-subtle);
+  
+  /* Sticky at top */
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.ds-flow__back {
+  /* Icon button sizing */
+  width: var(--ds-touch-target);
+  height: var(--ds-touch-target);
+  flex-shrink: 0;
+  
+  /* Visual */
+  border: 1px solid var(--ds-color-border-subtle);
+  border-radius: var(--ds-radius-full);
+  background: transparent;
+  color: var(--ds-color-text);
+  
+  /* Center icon */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--ds-font-size-lg);
+  
+  /* Interaction */
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.ds-flow__back:hover {
+  background: var(--ds-color-surface-hover);
+  border-color: var(--ds-color-border);
+}
+
+.ds-flow__back:active {
+  transform: scale(0.95);
+}
+
+.ds-flow__back-spacer {
+  width: var(--ds-touch-target);
+  flex-shrink: 0;
+}
+
+.ds-flow__title {
+  flex: 1;
+  margin: 0;
+  font-size: var(--ds-font-size-xl);
+  font-weight: var(--ds-font-weight-semibold);
+  
+  /* Truncate long titles */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ds-flow__progress {
+  flex-shrink: 0;
+  font-size: var(--ds-font-size-sm);
+  color: var(--ds-color-text-subtle);
+}
+
+/* Content */
+.ds-flow__content {
+  padding: var(--ds-space-5);
+  overflow: auto;
+  
+  /* Smooth scroll */
+  scroll-behavior: smooth;
+  overscroll-behavior: contain;
+}
+
+/* Footer */
+.ds-flow__footer {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-3);
+  padding: var(--ds-space-4) var(--ds-space-5);
+  background: var(--ds-color-surface-base);
+  border-top: 1px solid var(--ds-color-border-subtle);
+  
+  /* Sticky at bottom */
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
+}
+
+/* Mobile: adjust padding */
+@media (max-width: 640px) {
+  .ds-flow__header,
+  .ds-flow__footer {
+    padding: var(--ds-space-3) var(--ds-space-4);
+    gap: var(--ds-space-2);
+  }
+  
+  .ds-flow__content {
+    padding: var(--ds-space-4);
+  }
+  
+  .ds-flow__title {
+    font-size: var(--ds-font-size-lg);
+  }
+}
+
+/* Safe area insets */
+@supports (padding: env(safe-area-inset-bottom)) {
+  .ds-flow__footer {
+    padding-bottom: calc(var(--ds-space-4) + env(safe-area-inset-bottom));
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .ds-flow__content {
+    scroll-behavior: auto;
+  }
+  
+  .ds-flow__back {
+    transition: none;
+  }
+}

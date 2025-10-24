@@ -1,5 +1,5 @@
 /**
- * OverlaySheet
+ * SheetDialog
  * 
  * Mobile-first bottom sheet with:
  * - Drag handle & swipe to dismiss
@@ -11,11 +11,20 @@
 
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
-import type { OverlaySheetProps } from './types'
+import type { SheetDialogProps } from './types'
 import { OVERLAY_TOKENS, getZIndex } from './tokens'
 import { useOverlayContext } from './OverlayPickerCore'
+import { getTranslateStyle } from './utils/browser-compat'
+import { useKeyboardAvoidance } from './hooks/useKeyboardAvoidance'
+import { useInertBackground } from './hooks/useInertBackground'
 
-export const OverlaySheet: React.FC<OverlaySheetProps> = ({
+// SSR-safe portal root
+const getPortalRoot = () => {
+  if (typeof document === 'undefined') return null
+  return document.body
+}
+
+export const SheetDialog: React.FC<SheetDialogProps> = ({
   open,
   onClose,
   maxHeight = OVERLAY_TOKENS.maxHeight.default,
@@ -26,9 +35,55 @@ export const OverlaySheet: React.FC<OverlaySheetProps> = ({
   contentRef,
   'aria-label': ariaLabel,
   'aria-labelledby': ariaLabelledBy,
+  ...restProps
 }) => {
   const sheetRef = useRef<HTMLDivElement>(null)
   const overlayContext = useOverlayContext()
+  
+  // ⚠️ RUNTIME CONTRACTS (dev-only validation)
+  // This component will be renamed to SheetDialog in Day 6
+  useEffect(() => {
+    if (process.env.NODE_ENV !== 'production') {
+      // 1. Require accessibility label (CRITICAL)
+      if (!ariaLabel && !ariaLabelledBy) {
+        throw new Error(
+          '[SheetDialog/SheetDialog] Missing accessibility label.\n' +
+          'Modal dialogs must be named for screen readers.\n' +
+          'Fix: Add aria-label="Select color" or aria-labelledby="dialog-title"\n' +
+          'See: docs/ds/SHEET_POLICY.md#sheetdialog-contracts'
+        )
+      }
+      
+      // 2. Warn about allowDragToDismiss (UX concern)
+      if ('allowDragToDismiss' in restProps && restProps.allowDragToDismiss) {
+        console.warn(
+          '[SheetDialog/SheetDialog] Drag-to-dismiss is disabled for modal dialogs.\n' +
+          'Modal dialogs require explicit Done/Cancel buttons for clarity.\n' +
+          'Consider: Two-snap collapse pattern if needed.\n' +
+          'See: docs/ds/SHEET_INTERACTION_PATTERNS.md#sheetdialog'
+        )
+      }
+      
+      // 3. Verify modal behavior cannot be disabled
+      if ('trapFocus' in restProps && restProps.trapFocus === false) {
+        throw new Error(
+          '[SheetDialog/SheetDialog] Cannot disable trapFocus.\n' +
+          'Modal dialogs must trap focus for accessibility.\n' +
+          'Use <SheetPanel> for non-modal UI.\n' +
+          'See: docs/ds/SHEET_POLICY.md#sheetdialog-contracts'
+        )
+      }
+      
+      if ('scrollLock' in restProps && restProps.scrollLock === false) {
+        throw new Error(
+          '[SheetDialog/SheetDialog] Cannot disable scrollLock.\n' +
+          'Modal dialogs must lock background scroll.\n' +
+          'Use <SheetPanel> for non-modal UI.\n' +
+          'See: docs/ds/SHEET_POLICY.md#sheetdialog-contracts'
+        )
+      }
+    }
+  }, [ariaLabel, ariaLabelledBy, restProps])
 
   // Auto-wire contentRef: explicit prop > Context > internal ref
   // This prevents manual wiring bugs while maintaining backwards compatibility
@@ -42,6 +97,20 @@ export const OverlaySheet: React.FC<OverlaySheetProps> = ({
     if (typeof window === 'undefined') return false
     return window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false
   }, [])
+
+  // Keyboard avoidance: lift sheet when keyboard appears (iOS/Android)
+  const keyboardOffset = useKeyboardAvoidance(open, {
+    enabled: true,
+    onOffsetChange: (offset) => {
+      // Optional: trigger re-snap if needed
+    },
+  })
+
+  // Make background inert when acting as dialog
+  useInertBackground(open, {
+    enabled: true,
+    role: 'dialog',
+  })
 
   // Drag handlers
   const handleDragStart = (clientY: number) => {
@@ -103,28 +172,11 @@ export const OverlaySheet: React.FC<OverlaySheetProps> = ({
     }
   }, [isDragging, dragStart])
 
-  // Robust iOS scroll lock - prevents background bounce and touch scrolling
+  // Prevent touchmove except inside scrollable content (scroll lock handled by OverlayPickerCore)
+  // Mark as non-passive only when needed to call preventDefault
   useEffect(() => {
     if (!open || allowOutsideScroll) return
 
-    const html = document.documentElement
-    const scrollbarWidth = window.innerWidth - html.clientWidth
-    
-    // Save previous values
-    const prev = {
-      overflow: html.style.overflow,
-      overscrollBehaviorY: html.style.overscrollBehaviorY,
-      position: html.style.position,
-      paddingRight: document.body.style.paddingRight,
-    }
-
-    // Lock scroll
-    html.style.overflow = 'hidden'
-    html.style.overscrollBehaviorY = 'contain'
-    html.style.position = 'relative'
-    document.body.style.paddingRight = `${scrollbarWidth}px`
-
-    // Prevent touchmove except inside scrollable content
     const preventTouch = (e: TouchEvent) => {
       const target = e.target as HTMLElement
       const root = sheetRef.current
@@ -135,19 +187,22 @@ export const OverlaySheet: React.FC<OverlaySheetProps> = ({
     document.addEventListener('touchmove', preventTouch, { passive: false })
 
     return () => {
-      Object.assign(html.style, {
-        overflow: prev.overflow,
-        overscrollBehaviorY: prev.overscrollBehaviorY,
-        position: prev.position,
-      })
-      document.body.style.paddingRight = prev.paddingRight
       document.removeEventListener('touchmove', preventTouch)
     }
   }, [open, allowOutsideScroll])
 
+  // Calculate combined offset (drag + keyboard)
+  const totalOffset = dragOffset + keyboardOffset
+
+  // Get translate style with browser fallback
+  const translateStyle = getTranslateStyle(0, totalOffset)
+
   if (!open) return null
 
-  return (
+  const portalRoot = getPortalRoot()
+  if (!portalRoot) return null
+
+  const content = (
     <>
       {/* Backdrop */}
       <div
@@ -162,7 +217,7 @@ export const OverlaySheet: React.FC<OverlaySheetProps> = ({
         aria-hidden="true"
       />
 
-      {/* Sheet */}
+      {/* Sheet - CRITICAL: Cross-platform positioning with keyboard avoidance */}
       <div
         ref={effectiveRef}
         role="dialog"
@@ -174,17 +229,25 @@ export const OverlaySheet: React.FC<OverlaySheetProps> = ({
         onMouseDown={(e) => e.stopPropagation()}
         onMouseUp={(e) => e.stopPropagation()}
         onTouchEnd={(e) => e.stopPropagation()}
-        className={`fixed bottom-0 left-0 right-0 flex flex-col ${
-          prefersReducedMotion ? '' : 'transition-transform duration-300 ease-out'
+        className={`flex flex-col ${
+          prefersReducedMotion ? '' : 'transition-[translate,transform] duration-300 ease-out'
         }`}
         style={{
+          // Positioning - use logical properties
+          position: 'fixed',
+          insetInline: 0,
+          insetBlockEnd: 0,  // anchors to bottom
           zIndex: getZIndex('sheet'),
           maxHeight: `min(${maxHeight}px, 90vh)`,
-          transform: prefersReducedMotion ? 'none' : `translateY(${dragOffset}px)`,
-          paddingBottom: 'env(safe-area-inset-bottom)',
+          // Use translate with transform fallback (Safari <14.1, Chrome <104)
+          ...(prefersReducedMotion ? {} : translateStyle),
+          // Prevent rubber-band (iOS)
+          overscrollBehavior: 'contain',
+          // Safe areas + theming
+          paddingBlockEnd: `max(var(--ds-space-3, 12px), env(safe-area-inset-bottom, 0px))`,
           backgroundColor: 'var(--ds-color-surface-base)',
-          borderRadius: '16px 16px 0 0',
-          boxShadow: '0 -4px 24px rgba(0,0,0,0.15)',
+          borderRadius: 'var(--ds-radius-xl, 16px) var(--ds-radius-xl, 16px) 0 0',
+          boxShadow: 'var(--ds-shadow-overlay-lg, 0 -4px 24px rgba(0,0,0,0.15))',
         }}
       >
         {/* Drag handle */}
@@ -215,8 +278,11 @@ export const OverlaySheet: React.FC<OverlaySheetProps> = ({
           </div>
         )}
 
-        {/* Content (scrollable) */}
-        <div className="flex-1 overflow-y-auto overscroll-contain min-h-0">
+        {/* Content (scrollable) - prevent rubber-band */}
+        <div 
+          className="flex-1 overflow-y-auto min-h-0"
+          style={{ overscrollBehavior: 'contain' }}
+        >
           {children}
         </div>
 
@@ -234,4 +300,6 @@ export const OverlaySheet: React.FC<OverlaySheetProps> = ({
       </div>
     </>
   )
+
+  return createPortal(content, portalRoot)
 }

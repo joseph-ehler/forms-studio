@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SheetPanel Demo - Mobile Preview</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .demo-container {
+      display: flex;
+      gap: 40px;
+      max-width: 1400px;
+      width: 100%;
+    }
+
+    /* Phone mockup */
+    .phone-mockup {
+      width: 375px;
+      height: 812px;
+      background: #1f2937;
+      border-radius: 40px;
+      padding: 12px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .phone-notch {
+      position: absolute;
+      top: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 150px;
+      height: 30px;
+      background: #1f2937;
+      border-radius: 0 0 20px 20px;
+      z-index: 10;
+    }
+
+    .phone-screen {
+      width: 100%;
+      height: 100%;
+      background: white;
+      border-radius: 32px;
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Controls panel */
+    .controls-panel {
+      flex: 1;
+      background: white;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      max-height: 812px;
+      overflow-y: auto;
+    }
+
+    .controls-panel h1 {
+      margin-bottom: 10px;
+      color: #1f2937;
+    }
+
+    .controls-panel p {
+      color: #6b7280;
+      margin-bottom: 30px;
+    }
+
+    .demo-selector {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+    }
+
+    .demo-btn {
+      padding: 12px 20px;
+      border: 2px solid #e5e7eb;
+      background: white;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    .demo-btn:hover {
+      border-color: #3b82f6;
+      color: #3b82f6;
+    }
+
+    .demo-btn.active {
+      background: #3b82f6;
+      color: white;
+      border-color: #3b82f6;
+    }
+
+    .snap-controls {
+      margin-bottom: 30px;
+    }
+
+    .snap-controls h3 {
+      margin-bottom: 15px;
+      color: #374151;
+      font-size: 16px;
+    }
+
+    .snap-buttons {
+      display: flex;
+      gap: 10px;
+    }
+
+    .snap-btn {
+      flex: 1;
+      padding: 15px;
+      border: 2px solid #e5e7eb;
+      background: white;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    .snap-btn:hover {
+      background: #f3f4f6;
+    }
+
+    .snap-btn.active {
+      background: #3b82f6;
+      color: white;
+      border-color: #3b82f6;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 30px;
+    }
+
+    .action-btn {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    .action-btn.primary {
+      background: #3b82f6;
+      color: white;
+    }
+
+    .action-btn.secondary {
+      background: #ef4444;
+      color: white;
+    }
+
+    .info-box {
+      padding: 15px;
+      background: #f3f4f6;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+
+    .info-box h4 {
+      margin-bottom: 10px;
+      color: #374151;
+      font-size: 14px;
+    }
+
+    .info-box ul {
+      margin-left: 20px;
+      color: #6b7280;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    /* Sheet Panel Styles */
+    .sheet-panel {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: white;
+      border-radius: 16px 16px 0 0;
+      box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      transition: height 300ms cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 10;
+    }
+
+    .sheet-panel.hidden {
+      display: none;
+    }
+
+    .sheet-handle {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 48px;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .sheet-handle-bar {
+      width: 40px;
+      height: 4px;
+      background: #d1d5db;
+      border-radius: 2px;
+    }
+
+    .sheet-header {
+      padding: 16px;
+      border-bottom: 1px solid #e5e7eb;
+      flex-shrink: 0;
+    }
+
+    .sheet-header h2 {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 600;
+      color: #1f2937;
+    }
+
+    .sheet-header p {
+      margin: 4px 0 0;
+      font-size: 14px;
+      color: #6b7280;
+    }
+
+    .sheet-content {
+      flex: 1;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      min-height: 0;
+    }
+
+    .sheet-footer {
+      padding: 16px;
+      border-top: 1px solid #e5e7eb;
+      flex-shrink: 0;
+    }
+
+    .sheet-footer button {
+      width: 100%;
+      padding: 16px;
+      background: #3b82f6;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* Map background */
+    .map-background {
+      flex: 1;
+      background: #e5e7eb;
+      position: relative;
+      background-image: 
+        linear-gradient(#d1d5db 1px, transparent 1px),
+        linear-gradient(90deg, #d1d5db 1px, transparent 1px);
+      background-size: 40px 40px;
+      overflow: hidden;
+    }
+
+    .map-marker {
+      position: absolute;
+      top: 40%;
+      left: 50%;
+      width: 32px;
+      height: 32px;
+      background: #3b82f6;
+      border-radius: 50% 50% 50% 0;
+      transform: translate(-50%, -100%) rotate(-45deg);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .map-marker::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 12px;
+      height: 12px;
+      background: white;
+      border-radius: 50%;
+      transform: translate(-50%, -50%) rotate(45deg);
+    }
+
+    .map-indicator {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      padding: 8px 12px;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Ride options */
+    .ride-option {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .ride-option:hover {
+      border-color: #3b82f6;
+      background: #eff6ff;
+    }
+
+    .ride-option.selected {
+      border-color: #3b82f6;
+      background: #eff6ff;
+    }
+
+    .ride-icon {
+      font-size: 32px;
+    }
+
+    .ride-info {
+      flex: 1;
+    }
+
+    .ride-name {
+      font-weight: 600;
+      font-size: 16px;
+      color: #1f2937;
+    }
+
+    .ride-eta {
+      font-size: 14px;
+      color: #6b7280;
+    }
+
+    .ride-price {
+      font-weight: 700;
+      font-size: 18px;
+      color: #1f2937;
+    }
+
+    /* Status badge */
+    .status-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-top: 8px;
+    }
+
+    .status-badge.success {
+      background: #d1fae5;
+      color: #065f46;
+    }
+
+    .status-badge.warning {
+      background: #fef3c7;
+      color: #92400e;
+    }
+  </style>
+</head>
+<body>
+  <div class="demo-container">
+    <!-- Phone Mockup -->
+    <div class="phone-mockup">
+      <div class="phone-notch"></div>
+      <div class="phone-screen" id="phoneScreen">
+        <!-- Map Background -->
+        <div class="map-background">
+          <div class="map-marker"></div>
+          <div class="map-indicator">Map Pan: 🚫 Disabled</div>
+        </div>
+
+        <!-- Sheet Panel -->
+        <div class="sheet-panel hidden" id="sheetPanel" style="height: 50%;">
+          <div class="sheet-handle" id="sheetHandle">
+            <div class="sheet-handle-bar"></div>
+          </div>
+
+          <div class="sheet-header" id="sheetHeader">
+            <h2>Choose a ride</h2>
+            <p>123 Main St → 456 Oak Ave</p>
+          </div>
+
+          <div class="sheet-content" id="sheetContent">
+            <!-- Content will be injected by JS -->
+          </div>
+
+          <div class="sheet-footer" id="sheetFooter">
+            <button id="sheetFooterBtn">Request UberX</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Controls Panel -->
+    <div class="controls-panel">
+      <h1>SheetPanel Demo</h1>
+      <p>Click buttons to control the sheet (gesture-free for desktop testing)</p>
+
+      <!-- Demo Selector -->
+      <div class="demo-selector">
+        <button class="demo-btn active" data-demo="rides">🚗 Ride Options</button>
+        <button class="demo-btn" data-demo="url">🔗 URL Binding</button>
+        <button class="demo-btn" data-demo="form">📝 Form (Unsaved)</button>
+      </div>
+
+      <!-- Snap Controls -->
+      <div class="snap-controls">
+        <h3>📏 Snap Position (Desktop Click Mode)</h3>
+        <div class="snap-buttons">
+          <button class="snap-btn" data-snap="0.25">25%<br><small>Peek</small></button>
+          <button class="snap-btn active" data-snap="0.5">50%<br><small>Half</small></button>
+          <button class="snap-btn" data-snap="0.9">90%<br><small>Full</small></button>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="action-buttons">
+        <button class="action-btn primary" id="openBtn">Open Sheet</button>
+        <button class="action-btn secondary" id="closeBtn">Close Sheet</button>
+      </div>
+
+      <!-- Info Box -->
+      <div class="info-box">
+        <h4>✨ Features Demonstrated</h4>
+        <ul>
+          <li>Non-modal panel (no backdrop)</li>
+          <li>Click-based snap control (no gestures needed)</li>
+          <li>Multiple snap points (25%, 50%, 90%)</li>
+          <li>Phone UI mockup for accurate testing</li>
+          <li>Switch between demo scenarios</li>
+        </ul>
+      </div>
+
+      <div class="info-box">
+        <h4>🎯 Current Demo: <span id="currentDemo">Ride Options</span></h4>
+        <ul id="demoInfo">
+          <li>Uber/Lyft-style map + ride picker</li>
+          <li>Click ride options to select</li>
+          <li>Use snap buttons above to resize</li>
+        </ul>
+      </div>
+
+      <div class="info-box">
+        <h4>💡 How to Test</h4>
+        <ul>
+          <li><strong>Desktop:</strong> Click snap buttons (25%/50%/90%)</li>
+          <li><strong>Mobile:</strong> Open this HTML file on your phone</li>
+          <li><strong>Switch demos:</strong> Click demo buttons at top</li>
+          <li><strong>Close:</strong> Click "Close Sheet" button</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // State
+    let currentSnap = 0.5;
+    let isOpen = true;
+    let currentDemo = 'rides';
+    let selectedRide = 'uberx';
+    let isDirty = false;
+
+    // Elements
+    const sheetPanel = document.getElementById('sheetPanel');
+    const sheetHeader = document.getElementById('sheetHeader');
+    const sheetContent = document.getElementById('sheetContent');
+    const sheetFooter = document.getElementById('sheetFooter');
+    const sheetFooterBtn = document.getElementById('sheetFooterBtn');
+    const openBtn = document.getElementById('openBtn');
+    const closeBtn = document.getElementById('closeBtn');
+    const currentDemoText = document.getElementById('currentDemo');
+    const demoInfo = document.getElementById('demoInfo');
+
+    // Snap buttons
+    const snapButtons = document.querySelectorAll('.snap-btn');
+    snapButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const snap = parseFloat(btn.dataset.snap);
+        setSnap(snap);
+        updateActiveSnapButton(snap);
+      });
+    });
+
+    // Demo buttons
+    const demoButtons = document.querySelectorAll('.demo-btn');
+    demoButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        currentDemo = btn.dataset.demo;
+        demoButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderDemo();
+      });
+    });
+
+    // Open/Close
+    openBtn.addEventListener('click', () => openSheet());
+    closeBtn.addEventListener('click', () => closeSheet());
+
+    // Functions
+    function setSnap(snap) {
+      currentSnap = snap;
+      sheetPanel.style.height = `${snap * 100}%`;
+      
+      // Update URL if in URL demo
+      if (currentDemo === 'url') {
+        updateURL();
+      }
+    }
+
+    function updateActiveSnapButton(snap) {
+      snapButtons.forEach(btn => {
+        if (parseFloat(btn.dataset.snap) === snap) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+    }
+
+    function openSheet() {
+      isOpen = true;
+      sheetPanel.classList.remove('hidden');
+    }
+
+    function closeSheet() {
+      if (currentDemo === 'form' && isDirty) {
+        if (!confirm('You have unsaved changes. Close anyway?')) {
+          return;
+        }
+      }
+      isOpen = false;
+      sheetPanel.classList.add('hidden');
+    }
+
+    function renderDemo() {
+      if (currentDemo === 'rides') {
+        renderRidesDemo();
+      } else if (currentDemo === 'url') {
+        renderURLDemo();
+      } else if (currentDemo === 'form') {
+        renderFormDemo();
+      }
+    }
+
+    function renderRidesDemo() {
+      currentDemoText.textContent = 'Ride Options';
+      demoInfo.innerHTML = `
+        <li>Uber/Lyft-style map + ride picker</li>
+        <li>Click ride options to select</li>
+        <li>Use snap buttons to resize panel</li>
+      `;
+
+      sheetHeader.innerHTML = `
+        <h2>Choose a ride</h2>
+        <p>123 Main St → 456 Oak Ave</p>
+      `;
+
+      sheetContent.innerHTML = `
+        <div style="padding: 16px;">
+          <div class="ride-option ${selectedRide === 'uberx' ? 'selected' : ''}" data-ride="uberx">
+            <div class="ride-icon">🚗</div>
+            <div class="ride-info">
+              <div class="ride-name">UberX</div>
+              <div class="ride-eta">3 min away</div>
+            </div>
+            <div class="ride-price">$12.50</div>
+          </div>
+
+          <div class="ride-option ${selectedRide === 'comfort' ? 'selected' : ''}" data-ride="comfort">
+            <div class="ride-icon">✨</div>
+            <div class="ride-info">
+              <div class="ride-name">Comfort</div>
+              <div class="ride-eta">5 min away</div>
+            </div>
+            <div class="ride-price">$18.25</div>
+          </div>
+
+          <div class="ride-option ${selectedRide === 'black' ? 'selected' : ''}" data-ride="black">
+            <div class="ride-icon">🎩</div>
+            <div class="ride-info">
+              <div class="ride-name">Black</div>
+              <div class="ride-eta">8 min away</div>
+            </div>
+            <div class="ride-price">$32.00</div>
+          </div>
+
+          <div style="margin-top: 24px; padding: 12px; background: #f3f4f6; border-radius: 8px;">
+            <strong style="font-size: 14px;">💡 Try this:</strong>
+            <ul style="margin: 8px 0 0; padding-left: 20px; font-size: 14px; line-height: 1.6;">
+              <li>Click ride options to select</li>
+              <li>Click snap buttons (25%/50%/90%)</li>
+              <li>Close and reopen the sheet</li>
+            </ul>
+          </div>
+        </div>
+      `;
+
+      sheetFooterBtn.textContent = `Request ${selectedRide === 'uberx' ? 'UberX' : selectedRide === 'comfort' ? 'Comfort' : 'Black'}`;
+
+      // Add click handlers
+      document.querySelectorAll('.ride-option').forEach(option => {
+        option.addEventListener('click', () => {
+          selectedRide = option.dataset.ride;
+          renderRidesDemo();
+        });
+      });
+    }
+
+    function renderURLDemo() {
+      currentDemoText.textContent = 'URL Binding';
+      demoInfo.innerHTML = `
+        <li>Snap state persisted to URL</li>
+        <li>Check browser address bar</li>
+        <li>Change snaps to update URL</li>
+      `;
+
+      sheetHeader.innerHTML = `
+        <h2>URL Binding Demo</h2>
+        <p>Current snap: <strong>${currentSnap.toFixed(2)}</strong></p>
+      `;
+
+      sheetContent.innerHTML = `
+        <div style="padding: 24px;">
+          <div style="padding: 16px; background: #eff6ff; border-radius: 8px; margin-bottom: 16px; border: 1px solid #3b82f6;">
+            <p style="margin: 0; font-weight: 600; color: #1e40af;">
+              Check your URL bar for: <code>?panel=${currentSnap.toFixed(2)}</code>
+            </p>
+          </div>
+          
+          <h3 style="margin-top: 0;">How it works:</h3>
+          <ul style="line-height: 1.6;">
+            <li>Click snap buttons → URL updates</li>
+            <li>Refresh page → snap restored from URL</li>
+            <li>Share URL → opens at same snap</li>
+          </ul>
+
+          <div style="margin-top: 24px; padding: 12px; background: #f3f4f6; border-radius: 8px;">
+            <p style="margin: 0; font-size: 14px; color: #4b5563;">
+              <strong>Technical:</strong> Uses <code>URLSearchParams</code> + <code>history.replaceState</code>
+            </p>
+          </div>
+        </div>
+      `;
+
+      sheetFooter.style.display = 'none';
+      updateURL();
+    }
+
+    function renderFormDemo() {
+      currentDemoText.textContent = 'Form (Unsaved Changes)';
+      demoInfo.innerHTML = `
+        <li>Form with dirty state tracking</li>
+        <li>Type to make changes</li>
+        <li>Try closing with unsaved data</li>
+      `;
+
+      sheetHeader.innerHTML = `
+        <h2>Edit Profile</h2>
+        <p>Make changes below</p>
+      `;
+
+      sheetContent.innerHTML = `
+        <div style="padding: 24px;">
+          <label style="display: block; margin-bottom: 8px; font-weight: 600;">Name</label>
+          <input type="text" id="nameInput" placeholder="Enter your name" style="width: 100%; padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 16px; margin-bottom: 16px;">
+          
+          <div style="padding: 12px; background: ${isDirty ? '#fef3c7' : '#f3f4f6'}; border-radius: 8px;">
+            Status: ${isDirty ? '⚠️ Unsaved changes' : '✅ No changes'}
+          </div>
+
+          <p style="font-size: 14px; color: #6b7280; margin-top: 16px;">
+            Try clicking "Close Sheet" with unsaved changes → confirmation dialog appears
+          </p>
+        </div>
+      `;
+
+      sheetFooter.style.display = 'block';
+      sheetFooterBtn.textContent = 'Save Changes';
+
+      // Add input handler
+      setTimeout(() => {
+        const nameInput = document.getElementById('nameInput');
+        if (nameInput) {
+          nameInput.addEventListener('input', () => {
+            isDirty = true;
+            renderFormDemo();
+          });
+        }
+      }, 0);
+    }
+
+    function updateURL() {
+      const url = new URL(window.location.href);
+      url.searchParams.set('panel', currentSnap.toFixed(2));
+      window.history.replaceState({}, '', url.toString());
+    }
+
+    // Initialize
+    renderDemo();
+    openSheet();
+    setSnap(0.5);
+  </script>
+</body>
+</html>

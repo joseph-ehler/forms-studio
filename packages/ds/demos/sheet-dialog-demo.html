@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SheetDialog Demo - Modal Behavior</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .demo-container {
+      display: flex;
+      gap: 40px;
+      max-width: 1400px;
+      width: 100%;
+    }
+
+    /* Phone mockup */
+    .phone-mockup {
+      width: 375px;
+      height: 812px;
+      background: #1f2937;
+      border-radius: 40px;
+      padding: 12px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .phone-notch {
+      position: absolute;
+      top: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 150px;
+      height: 30px;
+      background: #1f2937;
+      border-radius: 0 0 20px 20px;
+      z-index: 10;
+    }
+
+    .phone-screen {
+      width: 100%;
+      height: 100%;
+      background: white;
+      border-radius: 32px;
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Controls panel */
+    .controls-panel {
+      flex: 1;
+      background: white;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      max-height: 812px;
+      overflow-y: auto;
+    }
+
+    .controls-panel h1 {
+      margin-bottom: 10px;
+      color: #1f2937;
+    }
+
+    .controls-panel p {
+      color: #6b7280;
+      margin-bottom: 30px;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 30px;
+    }
+
+    .action-btn {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    .action-btn.primary {
+      background: #3b82f6;
+      color: white;
+    }
+
+    .action-btn.secondary {
+      background: #ef4444;
+      color: white;
+    }
+
+    .info-box {
+      padding: 15px;
+      background: #f3f4f6;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+
+    .info-box h4 {
+      margin-bottom: 10px;
+      color: #374151;
+      font-size: 14px;
+    }
+
+    .info-box ul {
+      margin-left: 20px;
+      color: #6b7280;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    /* Main content (should be inert when modal open) */
+    .main-content {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .main-content.inert {
+      pointer-events: none;
+      opacity: 0.5;
+    }
+
+    .main-content h2 {
+      margin-bottom: 16px;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .button-group button {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      background: #3b82f6;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .button-group button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .status-indicator {
+      padding: 12px;
+      background: #f3f4f6;
+      border-radius: 8px;
+      margin-bottom: 12px;
+    }
+
+    /* Backdrop */
+    .backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      opacity: 0;
+      pointer-events: none;
+      z-index: 9;
+      transition: opacity 350ms ease;
+    }
+
+    .backdrop.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* Sheet Dialog */
+    .sheet-dialog {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: white;
+      border-radius: 16px 16px 0 0;
+      box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.2);
+      display: flex;
+      flex-direction: column;
+      z-index: 10;
+      height: 70%;
+      transform: translateY(100%);
+      transition: transform 350ms cubic-bezier(0.32, 0.72, 0, 1);
+      will-change: transform;
+    }
+
+    .sheet-dialog.visible {
+      transform: translateY(0);
+    }
+
+    .sheet-header {
+      padding: 20px;
+      border-bottom: 1px solid #e5e7eb;
+      flex-shrink: 0;
+    }
+
+    .sheet-header h2 {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 600;
+      color: #1f2937;
+    }
+
+    .sheet-content {
+      flex: 1;
+      overflow-y: auto;
+      min-height: 0;
+      position: relative;
+    }
+
+    .sheet-content-inner {
+      padding: 20px;
+    }
+
+    /* Sticky Search */
+    .sticky-search {
+      position: sticky;
+      top: 0;
+      background: white;
+      padding: 16px 20px;
+      border-bottom: 1px solid #e5e7eb;
+      z-index: 1;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+    }
+
+    .demo-badge {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      padding: 12px 20px;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      font-weight: 600;
+      z-index: 1000;
+    }
+
+    .demo-badge code {
+      color: #3b82f6;
+      background: #eff6ff;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 12px;
+    }
+
+    /* Keyboard Simulation */
+    .keyboard-simulator {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      z-index: 1001;
+    }
+
+    .keyboard-btn {
+      padding: 10px 16px;
+      background: white;
+      border: 2px solid #3b82f6;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      transition: all 0.2s;
+    }
+
+    .keyboard-btn:hover {
+      background: #eff6ff;
+    }
+
+    .keyboard-btn.active {
+      background: #3b82f6;
+      color: white;
+    }
+
+    /* Mock Keyboard */
+    .mock-keyboard {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 0;
+      background: linear-gradient(to bottom, #d1d5db 0%, #9ca3af 100%);
+      z-index: 999;
+      transition: height 300ms cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #374151;
+      font-weight: 600;
+      font-size: 14px;
+      box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.2);
+      border-radius: 0; /* Fits in phone screen */
+    }
+
+    .mock-keyboard.visible {
+      height: 300px;
+    }
+
+    /* Sheet adjusts when keyboard opens */
+    .phone-screen.keyboard-open .sheet-dialog {
+      bottom: 300px; /* Sits above keyboard */
+      height: calc(70% - 150px); /* Shrinks to avoid keyboard */
+      transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .sheet-footer {
+      padding: 16px;
+      border-top: 1px solid #e5e7eb;
+      display: flex;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .sheet-footer button {
+      flex: 1;
+      padding: 16px;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .sheet-footer .cancel-btn {
+      background: #e5e7eb;
+      color: #374151;
+    }
+
+    .sheet-footer .done-btn {
+      background: #3b82f6;
+      color: white;
+    }
+
+    /* Search input */
+    .search-input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      font-size: 16px;
+      margin: 0; /* No margin needed - parent sticky-search has padding */
+    }
+
+    /* Option list */
+    .option-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      border: 2px solid #e5e7eb;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .option-item:hover {
+      border-color: #3b82f6;
+      background: #eff6ff;
+    }
+
+    .option-item.selected {
+      border-color: #3b82f6;
+      background: #eff6ff;
+    }
+
+    .checkbox {
+      width: 20px;
+      height: 20px;
+      border: 2px solid #d1d5db;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .checkbox.checked {
+      background: #3b82f6;
+      border-color: #3b82f6;
+      color: white;
+    }
+
+    .option-label {
+      flex: 1;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <!-- Keyboard Simulator -->
+  <div class="keyboard-simulator">
+    <button class="keyboard-btn" id="toggleKeyboard">
+      📱 Toggle Keyboard
+    </button>
+    <div style="font-size: 12px; text-align: center; color: #6b7280; background: white; padding: 8px; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+      <strong>Keyboard:</strong> <span id="keyboardStatus">Closed</span>
+    </div>
+  </div>
+
+  <div class="demo-container">
+    <!-- Phone Mockup -->
+    <div class="phone-mockup">
+      <div class="phone-notch"></div>
+      <div class="phone-screen" id="phoneScreen">
+        <!-- Main Content (should become inert) -->
+        <div class="main-content" id="mainContent">
+          <h2>Project Settings</h2>
+          
+          <div class="status-indicator">
+            Background: <strong id="bgStatus">Interactive ✅</strong>
+          </div>
+
+          <div class="button-group">
+            <button id="triggerBtn">Select Team Members</button>
+          </div>
+
+          <p style="color: #6b7280; font-size: 14px;">
+            When dialog opens, this content should become inert (no clicks).
+          </p>
+
+          <div style="margin-top: 20px; padding: 16px; background: #f3f4f6; border-radius: 8px;">
+            <h3 style="margin: 0 0 8px;">Selected: <span id="selectedCount">0</span></h3>
+            <div id="selectedList" style="font-size: 14px; color: #6b7280;">
+              None
+            </div>
+          </div>
+        </div>
+
+        <!-- Backdrop -->
+        <div class="backdrop" id="backdrop"></div>
+
+        <!-- Sheet Dialog -->
+        <div class="sheet-dialog" id="sheetDialog">
+          <div class="sheet-header">
+            <h2>Select Team Members</h2>
+          </div>
+
+          <div class="sheet-content">
+            <div class="sticky-search">
+              <input 
+                type="search" 
+                class="search-input" 
+                id="searchInput"
+                placeholder="Search team members..."
+              />
+            </div>
+
+            <div class="sheet-content-inner">
+              <div id="optionsList">
+                <!-- Options injected by JS -->
+              </div>
+            </div>
+          </div>
+
+          <div class="sheet-footer">
+            <button class="cancel-btn" id="cancelBtn">Cancel</button>
+            <button class="done-btn" id="doneBtn">Done</button>
+          </div>
+        </div>
+
+        <!-- Mock Keyboard -->
+        <div class="mock-keyboard" id="mockKeyboard">
+          ⌨️ Virtual Keyboard (300px)
+        </div>
+      </div>
+    </div>
+
+    <!-- Controls Panel -->
+    <div class="controls-panel">
+      <h1>SheetDialog Demo</h1>
+      <p>Modal behavior with Done/Cancel semantics</p>
+
+      <!-- Action Buttons -->
+      <div class="action-buttons">
+        <button class="action-btn primary" id="openBtn">Open Dialog</button>
+        <button class="action-btn secondary" id="escBtn">Simulate ESC</button>
+      </div>
+
+      <!-- Info Box -->
+      <div class="info-box">
+        <h4>✨ Features Demonstrated</h4>
+        <ul>
+          <li>Modal semantics (blocks background)</li>
+          <li>Focus trap (keyboard nav contained)</li>
+          <li>Backdrop dims background</li>
+          <li>Done commits, Cancel reverts</li>
+          <li>ESC closes and reverts</li>
+          <li>Search filter (live)</li>
+        </ul>
+      </div>
+
+      <div class="info-box">
+        <h4>🎯 Test Scenarios</h4>
+        <ul>
+          <li><strong>Commit:</strong> Select items → Done → see selected count update</li>
+          <li><strong>Revert:</strong> Select items → Cancel → selections discarded</li>
+          <li><strong>ESC:</strong> Select items → ESC → reverts like Cancel</li>
+          <li><strong>Search:</strong> Type to filter team members</li>
+        </ul>
+      </div>
+
+      <div class="info-box">
+        <h4>🛡️ Enforcement</h4>
+        <ul>
+          <li>Background becomes inert (no clicks)</li>
+          <li>Body scroll locked (try scrolling)</li>
+          <li>Focus returns to trigger on close</li>
+          <li>Backdrop click does nothing (modal)</li>
+        </ul>
+      </div>
+
+      <div class="info-box">
+        <h4>⌨️ Keyboard Simulation</h4>
+        <ul>
+          <li><strong>Toggle Keyboard:</strong> Click button (bottom-right)</li>
+          <li><strong>Sheet shrinks:</strong> Avoids being covered by keyboard</li>
+          <li><strong>Content scrollable:</strong> Search stays sticky at top</li>
+          <li><strong>Smooth transition:</strong> 300ms resize animation</li>
+        </ul>
+      </div>
+
+      <div class="info-box">
+        <h4>📊 State Tracking</h4>
+        <ul>
+          <li><strong>Committed:</strong> <span id="committedState">[]</span></li>
+          <li><strong>Staging:</strong> <span id="stagingState">[]</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Data
+    const teamMembers = [
+      { id: 1, name: 'Alice Johnson', role: 'Engineer' },
+      { id: 2, name: 'Bob Smith', role: 'Designer' },
+      { id: 3, name: 'Carol Williams', role: 'PM' },
+      { id: 4, name: 'David Brown', role: 'Engineer' },
+      { id: 5, name: 'Eve Davis', role: 'Marketing' },
+      { id: 6, name: 'Frank Miller', role: 'Sales' },
+      { id: 7, name: 'Grace Wilson', role: 'Engineer' },
+      { id: 8, name: 'Henry Moore', role: 'Designer' },
+    ];
+
+    // State
+    let committed = []; // Actually selected (shown in main content)
+    let staging = [];   // Temporary selections (in dialog)
+    let searchQuery = '';
+
+    // Elements
+    const sheetDialog = document.getElementById('sheetDialog');
+    const backdrop = document.getElementById('backdrop');
+    const mainContent = document.getElementById('mainContent');
+    const triggerBtn = document.getElementById('triggerBtn');
+    const openBtn = document.getElementById('openBtn');
+    const escBtn = document.getElementById('escBtn');
+    const cancelBtn = document.getElementById('cancelBtn');
+    const doneBtn = document.getElementById('doneBtn');
+    const searchInput = document.getElementById('searchInput');
+    const optionsList = document.getElementById('optionsList');
+    const bgStatus = document.getElementById('bgStatus');
+    const selectedCount = document.getElementById('selectedCount');
+    const selectedList = document.getElementById('selectedList');
+    const committedState = document.getElementById('committedState');
+    const stagingState = document.getElementById('stagingState');
+    const toggleKeyboardBtn = document.getElementById('toggleKeyboard');
+    const mockKeyboard = document.getElementById('mockKeyboard');
+    const keyboardStatus = document.getElementById('keyboardStatus');
+    const phoneScreen = document.getElementById('phoneScreen');
+
+    let keyboardOpen = false;
+
+    // Keyboard simulation
+    toggleKeyboardBtn.addEventListener('click', () => {
+      keyboardOpen = !keyboardOpen;
+      
+      if (keyboardOpen) {
+        mockKeyboard.classList.add('visible');
+        phoneScreen.classList.add('keyboard-open');
+        toggleKeyboardBtn.classList.add('active');
+        keyboardStatus.textContent = 'Open';
+        
+        // Focus search input when keyboard opens
+        if (sheetDialog.classList.contains('visible')) {
+          searchInput.focus();
+        }
+      } else {
+        mockKeyboard.classList.remove('visible');
+        phoneScreen.classList.remove('keyboard-open');
+        toggleKeyboardBtn.classList.remove('active');
+        keyboardStatus.textContent = 'Closed';
+      }
+    });
+
+    // Open dialog
+    function openDialog() {
+      // Copy committed to staging
+      staging = [...committed];
+      
+      // Show dialog
+      sheetDialog.classList.add('visible');
+      backdrop.classList.add('visible');
+      mainContent.classList.add('inert');
+      bgStatus.textContent = 'Inert 🚫';
+      
+      // Render options
+      renderOptions();
+      
+      // Don't auto-focus search - let user tap when ready
+      // This prevents keyboard from auto-opening on mobile
+      
+      // Update state display
+      updateStateDisplay();
+    }
+
+    // Close dialog (revert)
+    function closeDialog() {
+      sheetDialog.classList.remove('visible');
+      backdrop.classList.remove('visible');
+      mainContent.classList.remove('inert');
+      bgStatus.textContent = 'Interactive ✅';
+      
+      // Clear search
+      searchQuery = '';
+      searchInput.value = '';
+      
+      // Return focus to trigger
+      triggerBtn.focus();
+      
+      // Update state display
+      updateStateDisplay();
+    }
+
+    // Commit changes
+    function commitDialog() {
+      // Copy staging to committed
+      committed = [...staging];
+      
+      // Update UI
+      updateSelectedDisplay();
+      
+      // Close
+      closeDialog();
+    }
+
+    // Render options list
+    function renderOptions() {
+      const filtered = teamMembers.filter(member =>
+        member.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        member.role.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+
+      if (filtered.length === 0) {
+        optionsList.innerHTML = `
+          <div style="padding: 40px 20px; text-align: center; color: #6b7280;">
+            <div style="font-size: 40px; margin-bottom: 12px;">🔍</div>
+            <div>No team members found</div>
+            <div style="font-size: 14px; margin-top: 4px;">Try a different search term</div>
+          </div>
+        `;
+        return;
+      }
+
+      optionsList.innerHTML = filtered.map(member => {
+        const isSelected = staging.includes(member.id);
+        return `
+          <div class="option-item ${isSelected ? 'selected' : ''}" data-id="${member.id}">
+            <div class="checkbox ${isSelected ? 'checked' : ''}">
+              ${isSelected ? '✓' : ''}
+            </div>
+            <div class="option-label">
+              <div>${member.name}</div>
+              <div style="font-size: 12px; color: #6b7280;">${member.role}</div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      // Add click handlers
+      document.querySelectorAll('.option-item').forEach(item => {
+        item.addEventListener('click', () => {
+          const id = parseInt(item.dataset.id);
+          if (staging.includes(id)) {
+            staging = staging.filter(i => i !== id);
+          } else {
+            staging.push(id);
+          }
+          renderOptions();
+          updateStateDisplay();
+        });
+      });
+    }
+
+    // Update selected display
+    function updateSelectedDisplay() {
+      selectedCount.textContent = committed.length;
+      
+      if (committed.length === 0) {
+        selectedList.textContent = 'None';
+      } else {
+        const names = committed.map(id => 
+          teamMembers.find(m => m.id === id)?.name
+        ).join(', ');
+        selectedList.textContent = names;
+      }
+    }
+
+    // Update state display
+    function updateStateDisplay() {
+      committedState.textContent = JSON.stringify(committed);
+      stagingState.textContent = JSON.stringify(staging);
+    }
+
+    // Event listeners
+    triggerBtn.addEventListener('click', openDialog);
+    openBtn.addEventListener('click', openDialog);
+    cancelBtn.addEventListener('click', closeDialog);
+    doneBtn.addEventListener('click', commitDialog);
+    escBtn.addEventListener('click', closeDialog);
+
+    // Search
+    searchInput.addEventListener('input', (e) => {
+      searchQuery = e.target.value;
+      renderOptions();
+    });
+
+    // Open keyboard when search gets focus
+    searchInput.addEventListener('focus', () => {
+      if (!keyboardOpen) {
+        keyboardOpen = true;
+        mockKeyboard.classList.add('visible');
+        phoneScreen.classList.add('keyboard-open');
+        toggleKeyboardBtn.classList.add('active');
+        keyboardStatus.textContent = 'Open';
+      }
+    });
+
+    // Keep keyboard open while typing
+    searchInput.addEventListener('blur', () => {
+      // Don't auto-close keyboard on blur - user might click Done/Cancel
+      // Let them close it manually with toggle button
+    });
+
+    // ESC key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && sheetDialog.classList.contains('visible')) {
+        closeDialog();
+      }
+    });
+
+    // Backdrop click (modal = does nothing)
+    backdrop.addEventListener('click', () => {
+      // Intentionally empty - modal dialogs don't close on backdrop click
+      console.log('Backdrop clicked - modal dialog ignores this');
+    });
+
+    // Initialize
+    updateSelectedDisplay();
+    updateStateDisplay();
+  </script>
+</body>
+</html>

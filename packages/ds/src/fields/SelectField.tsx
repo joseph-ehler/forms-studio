@@ -23,7 +23,7 @@ import { mergeFieldConfig } from './utils/field-json-config'
 import { useDeviceType } from '../hooks/useDeviceType'
 import { OverlayPickerCore, useOverlayContext } from '../components/overlay/OverlayPickerCore'
 import { OverlayPicker } from '../components/overlay/OverlayPicker'
-import { OverlaySheet } from '../components/overlay/OverlaySheet'
+import { SheetDialog  } from '../components/overlay/SheetDialog'
 import { PickerList } from '../components/picker/PickerList'
 import { PickerOption } from '../components/picker/PickerOption'
 import { PickerSearch } from '../components/picker/PickerSearch'
@@ -160,7 +160,7 @@ export const SelectField: React.FC<FieldComponentProps> = ({
                   {/* Content: Sheet on mobile, Popover on desktop */}
                   {isOpen && (
                     presentation === 'sheet' || isMobile ? (
-                      <OverlaySheet
+                      <SheetDialog
                         open={isOpen}
                         onClose={() => close('outside')}
                         maxHeight={ui.maxHeight ?? 560}
@@ -208,7 +208,7 @@ export const SelectField: React.FC<FieldComponentProps> = ({
                             )}
                           </PickerList>
                         </div>
-                      </OverlaySheet>
+                      </SheetDialog>
                     ) : (
                       <OverlayPicker
                         open={isOpen}

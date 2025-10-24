@@ -29,7 +29,7 @@ export const PickerList: React.FC<PickerListProps> = ({
       aria-labelledby={ariaLabelledBy}
       aria-multiselectable={ariaMultiselectable}
       onKeyDown={onKeyDown}
-      className="py-1"
+      className="py-2"  // Increased from py-1 for better touch UX
     >
       {children}
     </div>
