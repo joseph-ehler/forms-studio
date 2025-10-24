@@ -270,20 +270,22 @@ export function SelectField({
                       pointerEvents: 'none'
                     }} />
 
+                        {/* @refiner-ignore filter-dom-props - search input needs type/placeholder/value */}
                         <input
                     ref={searchInputRef}
-
+                    type="search"
                     role="searchbox"
                     aria-label="Filter options"
-
-
+                    placeholder="Search..."
+                    value={searchQuery}
                     onChange={(e) => {
                       setSearchQuery(e.target.value);
                       setHighlightedIndex(0);
                     }}
+                    autoFocus
                     className="ds-input ds-input--sm"
                     style={{
-                      paddingLeft: '36px' // Space for search icon
+                      paddingLeft: '36px', // Space for search icon
                     }} />
 
                       </div>
