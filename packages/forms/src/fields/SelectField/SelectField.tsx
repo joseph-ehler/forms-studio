@@ -327,7 +327,10 @@ export function SelectField({
                       handleSelect(option.value, field.onChange);
                     }
                   }}
-                  className="ds-option-button">
+                  className="ds-option-button"
+                  style={{
+                    padding: '10px 16px'
+                  }}>
                     
                     {/* Hover scrim - light/dark mode compatible */}
                     {index === highlightedIndex && !option.disabled &&
