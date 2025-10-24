@@ -9,6 +9,9 @@
 /* Import checkbox primitive (Phase 1 beautification) */
 @import './ds-checkbox.css';
 
+/* Import toggle primitive (Phase 1 beautification) */
+@import './ds-toggle.css';
+
 @layer atoms {
 /* ===== Base Input Styles ===== */
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Refiner v1.3 - Retroactive Code Upgrades
+ * Refiner v1.7 - Retroactive Code Upgrades
  * 
  * The "Service Bay" for the factory system.
  * Applies pattern upgrades to all existing fields retroactively.
@@ -19,6 +19,10 @@
  * - v1.3: no-inline-styles - Enforce DS classes over inline styles
  * - v1.3: label-contract - Ensure FormLabel has htmlFor
  * - v1.3: telemetry-presence - Verify telemetryAdapter imported when enabled
+ * - v1.4: aria-completeness - Complete ARIA implementation
+ * - v1.5: enforce-checkbox-primitive - Use .ds-checkbox not .ds-input
+ * - v1.6: enforce-wcag-contrast - WCAG AA color contrast validation
+ * - v1.7: enforce-toggle-primitive - Use .ds-toggle for role="switch"
  * 
  * Safe & Idempotent:
  * - Running twice yields no changes
@@ -37,15 +41,21 @@ import { labelContractV1_0 } from './transforms/label-contract-v1.0.mjs';
 import { telemetryPresenceV1_0 } from './transforms/telemetry-presence-v1.0.mjs';
 import { ariaCompletenessV1_0 } from './transforms/aria-completeness-v1.0.mjs';
 import { enforceCheckboxPrimitiveV1_0 } from './transforms/enforce-checkbox-primitive-v1.0.mjs';
+import { enforceWCAGContrastV1_0 } from './transforms/enforce-wcag-contrast.mjs';
+import { noHardcodedColorsV1_0 } from './transforms/no-hardcoded-colors-v1.0.mjs';
+import { enforceTogglePrimitiveV1_0 } from './transforms/enforce-toggle-primitive-v1.0.mjs';
 
 const TRANSFORMS = [
   filterDomPropsV1_1(), // v1.1: AST-based auto-fix for prop leakage
   dedupeJSXAttributesV1_2(), // v1.2: Remove duplicate JSX attributes
-  noInlineStylesV1_0(), // v1.3: Enforce DS classes (auto-fix)
+  noHardcodedColorsV1_0(), // v1.7: Replace hardcoded colors with tokens (auto-fix) ⭐ NEW
+  // noInlineStylesV1_0(), // v1.3: TOO AGGRESSIVE - Disabled in favor of specific checks
   labelContractV1_0(), // v1.3: Accessibility contract (auto-fix)
   telemetryPresenceV1_0(), // v1.3: Telemetry wiring check (report-only)
   ariaCompletenessV1_0(), // v1.4: Complete ARIA implementation (report-only)
   enforceCheckboxPrimitiveV1_0(), // v1.5: Enforce .ds-checkbox for checkboxes (auto-fix)
+  enforceTogglePrimitiveV1_0(), // v1.7: Enforce .ds-toggle for toggles (auto-fix)
+  enforceWCAGContrastV1_0(), // v1.6: WCAG AA contrast validation (report-only)
   // Future transforms:
   // normalizeImports({ canonical: { useMotion: '@intstudio/ds/utils' } }),
   // extractComposite(),
@@ -58,7 +68,7 @@ export async function run({ dryRun = true, scope = 'packages/forms/src/**/*.{ts,
   const startTime = Date.now();
   
   console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-  console.log(`🔧 REFINER v1.3 - ${dryRun ? 'DRY RUN' : 'APPLYING CHANGES'}`);
+  console.log(`🔧 REFINER v1.6 - ${dryRun ? 'DRY RUN' : 'APPLYING CHANGES'}`);
   console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
   console.log('');
   console.log(`Scope: ${scope}`);

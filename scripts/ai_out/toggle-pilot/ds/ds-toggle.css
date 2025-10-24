@@ -1,0 +1,175 @@
+/**
+ * Toggle Switch Primitive
+ * 
+ * Semantics: <input type="checkbox" role="switch">
+ * Visual: Pill track with sliding thumb
+ * Sizing: 40×22px default (md), with sm/lg variants
+ * Interaction: Click track/label, keyboard Space/Enter
+ * States: off, on, focus, hover, disabled, invalid
+ * 
+ * Design Tokens Required:
+ * - --ds-color-neutral-300 (off background)
+ * - --ds-color-neutral-400 (off border)
+ * - --ds-color-neutral-500 (hover border)
+ * - --ds-color-primary-bg (on background)
+ * - --ds-color-primary-border (on border)
+ * - --ds-color-primary-hover (on hover)
+ * - --ds-color-focus-ring (focus outline)
+ * - --ds-color-state-danger (invalid state)
+ * 
+ * WCAG AA Compliance:
+ * - Focus ring: 2px solid, high contrast
+ * - Color combinations: ≥ 4.5:1 contrast ratio
+ * - Touch target: ≥ 44×44px (via label wrapper)
+ * 
+ * @layer components
+ */
+
+@layer components {
+  /* Base Toggle */
+  .ds-toggle {
+    /* Hide native checkbox visuals */
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    
+    /* Layout */
+    position: relative;
+    display: inline-block;
+    width: var(--ds-toggle-width, 40px);
+    height: var(--ds-toggle-height, 22px);
+    margin: 0;
+    padding: 0;
+    
+    /* Track (pill shape) */
+    background: var(--ds-color-neutral-300);
+    border: 1px solid var(--ds-color-neutral-400);
+    border-radius: var(--ds-toggle-height);
+    
+    /* Interaction */
+    cursor: pointer;
+    transition: background-color 200ms ease, border-color 200ms ease;
+    
+    /* Remove default outline (we'll add focus-visible) */
+    outline: none;
+  }
+  
+  /* Thumb (pseudo-element) */
+  .ds-toggle::before {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    
+    /* Size: track height minus padding */
+    width: calc(var(--ds-toggle-height, 22px) - 6px);
+    height: calc(var(--ds-toggle-height, 22px) - 6px);
+    
+    /* Styling */
+    background: white;
+    border-radius: 50%;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+    
+    /* Animation (GPU-accelerated) */
+    transition: transform 200ms cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
+  }
+  
+  /* ===== STATES ===== */
+  
+  /* Checked (ON) */
+  .ds-toggle:checked {
+    background: var(--ds-color-primary-bg);
+    border-color: var(--ds-color-primary-border);
+  }
+  
+  .ds-toggle:checked::before {
+    /* Slide thumb to right */
+    transform: translateX(calc(var(--ds-toggle-width, 40px) - var(--ds-toggle-height, 22px) + 2px));
+  }
+  
+  /* Focus (keyboard navigation) */
+  .ds-toggle:focus-visible {
+    outline: 2px solid var(--ds-color-focus-ring);
+    outline-offset: 2px;
+  }
+  
+  /* Hover */
+  .ds-toggle:hover:not(:disabled) {
+    border-color: var(--ds-color-neutral-500);
+  }
+  
+  .ds-toggle:checked:hover:not(:disabled) {
+    background: var(--ds-color-primary-hover);
+  }
+  
+  /* Disabled */
+  .ds-toggle:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  /* Invalid */
+  .ds-toggle[aria-invalid="true"] {
+    border-color: var(--ds-color-state-danger);
+  }
+  
+  /* ===== SIZE VARIANTS ===== */
+  
+  /* Small (32×18px) */
+  .ds-toggle--sm {
+    --ds-toggle-width: 32px;
+    --ds-toggle-height: 18px;
+  }
+  
+  /* Large (48×26px) */
+  .ds-toggle--lg {
+    --ds-toggle-width: 48px;
+    --ds-toggle-height: 26px;
+  }
+  
+  /* ===== LOADING STATE (optional) ===== */
+  
+  .ds-toggle--loading {
+    pointer-events: none;
+  }
+  
+  .ds-toggle--loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 12px;
+    height: 12px;
+    margin: -6px 0 0 -6px;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: ds-toggle-spin 0.6s linear infinite;
+  }
+  
+  @keyframes ds-toggle-spin {
+    to { transform: rotate(360deg); }
+  }
+  
+  /* ===== ACCESSIBILITY ENHANCEMENTS ===== */
+  
+  /* High contrast mode support */
+  @media (prefers-contrast: high) {
+    .ds-toggle {
+      border-width: 2px;
+    }
+    
+    .ds-toggle:focus-visible {
+      outline-width: 3px;
+    }
+  }
+  
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .ds-toggle,
+    .ds-toggle::before {
+      transition: none;
+    }
+  }
+}

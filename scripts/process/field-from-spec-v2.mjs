@@ -42,6 +42,7 @@ import yaml from 'js-yaml';
 import { validateSpec } from './validate-spec.mjs';
 import { generateCompositeField } from './generate-composite-v2.2.mjs';
 import { CheckboxRecipe } from '../../packages/forms/src/factory/recipes/CheckboxRecipe.js';
+import { ToggleRecipe } from '../../packages/forms/src/factory/recipes/ToggleRecipe.js';
 
 const ROOT = process.cwd();
 const fieldName = process.argv[2];
@@ -163,8 +164,11 @@ function selectRecipe(spec) {
     return CheckboxRecipe;
   }
   
+  if (type === 'toggle' || type === 'switch') {
+    return ToggleRecipe;
+  }
+  
   // Future: add more recipes here
-  // if (type === 'toggle') return ToggleRecipe;
   // if (type === 'rating') return RatingRecipe;
   // if (type === 'slider' || type === 'range') return SliderRecipe;
   // if (type === 'file') return FileUploadRecipe;

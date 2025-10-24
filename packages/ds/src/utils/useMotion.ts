@@ -11,7 +11,7 @@
  */
 
 import { useState, useEffect } from 'react';
-import { transitions } from '.';
+import * as transitions from '../utils';
 
 interface MotionConfig {
   duration: {
