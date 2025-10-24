@@ -219,6 +219,24 @@ export const MultiSelectRecipe: Recipe = (ctx) => {
   const Overlay: React.FC<any> = ({ open, onClose, field }) => {
     if (!open) return null;
     
+    // Keyboard navigation hook for overlay (search input + list)
+    const handleKeyDown = useOverlayKeys({
+      count: filteredOptions.length,
+      activeIndex: highlightedIndex,
+      setActiveIndex: setHighlightedIndex,
+      onSelect: (index) => {
+        const option = filteredOptions[index];
+        if (!option.disabled) {
+          toggleSelection(option.value);
+        }
+      },
+      onClose: () => {
+        setIsOpen(false);
+        setSearchQuery('');
+      },
+      isOpen: open
+    });
+    
     // TODO: Use OverlayPrimitive/SheetPrimitive based on env.isMobile
     // For now, simple absolute positioning
     
