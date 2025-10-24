@@ -79,33 +79,16 @@ export const PickerSearch: React.FC<PickerSearchProps> = ({
         {/* Input */}
         <input
           ref={inputRef}
-          type="text"
+          type="search"
           value={localValue}
           onChange={(e) => setLocalValue(e.target.value)}
           onClick={(e) => e.stopPropagation()}
           onMouseDown={(e) => e.stopPropagation()}
           placeholder={placeholder}
+          className="ds-input"
           style={{
-            width: '100%',
-            paddingLeft: '40px',
-            paddingRight: '40px',
-            paddingTop: '10px',
-            paddingBottom: '10px',
-            minHeight: '44px',
-            fontSize: '14px',
-            color: 'var(--ds-color-text-primary)',
-            backgroundColor: 'var(--ds-color-surface-subtle)',
-            border: '1px solid var(--ds-color-border-subtle)',
-            borderRadius: '8px',
-            outline: 'none',
-          }}
-          onFocus={(e) => {
-            e.target.style.borderColor = 'var(--ds-color-border-focus)';
-            e.target.style.boxShadow = `0 0 0 3px color-mix(in oklab, var(--ds-color-border-focus), transparent 85%)`;
-          }}
-          onBlur={(e) => {
-            e.target.style.borderColor = 'var(--ds-color-border-subtle)';
-            e.target.style.boxShadow = 'none';
+            paddingLeft: '40px',  // Space for search icon
+            paddingRight: '40px', // Space for clear button
           }}
           aria-label="Search"
         />
