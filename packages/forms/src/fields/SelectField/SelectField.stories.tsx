@@ -1,3 +1,4 @@
+/** @refiner(filter-dom-props@1.1.0 applied 2025-10-24) */
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { useForm } from 'react-hook-form';
@@ -10,10 +11,10 @@ const meta: Meta<typeof SelectField> = {
   parameters: {
     docs: {
       description: {
-        component: 'Custom select field with overlay, search, and keyboard navigation. Uses desktop popover and mobile sheet.',
-      },
-    },
-  },
+        component: 'Custom select field with overlay, search, and keyboard navigation. Uses desktop popover and mobile sheet.'
+      }
+    }
+  }
 };
 
 export default meta;
@@ -21,19 +22,19 @@ type Story = StoryObj<typeof SelectField>;
 
 // Sample data
 const countries = [
-  { value: 'us', label: 'United States' },
-  { value: 'ca', label: 'Canada' },
-  { value: 'uk', label: 'United Kingdom' },
-  { value: 'au', label: 'Australia' },
-  { value: 'de', label: 'Germany' },
-  { value: 'fr', label: 'France' },
-  { value: 'jp', label: 'Japan' },
-  { value: 'br', label: 'Brazil' },
-];
+{ value: 'us', label: 'United States' },
+{ value: 'ca', label: 'Canada' },
+{ value: 'uk', label: 'United Kingdom' },
+{ value: 'au', label: 'Australia' },
+{ value: 'de', label: 'Germany' },
+{ value: 'fr', label: 'France' },
+{ value: 'jp', label: 'Japan' },
+{ value: 'br', label: 'Brazil' }];
+
 
 const largeList = Array.from({ length: 100 }, (_, i) => ({
   value: `option-${i}`,
-  label: `Option ${i + 1}`,
+  label: `Option ${i + 1}`
 }));
 
 // ============================================
@@ -43,7 +44,7 @@ const largeList = Array.from({ length: 100 }, (_, i) => ({
 export const Basic: Story = {
   render: () => {
     const { control, formState: { errors } } = useForm();
-    
+
     return (
       <SelectField
         name="country"
@@ -51,10 +52,10 @@ export const Basic: Story = {
         errors={errors}
         label="Country"
         placeholder="Select a country"
-        options={countries}
-      />
-    );
-  },
+        options={countries} />);
+
+
+  }
 };
 
 // ============================================
@@ -64,7 +65,7 @@ export const Basic: Story = {
 export const Searchable: Story = {
   render: () => {
     const { control, formState: { errors } } = useForm();
-    
+
     return (
       <SelectField
         name="country"
@@ -73,10 +74,10 @@ export const Searchable: Story = {
         label="Country (with search)"
         description="Type to filter options"
         searchable={true}
-        options={countries}
-      />
-    );
-  },
+        options={countries} />);
+
+
+  }
 };
 
 // ============================================
@@ -88,7 +89,7 @@ export const Clearable: Story = {
     const { control, formState: { errors } } = useForm({
       defaultValues: { country: 'us' }
     });
-    
+
     return (
       <SelectField
         name="country"
@@ -97,10 +98,10 @@ export const Clearable: Story = {
         label="Country (clearable)"
         description="Click the X to clear selection"
         clearable={true}
-        options={countries}
-      />
-    );
-  },
+        options={countries} />);
+
+
+  }
 };
 
 // ============================================
@@ -110,25 +111,25 @@ export const Clearable: Story = {
 export const Required: Story = {
   render: () => {
     const { control, handleSubmit, formState: { errors } } = useForm();
-    
+
     const onSubmit = (data: any) => console.log(data);
-    
+
     return (
-      <form onSubmit={handleSubmit(onSubmit)} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+      <form style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
         <SelectField
           name="country"
           control={control}
           errors={errors}
           label="Country *"
           required={true}
-          options={countries}
-        />
+          options={countries} />
+
         <button style={{ padding: '10px 20px', background: '#3b82f6', color: 'white', border: 'none', borderRadius: '6px' }}>
           Submit
         </button>
-      </form>
-    );
-  },
+      </form>);
+
+  }
 };
 
 // ============================================
@@ -140,7 +141,7 @@ export const Disabled: Story = {
     const { control, formState: { errors } } = useForm({
       defaultValues: { country: 'us' }
     });
-    
+
     return (
       <SelectField
         name="country"
@@ -148,10 +149,10 @@ export const Disabled: Story = {
         errors={errors}
         label="Country (disabled)"
         disabled={true}
-        options={countries}
-      />
-    );
-  },
+        options={countries} />);
+
+
+  }
 };
 
 // ============================================
@@ -161,12 +162,12 @@ export const Disabled: Story = {
 export const WithError: Story = {
   render: () => {
     const { control, setError, formState: { errors } } = useForm();
-    
+
     // Simulate error
     React.useEffect(() => {
       setError('country', { type: 'manual', message: 'Please select a valid country' });
     }, [setError]);
-    
+
     return (
       <SelectField
         name="country"
@@ -174,10 +175,10 @@ export const WithError: Story = {
         errors={errors}
         label="Country"
         required={true}
-        options={countries}
-      />
-    );
-  },
+        options={countries} />);
+
+
+  }
 };
 
 // ============================================
@@ -187,7 +188,7 @@ export const WithError: Story = {
 export const LongList: Story = {
   render: () => {
     const { control, formState: { errors } } = useForm();
-    
+
     return (
       <SelectField
         name="option"
@@ -196,10 +197,10 @@ export const LongList: Story = {
         label="Select from 100 options"
         description="Scroll or search to find options"
         searchable={true}
-        options={largeList}
-      />
-    );
-  },
+        options={largeList} />);
+
+
+  }
 };
 
 // ============================================
@@ -209,7 +210,7 @@ export const LongList: Story = {
 export const NoSearch: Story = {
   render: () => {
     const { control, formState: { errors } } = useForm();
-    
+
     return (
       <SelectField
         name="country"
@@ -218,10 +219,10 @@ export const NoSearch: Story = {
         label="Country (no search)"
         description="Use arrow keys to navigate"
         searchable={false}
-        options={countries}
-      />
-    );
-  },
+        options={countries} />);
+
+
+  }
 };
 
 // ============================================
@@ -231,7 +232,7 @@ export const NoSearch: Story = {
 export const CustomPlaceholder: Story = {
   render: () => {
     const { control, formState: { errors } } = useForm();
-    
+
     return (
       <SelectField
         name="country"
@@ -239,10 +240,10 @@ export const CustomPlaceholder: Story = {
         errors={errors}
         label="Destination"
         placeholder="Where are you traveling?"
-        options={countries}
-      />
-    );
-  },
+        options={countries} />);
+
+
+  }
 };
 
 // ============================================
@@ -252,17 +253,17 @@ export const CustomPlaceholder: Story = {
 export const FullyFeatured: Story = {
   render: () => {
     const { control, handleSubmit, watch, formState: { errors } } = useForm();
-    
+
     const selectedValue = watch('country');
-    
+
     const onSubmit = (data: any) => {
       console.log('Submitted:', data);
       alert(`Selected: ${data.country}`);
     };
-    
+
     return (
       <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-        <form onSubmit={handleSubmit(onSubmit)} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        <form style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
           <SelectField
             name="country"
             control={control}
@@ -272,19 +273,19 @@ export const FullyFeatured: Story = {
             required={true}
             searchable={true}
             clearable={true}
-            options={countries}
-          />
+            options={countries} />
+
           <button style={{ padding: '10px 20px', background: '#3b82f6', color: 'white', border: 'none', borderRadius: '6px' }}>
             Submit
           </button>
         </form>
         
-        {selectedValue && (
-          <div style={{ padding: '12px', background: '#f3f4f6', borderRadius: '6px' }}>
-            <strong>Selected:</strong> {countries.find(c => c.value === selectedValue)?.label}
+        {selectedValue &&
+        <div style={{ padding: '12px', background: '#f3f4f6', borderRadius: '6px' }}>
+            <strong>Selected:</strong> {countries.find((c) => c.value === selectedValue)?.label}
           </div>
-        )}
-      </div>
-    );
-  },
+        }
+      </div>);
+
+  }
 };

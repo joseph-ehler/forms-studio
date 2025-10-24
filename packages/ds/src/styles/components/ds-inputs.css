@@ -46,18 +46,133 @@
 
 .ds-input::placeholder {
   color: var(--ds-color-text-muted);
+  opacity: 1;
 }
 
+/* ===== Interactive States ===== */
+
+/* Hover - Visual affordance */
+.ds-input:hover:not(:disabled):not(:focus):not(:read-only) {
+  border-color: var(--ds-color-border-strong);
+  background-color: var(--ds-color-surface-subtle);
+}
+
+/* Focus - Ring instead of shadow (FLAT design) */
 .ds-input:focus {
   border-color: var(--ds-color-border-focus);
-  box-shadow: var(--ds-input-shadow-focus);
+  box-shadow: 0 0 0 3px var(--ds-color-primary-bg-subtle);
+  transform: translateY(-1px);
 }
 
+/* Active - Pressed state */
+.ds-input:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+/* ===== Validation States ===== */
+
+/* Error - Failed validation */
+.ds-input[aria-invalid="true"],
+.ds-input--error {
+  border-color: var(--ds-color-state-danger);
+  background-color: rgba(239, 68, 68, 0.05);
+}
+
+.ds-input[aria-invalid="true"]:focus,
+.ds-input--error:focus {
+  border-color: var(--ds-color-state-danger);
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+  animation: shake 0.3s ease-in-out;
+}
+
+/* Success - Validated */
+.ds-input--success {
+  border-color: var(--ds-color-state-success);
+  background-color: rgba(34, 197, 94, 0.05);
+}
+
+.ds-input--success:focus {
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
+}
+
+/* Warning - Soft validation */
+.ds-input--warning {
+  border-color: var(--ds-color-state-warning);
+  background-color: rgba(245, 158, 11, 0.05);
+}
+
+.ds-input--warning:focus {
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+}
+
+/* HTML5 Validation */
+.ds-input:invalid:not(:focus):not(:placeholder-shown) {
+  border-color: var(--ds-color-state-danger);
+}
+
+.ds-input:valid:not(:focus):not(:placeholder-shown):not([type="email"]):not([type="url"]) {
+  border-color: var(--ds-color-state-success);
+}
+
+/* ===== Special States ===== */
+
+/* Disabled */
 .ds-input:disabled {
   background-color: var(--ds-color-surface-subtle);
   color: var(--ds-color-text-muted);
   cursor: not-allowed;
   opacity: 0.6;
+  border-style: dashed;
+}
+
+/* Readonly - Not editable */
+.ds-input:read-only {
+  background-color: var(--ds-color-surface-raised);
+  cursor: default;
+  border-style: dashed;
+  border-color: var(--ds-color-border-subtle);
+}
+
+.ds-input:read-only:hover {
+  background-color: var(--ds-color-surface-raised);
+  border-color: var(--ds-color-border-subtle);
+}
+
+/* Loading - Async validation */
+.ds-input--loading {
+  background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48Y2lyY2xlIGN4PSI4IiBjeT0iOCIgcj0iNiIgc3Ryb2tlPSIjOTM5M2EzIiBzdHJva2Utd2lkdGg9IjIiIGZpbGw9Im5vbmUiIHN0cm9rZS1kYXNoYXJyYXk9IjMwIDEwIj48YW5pbWF0ZVRyYW5zZm9ybSBhdHRyaWJ1dGVOYW1lPSJ0cmFuc2Zvcm0iIHR5cGU9InJvdGF0ZSIgZnJvbT0iMCA4IDgiIHRvPSIzNjAgOCA4IiBkdXI9IjFzIiByZXBlYXRDb3VudD0iaW5kZWZpbml0ZSIvPjwvY2lyY2xlPjwvc3ZnPg==');
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px 16px;
+  padding-right: 40px;
+}
+
+/* ===== Browser Overrides ===== */
+
+/* Autofill - Override yellow */
+.ds-input:-webkit-autofill,
+.ds-input:-webkit-autofill:hover,
+.ds-input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px var(--ds-color-surface-base) inset;
+  -webkit-text-fill-color: var(--ds-color-text-primary);
+  border-color: var(--ds-color-border-subtle);
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Selection colors */
+.ds-input::selection {
+  background-color: var(--ds-color-primary-bg-subtle);
+  color: var(--ds-color-text-primary);
+}
+
+/* Caret color */
+.ds-input {
+  caret-color: var(--ds-color-primary-bg);
+}
+
+/* Search input cancel button */
+.ds-input[type="search"]::-webkit-search-cancel-button {
+  appearance: none;
 }
 
 /* Desktop: Adaptive input height (WCAG AA: 44px minimum) */
@@ -82,11 +197,67 @@
   font-size: 18px;
 }
 
+/* ===== Input Type Variants ===== */
+
+/* Search input */
+.ds-input[type="search"] {
+  padding-left: 40px;
+}
+
+/* File input */
+.ds-input[type="file"] {
+  padding: 8px;
+  cursor: pointer;
+}
+
+.ds-input[type="file"]::file-selector-button {
+  background: var(--ds-color-secondary-bg);
+  border: 1px solid var(--ds-color-border-subtle);
+  padding: 8px 16px;
+  border-radius: 4px;
+  margin-right: 12px;
+  cursor: pointer;
+  transition: all 150ms ease;
+}
+
+.ds-input[type="file"]::file-selector-button:hover {
+  background: var(--ds-color-secondary-bg-hover);
+  border-color: var(--ds-color-border-strong);
+}
+
 /* ===== Textarea ===== */
 
 .ds-textarea {
   min-height: 96px; /* 4 rows minimum */
   resize: vertical;
+  scroll-behavior: smooth;
+}
+
+/* ===== Glass Variant ===== */
+
+.ds-input--glass {
+  background: var(--ds-color-surface-glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.ds-input--glass:focus {
+  background: var(--ds-color-surface-glass);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* ===== Animations ===== */
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 /* ===== Button Styles ===== */

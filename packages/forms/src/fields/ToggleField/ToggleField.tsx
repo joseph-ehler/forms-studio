@@ -37,14 +37,14 @@ export function ToggleField({
             alignItems: 'center',
             gap: '0.75rem',
             minHeight: '44px',
-            padding: '11px 0',
+            padding: '11px 0'
           }}>
 
             <input
             {...field}
             type="checkbox"
             role="switch"
-            className="ds-toggle ds-toggle"
+            className="ds-toggle ds-toggle ds-toggle"
             id={name}
             aria-checked={field.value ?? false}
             aria-invalid={hasError || undefined}
