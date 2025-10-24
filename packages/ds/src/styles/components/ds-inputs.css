@@ -51,14 +51,16 @@
 
 /* ===== Interactive States ===== */
 
-/* Hover - 2px ring in primary color */
+/* Hover - Subtle background change, no ring */
 .ds-input:hover:not(:disabled):not(:focus):not(:read-only) {
-  box-shadow: 0 0 0 2px var(--ds-color-primary-bg);
+  background-color: var(--ds-color-surface-subtle);
+  border-color: var(--ds-color-border-strong);
 }
 
-/* Focus - 2px ring in primary color (always primary, regardless of validation) */
+/* Focus - 2px BLUE ring (reserved for focus only) */
 .ds-input:focus {
   box-shadow: 0 0 0 2px var(--ds-color-primary-bg);
+  border-color: var(--ds-color-primary-bg);
 }
 
 /* ===== Validation States ===== */
@@ -79,7 +81,7 @@
 
 .ds-input[aria-invalid="true"]:hover:not(:focus),
 .ds-input--error:hover:not(:focus) {
-  box-shadow: 0 0 0 2px var(--ds-color-state-danger); /* Hover ring matches error color */
+  background-color: rgba(239, 68, 68, 0.08); /* Slightly darker error tint on hover */
 }
 
 /* Success - Validated */
@@ -93,7 +95,7 @@
 }
 
 .ds-input--success:hover:not(:focus) {
-  box-shadow: 0 0 0 2px var(--ds-color-state-success); /* Hover ring matches success color */
+  background-color: rgba(34, 197, 94, 0.08); /* Slightly darker success tint on hover */
 }
 
 /* Warning - Soft validation */
@@ -107,7 +109,7 @@
 }
 
 .ds-input--warning:hover:not(:focus) {
-  box-shadow: 0 0 0 2px var(--ds-color-state-warning); /* Hover ring matches warning color */
+  background-color: rgba(245, 158, 11, 0.08); /* Slightly darker warning tint on hover */
 }
 
 /* HTML5 Validation - DISABLED BY DEFAULT
