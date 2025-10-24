@@ -1,4 +1,5 @@
 /** @refiner(filter-dom-props@1.1.0 applied 2025-10-24) */
+/** @refiner(filter-dom-props@1.1.0 applied 2025-10-24) */
 /**
  * SelectField - Custom Overlay Select
  * 
@@ -173,7 +174,7 @@ export function SelectField({
             <div style={{ position: 'relative', marginTop: label ? '8px' : 0 }}>
               <button
               ref={triggerRef}
-              type="button"
+
               id={name}
               disabled={disabled}
               aria-haspopup="listbox"
@@ -186,7 +187,7 @@ export function SelectField({
               className="ds-select-trigger"
               style={{
                 paddingRight: '40px', // Space for chevron icon
-                paddingLeft: '16px',  // Proper left padding
+                paddingLeft: '16px' // Proper left padding
               }}>
 
                 <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
@@ -271,18 +272,18 @@ export function SelectField({
 
                         <input
                     ref={searchInputRef}
-                    type="search"
+
                     role="searchbox"
                     aria-label="Filter options"
-                    placeholder="Search..."
-                    value={searchQuery}
+
+
                     onChange={(e) => {
                       setSearchQuery(e.target.value);
                       setHighlightedIndex(0);
                     }}
                     className="ds-input ds-input--sm"
                     style={{
-                      paddingLeft: '36px', // Space for search icon
+                      paddingLeft: '36px' // Space for search icon
                     }} />
 
                       </div>
@@ -290,15 +291,7 @@ export function SelectField({
               }
 
                   {/* Options List */}
-                  <div
-                style={{
-                  flex: 1,
-                  overflowY: 'auto',
-                  padding: '8px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '2px'
-                }}>
+                  <div className="ds-option-list" style={{ flex: 1 }}>
 
                     {filteredOptions.length === 0 ?
                 <div style={{ padding: '16px', textAlign: 'center', color: 'var(--ds-color-text-muted)' }}>
@@ -314,49 +307,19 @@ export function SelectField({
                   aria-disabled={option.disabled}
                   disabled={option.disabled}
                   onClick={() => !option.disabled && handleSelect(option.value, field.onChange)}
-                  onMouseEnter={() => setHighlightedIndex(index)}
+
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' && !option.disabled) {
                       e.preventDefault();
                       handleSelect(option.value, field.onChange);
                     }
                   }}
-                  style={{
-                    width: '100%',
-                    minHeight: '44px',
-                    padding: '10px 16px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    position: 'relative',
-                    background: field.value === option.value ? 'var(--ds-color-primary-bg)' : 'transparent',
-                    border: 'none',
-                    borderRadius: '6px',
-                    textAlign: 'left',
-                    fontSize: '14px',
-                    color:
-                    field.value === option.value ?
-                    'var(--ds-color-primary-text)' :
-                    option.disabled ?
-                    'var(--ds-color-text-muted)' :
-                    'var(--ds-color-text-primary)',
-                    cursor: option.disabled ? 'not-allowed' : 'pointer',
-                    opacity: option.disabled ? 0.5 : 1,
-                    transition: 'background 150ms ease'
-                  }}>
+                  className="ds-option-button">
                     
                     {/* Hover scrim - light/dark mode compatible */}
-                    {index === highlightedIndex && !option.disabled && (
-                      <div style={{
-                        position: 'absolute',
-                        inset: 0,
-                        background: field.value === option.value 
-                          ? 'rgba(0, 0, 0, 0.1)' // Darken selected item
-                          : 'var(--ds-color-primary-bg-subtle)', // Subtle highlight for unselected
-                        borderRadius: '6px',
-                        pointerEvents: 'none',
-                        transition: 'background 150ms ease'
-                      }} />
-                    )}
+                    {index === highlightedIndex && !option.disabled &&
+                  <div className="ds-hover-scrim" />
+                  }
                     
                     <span style={{ position: 'relative', zIndex: 1 }}>
                       {option.label}

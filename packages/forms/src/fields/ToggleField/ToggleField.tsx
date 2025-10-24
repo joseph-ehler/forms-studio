@@ -44,7 +44,7 @@ export function ToggleField({
             {...field}
             type="checkbox"
             role="switch"
-            className="ds-toggle ds-toggle ds-toggle"
+            className="ds-toggle ds-toggle ds-toggle ds-toggle"
             id={name}
             aria-checked={field.value ?? false}
             aria-invalid={hasError || undefined}

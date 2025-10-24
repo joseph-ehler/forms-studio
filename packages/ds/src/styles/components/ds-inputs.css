@@ -311,6 +311,67 @@
   border-color: rgba(255, 255, 255, 0.4);
 }
 
+/* ===== Overlay List with Search - Option Buttons ===== */
+
+.ds-option-list {
+  /* Container for option buttons */
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px;
+  overflow-y: auto;
+}
+
+.ds-option-button {
+  /* Base button styling for list options */
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  position: relative;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  text-align: left;
+  font-size: 14px;
+  color: var(--ds-color-text-primary);
+  cursor: pointer;
+  transition: background 150ms ease;
+}
+
+/* Selected state */
+.ds-option-button[aria-selected="true"] {
+  background: var(--ds-color-primary-bg);
+  color: var(--ds-color-primary-text);
+}
+
+/* Disabled state */
+.ds-option-button:disabled {
+  color: var(--ds-color-text-muted);
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* Hover scrim - overlays on top of button */
+.ds-hover-scrim {
+  position: absolute;
+  inset: 0;
+  border-radius: 6px;
+  pointer-events: none;
+  transition: background 150ms ease;
+}
+
+/* Unselected item hover */
+.ds-option-button:not([aria-selected="true"]) .ds-hover-scrim {
+  background: var(--ds-color-primary-bg-subtle);
+}
+
+/* Selected item hover - darken with scrim (light/dark compatible) */
+.ds-option-button[aria-selected="true"] .ds-hover-scrim {
+  background: rgba(0, 0, 0, 0.1);
+}
+
 /* ===== Animations ===== */
 
 @keyframes shake {
