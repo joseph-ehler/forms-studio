@@ -4,14 +4,19 @@ on:
   push:
     branches: [main, develop]
   pull_request:
+    paths:
+      - 'packages/**'
+      - '.eslintrc.import-hygiene.cjs'
+      - 'tsconfig*.json'
+      - 'scripts/gen-barrels.mts'
 
 jobs:
-  build:
+  validate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       
-      - uses: pnpm/action-setup@v2
+      - uses: pnpm/action-setup@v4
         with:
           version: 9
       
@@ -20,8 +25,29 @@ jobs:
           node-version: '20'
           cache: 'pnpm'
       
-      - run: pnpm install --frozen-lockfile
+      - name: Cache tool outputs
+        uses: actions/cache@v4
+        with:
+          path: |
+            **/node_modules/.cache/**
+          key: ${{ runner.os }}-tools-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-tools-
       
-      - run: pnpm typecheck
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
       
-      - run: pnpm build
+      - name: Check locked versions
+        run: pnpm versions:check
+      
+      - name: Check barrels are up-to-date
+        run: pnpm barrels:check
+      
+      - name: Lint code
+        run: pnpm lint
+      
+      - name: Type check
+        run: pnpm typecheck
+      
+      - name: Build packages
+        run: pnpm build

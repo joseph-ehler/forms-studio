@@ -1,0 +1,134 @@
+/**
+ * Overlay Standards
+ * 
+ * Consistent patterns for Modal, Drawer, Popover, etc.
+ * Only overlays get shadows; everything else uses borders + scrims.
+ */
+
+/**
+ * Backdrop (scrim) - behind all overlays
+ */
+[data-component="modal"] [data-role="backdrop"],
+[data-component="drawer"] [data-role="backdrop"],
+[data-component="popover"] [data-role="backdrop"] {
+  position: fixed;
+  inset: 0;
+  background: var(--ds-scrim);
+  z-index: calc(var(--ds-z-overlay) - 1);
+}
+
+/**
+ * Panel - the actual overlay content
+ */
+[data-component="modal"] [data-role="panel"],
+[data-component="drawer"] [data-role="panel"],
+[data-component="popover"] [data-role="panel"] {
+  box-shadow: var(--ds-elevation-overlay);
+  background: var(--ds-color-surface-overlay);
+  border-radius: var(--ds-radius-lg);
+  
+  /* Lock minimum sizes */
+  min-width: var(--ds-touch-target);
+  min-height: var(--ds-touch-target);
+}
+
+/**
+ * Modal-specific positioning
+ */
+[data-component="modal"] [data-role="panel"] {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 90vw;
+  max-height: 90vh;
+  z-index: var(--ds-z-modal);
+}
+
+/**
+ * Drawer-specific positioning
+ */
+[data-component="drawer"] [data-role="panel"] {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  max-width: 90vw;
+  width: 400px;
+  z-index: var(--ds-z-overlay);
+}
+
+/**
+ * Popover-specific positioning
+ */
+[data-component="popover"] [data-role="panel"] {
+  position: absolute;
+  z-index: var(--ds-z-popover);
+  min-width: 200px;
+}
+
+/**
+ * Animation: Fade in
+ */
+[data-component][data-state="entering"] [data-role="backdrop"] {
+  animation: ds-fade-in var(--ds-transition-fast) ease-out;
+}
+
+[data-component][data-state="entering"] [data-role="panel"] {
+  animation: ds-scale-fade-in var(--ds-transition-base) ease-out;
+}
+
+/**
+ * Animation: Fade out
+ */
+[data-component][data-state="exiting"] [data-role="backdrop"] {
+  animation: ds-fade-out var(--ds-transition-fast) ease-in;
+}
+
+[data-component][data-state="exiting"] [data-role="panel"] {
+  animation: ds-scale-fade-out var(--ds-transition-base) ease-in;
+}
+
+/**
+ * Keyframes
+ */
+@keyframes ds-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes ds-fade-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes ds-scale-fade-in {
+  from { 
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.96);
+  }
+  to { 
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes ds-scale-fade-out {
+  from { 
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  to { 
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.96);
+  }
+}
+
+/**
+ * Reduced motion: No animations
+ */
+@media (prefers-reduced-motion: reduce) {
+  [data-component][data-state] [data-role] {
+    animation: none !important;
+  }
+}

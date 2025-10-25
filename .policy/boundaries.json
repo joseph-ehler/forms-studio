@@ -1,0 +1,45 @@
+{
+  "description": "Module boundary rules - enforce clean architecture",
+  "rules": [
+    {
+      "name": "ds-is-leaf",
+      "comment": "DS is a leaf package - nothing depends on ui-bridge or apps",
+      "from": "packages/ds",
+      "to": ["packages/ds"],
+      "allowed": true
+    },
+    {
+      "name": "ui-bridge-can-use-ds",
+      "comment": "UI Bridge can import from DS",
+      "from": "packages/ui-bridge",
+      "to": ["packages/ds", "packages/ui-bridge"],
+      "allowed": true
+    },
+    {
+      "name": "demo-app-can-use-packages",
+      "comment": "Demo app can use any package",
+      "from": "packages/demo-app",
+      "to": ["packages/ds", "packages/ui-bridge", "packages/core", "packages/datasources"],
+      "allowed": true
+    },
+    {
+      "name": "core-is-standalone",
+      "comment": "Core package has no internal dependencies",
+      "from": "packages/core",
+      "to": ["packages/core"],
+      "allowed": true
+    }
+  ],
+  "violations": [
+    {
+      "from": "packages/ds",
+      "to": "packages/ui-bridge",
+      "reason": "DS must not depend on UI Bridge - creates circular dependency"
+    },
+    {
+      "from": "packages/ui-bridge",
+      "to": "packages/demo-app",
+      "reason": "Packages must not depend on apps"
+    }
+  ]
+}

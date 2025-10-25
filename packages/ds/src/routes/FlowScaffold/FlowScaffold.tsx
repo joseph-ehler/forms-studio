@@ -18,8 +18,9 @@
  * </FlowScaffold>
  */
 
-import { FC, PropsWithChildren } from 'react';
 import './flow-scaffold.css';
+
+import { FC, PropsWithChildren } from 'react';
 
 export interface FlowScaffoldProps {
   /**

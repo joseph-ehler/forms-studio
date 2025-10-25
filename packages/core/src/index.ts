@@ -3,8 +3,8 @@
  */
 
 // Schema exports
-export * from './schema/types';
 export * from './schema/helpers';
+export * from './schema/types';
 
 // Form spec exports  
 export * from './form/spec';

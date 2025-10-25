@@ -1,0 +1,49 @@
+/* Input reads ONLY --input-* vars. No roles/tokens here. */
+
+@layer components {
+  [data-component="input"] input {
+    color: var(--input-fg);
+    background: var(--input-bg);
+    border: 1px solid var(--input-border);
+    border-radius: var(--ds-radius-control);
+    padding: var(--ds-space-control-y) var(--ds-space-control-x);
+    min-height: var(--ds-touch-target);
+    font: inherit;
+    outline: none;
+    transition: border-color var(--ds-transition-base), box-shadow var(--ds-transition-base), background-color var(--ds-transition-base);
+    width: 100%;
+  }
+
+  [data-component="input"] input::placeholder {
+    color: var(--input-placeholder);
+  }
+
+  @media (hover: hover) {
+    [data-component="input"] input:hover:not(:disabled) {
+      border-color: var(--input-hover-border, var(--input-border));
+    }
+  }
+
+  [data-component="input"] input:focus-visible {
+    box-shadow: 0 0 0 var(--ds-focus-ring) var(--input-focus-ring);
+    border-color: var(--input-hover-border, var(--input-border));
+  }
+
+  [data-component="input"] input[aria-invalid="true"] {
+    border-color: var(--input-invalid-border, var(--input-border));
+  }
+
+  [data-component="input"] input:disabled,
+  [data-component="input"] input[aria-disabled="true"] {
+    color: var(--input-disabled-fg);
+    background: var(--input-disabled-bg);
+    border-color: var(--input-disabled-border);
+    cursor: not-allowed;
+    opacity: var(--ds-disabled-opacity);
+  }
+
+  /* sizes */
+  [data-component="input"][data-size="sm"] input { font-size: var(--ds-text-sm); }
+  [data-component="input"][data-size="md"] input { font-size: var(--ds-text-base); }
+  [data-component="input"][data-size="lg"] input { font-size: var(--ds-text-lg); }
+}

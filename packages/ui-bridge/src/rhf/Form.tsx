@@ -1,8 +1,8 @@
 /**
  * Form component with Zod + React Hook Form integration
  */
-import { FormProvider, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { FormProvider, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 export type FormProps<TSchema extends z.ZodTypeAny> = {

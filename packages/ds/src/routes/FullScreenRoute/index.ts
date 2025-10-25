@@ -1,2 +1,2 @@
-export { FullScreenRoute } from './FullScreenRoute';
 export type { FullScreenRouteProps } from './FullScreenRoute';
+export { FullScreenRoute } from './FullScreenRoute';

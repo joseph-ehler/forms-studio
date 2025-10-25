@@ -1,27 +1,69 @@
 {
   "name": "@intstudio/ds",
-  "version": "0.3.0",
-  "description": "Intelligence Studio Design System - Route shells, hooks, and design tokens",
+  "version": "0.4.0",
+  "description": "Intelligence Studio Design System - Elite Flowbite wrappers + bespoke routes",
   "type": "module",
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
+  "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
+      "source": "./src/index.ts",
       "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
+      "default": "./dist/index.js"
     },
-    "./dist/index.css": "./dist/index.css"
+    "./fb": {
+      "types": "./dist/fb/index.d.ts",
+      "source": "./src/fb/index.ts",
+      "import": "./dist/fb/index.js",
+      "default": "./dist/fb/index.js"
+    },
+    "./routes": {
+      "types": "./dist/routes/index.d.ts",
+      "source": "./src/routes/index.ts",
+      "import": "./dist/routes/index.js",
+      "default": "./dist/routes/index.js"
+    },
+    "./hooks": {
+      "types": "./dist/hooks/index.d.ts",
+      "source": "./src/hooks/index.ts",
+      "import": "./dist/hooks/index.js",
+      "default": "./dist/hooks/index.js"
+    },
+    "./styles": "./dist/index.css",
+    "./dist/fb/index.css": "./dist/fb/index.css",
+    "./dist/index.css": "./dist/index.css",
+    "./dist/routes/index.css": "./dist/routes/index.css",
+    "./dist/styles/ds-interactions.css": "./dist/styles/ds-interactions.css",
+    "./dist/styles/focus-rings.css": "./dist/styles/focus-rings.css",
+    "./dist/styles/overlay-standards.css": "./dist/styles/overlay-standards.css",
+    "./package.json": "./package.json"
+  },
+  "typesVersions": {
+    "*": {
+      "fb": [
+        "dist/fb/index.d.ts"
+      ],
+      "routes": [
+        "dist/routes/index.d.ts"
+      ],
+      "hooks": [
+        "dist/hooks/index.d.ts"
+      ]
+    }
   },
   "files": [
     "dist",
     "README.md"
   ],
   "scripts": {
-    "build": "tsup src/index.ts --format esm,cjs --dts --clean",
-    "dev": "tsup src/index.ts --format esm,cjs --dts --watch",
-    "typecheck": "tsc --noEmit"
+    "build": "tsup --config tsup.config.ts",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src --ext .ts,.tsx",
+    "test": "vitest",
+    "check:deprecations": "tsx scripts/check-deprecations.ts",
+    "check:deprecations:warn": "tsx scripts/check-deprecations.ts --warn"
   },
   "keywords": [
     "design-system",
@@ -50,13 +92,25 @@
     "react": "^18.0.0",
     "react-dom": "^18.0.0"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@intstudio/tokens": "workspace:*",
+    "flowbite-react": "^0.10.1",
+    "flowbite-react-icons": "^1.0.8",
+    "react-icons": "^5.5.0",
+    "tailwind-merge": "^2.2.2"
+  },
   "devDependencies": {
     "@types/node": "^20.11.0",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
+    "@types/react-router": "^5.1.20",
+    "@types/react-router-dom": "^5.3.3",
+    "flowbite-typography": "^1.0.3",
+    "framer-motion": "^12.23.24",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-router": "^7.9.4",
+    "react-router-dom": "^7.9.4",
     "tsup": "^8.0.2",
     "typescript": "^5.9.3"
   }

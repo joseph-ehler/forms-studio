@@ -1,0 +1,27 @@
+{
+  "$schema": "./deprecations.schema.json",
+  "deprecations": [
+    {
+      "component": "Button (Flowbite wrapper)",
+      "path": "src/fb/Button.old.tsx",
+      "reason": "Replaced with token-only implementation",
+      "since": "0.4.0",
+      "removeIn": "0.6.0",
+      "migration": {
+        "from": "import { Button } from '@intstudio/ds/fb'  // Old Flowbite wrapper",
+        "to": "import { Button } from '@intstudio/ds/fb'  // New token-only (same path!)",
+        "breaking": false,
+        "notes": [
+          "API is identical (variant, size, loading, etc.)",
+          "Visual improvements: smoother transitions, token-based colors",
+          "No code changes needed - just rebuild"
+        ]
+      },
+      "migrationUrl": "https://github.com/your-org/forms-studio/blob/main/docs/migrations/button-v0.4.0.md"
+    }
+  ],
+  "meta": {
+    "lastUpdated": "2025-10-24",
+    "policy": "Deprecations are removed after 2 minor versions or 3 months, whichever is longer"
+  }
+}

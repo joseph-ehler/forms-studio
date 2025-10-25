@@ -65,8 +65,8 @@ const CONVENTIONS = {
   // Allowed patterns (SESSION_, ADR_, etc.)
   ALLOWED_PATTERNS: LOADED_EXCEPTIONS.patterns || [],
   
-  // Hook files should be kebab-case like other files
-  // REMOVED: HOOK_PATTERN - hooks follow kebab-case like everything else
+  // Hook files: allow camelCase (useModal.ts, useDrawer.tsx)
+  HOOK_PATTERN: /^use[A-Z][a-zA-Z0-9]*\.(ts|tsx)$/,
   
   // Ignored directories
   IGNORED_DIRS: new Set([
@@ -112,6 +112,11 @@ function validateFileName(filePath) {
   
   // Check for special allowed files
   if (CONVENTIONS.ALLOWED_SPECIAL.has(name)) {
+    return { valid: true };
+  }
+  
+  // Check for hook files
+  if (CONVENTIONS.HOOK_PATTERN.test(name)) {
     return { valid: true };
   }
   

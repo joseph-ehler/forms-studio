@@ -89,6 +89,6 @@ export type BrandKey = keyof typeof BRANDS;
 /**
  * Get brand tokens
  */
-export function getBrandTokens(brand: BrandKey): typeof COLOR_TOKENS {
+export function getBrandTokens(brand: BrandKey) {
   return BRANDS[brand];
 }

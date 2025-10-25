@@ -1,0 +1,612 @@
+/**
+ * @intstudio/tokens - Design System Tokens
+ * 
+ * Single source of truth for all design values.
+ * These CSS variables are consumed by Tailwind config and components.
+ */
+
+:root {
+  /* ============================================
+     SPACING
+     ============================================ */
+  --ds-space-0: 0;
+  --ds-space-1: 0.25rem;   /* 4px */
+  --ds-space-2: 0.5rem;    /* 8px */
+  --ds-space-3: 0.75rem;   /* 12px */
+  --ds-space-4: 1rem;      /* 16px */
+  --ds-space-5: 1.25rem;   /* 20px */
+  --ds-space-6: 1.5rem;    /* 24px */
+  --ds-space-8: 2rem;      /* 32px */
+  --ds-space-10: 2.5rem;   /* 40px */
+  --ds-space-12: 3rem;     /* 48px */
+  --ds-space-16: 4rem;     /* 64px */
+  --ds-space-20: 5rem;     /* 80px */
+  --ds-space-24: 6rem;     /* 96px */
+
+  /* ============================================
+     BRAND SEEDS (white-label entry point)
+     ============================================ */
+  /* Change these values per brand/container via data-brand attribute */
+  --ds-primary-h: 225;     /* blue - your brand */
+  --ds-primary-c: 0.15;    /* chroma/saturation */
+
+  --ds-success-h: 160;     /* green-cyan */
+  --ds-success-c: 0.15;
+
+  --ds-warning-h: 60;      /* yellow */
+  --ds-warning-c: 0.15;
+
+  --ds-danger-h: 15;       /* red/orange-red */
+  --ds-danger-c: 0.15;
+
+  --ds-info-h: 200;        /* cyan-blue */
+  --ds-info-c: 0.13;
+
+  --ds-neutral-c: 0.01;    /* near-grayscale */
+
+  /* ============================================
+     OKLCH COLOR RAMPS (generative, light mode)
+     ============================================ */
+  /* Primary scale 1-12 (1=subtlest, 10=solid, 12=darkest) */
+  --ds-primary-1:  oklch(0.98 var(--ds-primary-c) var(--ds-primary-h));
+  --ds-primary-2:  oklch(0.96 var(--ds-primary-c) var(--ds-primary-h));
+  --ds-primary-3:  oklch(0.93 var(--ds-primary-c) var(--ds-primary-h));
+  --ds-primary-4:  oklch(0.90 var(--ds-primary-c) var(--ds-primary-h));
+  --ds-primary-5:  oklch(0.86 var(--ds-primary-c) var(--ds-primary-h));
+  --ds-primary-6:  oklch(0.82 var(--ds-primary-c) var(--ds-primary-h));
+  --ds-primary-7:  oklch(0.78 var(--ds-primary-c) var(--ds-primary-h));
+  --ds-primary-8:  oklch(0.73 var(--ds-primary-c) var(--ds-primary-h));
+  --ds-primary-9:  oklch(0.68 var(--ds-primary-c) var(--ds-primary-h));
+  --ds-primary-10: oklch(0.63 var(--ds-primary-c) var(--ds-primary-h)); /* solid brand color */
+  --ds-primary-11: oklch(0.57 var(--ds-primary-c) var(--ds-primary-h));
+  --ds-primary-12: oklch(0.52 var(--ds-primary-c) var(--ds-primary-h));
+
+  /* Neutral scale (grayscale) */
+  --ds-neutral-1:  oklch(0.99 var(--ds-neutral-c) 0);
+  --ds-neutral-2:  oklch(0.98 var(--ds-neutral-c) 0);
+  --ds-neutral-3:  oklch(0.96 var(--ds-neutral-c) 0);
+  --ds-neutral-4:  oklch(0.93 var(--ds-neutral-c) 0);
+  --ds-neutral-5:  oklch(0.89 var(--ds-neutral-c) 0);
+  --ds-neutral-6:  oklch(0.86 var(--ds-neutral-c) 0);
+  --ds-neutral-7:  oklch(0.82 var(--ds-neutral-c) 0);
+  --ds-neutral-8:  oklch(0.78 var(--ds-neutral-c) 0);
+  --ds-neutral-9:  oklch(0.73 var(--ds-neutral-c) 0);
+  --ds-neutral-10: oklch(0.68 var(--ds-neutral-c) 0);
+  --ds-neutral-11: oklch(0.62 var(--ds-neutral-c) 0);
+  --ds-neutral-12: oklch(0.55 var(--ds-neutral-c) 0);
+
+  /* Success scale (green) */
+  --ds-success-1:  oklch(0.98 var(--ds-success-c) var(--ds-success-h));
+  --ds-success-2:  oklch(0.96 var(--ds-success-c) var(--ds-success-h));
+  --ds-success-3:  oklch(0.93 var(--ds-success-c) var(--ds-success-h));
+  --ds-success-4:  oklch(0.90 var(--ds-success-c) var(--ds-success-h));
+  --ds-success-5:  oklch(0.86 var(--ds-success-c) var(--ds-success-h));
+  --ds-success-6:  oklch(0.82 var(--ds-success-c) var(--ds-success-h));
+  --ds-success-7:  oklch(0.78 var(--ds-success-c) var(--ds-success-h));
+  --ds-success-8:  oklch(0.73 var(--ds-success-c) var(--ds-success-h));
+  --ds-success-9:  oklch(0.68 var(--ds-success-c) var(--ds-success-h));
+  --ds-success-10: oklch(0.63 var(--ds-success-c) var(--ds-success-h));
+  --ds-success-11: oklch(0.57 var(--ds-success-c) var(--ds-success-h));
+  --ds-success-12: oklch(0.52 var(--ds-success-c) var(--ds-success-h));
+
+  /* Warning scale (yellow) */
+  --ds-warning-1:  oklch(0.99 var(--ds-warning-c) var(--ds-warning-h));
+  --ds-warning-2:  oklch(0.97 var(--ds-warning-c) var(--ds-warning-h));
+  --ds-warning-3:  oklch(0.94 var(--ds-warning-c) var(--ds-warning-h));
+  --ds-warning-4:  oklch(0.91 var(--ds-warning-c) var(--ds-warning-h));
+  --ds-warning-5:  oklch(0.87 var(--ds-warning-c) var(--ds-warning-h));
+  --ds-warning-6:  oklch(0.83 var(--ds-warning-c) var(--ds-warning-h));
+  --ds-warning-7:  oklch(0.79 var(--ds-warning-c) var(--ds-warning-h));
+  --ds-warning-8:  oklch(0.75 var(--ds-warning-c) var(--ds-warning-h));
+  --ds-warning-9:  oklch(0.70 var(--ds-warning-c) var(--ds-warning-h));
+  --ds-warning-10: oklch(0.65 var(--ds-warning-c) var(--ds-warning-h));
+  --ds-warning-11: oklch(0.60 var(--ds-warning-c) var(--ds-warning-h));
+  --ds-warning-12: oklch(0.55 var(--ds-warning-c) var(--ds-warning-h));
+
+  /* Danger scale (red) */
+  --ds-danger-1:  oklch(0.98 var(--ds-danger-c) var(--ds-danger-h));
+  --ds-danger-2:  oklch(0.96 var(--ds-danger-c) var(--ds-danger-h));
+  --ds-danger-3:  oklch(0.93 var(--ds-danger-c) var(--ds-danger-h));
+  --ds-danger-4:  oklch(0.90 var(--ds-danger-c) var(--ds-danger-h));
+  --ds-danger-5:  oklch(0.86 var(--ds-danger-c) var(--ds-danger-h));
+  --ds-danger-6:  oklch(0.82 var(--ds-danger-c) var(--ds-danger-h));
+  --ds-danger-7:  oklch(0.78 var(--ds-danger-c) var(--ds-danger-h));
+  --ds-danger-8:  oklch(0.73 var(--ds-danger-c) var(--ds-danger-h));
+  --ds-danger-9:  oklch(0.68 var(--ds-danger-c) var(--ds-danger-h));
+  --ds-danger-10: oklch(0.63 var(--ds-danger-c) var(--ds-danger-h));
+  --ds-danger-11: oklch(0.57 var(--ds-danger-c) var(--ds-danger-h));
+  --ds-danger-12: oklch(0.52 var(--ds-danger-c) var(--ds-danger-h));
+
+  /* Info scale (cyan-blue) */
+  --ds-info-1:  oklch(0.98 var(--ds-info-c) var(--ds-info-h));
+  --ds-info-2:  oklch(0.96 var(--ds-info-c) var(--ds-info-h));
+  --ds-info-3:  oklch(0.93 var(--ds-info-c) var(--ds-info-h));
+  --ds-info-4:  oklch(0.90 var(--ds-info-c) var(--ds-info-h));
+  --ds-info-5:  oklch(0.86 var(--ds-info-c) var(--ds-info-h));
+  --ds-info-6:  oklch(0.82 var(--ds-info-c) var(--ds-info-h));
+  --ds-info-7:  oklch(0.78 var(--ds-info-c) var(--ds-info-h));
+  --ds-info-8:  oklch(0.73 var(--ds-info-c) var(--ds-info-h));
+  --ds-info-9:  oklch(0.68 var(--ds-info-c) var(--ds-info-h));
+  --ds-info-10: oklch(0.63 var(--ds-info-c) var(--ds-info-h));
+  --ds-info-11: oklch(0.57 var(--ds-info-c) var(--ds-info-h));
+  --ds-info-12: oklch(0.52 var(--ds-info-c) var(--ds-info-h));
+
+  /* ============================================
+     SEMANTIC ROLES (abstraction layer)
+     ============================================ */
+  /* App surfaces & text */
+  --ds-role-bg:        var(--ds-neutral-1);
+  --ds-role-surface:   var(--ds-neutral-2);
+  --ds-role-border:    var(--ds-neutral-6);
+  --ds-role-text:      var(--ds-neutral-12);
+
+  /* Primary brand actions */
+  --ds-role-primary-bg:      var(--ds-primary-10);
+  --ds-role-primary-text:    white;
+  --ds-role-primary-hover:   var(--ds-primary-11);
+  --ds-role-primary-active:  var(--ds-primary-12);
+
+  /* Semantic feedback colors */
+  --ds-role-success-bg:      var(--ds-success-10);
+  --ds-role-success-text:    white;
+  --ds-role-success-hover:   var(--ds-success-11);
+  --ds-role-success-active:  var(--ds-success-12);
+
+  --ds-role-warning-bg:      var(--ds-warning-10);
+  --ds-role-warning-text:    black;
+  --ds-role-warning-hover:   var(--ds-warning-11);
+  --ds-role-warning-active:  var(--ds-warning-12);
+
+  --ds-role-danger-bg:       var(--ds-danger-10);
+  --ds-role-danger-text:     white;
+  --ds-role-danger-hover:    var(--ds-danger-11);
+  --ds-role-danger-active:   var(--ds-danger-12);
+
+  --ds-role-info-bg:         var(--ds-info-10);
+  --ds-role-info-text:       white;
+  --ds-role-info-hover:      var(--ds-info-11);
+  --ds-role-info-active:     var(--ds-info-12);
+
+  /* Link roles (for anchors/inline actions) */
+  --ds-role-link:            var(--ds-primary-10);
+  --ds-role-link-hover:      var(--ds-primary-11);
+  --ds-role-link-visited:    var(--ds-primary-12);
+
+  /* Subtle interactions (ghost/secondary) */
+  --ds-ghost-hover-alpha:  0.10;  /* 10% opacity - tweakable per brand */
+  --ds-ghost-active-alpha: 0.15;  /* 15% opacity */
+  --ds-role-ghost-hover:  color-mix(in oklab, var(--ds-role-text) calc(var(--ds-ghost-hover-alpha) * 100%), transparent);
+  --ds-role-ghost-active: color-mix(in oklab, var(--ds-role-text) calc(var(--ds-ghost-active-alpha) * 100%), transparent);
+
+  /* Global mix ratios (tunable) */
+  --ds-mix-hover:  92%;  /* 8% darker for prominent buttons */
+  --ds-mix-active: 88%;  /* 12% darker */
+
+  /* ============================================
+     COLORS - BACKWARDS COMPATIBILITY ALIASES
+     ============================================ */
+  /* Legacy tokens → point to new ramps (remove after migration) */
+  
+  /* Surface colors */
+  --ds-color-surface-base: var(--ds-neutral-1);
+  --ds-color-surface-raised: var(--ds-neutral-2);
+  --ds-color-surface-sunken: var(--ds-neutral-3);
+  --ds-color-surface-overlay: var(--ds-neutral-1);
+  
+  /* Text colors */
+  --ds-color-text: var(--ds-neutral-12);
+  --ds-color-text-rgb: 11 11 12; /* keep for rgba() compat */
+  --ds-color-text-subtle: var(--ds-neutral-10);
+  --ds-color-text-muted: var(--ds-neutral-8);
+  --ds-color-text-inverse: white;
+  
+  /* Border colors */
+  --ds-color-border-subtle: var(--ds-neutral-5);
+  --ds-color-border-medium: var(--ds-neutral-6);
+  --ds-color-border-strong: var(--ds-neutral-8);
+  
+  /* Brand colors */
+  --ds-color-primary: var(--ds-primary-10);
+  --ds-color-primary-rgb: 47 111 237; /* keep for rgba() compat */
+  --ds-color-primary-hover: var(--ds-primary-11);
+  --ds-color-primary-active: var(--ds-primary-12);
+  --ds-color-primary-subtle: var(--ds-primary-2);
+  
+  --ds-color-success: var(--ds-success-10);
+  --ds-color-success-rgb: 22 163 74; /* keep for rgba() compat */
+  --ds-color-success-subtle: var(--ds-success-2);
+  
+  --ds-color-warning: var(--ds-warning-10);
+  --ds-color-warning-rgb: 245 158 11; /* keep for rgba() compat */
+  --ds-color-warning-subtle: var(--ds-warning-2);
+  
+  --ds-color-danger: var(--ds-danger-10);
+  --ds-color-danger-rgb: 220 38 38; /* keep for rgba() compat */
+  --ds-color-danger-hover: var(--ds-danger-11);
+  --ds-color-danger-active: var(--ds-danger-12);
+  --ds-color-danger-subtle: var(--ds-danger-2);
+  
+  --ds-color-info: var(--ds-info-10);
+  --ds-color-info-rgb: 8 145 178; /* keep for rgba() compat */
+  --ds-color-info-hover: var(--ds-info-11);
+  --ds-color-info-active: var(--ds-info-12);
+  --ds-color-info-subtle: var(--ds-info-2);
+
+  /* ============================================
+     BORDER RADIUS (FLAT AESTHETIC)
+     ============================================ */
+  --ds-radius-sm: 0.25rem;   /* 4px - minimal curves */
+  --ds-radius-md: 0.375rem;  /* 6px */
+  --ds-radius-lg: 0.5rem;    /* 8px - default */
+  --ds-radius-xl: 0.75rem;   /* 12px */
+  --ds-radius-full: 9999px;  /* pills/avatars only */
+
+  /* ============================================
+     SHADOWS (ONLY FOR OVERLAYS)
+     ============================================ */
+  --ds-shadow-none: none;
+  --ds-shadow-overlay-sm: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --ds-shadow-overlay-md: 0 8px 24px rgba(0, 0, 0, 0.12);
+  --ds-shadow-overlay-lg: 0 12px 32px rgba(0, 0, 0, 0.16);
+  --ds-shadow-overlay-xl: 0 20px 48px rgba(0, 0, 0, 0.20);
+
+  /* ============================================
+     GLASS VARIANT (OPTIONAL)
+     ============================================ */
+  --ds-glass-bg: rgba(255, 255, 255, 0.8);
+  --ds-glass-blur: 12px;
+  --ds-glass-border: rgba(255, 255, 255, 0.18);
+
+  /* ============================================
+     Z-INDEX LAYERS
+     ============================================ */
+  --ds-z-base: 0;
+  --ds-z-dropdown: 50;
+  --ds-z-sticky: 60;
+  --ds-z-panel: 70;
+  --ds-z-overlay: 80;
+  --ds-z-modal: 90;
+  --ds-z-popover: 95;
+  --ds-z-toast: 100;
+  --ds-z-tooltip: 110;
+
+  /* ============================================
+     STATE TOKENS (hover/active/focus/disabled)
+     ============================================ */
+  /* Now driven by semantic roles */
+  --ds-state-hover-bg: var(--ds-role-ghost-hover);
+  --ds-state-active-bg: var(--ds-role-ghost-active);
+  --ds-state-focus-ring: color-mix(in oklab, var(--ds-role-primary-bg) 40%, transparent);
+  --ds-state-disabled-fg: color-mix(in oklab, var(--ds-role-text) 50%, transparent);
+  --ds-state-disabled-bg: color-mix(in oklab, var(--ds-role-text) 5%, transparent);
+
+  /* Selection & focus-outline (UX polish) */
+  --ds-selection-bg: color-mix(in oklab, var(--ds-role-primary-bg) 25%, transparent);
+  --ds-selection-fg: var(--ds-role-text);
+
+  /* ============================================
+     LAYER TOKENS (flat design separation)
+     ============================================ */
+  --ds-scrim: rgba(var(--ds-color-text-rgb), 0.06);
+  --ds-elevation-overlay: var(--ds-shadow-overlay-md);
+
+  /* ============================================
+     DENSITY & CONTROL ERGONOMICS
+     ============================================ */
+  --ds-density: comfortable; /* comfortable | compact */
+  --ds-space-control-y: var(--ds-space-2);  /* vertical padding for inputs/buttons */
+  --ds-space-control-x: var(--ds-space-3);  /* horizontal padding */
+  --ds-radius-control: var(--ds-radius-lg); /* default border radius for controls */
+
+  /* ============================================
+     TOUCH TARGETS & ACCESSIBILITY
+     ============================================ */
+  --ds-touch-target: 44px; /* WCAG 2.1 minimum */
+  
+  /* Focus ring system */
+  --ds-focus-ring: 2px;
+  --ds-focus-offset: 2px;
+  --ds-focus-color: var(--ds-color-primary);
+  --ds-focus-ring-color: rgba(var(--ds-color-primary-rgb), 0.4);
+  --ds-focus-ring-color-strong: rgba(var(--ds-color-text-rgb), 0.6);
+  --ds-outline-width: 2px;
+  --ds-outline-offset: 2px;
+
+  /* ============================================
+     INTERACTION TOKENS
+     ============================================ */
+  /* Press feedback */
+  --ds-press-scale: 0.985;
+  --ds-press-translate-y: 0.5px;
+  --ds-press-duration: 200ms;
+  --ds-press-easing: cubic-bezier(0.2, 0, 0, 1);
+
+  /* Ripple effect (optional) */
+  --ds-ripple-alpha: 0.14;
+  --ds-ripple-duration: 280ms;
+  --ds-ripple-easing: cubic-bezier(0.4, 0, 1, 1);
+
+  /* Modality */
+  --ds-modality-blur: 12px;
+  --ds-modality-opacity: 0.8;
+  --ds-modality-duration: 200ms;
+  --ds-modality-easing: cubic-bezier(0.2, 0, 0, 1);
+
+  /* Accessibility preferences */
+  --ds-reduced-motion-duration: 0ms;
+  --ds-high-contrast-color: #000000;
+
+  /* Disabled state */
+  --ds-disabled-opacity: 0.5;
+
+  /* ============================================
+     INTERACTION PRIMITIVES
+     ============================================ */
+  --ds-hover-brighten: 0.98;
+
+  /* ============================================
+     TRANSITIONS & EASINGS
+     ============================================ */
+  --ds-duration-quick: 120ms;
+  --ds-duration-standard: 200ms;
+  --ds-duration-slow: 320ms;
+  --ds-ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ds-ease-accelerate: cubic-bezier(0.4, 0, 1, 1);
+  --ds-ease-decelerate: cubic-bezier(0, 0, 0.2, 1);
+  --ds-transition-fast: var(--ds-duration-quick) var(--ds-ease-standard);
+  --ds-transition-base: var(--ds-duration-standard) var(--ds-ease-standard);
+  --ds-transition-slow: var(--ds-duration-slow) var(--ds-ease-standard);
+
+  /* Legacy aliases for backwards compat */
+  --ds-transition-fast: var(--ds-duration-quick) var(--ds-ease-standard);
+  --ds-transition-base: var(--ds-duration-standard) var(--ds-ease-standard);
+  --ds-transition-slow: var(--ds-duration-slow) var(--ds-ease-standard);
+
+  /* ============================================
+     TYPOGRAPHY
+     ============================================ */
+  --ds-font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --ds-font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  
+  --ds-text-xs: 0.75rem;     /* 12px */
+  --ds-text-sm: 0.875rem;    /* 14px */
+  --ds-text-base: 1rem;      /* 16px */
+  --ds-text-lg: 1.125rem;    /* 18px */
+  --ds-text-xl: 1.25rem;     /* 20px */
+  --ds-text-2xl: 1.5rem;     /* 24px */
+  --ds-text-3xl: 1.875rem;   /* 30px */
+  --ds-text-4xl: 2.25rem;    /* 36px */
+  
+  --ds-leading-tight: 1.25;
+  --ds-leading-normal: 1.5;
+  --ds-leading-relaxed: 1.75;
+  
+  --ds-weight-normal: 400;
+  --ds-weight-medium: 500;
+  --ds-weight-semibold: 600;
+  --ds-weight-bold: 700;
+
+  /* ============================================
+     INTERACTION PRIMITIVES
+     ============================================ */
+  
+  /* Press feedback */
+  --ds-press-scale: 0.985;
+  --ds-press-translate-y: 0.5px;
+  --ds-hover-brighten: 0.98;
+  
+  /* Ripple effect (optional) */
+  --ds-ripple-alpha: 0.14;
+  --ds-ripple-duration: 280ms;
+  
+  /* Disabled state */
+  --ds-disabled-opacity: 0.5;
+  
+  /* ============================================
+     TRANSITIONS & EASINGS
+     ============================================ */
+  
+  /* Durations */
+  --ds-duration-quick: 120ms;
+  --ds-duration-standard: 200ms;
+  --ds-duration-slow: 320ms;
+  
+  /* Easings */
+  --ds-ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ds-ease-accelerate: cubic-bezier(0.4, 0, 1, 1);
+  --ds-ease-decelerate: cubic-bezier(0, 0, 0.2, 1);
+  
+  /* Legacy aliases for backwards compat */
+  --ds-transition-fast: var(--ds-duration-quick) var(--ds-ease-standard);
+  --ds-transition-base: var(--ds-duration-standard) var(--ds-ease-standard);
+  --ds-transition-slow: var(--ds-duration-slow) var(--ds-ease-standard);
+}
+
+/* ============================================
+   DARK MODE (OKLCH ramps inverted)
+   ============================================ */
+:root[data-theme="dark"] {
+  /* Primary scale (dark - inverted lightness) */
+  --ds-primary-1:  oklch(0.18 var(--ds-primary-c) var(--ds-primary-h));
+  --ds-primary-2:  oklch(0.22 var(--ds-primary-c) var(--ds-primary-h));
+  --ds-primary-3:  oklch(0.26 var(--ds-primary-c) var(--ds-primary-h));
+  --ds-primary-4:  oklch(0.31 var(--ds-primary-c) var(--ds-primary-h));
+  --ds-primary-5:  oklch(0.37 var(--ds-primary-c) var(--ds-primary-h));
+  --ds-primary-6:  oklch(0.43 var(--ds-primary-c) var(--ds-primary-h));
+  --ds-primary-7:  oklch(0.50 var(--ds-primary-c) var(--ds-primary-h));
+  --ds-primary-8:  oklch(0.58 var(--ds-primary-c) var(--ds-primary-h));
+  --ds-primary-9:  oklch(0.65 var(--ds-primary-c) var(--ds-primary-h));
+  --ds-primary-10: oklch(0.72 var(--ds-primary-c) var(--ds-primary-h)); /* solid */
+  --ds-primary-11: oklch(0.78 var(--ds-primary-c) var(--ds-primary-h));
+  --ds-primary-12: oklch(0.84 var(--ds-primary-c) var(--ds-primary-h));
+
+  /* Neutral scale (dark) */
+  --ds-neutral-1:  oklch(0.12 var(--ds-neutral-c) 0);
+  --ds-neutral-2:  oklch(0.16 var(--ds-neutral-c) 0);
+  --ds-neutral-3:  oklch(0.20 var(--ds-neutral-c) 0);
+  --ds-neutral-4:  oklch(0.24 var(--ds-neutral-c) 0);
+  --ds-neutral-5:  oklch(0.29 var(--ds-neutral-c) 0);
+  --ds-neutral-6:  oklch(0.35 var(--ds-neutral-c) 0);
+  --ds-neutral-7:  oklch(0.42 var(--ds-neutral-c) 0);
+  --ds-neutral-8:  oklch(0.50 var(--ds-neutral-c) 0);
+  --ds-neutral-9:  oklch(0.58 var(--ds-neutral-c) 0);
+  --ds-neutral-10: oklch(0.66 var(--ds-neutral-c) 0);
+  --ds-neutral-11: oklch(0.73 var(--ds-neutral-c) 0);
+  --ds-neutral-12: oklch(0.80 var(--ds-neutral-c) 0);
+
+  /* Success/Warning/Danger (dark) */
+  --ds-success-1:  oklch(0.18 var(--ds-success-c) var(--ds-success-h));
+  --ds-success-2:  oklch(0.22 var(--ds-success-c) var(--ds-success-h));
+  --ds-success-3:  oklch(0.26 var(--ds-success-c) var(--ds-success-h));
+  --ds-success-4:  oklch(0.31 var(--ds-success-c) var(--ds-success-h));
+  --ds-success-5:  oklch(0.37 var(--ds-success-c) var(--ds-success-h));
+  --ds-success-6:  oklch(0.43 var(--ds-success-c) var(--ds-success-h));
+  --ds-success-7:  oklch(0.50 var(--ds-success-c) var(--ds-success-h));
+  --ds-success-8:  oklch(0.58 var(--ds-success-c) var(--ds-success-h));
+  --ds-success-9:  oklch(0.65 var(--ds-success-c) var(--ds-success-h));
+  --ds-success-10: oklch(0.72 var(--ds-success-c) var(--ds-success-h));
+  --ds-success-11: oklch(0.78 var(--ds-success-c) var(--ds-success-h));
+  --ds-success-12: oklch(0.84 var(--ds-success-c) var(--ds-success-h));
+
+  --ds-warning-1:  oklch(0.18 var(--ds-warning-c) var(--ds-warning-h));
+  --ds-warning-2:  oklch(0.22 var(--ds-warning-c) var(--ds-warning-h));
+  --ds-warning-3:  oklch(0.26 var(--ds-warning-c) var(--ds-warning-h));
+  --ds-warning-4:  oklch(0.31 var(--ds-warning-c) var(--ds-warning-h));
+  --ds-warning-5:  oklch(0.37 var(--ds-warning-c) var(--ds-warning-h));
+  --ds-warning-6:  oklch(0.43 var(--ds-warning-c) var(--ds-warning-h));
+  --ds-warning-7:  oklch(0.50 var(--ds-warning-c) var(--ds-warning-h));
+  --ds-warning-8:  oklch(0.58 var(--ds-warning-c) var(--ds-warning-h));
+  --ds-warning-9:  oklch(0.65 var(--ds-warning-c) var(--ds-warning-h));
+  --ds-warning-10: oklch(0.72 var(--ds-warning-c) var(--ds-warning-h));
+  --ds-warning-11: oklch(0.78 var(--ds-warning-c) var(--ds-warning-h));
+  --ds-warning-12: oklch(0.84 var(--ds-warning-c) var(--ds-warning-h));
+
+  --ds-danger-1:  oklch(0.18 var(--ds-danger-c) var(--ds-danger-h));
+  --ds-danger-2:  oklch(0.22 var(--ds-danger-c) var(--ds-danger-h));
+  --ds-danger-3:  oklch(0.26 var(--ds-danger-c) var(--ds-danger-h));
+  --ds-danger-4:  oklch(0.31 var(--ds-danger-c) var(--ds-danger-h));
+  --ds-danger-5:  oklch(0.37 var(--ds-danger-c) var(--ds-danger-h));
+  --ds-danger-6:  oklch(0.43 var(--ds-danger-c) var(--ds-danger-h));
+  --ds-danger-7:  oklch(0.50 var(--ds-danger-c) var(--ds-danger-h));
+  --ds-danger-8:  oklch(0.58 var(--ds-danger-c) var(--ds-danger-h));
+  --ds-danger-9:  oklch(0.65 var(--ds-danger-c) var(--ds-danger-h));
+  --ds-danger-10: oklch(0.72 var(--ds-danger-c) var(--ds-danger-h));
+  --ds-danger-11: oklch(0.78 var(--ds-danger-c) var(--ds-danger-h));
+  --ds-danger-12: oklch(0.84 var(--ds-danger-c) var(--ds-danger-h));
+
+  --ds-info-1:  oklch(0.18 var(--ds-info-c) var(--ds-info-h));
+  --ds-info-2:  oklch(0.22 var(--ds-info-c) var(--ds-info-h));
+  --ds-info-3:  oklch(0.26 var(--ds-info-c) var(--ds-info-h));
+  --ds-info-4:  oklch(0.31 var(--ds-info-c) var(--ds-info-h));
+  --ds-info-5:  oklch(0.37 var(--ds-info-c) var(--ds-info-h));
+  --ds-info-6:  oklch(0.43 var(--ds-info-c) var(--ds-info-h));
+  --ds-info-7:  oklch(0.50 var(--ds-info-c) var(--ds-info-h));
+  --ds-info-8:  oklch(0.58 var(--ds-info-c) var(--ds-info-h));
+  --ds-info-9:  oklch(0.65 var(--ds-info-c) var(--ds-info-h));
+  --ds-info-10: oklch(0.72 var(--ds-info-c) var(--ds-info-h));
+  --ds-info-11: oklch(0.78 var(--ds-info-c) var(--ds-info-h));
+  --ds-info-12: oklch(0.84 var(--ds-info-c) var(--ds-info-h));
+
+  /* Semantic roles (dark) */
+  --ds-role-bg:        var(--ds-neutral-1);
+  --ds-role-surface:   var(--ds-neutral-2);
+  --ds-role-border:    var(--ds-neutral-6);
+  --ds-role-text:      var(--ds-neutral-12);
+  
+  /* Fix RGB triplet for dark mode (used in scrims/disabled states) */
+  --ds-color-text-rgb: 255 255 255;
+
+  --ds-role-primary-bg:      var(--ds-primary-10);
+  --ds-role-primary-text:    black; /* often best on bright solid */
+  --ds-role-primary-hover:   var(--ds-primary-11);
+  --ds-role-primary-active:  var(--ds-primary-12);
+
+  --ds-role-success-bg:      var(--ds-success-10);
+  --ds-role-success-text:    black;
+  --ds-role-success-hover:   var(--ds-success-11);
+  --ds-role-success-active:  var(--ds-success-12);
+
+  --ds-role-warning-bg:      var(--ds-warning-10);
+  --ds-role-warning-text:    black;
+  --ds-role-warning-hover:   var(--ds-warning-11);
+  --ds-role-warning-active:  var(--ds-warning-12);
+
+  --ds-role-danger-bg:       var(--ds-danger-10);
+  --ds-role-danger-text:     black;
+  --ds-role-danger-hover:    var(--ds-danger-11);
+  --ds-role-danger-active:   var(--ds-danger-12);
+
+  --ds-role-info-bg:         var(--ds-info-10);
+  --ds-role-info-text:       black;
+  --ds-role-info-hover:      var(--ds-info-11);
+  --ds-role-info-active:     var(--ds-info-12);
+
+  /* Link roles (dark) */
+  --ds-role-link:            var(--ds-primary-10);
+  --ds-role-link-hover:      var(--ds-primary-11);
+  --ds-role-link-visited:    var(--ds-primary-12);
+
+  --ds-role-ghost-hover:  color-mix(in oklab, var(--ds-role-text) calc(var(--ds-ghost-hover-alpha) * 100%), transparent);
+  --ds-role-ghost-active: color-mix(in oklab, var(--ds-role-text) calc(var(--ds-ghost-active-alpha) * 100%), transparent);
+
+  /* State tokens (dark) - use roles */
+  --ds-state-focus-ring: color-mix(in oklab, var(--ds-role-primary-bg) 45%, transparent);
+}
+
+/* ============================================
+   WHITE-LABEL BRAND SEEDS
+   ============================================ */
+/* Apply via data-brand attribute on :root or any container */
+:root[data-brand="sunrise"] { --ds-primary-h: 25; }   /* orange */
+:root[data-brand="mint"]    { --ds-primary-h: 160; }  /* green-cyan */
+:root[data-brand="berry"]   { --ds-primary-h: 320; }  /* purple-pink */
+:root[data-brand="ocean"]   { --ds-primary-h: 200; }  /* cyan-blue */
+:root[data-brand="forest"]  { --ds-primary-h: 140; }  /* green */
+
+/* ============================================
+   BROWSER FALLBACK (older browsers)
+   ============================================ */
+@supports not (color: oklch(0.5 0.1 180)) {
+  /* Fallback to backwards-compat aliases for older browsers */
+  :root {
+    --ds-role-bg: var(--ds-color-surface-base);
+    --ds-role-surface: var(--ds-color-surface-raised);
+    --ds-role-border: var(--ds-color-border-medium);
+    --ds-role-text: var(--ds-color-text);
+
+    --ds-role-primary-bg: var(--ds-color-primary);
+    --ds-role-primary-text: var(--ds-color-text-inverse);
+    --ds-role-primary-hover: var(--ds-color-primary-hover);
+    --ds-role-primary-active: var(--ds-color-primary-active);
+
+    --ds-role-success-bg: var(--ds-color-success);
+    --ds-role-success-text: white;
+    --ds-role-warning-bg: var(--ds-color-warning);
+    --ds-role-warning-text: black;
+    --ds-role-danger-bg: var(--ds-color-danger);
+    --ds-role-danger-text: white;
+    --ds-role-danger-hover: var(--ds-color-danger-hover);
+    --ds-role-danger-active: var(--ds-color-danger-active);
+
+    /* Ghost hover/active fallback to modern rgb() syntax with text-rgb */
+    --ds-role-ghost-hover: rgb(var(--ds-color-text-rgb) / 0.10);
+    --ds-role-ghost-active: rgb(var(--ds-color-text-rgb) / 0.15);
+  }
+}
+
+/* ============================================
+   TEXT SELECTION (UX polish)
+   ============================================ */
+::selection {
+  background: var(--ds-selection-bg);
+  color: var(--ds-selection-fg);
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --ds-transition-fast: 0ms;
+    --ds-transition-base: 0ms;
+    --ds-transition-slow: 0ms;
+  }
+}

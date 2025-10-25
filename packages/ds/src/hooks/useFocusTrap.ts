@@ -11,7 +11,7 @@
  * useFocusTrap(ref, { enabled: isOpen });
  */
 
-import { useEffect, RefObject } from 'react';
+import { RefObject,useEffect } from 'react';
 
 interface UseFocusTrapOptions {
   /** Enable/disable trap */

@@ -9,6 +9,8 @@
  * - SheetPanel → SheetPanel ⚠️ (warns)
  */
 
+import { type RefObject,useLayoutEffect } from 'react';
+
 export interface StackPolicyConfig {
   type: 'dialog' | 'panel';
   parentType?: 'dialog' | 'panel';
@@ -54,10 +56,10 @@ export function useStackPolicy({
  * useStackDepthClass - Automatically apply depth-based classes
  */
 export function useStackDepthClass(
-  ref: React.RefObject<HTMLElement>,
+  ref: RefObject<HTMLElement>,
   depth: number
 ) {
-  React.useLayoutEffect(() => {
+  useLayoutEffect(() => {
     const el = ref.current;
     if (!el) return;
     

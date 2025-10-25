@@ -12,11 +12,13 @@
  * } />
  */
 
+import './full-screen-route.css';
+
+import { AnimatePresence,motion } from 'framer-motion';
 import { FC, PropsWithChildren, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router';
-import { motion, AnimatePresence } from 'framer-motion';
+
 import { useFocusTrap } from '../../hooks/useFocusTrap';
-import './full-screen-route.css';
 
 export interface FullScreenRouteProps {
   /**
@@ -121,9 +123,9 @@ export const FullScreenRoute: FC<PropsWithChildren<FullScreenRouteProps>> = ({
         aria-modal="true"
         tabIndex={-1}
         className={`ds-fullscreen-route ${className}`.trim()}
-        initial={prefersReducedMotion ? false : { opacity: 0, y: 24 }}
-        animate={prefersReducedMotion ? false : { opacity: 1, y: 0 }}
-        exit={prefersReducedMotion ? false : { opacity: 0, y: 24 }}
+        initial={prefersReducedMotion ? undefined : { opacity: 0, y: 24 }}
+        animate={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
+        exit={prefersReducedMotion ? undefined : { opacity: 0, y: 24 }}
         transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
       >
         {children}

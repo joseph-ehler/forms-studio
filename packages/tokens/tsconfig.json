@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist"
+  },
+  "include": ["src"],
+  "exclude": [
+    "dist",
+    "**/*.test.*",
+    "**/*.spec.*",
+    "../../flowbite-react-blocks-*/**",
+    "../../.flowbite-blocks-reference/**"
+  ]
+}

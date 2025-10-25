@@ -1,0 +1,11 @@
+{
+  "name": "eslint-plugin-cascade",
+  "version": "0.1.0",
+  "description": "Custom ESLint rules for Cascade design system",
+  "main": "index.js",
+  "type": "commonjs",
+  "private": true,
+  "keywords": ["eslint", "eslintplugin", "eslint-plugin", "cascade", "design-system"],
+  "author": "",
+  "license": "MIT"
+}

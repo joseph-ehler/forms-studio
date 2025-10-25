@@ -1,8 +1,9 @@
 /**
  * Select wrapper with RHF integration
  */
-import { Controller, useFormContext } from 'react-hook-form';
 import { Label, Select as FlowbiteSelect, type SelectProps as FlowbiteSelectProps } from 'flowbite-react';
+import { Controller, useFormContext } from 'react-hook-form';
+
 import { useFieldIds } from './Field';
 
 export type SelectProps = Omit<FlowbiteSelectProps, 'name'> & {

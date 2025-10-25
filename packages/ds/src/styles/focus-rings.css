@@ -1,0 +1,68 @@
+/**
+ * Global Focus Ring Standards
+ * 
+ * Consistent, accessible focus indicators across all interactive elements.
+ * Uses double-halo pattern: offset + primary ring.
+ * 
+ * Applied to all DS components automatically.
+ */
+
+/**
+ * Standard focus ring for all interactive elements
+ * 
+ * Pattern: Transparent offset + primary color ring + subtle outer ring
+ * Works in both light and dark modes.
+ */
+:where([data-component]) :is(
+  button,
+  [role="button"],
+  a,
+  input,
+  select,
+  textarea,
+  [tabindex]:not([tabindex="-1"])
+):where(:focus-visible) {
+  outline: none;
+  box-shadow:
+    /* Inner offset (creates gap from element) */
+    0 0 0 var(--ds-focus-offset) transparent,
+    
+    /* Primary focus ring */
+    0 0 0 calc(var(--ds-focus-offset) + var(--ds-focus-ring)) var(--ds-state-focus-ring),
+    
+    /* Subtle outer ring for extra contrast */
+    0 0 0 calc(var(--ds-focus-offset) + var(--ds-focus-ring) + 1px) rgba(var(--ds-color-text-rgb), 0.08);
+}
+
+/**
+ * Focus ring for components on light backgrounds
+ */
+:where([data-component][data-theme="light"]) :is(
+  button,
+  [role="button"]
+):where(:focus-visible) {
+  box-shadow:
+    0 0 0 var(--ds-focus-offset) var(--ds-color-surface-base),
+    0 0 0 calc(var(--ds-focus-offset) + var(--ds-focus-ring)) var(--ds-state-focus-ring);
+}
+
+/**
+ * Focus ring for components on dark backgrounds
+ */
+:where([data-component][data-theme="dark"]) :is(
+  button,
+  [role="button"]
+):where(:focus-visible) {
+  box-shadow:
+    0 0 0 var(--ds-focus-offset) var(--ds-color-surface-base),
+    0 0 0 calc(var(--ds-focus-offset) + var(--ds-focus-ring)) rgba(var(--ds-color-primary-rgb), 0.5);
+}
+
+/**
+ * Reduced motion: Remove shadow animation
+ */
+@media (prefers-reduced-motion: reduce) {
+  :where([data-component]) :is(button, [role="button"], a, input, select, textarea):where(:focus-visible) {
+    transition: box-shadow 0ms;
+  }
+}

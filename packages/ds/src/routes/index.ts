@@ -1,19 +1,8 @@
-/**
- * DS Routes - Macro/Meso navigation components
- * 
- * Escalation hierarchy:
- * - Micro: SheetDialog (max depth 2)
- * - Meso: FlowScaffold (sub-flows within route)
- * - Macro: FullScreenRoute (focused tasks)
- * 
- * Plus: RoutePanel for desktop persistent UI
+/* AUTO-GENERATED FILE. DO NOT EDIT.
+ * Run: pnpm barrels
  */
 
-export { FullScreenRoute } from './FullScreenRoute';
-export type { FullScreenRouteProps } from './FullScreenRoute';
-
-export { FlowScaffold, useSubFlow } from './FlowScaffold';
-export type { FlowScaffoldProps, SubFlowState } from './FlowScaffold';
-
-export { RoutePanel } from './RoutePanel';
-export type { RoutePanelProps } from './RoutePanel';
+export * from './FlowScaffold/FlowScaffold';
+export * from './FlowScaffold/useSubFlow';
+export * from './FullScreenRoute/FullScreenRoute';
+export * from './RoutePanel/RoutePanel';

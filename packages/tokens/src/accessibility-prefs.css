@@ -1,0 +1,118 @@
+/**
+ * Accessibility Preference Overrides
+ * 
+ * Respects user system preferences for:
+ * - High contrast
+ * - Reduced motion
+ * - Forced colors (Windows high contrast mode)
+ */
+
+/* ============================================
+   HIGH CONTRAST MODE
+   ============================================ */
+
+@media (prefers-contrast: more) {
+  :root {
+    /* Stronger focus rings */
+    --ds-focus-ring-color: rgba(0 0 0 / 1);
+    --ds-focus-ring-color-strong: rgba(0 0 0 / 1);
+    
+    /* More visible hover states */
+    --ds-state-hover-bg: rgba(var(--ds-color-text-rgb), 0.18);
+    --ds-state-active-bg: rgba(var(--ds-color-text-rgb), 0.28);
+    
+    /* Stronger borders */
+    --ds-color-border-medium: #52525b;
+    --ds-color-border-strong: #27272a;
+  }
+  
+  :root[data-theme="dark"] {
+    --ds-focus-ring-color: rgba(255 255 255 / 1);
+    --ds-state-hover-bg: rgba(255 255 255, 0.25);
+    --ds-state-active-bg: rgba(255 255 255, 0.35);
+  }
+}
+
+/* Manual high-contrast toggle */
+:root[data-contrast="high"] {
+  --ds-focus-ring-color: rgba(var(--ds-color-text-rgb), 0.9);
+  --ds-state-hover-bg: rgba(var(--ds-color-text-rgb), 0.2);
+  --ds-state-active-bg: rgba(var(--ds-color-text-rgb), 0.3);
+}
+
+/* ============================================
+   REDUCED MOTION
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    /* Zero all animations */
+    --ds-duration-quick: 0ms;
+    --ds-duration-standard: 0ms;
+    --ds-duration-slow: 0ms;
+    --ds-ripple-duration: 0ms;
+    
+    /* Keep easings (for instant transitions) */
+    --ds-transition-fast: 0ms var(--ds-ease-standard);
+    --ds-transition-base: 0ms var(--ds-ease-standard);
+    --ds-transition-slow: 0ms var(--ds-ease-standard);
+  }
+  
+  /* Disable all animations globally */
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================
+   FORCED COLORS (Windows High Contrast)
+   ============================================ */
+
+@media (forced-colors: active) {
+  :root {
+    /* Let system colors take over */
+    --ds-color-text: CanvasText;
+    --ds-color-surface-base: Canvas;
+    --ds-color-primary: LinkText;
+    --ds-focus-ring-color: Highlight;
+  }
+  
+  /* Ensure all interactive elements have visible borders */
+  [data-interactive] {
+    border: 1px solid ButtonBorder !important;
+  }
+  
+  /* Ensure focus rings are visible */
+  [data-interactive]:focus-visible {
+    outline: 2px solid Highlight !important;
+    outline-offset: 2px;
+  }
+}
+
+/* ============================================
+   MOBILE/TOUCH OPTIMIZATIONS
+   ============================================ */
+
+@media (max-width: 640px) {
+  :root {
+    /* Larger touch targets on mobile */
+    --ds-touch-target: 48px;
+    
+    /* Slightly longer durations for better feel */
+    --ds-duration-quick: 150ms;
+    --ds-duration-standard: 250ms;
+  }
+}
+
+@media (hover: none) {
+  :root {
+    /* No hover states on touch devices */
+    --ds-state-hover-bg: transparent;
+    --ds-hover-brighten: 1;
+  }
+}

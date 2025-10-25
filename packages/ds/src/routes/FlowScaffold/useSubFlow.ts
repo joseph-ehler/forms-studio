@@ -24,8 +24,8 @@
  * flow.isLast  // boolean
  */
 
-import { useSearchParams } from 'react-router-dom';
 import { useMemo, useRef } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
 export interface SubFlowState<T extends string> {
   /** Current step */

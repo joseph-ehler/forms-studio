@@ -1,8 +1,9 @@
 /**
  * Input wrapper with RHF integration
  */
-import { Controller, useFormContext } from 'react-hook-form';
 import { Label, TextInput, type TextInputProps } from 'flowbite-react';
+import { Controller, useFormContext } from 'react-hook-form';
+
 import { useFieldIds } from './Field';
 
 export type InputProps = Omit<TextInputProps, 'name'> & {

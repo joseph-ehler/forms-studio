@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json.schemastore.org/eslintrc",
+  "rules": {
+    "no-restricted-syntax": [
+      "error",
+      {
+        "selector": "Literal[value=/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/]",
+        "message": "❌ Raw hex colors not allowed. Use dsColor() or var(--ds-color-*) instead."
+      },
+      {
+        "selector": "Literal[value=/^\\d+px$/]",
+        "message": "❌ Hardcoded px values not allowed. Use dsSpace() or var(--ds-space-*) instead."
+      },
+      {
+        "selector": "Literal[value=/^rgba?\\(/]",
+        "message": "❌ Raw rgb()/rgba() not allowed. Use dsColorRGB() with var(--ds-color-*-rgb) instead."
+      }
+    ],
+    "no-restricted-imports": [
+      "error",
+      {
+        "patterns": [
+          {
+            "group": ["**/node_modules/flowbite*/**/*.css"],
+            "message": "❌ Do not import Flowbite CSS directly. Use DS tokens and components."
+          }
+        ]
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": ["*.css"],
+      "rules": {
+        "no-restricted-syntax": "off"
+      }
+    },
+    {
+      "files": ["**/tokens/**", "**/tailwind.config.*"],
+      "rules": {
+        "no-restricted-syntax": "off"
+      }
+    }
+  ]
+}

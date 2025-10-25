@@ -1,0 +1,19 @@
+{
+  "directories": [
+    "packages/ds/src/fb",
+    "packages/ds/src/routes",
+    "packages/ds/src/hooks"
+  ],
+  "barrelName": "index.ts",
+  "barrelType": "flat",
+  "delete": true,
+  "exportDefault": false,
+  "quoteCharacter": "single",
+  "include": [".*\\.(ts|tsx)$"],
+  "exclude": [
+    ".*\\.stories\\.tsx$",
+    ".*\\.(spec|test)\\.(ts|tsx)$",
+    ".*/__tests__/.*",
+    ".*/stories/.*"
+  ]
+}

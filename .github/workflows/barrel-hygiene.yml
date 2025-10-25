@@ -1,0 +1,111 @@
+name: Barrel & Import Hygiene
+
+on:
+  pull_request:
+    paths:
+      - 'packages/**/*.ts'
+      - 'packages/**/*.tsx'
+      - 'packages/**/index.ts'
+      - '.barrelsby.json'
+      - '.eslintrc.import-hygiene.cjs'
+  push:
+    branches:
+      - main
+
+jobs:
+  check-barrels:
+    name: Check Barrel Freshness
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 9.0.0
+      
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+      
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      
+      - name: Generate barrels
+        run: pnpm barrels
+      
+      - name: Check for barrel changes
+        run: |
+          if ! git diff --quiet packages/**/index.ts; then
+            echo "❌ Barrels are out of date!"
+            echo ""
+            echo "Changed files:"
+            git diff --name-only packages/**/index.ts
+            echo ""
+            echo "Run: pnpm barrels"
+            echo ""
+            exit 1
+          fi
+          echo "✅ All barrels are up to date"
+
+  check-cycles:
+    name: Check Circular Dependencies
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 9.0.0
+      
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+      
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      
+      - name: Check for circular dependencies
+        run: pnpm deps:cycles
+
+  lint-imports:
+    name: Lint Import Hygiene
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 9.0.0
+      
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+      
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      
+      - name: Lint imports
+        run: |
+          eslint \
+            --config .eslintrc.import-hygiene.cjs \
+            --ext .ts,.tsx,.js,.jsx \
+            "packages/**"
+      
+      - name: Report violations
+        if: failure()
+        run: |
+          echo "❌ Import hygiene violations found!"
+          echo ""
+          echo "Common issues:"
+          echo "  • Deep imports: @intstudio/ds/src/..."
+          echo "  • Bypassing barrels: ../../../some/path"
+          echo "  • Circular dependencies"
+          echo ""
+          echo "Fix: pnpm fix:barrels"
+          echo ""

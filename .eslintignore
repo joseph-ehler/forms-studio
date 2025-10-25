@@ -1,0 +1,6 @@
+dist/**
+**/dist/**
+storybook-static/**
+.flowbite-blocks-reference/**
+flowbite-react-blocks-1.8.0-beta/**
+node_modules/**

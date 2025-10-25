@@ -1,0 +1,101 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Deprecations Registry",
+  "description": "Tracks deprecated components and their removal timeline",
+  "type": "object",
+  "properties": {
+    "deprecations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["component", "reason", "since", "removeIn"],
+        "properties": {
+          "component": {
+            "type": "string",
+            "description": "Component name"
+          },
+          "path": {
+            "type": "string",
+            "description": "File path (relative to package root)"
+          },
+          "reason": {
+            "type": "string",
+            "description": "Why it's being deprecated"
+          },
+          "since": {
+            "type": "string",
+            "pattern": "^\\d+\\.\\d+\\.\\d+$",
+            "description": "Version when deprecated"
+          },
+          "removeIn": {
+            "type": "string",
+            "pattern": "^\\d+\\.\\d+\\.\\d+$",
+            "description": "Version when it will be removed"
+          },
+          "migration": {
+            "type": "object",
+            "properties": {
+              "from": {
+                "type": "string",
+                "description": "Old usage pattern"
+              },
+              "to": {
+                "type": "string",
+                "description": "New usage pattern"
+              },
+              "breaking": {
+                "type": "boolean",
+                "description": "Whether migration involves breaking changes"
+              },
+              "notes": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Migration tips"
+              }
+            }
+          },
+          "migrationUrl": {
+            "type": "string",
+            "format": "uri",
+            "description": "Link to detailed migration guide"
+          }
+        }
+      }
+    },
+    "removed": {
+      "type": "array",
+      "description": "History of removed deprecations",
+      "items": {
+        "type": "object",
+        "required": ["component", "removedIn"],
+        "properties": {
+          "component": {
+            "type": "string"
+          },
+          "removedIn": {
+            "type": "string",
+            "pattern": "^\\d+\\.\\d+\\.\\d+$"
+          },
+          "replacement": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "meta": {
+      "type": "object",
+      "properties": {
+        "lastUpdated": {
+          "type": "string",
+          "format": "date"
+        },
+        "policy": {
+          "type": "string",
+          "description": "Deprecation policy summary"
+        }
+      }
+    }
+  }
+}

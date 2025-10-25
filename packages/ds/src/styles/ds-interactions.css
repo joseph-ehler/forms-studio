@@ -1,0 +1,237 @@
+/**
+ * Universal Interaction Layer
+ * 
+ * Single source of truth for all interactive states:
+ * - Focus (keyboard only via :focus-visible)
+ * - Hover (pointer only via media query)
+ * - Active/Press (all input types)
+ * - Disabled
+ * - Loading
+ * - Ripple effect (optional)
+ * 
+ * All interactive components declare:
+ * - data-interactive (required)
+ * - data-variant (primary|secondary|ghost|danger|link)
+ * - data-size (sm|md|lg)
+ * - data-state (idle|loading|pressed)
+ * 
+ * Token-driven, works on web + Capacitor, respects a11y prefs.
+ */
+
+@layer ds-interactions {
+/* ============================================
+   BASE INTERACTIVE ELEMENT
+   ============================================ */
+
+:where([data-interactive]) {
+  /* Remove browser defaults */
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+  
+  /* Interaction tuning */
+  user-select: none;
+  touch-action: manipulation;
+  cursor: pointer;
+  
+  /* Minimum sizes */
+  min-block-size: var(--ds-touch-target);
+  min-inline-size: var(--ds-touch-target);
+  
+  /* Visual foundation */
+  border-radius: var(--ds-radius-control);
+  
+  /* Smooth transitions */
+  transition: 
+    background-color var(--ds-duration-standard) var(--ds-ease-standard),
+    box-shadow var(--ds-duration-standard) var(--ds-ease-standard),
+    transform var(--ds-duration-quick) var(--ds-ease-accelerate),
+    opacity var(--ds-duration-quick) var(--ds-ease-standard),
+    filter var(--ds-duration-standard) var(--ds-ease-standard);
+}
+
+/* ============================================
+   FOCUS STATE (keyboard only)
+   ============================================ */
+
+:where([data-interactive]):where(:focus-visible) {
+  /* Double-ring pattern: offset + primary ring */
+  box-shadow:
+    0 0 0 var(--ds-focus-offset) var(--ds-color-surface-base),
+    0 0 0 calc(var(--ds-focus-offset) + var(--ds-focus-ring)) var(--ds-focus-ring-color);
+}
+
+/* Variant-specific focus rings */
+:where([data-interactive][data-variant="danger"]):where(:focus-visible) {
+  box-shadow:
+    0 0 0 var(--ds-focus-offset) var(--ds-color-surface-base),
+    0 0 0 calc(var(--ds-focus-offset) + var(--ds-focus-ring)) rgba(var(--ds-color-danger-rgb), 0.4);
+}
+
+/* ============================================
+   HOVER STATE (pointer devices only)
+   ============================================ */
+
+@media (hover: hover) and (pointer: fine) {
+  /* Ghost variant - subtle background */
+  :where([data-interactive][data-variant="ghost"]:hover:not(:disabled):not([aria-disabled="true"])) {
+    background: var(--ds-state-hover-bg);
+  }
+  
+  /* Secondary variant - subtle brightness */
+  :where([data-interactive][data-variant="secondary"]:hover:not(:disabled):not([aria-disabled="true"])) {
+    filter: brightness(var(--ds-hover-brighten));
+  }
+  
+  /* Link variant - underline */
+  :where([data-interactive][data-variant="link"]:hover:not(:disabled):not([aria-disabled="true"])) {
+    text-decoration: none;
+  }
+}
+
+/* ============================================
+   ACTIVE/PRESS STATE (all input types)
+   ============================================ */
+
+:where([data-interactive]:active:not(:disabled):not([aria-disabled="true"])) {
+  /* Subtle press feedback */
+  transform: 
+    translateY(var(--ds-press-translate-y)) 
+    scale(var(--ds-press-scale));
+}
+
+/* Pressed state (toggle buttons, etc.) */
+:where([data-interactive][aria-pressed="true"]), :where([data-interactive][data-state="pressed"]) {
+  /* Remove focus ring when pressed */
+  box-shadow: none;
+}
+
+/* ============================================
+   DISABLED STATE
+   ============================================ */
+
+:where([data-interactive]:disabled), :where([data-interactive][aria-disabled="true"]) {
+  opacity: var(--ds-disabled-opacity);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ============================================
+   LOADING STATE
+   ============================================ */
+
+[data-interactive][aria-busy="true"],
+[data-interactive][data-state="loading"] {
+  cursor: wait;
+  pointer-events: none;
+}
+
+/* ============================================
+   RIPPLE EFFECT (optional, Android-style)
+   ============================================ */
+
+[data-interactive][data-ripple="true"] {
+  position: relative;
+  overflow: hidden;
+}
+
+[data-interactive][data-ripple="true"]::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle,
+    rgba(var(--ds-color-text-rgb), var(--ds-ripple-alpha)) 10%,
+    transparent 10.01%
+  ) center / 10px 10px no-repeat;
+  transform: scale(0);
+  opacity: 0;
+  pointer-events: none;
+}
+
+[data-interactive][data-ripple="true"]:active::after {
+  transform: scale(20);
+  opacity: 1;
+  transition: 
+    transform var(--ds-ripple-duration) var(--ds-ease-decelerate),
+    opacity calc(var(--ds-ripple-duration) * 0.8) var(--ds-ease-standard);
+}
+
+/* ============================================
+   INPUT MODALITY REFINEMENTS
+   ============================================ */
+
+/* Keyboard users: stronger focus indication */
+:root[data-input="kbd"] [data-interactive]:focus-visible {
+  box-shadow:
+    0 0 0 var(--ds-focus-offset) var(--ds-color-surface-base),
+    0 0 0 calc(var(--ds-focus-offset) + var(--ds-focus-ring)) var(--ds-focus-ring-color-strong);
+}
+
+/* Touch users: no hover, more obvious active state */
+:root[data-input="touch"] [data-interactive]:active {
+  transform: scale(0.97);
+}
+
+/* ============================================
+   SIZE VARIANTS
+   ============================================ */
+
+[data-interactive][data-size="sm"] {
+  min-block-size: calc(var(--ds-touch-target) * 0.8);
+  min-inline-size: calc(var(--ds-touch-target) * 0.8);
+}
+
+[data-interactive][data-size="lg"] {
+  min-block-size: calc(var(--ds-touch-target) * 1.1);
+  min-inline-size: calc(var(--ds-touch-target) * 1.1);
+}
+
+/* Icon-only buttons: square */
+[data-interactive][data-icon-only="true"] {
+  aspect-ratio: 1;
+  padding: 0;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ============================================
+   REDUCED MOTION OVERRIDES
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  [data-interactive],
+  [data-interactive]::before,
+  [data-interactive]::after {
+    transition: none !important;
+    animation: none !important;
+  }
+  
+  /* Keep instant visual feedback */
+  [data-interactive]:active {
+    opacity: 0.8;
+    transform: none;
+  }
+}
+
+/* ============================================
+   HIGH CONTRAST OVERRIDES
+   ============================================ */
+
+@media (forced-colors: active) {
+  [data-interactive] {
+    border: 1px solid ButtonBorder !important;
+  }
+  
+  [data-interactive]:focus-visible {
+    outline: 2px solid Highlight !important;
+    outline-offset: 2px;
+    box-shadow: none;
+  }
+  
+  [data-interactive]:disabled {
+    opacity: 1;
+    color: GrayText !important;
+  }
+}
+
+} /* end @layer ds-interactions */

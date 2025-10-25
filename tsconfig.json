@@ -1,18 +1,16 @@
 {
-  "compilerOptions": {
-    "target": "ES2022",
-    "lib": ["ES2022", "DOM", "DOM.Iterable"],
-    "module": "ESNext",
-    "moduleResolution": "Bundler",
-    "strict": true,
-    "jsx": "react-jsx",
-    "declaration": true,
-    "skipLibCheck": true,
-    "baseUrl": ".",
-    "paths": {
-      "@intstudio/ds": ["./packages/ds/src"],
-      "@intstudio/core": ["./packages/core/src"],
-      "@intstudio/ui-bridge": ["./packages/ui-bridge/src"]
-    }
-  }
+  "files": [],
+  "references": [
+    { "path": "packages/tokens" },
+    { "path": "packages/core" },
+    { "path": "packages/ds" },
+    { "path": "packages/ui-bridge" }
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "storybook-static",
+    "flowbite-react-blocks-*/**",
+    ".flowbite-blocks-reference/**"
+  ]
 }

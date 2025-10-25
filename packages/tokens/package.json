@@ -1,0 +1,36 @@
+{
+  "name": "@intstudio/tokens",
+  "version": "0.1.0",
+  "description": "Design tokens - CSS variables and Tailwind theme helpers",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./tokens.css": "./src/tokens.css",
+    "./accessibility-prefs.css": "./src/accessibility-prefs.css",
+    "./tailwind-theme": {
+      "types": "./dist/tailwind-theme.d.ts",
+      "import": "./dist/tailwind-theme.js"
+    }
+  },
+  "files": [
+    "dist",
+    "src/tokens.css",
+    "src/accessibility-prefs.css",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts src/tailwind-theme.ts --format esm --dts --clean",
+    "dev": "tsup src/index.ts src/tailwind-theme.ts --format esm --dts --watch",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "tsup": "^8.0.2",
+    "typescript": "^5.9.3"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "allowedRoots": [
+    ".cascade",
+    ".changeset",
+    ".github",
+    ".husky",
+    ".reports",
+    ".vscode",
+    "_templates",
+    "contracts",
+    "docs",
+    "packages",
+    "playwright-report",
+    "scripts",
+    "specs",
+    "test-results",
+    "tests",
+    "tmp",
+    "tools"
+  ],
+  "description": "Allowlist of permitted top-level directories. New roots require explicit approval."
+}

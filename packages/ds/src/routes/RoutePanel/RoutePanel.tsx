@@ -17,9 +17,10 @@
  * } />
  */
 
+import './route-panel.css';
+
 import { FC, PropsWithChildren, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router';
-import './route-panel.css';
 
 export interface RoutePanelProps {
   /**

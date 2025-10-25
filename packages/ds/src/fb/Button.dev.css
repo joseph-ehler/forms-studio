@@ -1,0 +1,43 @@
+/**
+ * Button Dev Helpers - Force state toggles for visual QA
+ * 
+ * These styles allow designers/developers to lock buttons in specific states
+ * for visual inspection without needing to interact (hover/focus/active).
+ * 
+ * Usage in Storybook or dev environment:
+ * <Button data-dev-force="hover" variant="primary">Preview Hover</Button>
+ * <Button data-dev-force="active" variant="danger">Preview Active</Button>
+ * <Button data-dev-force="focus" variant="success">Preview Focus</Button>
+ * 
+ * Note: Only use in development/Storybook, not production code
+ */
+
+@layer ds-interactions {
+  /* Force hover state */
+  [data-component="button"][data-dev-force="hover"] {
+    background: var(--btn-hover-bg, var(--btn-bg));
+    box-shadow: var(--ds-shadow-overlay-sm);
+    transform: translateY(-1px);
+  }
+
+  /* Force active state */
+  [data-component="button"][data-dev-force="active"] {
+    background: var(--btn-active-bg, var(--btn-hover-bg, var(--btn-bg)));
+    transform: translateY(0);
+    box-shadow: none;
+  }
+
+  /* Force focus-visible state */
+  [data-component="button"][data-dev-force="focus"] {
+    outline: none;
+    box-shadow:
+      0 0 0 var(--ds-focus-offset) var(--ds-role-bg),
+      0 0 0 calc(var(--ds-focus-offset) + var(--ds-focus-ring)) var(--ds-state-focus-ring);
+  }
+
+  /* Force disabled appearance (without actually disabling) */
+  [data-component="button"][data-dev-force="disabled"] {
+    opacity: var(--ds-disabled-opacity, 0.5);
+    cursor: not-allowed;
+  }
+}
