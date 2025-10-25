@@ -2,7 +2,7 @@
  * Run: pnpm barrels
  */
 
-export * from './FlowScaffold/FlowScaffold';
-export * from './FlowScaffold/useSubFlow';
-export * from './FullScreenRoute/FullScreenRoute';
-export * from './RoutePanel/RoutePanel';
+export * from './flow-scaffold/FlowScaffold';
+export * from './flow-scaffold/useSubFlow';
+export * from './full-screen-route/FullScreenRoute';
+export * from './route-panel/RoutePanel';

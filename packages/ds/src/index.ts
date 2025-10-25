@@ -8,9 +8,9 @@
 export { ThemeToggle } from './components/ThemeToggle';
 
 // Routes (macro UX)
-export * from './routes/FlowScaffold';
-export * from './routes/FullScreenRoute';
-export * from './routes/RoutePanel';
+export * from './routes/flow-scaffold';
+export * from './routes/full-screen-route';
+export * from './routes/route-panel';
 
 // Hooks (behavioral logic)
 export { useDeviceType } from './hooks/useDeviceType';
