@@ -238,6 +238,25 @@ importers:
         specifier: 5.8.2
         version: 5.8.2
 
+  packages/forms:
+    dependencies:
+      '@intstudio/ds':
+        specifier: workspace:*
+        version: link:../ds
+      react:
+        specifier: '>=18'
+        version: 18.3.1
+      react-hook-form:
+        specifier: '>=7'
+        version: 7.65.0(react@18.3.1)
+    devDependencies:
+      tsup:
+        specifier: ^8.5.0
+        version: 8.5.0(jiti@1.21.7)(postcss@8.5.6)(tsx@4.20.6)(typescript@5.8.2)(yaml@2.8.1)
+      typescript:
+        specifier: 5.8.2
+        version: 5.8.2
+
   packages/tokens:
     devDependencies:
       '@types/node':
