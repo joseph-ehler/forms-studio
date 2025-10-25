@@ -63,7 +63,9 @@
     "lint": "eslint src --ext .ts,.tsx",
     "test": "vitest",
     "check:deprecations": "tsx scripts/check-deprecations.ts",
-    "check:deprecations:warn": "tsx scripts/check-deprecations.ts --warn"
+    "check:deprecations:warn": "tsx scripts/check-deprecations.ts --warn",
+    "api:check": "api-extractor run --local",
+    "api:update": "api-extractor run --local --verbose --diagnostics"
   },
   "keywords": [
     "design-system",

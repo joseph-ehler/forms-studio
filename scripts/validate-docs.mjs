@@ -34,6 +34,8 @@ const ALLOWED_PATTERNS = [
   /^\.cascade\//,
   /^packages\/[^/]+\/docs\//,
   /^\.github\//,  // Allow GitHub-specific files
+  /^packages\/[^/]+\/etc\/.*\.api\.md$/,  // API Extractor reports
+  /^packages\/[^/]+\/temp\/.*\.api\.md$/,  // API Extractor temp files
 ];
 
 // Explicit exceptions (allowed .md files in roots)

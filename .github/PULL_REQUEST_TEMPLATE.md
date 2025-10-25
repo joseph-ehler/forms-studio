@@ -51,6 +51,12 @@
 - [ ] **Rename sanity**: Ran `pnpm doctor:rename` before commit
 - [ ] **Golden sources**: No protected directories deleted (flowbite-react-blocks, etc.)
 
+### Public API (if applicable)
+
+- [ ] **API check**: Ran `pnpm api:check` and it passes
+- [ ] **If API changed**: Ran `pnpm api:update` and reviewed baseline changes
+- [ ] **If intentional**: Added changeset with semver bump
+
 ## Related Issues
 
 <!-- Link to related issues, e.g., "Fixes #123" or "Relates to #456" -->

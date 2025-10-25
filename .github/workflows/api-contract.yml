@@ -1,0 +1,69 @@
+name: API Contract
+
+on:
+  pull_request:
+    branches: [main, develop]
+  workflow_dispatch: {}
+
+jobs:
+  api-check:
+    runs-on: ubuntu-latest
+    name: API Surface Stability Check
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+      
+      - name: Build Packages
+        run: pnpm api:build
+      
+      - name: Check API Surface
+        run: pnpm api:check
+        continue-on-error: true
+        id: api-check
+      
+      - name: Comment on PR (if API changed)
+        if: failure() && steps.api-check.outcome == 'failure'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `⚠️ **API Surface Changed**
+              
+              The public API of \`@intstudio/ds\` has changed.
+              
+              **If this is intentional:**
+              1. Run \`pnpm api:update\` locally
+              2. Review the changes in \`packages/ds/etc/ds.api.md\`
+              3. Add a changeset: \`pnpm changeset\`
+              4. Commit both files
+              
+              **If this is accidental:**
+              1. Review your changes to ensure no unintended exports
+              2. Revert breaking changes
+              
+              See [API Contract Guide](../../docs/handbook/API_CONTRACT.md) for details.`
+            })
+      
+      - name: Fail if API changed without approval
+        if: steps.api-check.outcome == 'failure'
+        run: |
+          echo "❌ Public API changed but baseline not updated"
+          echo "Run: pnpm api:update"
+          exit 1

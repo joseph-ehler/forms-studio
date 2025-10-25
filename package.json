@@ -45,6 +45,10 @@
     "metrics:adoption": "node scripts/metrics/adoption.mjs",
     "metrics:ci": "node scripts/metrics/ci.mjs",
     "metrics:all": "pnpm metrics:adoption && pnpm metrics:ci",
+    "api:build": "pnpm -r --filter './packages/**' build",
+    "api:check": "pnpm -r --filter '@intstudio/ds' api:check",
+    "api:update": "pnpm -r --filter '@intstudio/ds' api:update",
+    "prepr": "pnpm doctor && pnpm api:build && pnpm api:check",
     "sb": "storybook dev -p 6006",
     "sb:build": "storybook build",
     "sb:test": "storybook test --watch",
@@ -52,6 +56,7 @@
     "sb:new": "node scripts/new-story.mjs"
   },
   "devDependencies": {
+    "@microsoft/api-extractor": "^7.53.3",
     "@storybook/addon-a11y": "8.6.14",
     "@storybook/addon-essentials": "8.6.14",
     "@storybook/addon-interactions": "8.6.14",
