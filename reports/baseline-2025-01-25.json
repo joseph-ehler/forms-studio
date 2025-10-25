@@ -1,0 +1,64 @@
+{
+  "summary": {
+    "date": "2025-10-25",
+    "totals": {
+      "flowbiteReact": 7,
+      "flowbiteCss": 0,
+      "dsWrappers": 1
+    },
+    "ratio": {
+      "dsToFlowbite": 0.14285714285714285
+    },
+    "filesWithMatches": 8
+  },
+  "perFile": [
+    {
+      "file": "packages/demo-app/src/pages/quality-layer-demo.tsx",
+      "flowbiteReact": 0,
+      "flowbiteCss": 0,
+      "dsWrappers": 1
+    },
+    {
+      "file": "packages/ds/src/fb/Drawer.tsx",
+      "flowbiteReact": 1,
+      "flowbiteCss": 0,
+      "dsWrappers": 0
+    },
+    {
+      "file": "packages/ds/src/fb/Field.tsx",
+      "flowbiteReact": 1,
+      "flowbiteCss": 0,
+      "dsWrappers": 0
+    },
+    {
+      "file": "packages/ds/src/fb/Modal.tsx",
+      "flowbiteReact": 1,
+      "flowbiteCss": 0,
+      "dsWrappers": 0
+    },
+    {
+      "file": "packages/ds/src/fb/TableRowActions.tsx",
+      "flowbiteReact": 1,
+      "flowbiteCss": 0,
+      "dsWrappers": 0
+    },
+    {
+      "file": "packages/ui-bridge/src/form/Button.tsx",
+      "flowbiteReact": 1,
+      "flowbiteCss": 0,
+      "dsWrappers": 0
+    },
+    {
+      "file": "packages/ui-bridge/src/form/Input.tsx",
+      "flowbiteReact": 1,
+      "flowbiteCss": 0,
+      "dsWrappers": 0
+    },
+    {
+      "file": "packages/ui-bridge/src/form/Select.tsx",
+      "flowbiteReact": 1,
+      "flowbiteCss": 0,
+      "dsWrappers": 0
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+# Ignore daily reports (commit snapshots periodically via script)
+*.json
+*.csv
+
+# Keep baseline and milestone snapshots
+!baseline-*.json
+!milestone-*.json
+!*-snapshot.json

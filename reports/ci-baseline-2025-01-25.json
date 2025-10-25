@@ -1,0 +1,7 @@
+{
+  "date": "2025-10-25",
+  "command": "pnpm doctor",
+  "ok": true,
+  "durationMs": 175,
+  "stderrSample": ""
+}
