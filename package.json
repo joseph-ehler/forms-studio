@@ -38,8 +38,10 @@
     "guard": "pnpm fix:imports && pnpm typecheck",
     "versions:check": "node scripts/check-versions.mjs",
     "doctor": "pnpm barrels && pnpm lint:prod && pnpm typecheck && pnpm -r --filter './packages/**' build",
+    "doctor:rename": "node scripts/validate-renames.mjs && pnpm typecheck",
     "ds:doctor": "pnpm doctor",
     "ds:new": "echo '🚧 Component generator coming soon! For now, use Input.template.tsx as reference.'",
+    "refactor:rename": "tsx scripts/refactor-rename.mts",
     "sb": "storybook dev -p 6006",
     "sb:build": "storybook build",
     "sb:test": "storybook test --watch",
@@ -72,6 +74,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "storybook": "8.6.14",
+    "ts-morph": "^27.0.2",
     "tsx": "^4.20.6",
     "typescript": "5.8.2",
     "vite": "5.4.10"

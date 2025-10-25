@@ -9,6 +9,7 @@
     "_templates",
     "contracts",
     "docs",
+    "flowbite-react-blocks-1.8.0-beta",
     "packages",
     "playwright-report",
     "scripts",
@@ -18,5 +19,8 @@
     "tmp",
     "tools"
   ],
-  "description": "Allowlist of permitted top-level directories. New roots require explicit approval."
+  "goldenSources": [
+    "flowbite-react-blocks-1.8.0-beta/"
+  ],
+  "description": "Allowlist of permitted top-level directories. New roots require explicit approval. goldenSources are protected from deletion."
 }

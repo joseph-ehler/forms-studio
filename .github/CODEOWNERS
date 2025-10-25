@@ -1,6 +1,9 @@
 # CODEOWNERS - Review routing for forms-studio monorepo
 # https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
 
+# Golden Sources (protected - cannot delete without approval)
+/flowbite-react-blocks-1.8.0-beta/**    @josephehler
+
 # DS Layer (Flowbite + SKIN)
 /packages/ds/src/control/**             @josephehler
 /packages/ds/src/registry/**            @josephehler
@@ -24,3 +27,4 @@
 /.github/**                             @josephehler
 /scripts/**                             @josephehler
 /tools/**                               @josephehler
+/.policy/**                             @josephehler
