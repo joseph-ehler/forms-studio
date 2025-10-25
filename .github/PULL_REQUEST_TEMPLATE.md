@@ -45,6 +45,12 @@
 - [ ] ARIA attributes present/verified
 - [ ] Documentation updated (`WHERE-TO-EDIT.md`, ADRs)
 
+### Refactor (if applicable)
+
+- [ ] **Renames**: Used `pnpm refactor:rename` (not manual) - see [`RENAME_WORKFLOW.md`](../../docs/handbook/RENAME_WORKFLOW.md)
+- [ ] **Rename sanity**: Ran `pnpm doctor:rename` before commit
+- [ ] **Golden sources**: No protected directories deleted (flowbite-react-blocks, etc.)
+
 ## Related Issues
 
 <!-- Link to related issues, e.g., "Fixes #123" or "Relates to #456" -->
