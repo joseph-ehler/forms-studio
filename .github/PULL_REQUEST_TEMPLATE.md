@@ -1,47 +1,49 @@
 # Pull Request
 
-## Description
+## Summary
 
-<!-- Brief description of what this PR does -->
+<!-- 1-3 lines: what changed and why -->
 
-## Type of Change
+## Scope
 
-- [ ] Bug fix (non-breaking change which fixes an issue)
-- [ ] New feature (non-breaking change which adds functionality)
-- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
-- [ ] Documentation update
-- [ ] Refactoring (no functional changes)
+- [ ] DS primitives (Flowbite + SKIN)
+- [ ] Control Panel changes (`control/`, `registry/`)
+- [ ] Forms layer (contracts/renderer)
+- [ ] Tokens/roles
+- [ ] Docs / ADR
 
-## Checklist
+## Validation
 
-### Code Quality
+```bash
+✅ pnpm lint:prod       # Prod-only lint
+✅ pnpm typecheck       # All packages
+✅ pnpm build           # All packages compile
+```
 
-- [ ] My code follows the style guidelines of this project
-- [ ] I have performed a self-review of my own code
-- [ ] I have commented my code, particularly in hard-to-understand areas
-- [ ] My changes generate no new warnings or errors
+- [ ] All checks passing
+- [ ] Barrels up-to-date (if applicable)
 
-### Documentation & Naming
+## Architecture Checklist
 
-- [ ] ✅ **No root-level or package-root docs added** (docs must be in `docs/` or `packages/*/docs/`)
-- [ ] ✅ **Naming validator passes** (`pnpm validate:naming`)
-- [ ] ✅ **Docs in approved locations** (if docs added)
-- [ ] I have updated documentation as needed
-- [ ] My files follow naming conventions (kebab-case for files, PascalCase for components)
+### DS Layer (if applicable)
 
-### Testing
+- [ ] Variants defined in `control/variants.config.ts`
+- [ ] SKIN keys in `control/skin-contracts.ts` (TypeScript contracts)
+- [ ] SKIN maps in `registry/skins/*.skin.ts`
+- [ ] Components read only `--component-*` vars (never `--ds-role-*` directly)
+- [ ] No magic numbers (only tokens)
 
-- [ ] I have added tests that prove my fix is effective or that my feature works
-- [ ] New and existing unit tests pass locally with my changes
-- [ ] I have added/updated E2E tests if needed
+### Forms Layer (if applicable)
 
-### Design System (if applicable)
+- [ ] Contracts in `field-contracts.ts` (TypeScript types)
+- [ ] Registry in `field-types.ts` (central mapping)
+- [ ] Fields compose `@intstudio/ds/fb/*` primitives (no Flowbite imports)
+- [ ] No CSS files in Forms layer (DS classes only)
 
-- [ ] Components use DS primitives (no custom CSS in Forms layer)
-- [ ] Only `--ds-*` tokens used (no magic numbers)
-- [ ] ARIA attributes added/verified
-- [ ] Keyboard navigation tested
-- [ ] Mobile/responsive behavior verified
+### General
+
+- [ ] ARIA attributes present/verified
+- [ ] Documentation updated (`WHERE-TO-EDIT.md`, ADRs)
 
 ## Related Issues
 

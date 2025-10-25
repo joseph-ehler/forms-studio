@@ -2,6 +2,25 @@
 
 **Fresh, minimal monorepo for building platforms quickly.**
 
+## 🎯 **Current Focus**
+
+**Flowbite-wrapped primitives powered by SKIN tokens.**
+
+- **DS Layer**: Flowbite components wrapped with SKIN variables (`@intstudio/ds/fb`)
+- **Control Panel**: Variants (`control/variants.config.ts`) + SKIN maps (`registry/skins/`)
+- **Forms Layer**: TypeScript contracts + renderer using DS primitives (`@intstudio/forms`)
+- **Pattern**: TypeScript contracts > custom tooling (compile-time enforcement)
+
+**Where to look:**
+- DS variants → `packages/ds/src/control/variants.config.ts`
+- DS SKIN maps → `packages/ds/src/registry/skins/*.skin.ts`
+- Forms contracts → `packages/forms/src/control/field-contracts.ts`
+- Forms fields → `packages/forms/src/fields/*/`
+
+See [`docs/handbook/WHERE-TO-EDIT.md`](docs/handbook/WHERE-TO-EDIT.md) for complete reference.
+
+---
+
 ## 📦 **Packages**
 
 ### `@intstudio/ds`

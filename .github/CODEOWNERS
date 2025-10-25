@@ -1,15 +1,26 @@
-# Documentation ownership
+# CODEOWNERS - Review routing for forms-studio monorepo
 # https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
 
-# Monorepo-level documentation
-/docs/**                      @josephehler
-/.cascade/**                  @josephehler
+# DS Layer (Flowbite + SKIN)
+/packages/ds/src/control/**             @josephehler
+/packages/ds/src/registry/**            @josephehler
+/packages/ds/src/fb/**                  @josephehler
 
-# Package-specific documentation  
-/packages/ds/docs/**          @josephehler
-/packages/core/docs/**        @josephehler
-/packages/ui-bridge/docs/**   @josephehler
+# Forms Layer (Contracts + Renderer)
+/packages/forms/**                      @josephehler
 
-# Configuration files
-/.github/**                   @josephehler
-/scripts/**                   @josephehler
+# Tokens & Design
+/packages/tokens/**                     @josephehler
+
+# Core utilities
+/packages/core/**                       @josephehler
+
+# Documentation
+/docs/**                                @josephehler
+/.cascade/**                            @josephehler
+/packages/*/docs/**                     @josephehler
+
+# Infrastructure
+/.github/**                             @josephehler
+/scripts/**                             @josephehler
+/tools/**                               @josephehler
