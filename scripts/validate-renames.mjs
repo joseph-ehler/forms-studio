@@ -57,17 +57,22 @@ try {
 console.log('3️⃣  Checking for PascalCase directories in routes/...');
 try {
   const caseDirs = execSync(
-    `find packages -path "*/src/routes/*" -type d -name "*[A-Z]*" 2>/dev/null || true`,
+    `find packages -path "*/src/routes/*" -type d 2>/dev/null || true`,
     { encoding: 'utf-8' }
   );
   
-  // Filter out acceptable patterns (e.g., node_modules, dist)
+  // Only check the basename (last part of path) for PascalCase
   const problematic = caseDirs
     .split('\n')
     .filter(line => line.trim())
     .filter(line => !line.includes('node_modules'))
     .filter(line => !line.includes('dist'))
-    .filter(line => !line.includes('.git'));
+    .filter(line => !line.includes('.git'))
+    .filter(line => {
+      const basename = line.split('/').pop();
+      // Check if basename has uppercase (PascalCase) but not all uppercase (acronyms OK)
+      return basename && /[A-Z]/.test(basename) && basename !== basename.toUpperCase();
+    });
   
   if (problematic.length > 0) {
     console.error('❌ PascalCase directories under routes/ (use kebab-case):\n');
