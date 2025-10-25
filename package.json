@@ -37,7 +37,7 @@
     "prebuild": "pnpm barrels",
     "guard": "pnpm fix:imports && pnpm typecheck",
     "versions:check": "node scripts/check-versions.mjs",
-    "doctor": "pnpm barrels && pnpm lint:prod && pnpm typecheck && pnpm -r --filter './packages/**' build",
+    "doctor": "pnpm barrels && pnpm lint:prod && pnpm typecheck && pnpm -r --filter './packages/**' build && pnpm api:check",
     "doctor:rename": "node scripts/validate-renames.mjs && pnpm typecheck",
     "ds:doctor": "pnpm doctor",
     "ds:new": "echo '🚧 Component generator coming soon! For now, use Input.template.tsx as reference.'",
