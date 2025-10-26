@@ -12,3 +12,4 @@
 export * from './ModalShell';
 export * from './DrawerShell';
 export * from './PopoverShell';
+export * from './CommandPaletteShell';

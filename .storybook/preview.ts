@@ -1,7 +1,7 @@
 import type { Preview } from '@storybook/react';
 import { createElement } from 'react';
 import { Flowbite } from 'flowbite-react';
-import { dsFlowbiteTheme } from '../packages/ds/src/primitives/Sheet/flowbiteTheme';
+import { dsFlowbiteTheme } from '../packages/ds/src/primitives/BottomSheet/flowbiteTheme';
 
 // 1) Tokens (CSS vars) - single source of truth
 import '../packages/tokens/src/tokens.css';
@@ -12,8 +12,8 @@ import 'flowbite/dist/flowbite.css';
 // 3) Vaul drawer styles (for Sheet primitive)
 import '../node_modules/vaul/style.css';
 
-// 4) DS styles (includes Sheet.css with backdrop fix)
-import '../packages/ds/src/primitives/Sheet/Sheet.css';
+// 4) DS styles (includes BottomSheet.css with backdrop fix)
+import '../packages/ds/src/primitives/BottomSheet/BottomSheet.css';
 
 /**
  * Global decorator: wraps all stories in Flowbite theme provider

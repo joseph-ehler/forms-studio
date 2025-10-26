@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added (30-Day Velocity - Week 1) 🚀 IN PROGRESS
+
+- **CommandPaletteShell** (`shell/micro/CommandPaletteShell/`)
+  - ⌘K/Ctrl+K global command interface
+  - Uses shortcut broker with 'palette' scope (highest priority)
+  - Fuzzy search (simple substring matching)
+  - Keyboard navigation (↑/↓, Enter, Esc)
+  - Haptics on selection (native platforms)
+  - Emits shell events for analytics
+  - Composes overlay-policy, focus-policy, shortcut-broker, haptics
+  - Zero new behavior - pure composition
+
 ### Added (Sprint B - Polish) ✅ COMPLETE
 
 - **RAF Flood Guard** (`shell/behavior/variant-resolver.ts`)
