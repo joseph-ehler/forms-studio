@@ -1,0 +1,133 @@
+/**
+ * NavShell - Structural CSS (Zero Skin)
+ * 
+ * Coordinates navigation visibility and overlay behavior.
+ * No colors/typography - Flowbite Sidebar provides those.
+ */
+
+/* =====================================================
+   Container
+   ===================================================== */
+
+.nav-shell {
+  --nav-shell-w: 280px;
+
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: var(--nav-shell-w);
+  overflow: hidden;
+}
+
+/* =====================================================
+   Slots
+   ===================================================== */
+
+[data-slot="nav-header"] {
+  flex-shrink: 0;
+  border-block-end: 1px solid var(--ds-border-subtle, #e5e7eb);
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+}
+
+[data-slot="nav-body"] {
+  flex: 1;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+[data-slot="nav-footer"] {
+  flex-shrink: 0;
+  border-block-start: 1px solid var(--ds-border-subtle, #e5e7eb);
+  min-height: 56px;
+}
+
+/* =====================================================
+   Responsive Behavior
+   ===================================================== */
+
+/* Desktop: Persistent inline (handled by AppShell grid) */
+/* No additional styles needed - AppShell controls positioning */
+
+/* Tablet/Mobile: Off-canvas overlay */
+.nav-shell[data-shell-mode="tablet"],
+.nav-shell[data-shell-mode="mobile"] {
+  position: fixed;
+  top: 0;
+  inset-inline-start: 0;
+  bottom: 0;
+  z-index: var(--z-shell, 51);
+  background: var(--ds-surface-base, #fff);
+  box-shadow: var(--ds-shadow-lg, 0 10px 15px -3px rgba(0, 0, 0, 0.1));
+
+  /* Slide-in animation */
+  transform: translateX(-100%);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Open state */
+.nav-shell[data-nav-open="true"][data-shell-mode="tablet"],
+.nav-shell[data-nav-open="true"][data-shell-mode="mobile"] {
+  transform: translateX(0);
+}
+
+/* RTL support */
+[dir="rtl"] .nav-shell[data-shell-mode="tablet"],
+[dir="rtl"] .nav-shell[data-shell-mode="mobile"] {
+  inset-inline-start: auto;
+  inset-inline-end: 0;
+  transform: translateX(100%);
+}
+
+[dir="rtl"] .nav-shell[data-nav-open="true"][data-shell-mode="tablet"],
+[dir="rtl"] .nav-shell[data-nav-open="true"][data-shell-mode="mobile"] {
+  transform: translateX(0);
+}
+
+/* =====================================================
+   Safe Area Support
+   ===================================================== */
+
+.nav-shell[data-shell-mode="mobile"] {
+  padding-top: var(--shell-safe-top, 0px);
+  padding-bottom: var(--shell-safe-bottom, 0px);
+}
+
+/* =====================================================
+   Pointer Modality
+   ===================================================== */
+
+/* Touch: Larger touch targets */
+:root[data-pointer="coarse"] .nav-shell [data-slot="nav-header"],
+:root[data-pointer="coarse"] .nav-shell [data-slot="nav-footer"] {
+  min-height: 64px;
+}
+
+/* =====================================================
+   Reduced Motion
+   ===================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-shell {
+    transition: none !important;
+  }
+}
+
+/* =====================================================
+   Focus Management
+   ===================================================== */
+
+/* When nav is closed (mobile/tablet), prevent focus */
+.nav-shell[data-nav-open="false"][data-shell-mode="tablet"],
+.nav-shell[data-nav-open="false"][data-shell-mode="mobile"] {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.nav-shell[data-nav-open="true"][data-shell-mode="tablet"],
+.nav-shell[data-nav-open="true"][data-shell-mode="mobile"] {
+  visibility: visible;
+  pointer-events: auto;
+}

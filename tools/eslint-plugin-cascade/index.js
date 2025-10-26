@@ -9,6 +9,8 @@
 
 module.exports = {
   rules: {
+    'no-children-on-inputs': require('./no-children-on-inputs'),
+    'controlled-input-required-props': require('./controlled-input-required-props'),
     // SKIN rules removed - TypeScript now enforces completeness
     // Add other project-specific rules here as needed
   },

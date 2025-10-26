@@ -36,6 +36,13 @@ Same shape everywhere. No special cases.
 - PR checklist (template enforces)
 - Golden-source protection (can't delete)
 
+### ✅ Toyota-Grade Generators
+- `pnpm ds:new <Component>` - DS primitives (10 min)
+- `pnpm forms:new <Field>` - Form fields (15 min)
+- **Jidoka**: Built-in quality (complete by construction)
+- **Poka-Yoke**: Cannot generate incomplete code
+- **Standard Work**: Identical patterns every time
+
 ---
 
 ## Keep It Lean (Rituals)
@@ -104,48 +111,54 @@ No deletions in last 30 days ✅
 
 ## High-Leverage Next Moves (No Sprawl)
 
-### 1. Finish DS "Core Six"
+### 1. Finish DS "Core Six" (NOW: 10 min each)
 
 **Primitives**: Select, Textarea, Checkbox, Radio, Toggle, Breadcrumb
 
-**Pattern** (10 min each):
+**Pattern** (AUTOMATED - 10 min each):
 ```bash
-# 1. Add variants
-vim packages/ds/src/control/variants.config.ts
+# Generate component (auto-creates all files)
+pnpm ds:new Select
 
-# 2. Add SKIN map
-vim packages/ds/src/registry/skins/select.skin.ts
-
-# 3. Create wrapper
-vim packages/ds/src/fb/Select.tsx
-
-# 4. Matrix story
-vim packages/ds/src/fb/Select.stories.tsx
-
-# 5. Validate
+# Validate
 pnpm doctor
+
+# Review in Storybook
+pnpm sb
 ```
+
+**What generator creates:**
+- ✅ Component file with SKIN pattern
+- ✅ CSS with design tokens
+- ✅ SKIN registry entry
+- ✅ Variants config updated
+- ✅ Matrix stories
+- ✅ Type contracts
 
 ---
 
-### 2. Expand Forms (Same Shape)
+### 2. Expand Forms (Same Shape - NOW: 15 min each)
 
 **Fields**: TextField, EmailField, CheckboxField, RadioField, ToggleField
 
-**Pattern** (15 min each):
+**Pattern** (AUTOMATED - 15 min each):
 ```bash
-# 1. Add config type
-vim packages/forms/src/control/field-contracts.ts
+# Generate field (auto-creates all files + registration)
+pnpm forms:new TextField
 
-# 2. Create field (compose DS primitive)
-vim packages/forms/src/fields/TextField/TextField.tsx
-
-# 3. Register
-vim packages/forms/src/registry/field-types.ts
-
-# 4. Validate
+# Validate
 pnpm doctor
+
+# Review in Storybook
+pnpm sb
 ```
+
+**What generator creates:**
+- ✅ Field component (composes DS primitive)
+- ✅ Field contracts type
+- ✅ Registry entry (auto-wired)
+- ✅ Matrix stories
+- ✅ Type safety
 
 ---
 
@@ -359,17 +372,20 @@ pnpm refactor:rename <from> <to>         # Auto-updates imports
 # Validate rename
 pnpm doctor:rename                       # Sanity + typecheck
 
-# Add DS primitive
-vim control/variants.config.ts           # Add variant
-vim registry/skins/<component>.skin.ts   # Map SKIN
-vim fb/<Component>.tsx                   # Wrapper
+# Generate DS primitive (AUTOMATED - 10 min)
+pnpm ds:new <Component>                  # Generate all files
 pnpm doctor                              # Validate
 
-# Add Form field
-vim forms/control/field-contracts.ts     # Add config
-vim forms/fields/<Field>/<Field>.tsx     # Compose DS
-vim forms/registry/field-types.ts        # Register
+# Generate Form field (AUTOMATED - 15 min)
+pnpm forms:new <Field>                   # Generate all files + registration
 pnpm doctor                              # Validate
+
+# Validate generated code
+pnpm validate:generated                  # Check structure
+
+# Metrics & observability
+pnpm metrics:adoption                    # DS adoption metrics
+pnpm metrics:ci                          # CI timing metrics
 ```
 
 ---

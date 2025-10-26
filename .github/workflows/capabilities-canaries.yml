@@ -1,0 +1,59 @@
+name: Capabilities Canaries
+
+on:
+  pull_request:
+    paths:
+      - 'packages/ds/src/primitives/**'
+      - 'packages/ds/src/capabilities/**'
+  push:
+    branches: [main]
+
+jobs:
+  canaries:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build packages
+        run: pnpm build
+
+      - name: Build Storybook
+        run: pnpm sb:build
+
+      - name: Install Playwright
+        run: npx playwright install --with-deps chromium
+
+      - name: Run Canary Tests
+        run: |
+          echo "🧪 Running Canary Stories..."
+          pnpm sb:test:ci --grep='Canaries' || {
+            echo "❌ Canary tests failed"
+            echo "Review test results and fix before merging"
+            exit 1
+          }
+          echo "✅ All canaries passed"
+
+      - name: Upload test results
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: canary-test-results
+          path: |
+            test-results/
+            playwright-report/

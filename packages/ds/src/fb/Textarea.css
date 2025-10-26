@@ -1,0 +1,52 @@
+/**
+ * Textarea styles - Token-driven, automagic
+ * 
+ * Reads only --textarea-* variables (set by SKIN in Textarea.tsx)
+ * Never references design tokens/roles directly
+ * 
+ * Result: Universal styling that adapts to any theme
+ */
+
+@layer ds-interactions {
+  /* Base styles */
+  :where([data-component="textarea"]) {
+    color: var(--textarea-fg);
+    background: var(--textarea-bg);
+    border: 1px solid var(--textarea-border);
+    border-radius: var(--ds-radius-control);
+    padding-inline: var(--ds-space-3);
+    padding-block: var(--ds-space-2);
+    font-family: var(--ds-font-sans);
+    font-size: var(--ds-text-sm);
+    transition: 
+      border-color var(--ds-transition-fast),
+      background-color var(--ds-transition-fast),
+      box-shadow var(--ds-transition-fast);
+  }
+
+  /* Hover state */
+  :where([data-component="textarea"]:hover:not(:disabled)) {
+    border-color: var(--textarea-hover-border, var(--textarea-border));
+    background: var(--textarea-hover-bg, var(--textarea-bg));
+  }
+
+  /* Focus state */
+  :where([data-component="textarea"]:focus-visible) {
+    outline: none;
+    box-shadow:
+      0 0 0 var(--ds-focus-offset) var(--ds-role-bg),
+      0 0 0 calc(var(--ds-focus-offset) + var(--ds-focus-ring)) var(--textarea-focus-ring);
+  }
+
+  /* Disabled state */
+  :where([data-component="textarea"]:disabled) {
+    opacity: var(--ds-disabled-opacity, 0.5);
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  /* Invalid state */
+  :where([data-component="textarea"][aria-invalid="true"]) {
+    border-color: var(--ds-role-danger-hover);
+  }
+}

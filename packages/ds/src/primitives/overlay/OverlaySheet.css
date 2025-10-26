@@ -1,0 +1,33 @@
+/**
+ * OverlaySheet Primitive - Structural CSS
+ * 
+ * Bottom-anchored overlay mechanics using tokens.
+ * NO slots, NO responsive logic - true primitive.
+ */
+
+/* Backdrop (scrim) */
+.overlay-sheet-backdrop {
+  position: fixed;
+  inset: 0;
+  background: var(--overlay-scrim-bg, rgba(0, 0, 0, 0.5));
+  z-index: var(--ds-z-scrim, 50);
+}
+
+/* Content container (bottom-anchored) */
+.overlay-sheet {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: var(--ds-z-shell, 51);
+  outline: none;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .overlay-sheet-backdrop,
+  .overlay-sheet {
+    transition: none !important;
+    animation: none !important;
+  }
+}

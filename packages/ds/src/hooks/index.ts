@@ -2,11 +2,10 @@
  * Run: pnpm barrels
  */
 
-export * from './useDeviceType';
 export * from './useDisclosure';
 export * from './useFocusTrap';
+export * from './useKeyboardOpen';
 export * from './useOverlayPolicy';
 export * from './usePagination';
 export * from './useStackPolicy';
 export * from './useTelemetry';
-export * from './useTheme';

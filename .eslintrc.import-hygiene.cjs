@@ -32,18 +32,53 @@ module.exports = {
     }
   },
   overrides: [
-    // 1) Apps & other packages (NOT ds) — block direct flowbite usage
+    // 1) Apps & other packages (NOT ds) — block direct flowbite usage + behavior engines
     {
       files: ['apps/**/*.{ts,tsx}', 'packages/*/{src,**/src}/**/*.{ts,tsx}'],
-      excludedFiles: ['packages/ds/**', 'packages/ui-bridge/**'],
+      excludedFiles: [
+        'packages/ds/**',
+        'packages/ui-bridge/**',
+        '**/*.stories.*',
+        '**/*.test.*',
+      ],
       rules: {
         'no-restricted-imports': ['error', {
           patterns: [
             {
               group: ['flowbite-react', 'flowbite-react/*'],
               message: 'Import Flowbite only via @intstudio/ds/fb'
+            },
+            {
+              group: ['@intstudio/ds/primitives/*', '@ds/primitives/*'],
+              message: 'Import shells from @intstudio/ds/shell. Primitives are for shells only.'
             }
-          ]
+          ],
+          paths: [
+            {
+              name: 'react-spring-bottom-sheet',
+              message: 'Use <Sheet/> from @intstudio/ds/primitives instead.',
+            },
+            {
+              name: '@floating-ui/react',
+              message: 'Use <Popover/> from @intstudio/ds/primitives instead.',
+            },
+            {
+              name: 'react-virtuoso',
+              message: 'Use DS <VirtList/> wrapper (coming soon) instead.',
+            },
+            {
+              name: '@use-gesture/react',
+              message: 'Use DS wrappers; gestures handled internally.',
+            },
+            {
+              name: '@capacitor/haptics',
+              message: 'Use haptic() from @intstudio/ds/capabilities instead.',
+            },
+            {
+              name: '@capacitor/keyboard',
+              message: 'Use useKeyboardInsets() from @intstudio/ds/capabilities instead.',
+            },
+          ],
         }],
       }
     },

@@ -1,0 +1,91 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "DS Component Classification Map",
+  "description": "Enforces behavioral classification before component generation",
+  "type": "object",
+  "required": ["version", "classes", "components"],
+  "properties": {
+    "version": {
+      "type": "string",
+      "description": "Classmap schema version"
+    },
+    "classes": {
+      "type": "object",
+      "description": "Available component behavior classes",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["description", "engine", "template"],
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "engine": {
+            "type": "string"
+          },
+          "enhancement": {
+            "type": "string"
+          },
+          "template": {
+            "type": "string"
+          },
+          "rules": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "type": "object",
+      "description": "Registered components with their classifications",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["class", "engine", "flowbiteName", "controlledProps", "acceptsChildren"],
+        "properties": {
+          "class": {
+            "type": "string",
+            "enum": ["Input", "Container", "Dialog", "Sheet", "Positioned", "Virtualized", "CompositeWidget"]
+          },
+          "engine": {
+            "type": "string"
+          },
+          "flowbiteName": {
+            "type": ["string", "null"]
+          },
+          "controlledProps": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "requiresProps": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "acceptsChildren": {
+            "type": "boolean"
+          },
+          "enhancement": {
+            "type": "string"
+          },
+          "notes": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "decisionLadder": {
+      "type": "array"
+    },
+    "requiredBeforeGeneration": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

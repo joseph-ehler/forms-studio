@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sheet Test - NO STORYBOOK</title>
+  <script type="module">
+    import React, { useState } from 'https://esm.sh/react@18';
+    import ReactDOM from 'https://esm.sh/react-dom@18/client';
+    
+    // Simple test - does the component even exist?
+    console.log('React loaded:', !!React);
+    
+    function TestSheet() {
+      const [open, setOpen] = React.useState(false);
+      
+      return React.createElement('div', { style: { padding: 40 } },
+        React.createElement('h1', null, 'Sheet Component Test'),
+        React.createElement('p', null, `Open: ${open}`),
+        React.createElement('button', {
+          onClick: () => setOpen(true),
+          style: { padding: 20, background: 'blue', color: 'white', fontSize: 20 }
+        }, 'Open Sheet'),
+        
+        open && React.createElement('div', {
+          style: {
+            position: 'fixed',
+            inset: 0,
+            background: 'rgba(0,0,0,0.5)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }
+        },
+          React.createElement('div', {
+            style: { background: 'white', padding: 40, borderRadius: 8 }
+          },
+            React.createElement('h2', null, 'IT WORKS!'),
+            React.createElement('button', {
+              onClick: () => setOpen(false),
+              style: { padding: 10, background: 'red', color: 'white' }
+            }, 'Close')
+          )
+        )
+      );
+    }
+    
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(React.createElement(TestSheet));
+  </script>
+</head>
+<body>
+  <div id="root"></div>
+</body>
+</html>

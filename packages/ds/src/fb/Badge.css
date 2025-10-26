@@ -1,0 +1,52 @@
+/**
+ * Badge styles - Token-driven, automagic
+ * 
+ * Reads only --badge-* variables (set by SKIN in Badge.tsx)
+ * Never references design tokens/roles directly
+ * 
+ * Result: Universal styling that adapts to any theme
+ */
+
+@layer ds-interactions {
+  /* Base styles */
+  :where([data-component="badge"]) {
+    color: var(--badge-fg);
+    background: var(--badge-bg);
+    border: 1px solid var(--badge-border);
+    border-radius: var(--ds-radius-control);
+    padding-inline: var(--ds-space-3);
+    padding-block: var(--ds-space-2);
+    font-family: var(--ds-font-sans);
+    font-size: var(--ds-text-sm);
+    transition: 
+      border-color var(--ds-transition-fast),
+      background-color var(--ds-transition-fast),
+      box-shadow var(--ds-transition-fast);
+  }
+
+  /* Hover state */
+  :where([data-component="badge"]:hover:not(:disabled)) {
+    border-color: var(--badge-hover-border, var(--badge-border));
+    background: var(--badge-hover-bg, var(--badge-bg));
+  }
+
+  /* Focus state */
+  :where([data-component="badge"]:focus-visible) {
+    outline: none;
+    box-shadow:
+      0 0 0 var(--ds-focus-offset) var(--ds-role-bg),
+      0 0 0 calc(var(--ds-focus-offset) + var(--ds-focus-ring)) var(--badge-focus-ring);
+  }
+
+  /* Disabled state */
+  :where([data-component="badge"]:disabled) {
+    opacity: var(--ds-disabled-opacity, 0.5);
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  /* Invalid state */
+  :where([data-component="badge"][aria-invalid="true"]) {
+    border-color: var(--ds-role-danger-hover);
+  }
+}

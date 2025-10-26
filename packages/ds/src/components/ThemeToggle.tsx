@@ -9,7 +9,7 @@
  * - Minimal, clean design
  */
 
-import { useTheme } from '../hooks/useTheme';
+import { useTheme } from '../shell/core/environment/useTheme';
 
 type ThemeToggleProps = {
   /** Show labels (default: false) */

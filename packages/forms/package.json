@@ -1,0 +1,74 @@
+{
+  "name": "@intstudio/forms",
+  "version": "0.1.0",
+  "description": "Intelligence Studio Forms - Schema-driven form fields composing DS primitives",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "source": "./src/index.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./fields": {
+      "types": "./dist/fields/index.d.ts",
+      "source": "./src/fields/index.ts",
+      "import": "./dist/fields/index.js",
+      "default": "./dist/fields/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "typesVersions": {
+    "*": {
+      "fields": [
+        "dist/fields/index.d.ts"
+      ]
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsup --config tsup.config.ts",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src --ext .ts,.tsx",
+    "test": "vitest",
+    "api:check": "api-extractor run --local",
+    "api:update": "api-extractor run --local --verbose --diagnostics"
+  },
+  "keywords": [
+    "forms",
+    "react",
+    "react-hook-form",
+    "validation",
+    "zod",
+    "schema-driven",
+    "accessibility",
+    "a11y"
+  ],
+  "author": "Intelligence Studio",
+  "license": "Apache-2.0",
+  "peerDependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
+  "dependencies": {
+    "@intstudio/ds": "workspace:*",
+    "@intstudio/tokens": "workspace:*",
+    "react-hook-form": "^7.49.0",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "tsup": "^8.0.2",
+    "typescript": "^5.9.3"
+  }
+}

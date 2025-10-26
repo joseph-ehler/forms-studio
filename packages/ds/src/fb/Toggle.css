@@ -1,0 +1,52 @@
+/**
+ * Toggle styles - Token-driven, automagic
+ * 
+ * Reads only --toggle-* variables (set by SKIN in Toggle.tsx)
+ * Never references design tokens/roles directly
+ * 
+ * Result: Universal styling that adapts to any theme
+ */
+
+@layer ds-interactions {
+  /* Base styles */
+  :where([data-component="toggle"]) {
+    color: var(--toggle-fg);
+    background: var(--toggle-bg);
+    border: 1px solid var(--toggle-border);
+    border-radius: var(--ds-radius-control);
+    padding-inline: var(--ds-space-3);
+    padding-block: var(--ds-space-2);
+    font-family: var(--ds-font-sans);
+    font-size: var(--ds-text-sm);
+    transition: 
+      border-color var(--ds-transition-fast),
+      background-color var(--ds-transition-fast),
+      box-shadow var(--ds-transition-fast);
+  }
+
+  /* Hover state */
+  :where([data-component="toggle"]:hover:not(:disabled)) {
+    border-color: var(--toggle-hover-border, var(--toggle-border));
+    background: var(--toggle-hover-bg, var(--toggle-bg));
+  }
+
+  /* Focus state */
+  :where([data-component="toggle"]:focus-visible) {
+    outline: none;
+    box-shadow:
+      0 0 0 var(--ds-focus-offset) var(--ds-role-bg),
+      0 0 0 calc(var(--ds-focus-offset) + var(--ds-focus-ring)) var(--toggle-focus-ring);
+  }
+
+  /* Disabled state */
+  :where([data-component="toggle"]:disabled) {
+    opacity: var(--ds-disabled-opacity, 0.5);
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  /* Invalid state */
+  :where([data-component="toggle"][aria-invalid="true"]) {
+    border-color: var(--ds-role-danger-hover);
+  }
+}

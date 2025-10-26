@@ -1,0 +1,82 @@
+name: Generators - Jidoka
+
+on:
+  pull_request:
+    paths:
+      - 'packages/ds/src/fb/**'
+      - 'packages/ds/src/registry/skins/**'
+      - 'packages/ds/src/control/variants.config.ts'
+      - 'packages/forms/src/fields/**'
+      - 'packages/forms/src/control/field-contracts.ts'
+      - 'packages/forms/src/registry/field-types.ts'
+      - 'scripts/ds-new.mjs'
+      - 'scripts/forms-new.mjs'
+      - 'scripts/validate-generated.mjs'
+
+jobs:
+  validate-generated:
+    name: Validate Generated Code (Jidoka)
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      
+      - name: Validate generated code structure
+        run: node scripts/validate-generated.mjs
+      
+      - name: TypeCheck (validates SKIN completeness)
+        run: pnpm typecheck
+      
+      - name: Build (validates all exports)
+        run: pnpm build
+      
+      - name: Comment PR (on failure)
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `## ⚠️ Jidoka: Generated Code Validation Failed
+              
+              The generated code does not meet Toyota Standard Work quality requirements.
+              
+              ### Common Issues
+              - Missing SKIN registry entry
+              - Missing variant in variants.config.ts
+              - Missing field registration in field-types.ts
+              - Missing stories file
+              - Direct Flowbite imports in Forms fields
+              
+              ### How to Fix
+              1. Review the validation errors above
+              2. Re-run the generator with correct parameters
+              3. Run \`pnpm validate:generated\` locally
+              4. Run \`pnpm doctor\` to ensure full compliance
+              
+              ### Manual Checklist
+              - [ ] Component/Field file exists
+              - [ ] SKIN registry complete (DS only)
+              - [ ] Variants registered (DS only)
+              - [ ] Field registered (Forms only)
+              - [ ] Stories file present
+              - [ ] TypeScript compiles
+              - [ ] All tests pass
+              `
+            })

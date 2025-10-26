@@ -1,0 +1,68 @@
+/**
+ * BottomSheet Shell - Structural CSS (Zero Skin)
+ * 
+ * Simplified version using tokens.
+ * Full-featured version remains in primitives/ for now.
+ */
+
+.bottom-sheet-shell {
+  /* Layout */
+  display: flex;
+  flex-direction: column;
+  
+  /* Sizing */
+  max-height: 90vh;
+  width: 100%;
+  
+  /* Background (flat by default) */
+  background: var(--ds-surface-base, #fff);
+  
+  /* Border (top only for bottom sheet) */
+  border-top-left-radius: var(--ds-radius-lg, 12px);
+  border-top-right-radius: var(--ds-radius-lg, 12px);
+  
+  /* Shadow (needs elevation) */
+  box-shadow: var(--ds-shadow-overlay-lg, 0 -4px 12px rgba(0, 0, 0, 0.1));
+}
+
+/* Drag handle (mobile only) */
+.bottom-sheet-shell__handle {
+  width: 32px;
+  height: 4px;
+  background: var(--ds-border-subtle, #e5e7eb);
+  border-radius: 2px;
+  margin: 8px auto;
+  flex-shrink: 0;
+}
+
+/* Slots (zero padding - content provides) */
+.bottom-sheet-shell__header {
+  flex-shrink: 0;
+  border-bottom: 1px solid var(--ds-border-subtle, #e5e7eb);
+  min-height: var(--ds-touch-target, 44px);
+}
+
+.bottom-sheet-shell__content {
+  flex: 1;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.bottom-sheet-shell__footer {
+  flex-shrink: 0;
+  border-top: 1px solid var(--ds-border-subtle, #e5e7eb);
+  min-height: var(--ds-touch-target, 44px);
+}
+
+/* Safe area support */
+.bottom-sheet-shell {
+  padding-bottom: var(--shell-safe-bottom, 0px);
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .bottom-sheet-shell {
+    transition: none !important;
+  }
+}

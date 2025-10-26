@@ -1,0 +1,133 @@
+/**
+ * PopoverShell - Structural CSS (Zero Skin)
+ * 
+ * Provides anchored popover structure with slots.
+ * No colors/typography - your content provides those.
+ */
+
+/* =====================================================
+   Popover Container
+   ===================================================== */
+
+.popover-shell {
+  /* Layout */
+  display: flex;
+  flex-direction: column;
+  
+  /* Sizing */
+  max-width: min(400px, calc(100vw - 16px));
+  max-height: calc(100vh - 16px);
+  
+  /* Background (flat by default) */
+  background: var(--ds-surface-base, #fff);
+  
+  /* Border (subtle separation) */
+  border: 1px solid var(--ds-border-subtle, #e5e7eb);
+  border-radius: var(--ds-radius-md, 6px);
+  
+  /* Shadow (popover needs elevation) */
+  box-shadow: var(--ds-shadow-overlay-md, 0 10px 15px -3px rgba(0, 0, 0, 0.1));
+  
+  /* Smooth appearance */
+  animation: popover-fade-in 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes popover-fade-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* =====================================================
+   Arrow
+   ===================================================== */
+
+.popover-shell-arrow {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: var(--ds-surface-base, #fff);
+  border: 1px solid var(--ds-border-subtle, #e5e7eb);
+  transform: rotate(45deg);
+  z-index: -1;
+}
+
+/* Arrow positions */
+.popover-shell-arrow[data-placement="top"] {
+  bottom: -6px;
+  left: 50%;
+  margin-left: -6px;
+  border-top: none;
+  border-left: none;
+}
+
+.popover-shell-arrow[data-placement="bottom"] {
+  top: -6px;
+  left: 50%;
+  margin-left: -6px;
+  border-bottom: none;
+  border-right: none;
+}
+
+.popover-shell-arrow[data-placement="left"] {
+  right: -6px;
+  top: 50%;
+  margin-top: -6px;
+  border-bottom: none;
+  border-left: none;
+}
+
+.popover-shell-arrow[data-placement="right"] {
+  left: -6px;
+  top: 50%;
+  margin-top: -6px;
+  border-top: none;
+  border-right: none;
+}
+
+/* =====================================================
+   Slots (Zero Padding)
+   ===================================================== */
+
+[data-slot="header"] {
+  flex-shrink: 0;
+  border-block-end: 1px solid var(--ds-border-subtle, #e5e7eb);
+  min-height: var(--ds-space-8, 32px);
+}
+
+[data-slot="body"] {
+  flex: 1;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  
+  /* Full-bleed by default (your content provides padding) */
+}
+
+/* =====================================================
+   Reduced Motion
+   ===================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .popover-shell {
+    animation: none !important;
+  }
+}
+
+/* =====================================================
+   Mobile Adaptations
+   ===================================================== */
+
+.popover-shell[data-shell-mode="mobile"] {
+  /* Mobile: Larger touch targets */
+  max-width: calc(100vw - 32px);
+}
+
+.popover-shell[data-shell-mode="mobile"] [data-slot="header"] {
+  min-height: var(--ds-touch-target, 44px);
+}

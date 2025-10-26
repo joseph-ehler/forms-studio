@@ -18,10 +18,29 @@
 ✅ pnpm lint:prod       # Prod-only lint
 ✅ pnpm typecheck       # All packages
 ✅ pnpm build           # All packages compile
+✅ pnpm api:check       # API surface stable
+✅ pnpm validate:generated  # Component structure
 ```
 
 - [ ] All checks passing
 - [ ] Barrels up-to-date (if applicable)
+
+### Capabilities System (REQUIRED if touched primitives/capabilities)
+
+**Applies to:** `packages/ds/src/primitives/**` or `packages/ds/src/capabilities/**`
+
+```bash
+✅ pnpm validate:canaries   # Canary stories pass
+✅ pnpm validate:bundle     # Bundle budget + code-split OK
+✅ pnpm validate:smoke      # Playwright smoke tests
+```
+
+- [ ] **REQUIRED**: All canary stories pass (9 total: Sheet 6, Popover 3)
+- [ ] **REQUIRED**: Bundle budget within 550KB + code-split verified
+- [ ] **REQUIRED**: Playwright smoke tests pass (desktop + mobile)
+- [ ] **REQUIRED**: No restricted imports (ESLint blocks at commit)
+- [ ] API baseline updated if surface changed (`pnpm api:update`)
+- [ ] forceMode rollback lever considered (if new routing behavior)
 
 ## Architecture Checklist
 

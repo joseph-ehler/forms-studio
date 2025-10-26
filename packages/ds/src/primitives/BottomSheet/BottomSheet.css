@@ -1,0 +1,188 @@
+/**
+ * Sheet Styling (Vaul Drawer)
+ * 
+ * DS tokens only - no magic numbers
+ * OKLCH-based, theme-aware
+ * Semantic elevation shadows
+ */
+
+@import './ds-bridge.css';
+
+/* ===================================
+   Flowbite Modal Backdrop Override
+   =================================== */
+
+/* Hide Flowbite's default backdrop (we render DSModalBackdrop instead) */
+[data-testid="modal-backdrop"],
+.flowbite-modal-backdrop,
+div[class*="bg-gray-900"][class*="bg-opacity"] {
+  display: none !important;
+}
+
+:root {
+  /* Z-index policy (system-wide) */
+  --z-underlay: 49;
+  --z-scrim: 50;
+  --z-sheet: 51;
+  --z-popover: 60;
+  --z-toast: 70;
+
+  /* Semantic thresholds (for docs + theming) */
+  --ds-sheet-work-min: 0.5;
+  --ds-sheet-owned-min: 0.9;
+
+  /* Elevation token - far-radiating floating shadow */
+  --ds-elevation-sheet: 
+    0 20px 80px -10px rgba(0, 0, 0, 0.22),
+    0 10px 40px -5px rgba(0, 0, 0, 0.14),
+    0 4px 20px -2px rgba(0, 0, 0, 0.12),
+    0 0 0 1px rgba(0, 0, 0, 0.05);
+
+  /* ===================================
+     UnderlayEffects CSS Interpolation
+     =================================== */
+  /* Read --sheet-snap (0..1) and interpolate effect values */
+  --ue-t: var(--sheet-snap, 0);
+  --ue-blur: calc(var(--ue-blur-min, 0px) + (var(--ue-blur-max, 12px) - var(--ue-blur-min, 0px)) * var(--ue-t));
+  --ue-scale: calc(var(--ue-scale-min, 1) + (var(--ue-scale-max, 0.98) - var(--ue-scale-min, 1)) * var(--ue-t));
+  --ue-dim: calc(var(--ue-dim-min, 0) + (var(--ue-dim-max, 0.08) - var(--ue-dim-min, 0)) * var(--ue-t));
+}
+
+/* Apply scale to underlay roots (not the portal!) */
+#app-root,
+#storybook-root {
+  transform: scale(var(--ue-scale));
+  transition: transform 200ms ease;
+  transform-origin: 50% 100%;
+}
+
+/* Additive dim layer (behind sheet scrim) */
+.ds-underlay-dimmer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: rgba(0, 0, 0, var(--ue-dim));
+  z-index: var(--z-underlay);
+  transition: background 200ms ease;
+}
+
+/* Blur via overlay backdrop-filter */
+.ds-sheet-overlay--blur {
+  backdrop-filter: blur(var(--ue-blur));
+}
+
+/* Respect user preferences */
+@media (prefers-reduced-transparency: reduce) {
+  .ds-sheet-overlay--blur {
+    backdrop-filter: none;
+  }
+  #app-root,
+  #storybook-root {
+    transform: none !important; /* Disable scale */
+  }
+}
+
+.ds-sheet-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-scrim);
+}
+
+.ds-sheet-overlay--dim {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.ds-sheet-overlay--blur {
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(8px);
+}
+
+.ds-sheet-overlay--none {
+  display: none;
+}
+
+.ds-sheet-content {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  height: 96%;
+  background: var(--ds-color-surface-base, var(--ds-neutral-1));
+  border-top-left-radius: var(--ds-radius-3, 16px);
+  border-top-right-radius: var(--ds-radius-3, 16px);
+  z-index: var(--z-sheet);
+  /* Prominent floating elevation */
+  box-shadow: var(--ds-elevation-sheet);
+}
+
+/* Reduced transparency mode */
+@media (prefers-reduced-transparency: reduce) {
+  .ds-sheet-overlay--blur {
+    backdrop-filter: none;
+  }
+}
+
+/* Reduced motion mode */
+@media (prefers-reduced-motion: reduce) {
+  .ds-sheet-content {
+    transition: none !important;
+  }
+}
+
+.ds-sheet-handle {
+  width: 48px;
+  height: 6px;
+  flex-shrink: 0;
+  border-radius: 9999px;
+  background: var(--ds-color-border-subtle, var(--ds-neutral-5));
+  margin: var(--ds-space-4, 16px) auto var(--ds-space-2, 8px);
+}
+
+/* Content slot (when using slots) - ZERO padding, full-bleed */
+.ds-sheet-content-slot {
+  flex: 1;
+  overflow-y: auto;
+  /* iOS scroll chain guard (prevent rubber-band bleed) */
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Legacy mode (no slots) - keeps padding for backward compat */
+.ds-sheet-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--ds-space-4, 16px);
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* CSS-driven elevation (data-bucket selector) */
+.ds-sheet-content[data-bucket="peek"]  { box-shadow: var(--ds-elevation-sheet-peek, var(--ds-elevation-sheet)); }
+.ds-sheet-content[data-bucket="work"]  { box-shadow: var(--ds-elevation-sheet-work, var(--ds-elevation-sheet)); }
+.ds-sheet-content[data-bucket="owned"] { box-shadow: var(--ds-elevation-sheet-owned, var(--ds-elevation-sheet)); }
+
+/* ===================================
+   Slot API Components
+   =================================== */
+
+/* Header: Sticky top rail (SHELL ONLY - zero styling) */
+.ds-sheet-header {
+  flex-shrink: 0;
+  /* Structure: divider line between header and content */
+  border-bottom: 1px solid var(--ds-color-border-subtle, var(--ds-neutral-5));
+}
+
+/* Footer: Sticky bottom rail (SHELL ONLY - zero styling) */
+.ds-sheet-footer {
+  flex-shrink: 0;
+  /* Structure: divider line between content and footer */
+  border-top: 1px solid var(--ds-color-border-subtle, var(--ds-neutral-5));
+  /* NO background - your content provides background if needed */
+}
+
+/* Footer safe-area (iOS) - System spacing only */
+.ds-sheet-footer[data-footer-safe="true"] {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}

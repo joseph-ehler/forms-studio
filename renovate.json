@@ -1,0 +1,45 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:base"
+  ],
+  "schedule": ["every weekend"],
+  "packageRules": [
+    {
+      "description": "Pin behavior engine versions (capability system dependencies)",
+      "matchPackageNames": [
+        "react-spring-bottom-sheet",
+        "@floating-ui/react",
+        "@use-gesture/react",
+        "react-spring",
+        "react-virtuoso",
+        "@capacitor/haptics",
+        "@capacitor/keyboard"
+      ],
+      "rangeStrategy": "pin",
+      "groupName": "capabilities behavior engines",
+      "schedule": ["every weekend"],
+      "labels": ["capabilities", "dependencies"]
+    },
+    {
+      "description": "Pin Flowbite (DS foundation)",
+      "matchPackageNames": ["flowbite", "flowbite-react"],
+      "rangeStrategy": "pin",
+      "groupName": "flowbite",
+      "schedule": ["every weekend"],
+      "labels": ["design-system", "dependencies"]
+    },
+    {
+      "description": "Auto-merge dev dependencies (low risk)",
+      "matchDepTypes": ["devDependencies"],
+      "matchUpdateTypes": ["patch", "minor"],
+      "automerge": true
+    }
+  ],
+  "prConcurrentLimit": 5,
+  "prHourlyLimit": 2,
+  "vulnerabilityAlerts": {
+    "enabled": true,
+    "labels": ["security"]
+  }
+}

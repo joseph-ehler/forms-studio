@@ -1,0 +1,68 @@
+/**
+ * GlobalProgressBar - Top loading indicator
+ * 
+ * 2px bar at top of viewport using motion tokens.
+ */
+
+.global-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--progress-height, 2px);
+  background: transparent;
+  z-index: var(--ds-z-toast, 100); /* Above everything except tooltips */
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.global-progress-bar__fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: var(--progress-width, 0%);
+  background: var(--progress-color, var(--ds-color-primary, #3b82f6));
+  transition: width var(--motion-duration-2, 200ms) var(--motion-ease-decelerate, cubic-bezier(0.0, 0.0, 0.2, 1));
+  box-shadow: 0 0 8px var(--progress-color, var(--ds-color-primary, #3b82f6));
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .global-progress-bar__fill {
+    transition: none;
+  }
+}
+
+/* Indeterminate shimmer effect when at 0% */
+.global-progress-bar__fill[style*="--progress-width: 0%"]::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--progress-color, var(--ds-color-primary, #3b82f6)),
+    transparent
+  );
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(400%);
+  }
+}
+
+/* Disable shimmer in reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .global-progress-bar__fill::after {
+    animation: none;
+  }
+}

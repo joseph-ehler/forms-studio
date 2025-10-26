@@ -10,6 +10,9 @@ export { default as tailwindTheme } from './tailwind-theme';
 // Type-safe token access helpers
 export * from './typed';
 
+// Motion & surface tokens
+export * from './motion-tokens';
+
 // Token constants (for JS consumption)
 export const tokens = {
   space: {

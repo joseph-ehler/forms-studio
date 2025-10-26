@@ -1,0 +1,155 @@
+{
+  "$schema": "./components.classmap.schema.json",
+  "version": "1.0.0",
+  "classes": {
+    "Input": {
+      "description": "Controlled form inputs (no children, require value/checked + onChange)",
+      "engine": "Flowbite",
+      "template": "input-controlled",
+      "rules": ["no-children", "require-controlled-props", "require-label-wrapper"]
+    },
+    "Container": {
+      "description": "Passive display components (accept children)",
+      "engine": "Flowbite",
+      "template": "container-passthrough",
+      "rules": ["accept-children"]
+    },
+    "Dialog": {
+      "description": "Modal overlays (desktop-centric, ESC + focus trap)",
+      "engine": "Flowbite",
+      "template": "dialog-modal",
+      "rules": ["require-aria-label", "focus-trap", "esc-close"]
+    },
+    "Sheet": {
+      "description": "Mobile-first gesture overlays (bottom sheet, drawer)",
+      "engine": "FlowbiteDrawer",
+      "enhancement": "rsbs-gesture",
+      "template": "sheet-drawer",
+      "rules": ["require-aria-label", "mobile-optimized", "optional-gestures"]
+    },
+    "Positioned": {
+      "description": "Anchored floating elements (collision-aware)",
+      "engine": "@floating-ui/react",
+      "template": "positioned-floating",
+      "rules": ["anchor-required", "collision-aware"]
+    },
+    "Virtualized": {
+      "description": "Large list rendering (windowing)",
+      "engine": "react-virtuoso",
+      "template": "virtualized-list",
+      "rules": ["data-driven", "windowing"]
+    },
+    "CompositeWidget": {
+      "description": "Complex stateful patterns (combobox, datepicker)",
+      "engine": "TBD",
+      "template": "composite-custom",
+      "rules": ["requires-adr", "headless-engine", "rhf-integration"]
+    }
+  },
+  "components": {
+    "Textarea": {
+      "class": "Input",
+      "engine": "Flowbite",
+      "flowbiteName": "Textarea",
+      "controlledProps": ["value", "onChange"],
+      "acceptsChildren": false,
+      "notes": "Self-closing input element"
+    },
+    "Checkbox": {
+      "class": "Input",
+      "engine": "Flowbite",
+      "flowbiteName": "Checkbox",
+      "controlledProps": ["checked", "onChange"],
+      "acceptsChildren": false,
+      "notes": "Extends input element; needs label wrapper"
+    },
+    "Radio": {
+      "class": "Input",
+      "engine": "Flowbite",
+      "flowbiteName": "Radio",
+      "controlledProps": ["checked", "onChange"],
+      "requiresProps": ["name"],
+      "acceptsChildren": false,
+      "notes": "Requires 'name' prop for grouping"
+    },
+    "Toggle": {
+      "class": "Input",
+      "engine": "Flowbite",
+      "flowbiteName": "ToggleSwitch",
+      "controlledProps": ["checked", "onChange"],
+      "acceptsChildren": false,
+      "notes": "Controlled switch; has built-in label support"
+    },
+    "Badge": {
+      "class": "Container",
+      "engine": "Flowbite",
+      "flowbiteName": "Badge",
+      "controlledProps": [],
+      "acceptsChildren": true,
+      "notes": "Passive display component"
+    },
+    "Modal": {
+      "class": "Dialog",
+      "engine": "Flowbite",
+      "flowbiteName": "Modal",
+      "controlledProps": ["show", "onClose"],
+      "acceptsChildren": true,
+      "notes": "Desktop modal dialog with focus trap and ESC close"
+    },
+    "Sheet": {
+      "class": "Sheet",
+      "engine": "FlowbiteDrawer",
+      "flowbiteName": "Drawer",
+      "controlledProps": ["isOpen", "onClose"],
+      "acceptsChildren": true,
+      "decision": "ComposeFromFlowbite",
+      "composeWith": ["Drawer"],
+      "enhancement": "react-spring-bottom-sheet",
+      "engineEnabledByDefault": false,
+      "notes": "Mobile-first bottom sheet; Flowbite Drawer as base, optional gesture enhancement"
+    },
+    "Popover": {
+      "class": "Positioned",
+      "engine": "@floating-ui/react",
+      "flowbiteName": null,
+      "controlledProps": ["open", "onOpenChange"],
+      "acceptsChildren": true,
+      "notes": "Floating UI for collision-aware positioning"
+    },
+    "Tooltip": {
+      "class": "Positioned",
+      "engine": "@floating-ui/react",
+      "flowbiteName": "Tooltip",
+      "controlledProps": [],
+      "acceptsChildren": true,
+      "notes": "Can use Flowbite Tooltip or Floating UI"
+    }
+  },
+  "decisionLadder": [
+    {
+      "step": 1,
+      "question": "Does Flowbite have this component?",
+      "yes": "Wrap it (preferred)",
+      "no": "Go to step 2"
+    },
+    {
+      "step": 2,
+      "question": "Can we model it using Flowbite parts?",
+      "yes": "Compose from Flowbite (Sheet = Drawer + CSS)",
+      "no": "Go to step 3"
+    },
+    {
+      "step": 3,
+      "question": "Is a headless engine justified?",
+      "yes": "Use engine behind adapter (Floating UI, Virtuoso)",
+      "no": "Write ADR and defer"
+    }
+  ],
+  "requiredBeforeGeneration": [
+    "Research snapshot exists (pnpm ds:research <Name>)",
+    "Component classified in this classmap",
+    "Engine chosen and documented",
+    "Template matches class",
+    "Stories will demonstrate correct usage"
+  ]
+}

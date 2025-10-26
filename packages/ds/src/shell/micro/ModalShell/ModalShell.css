@@ -1,0 +1,168 @@
+/**
+ * ModalShell - Structural CSS (Zero Skin)
+ * 
+ * Provides centered dialog structure with slots.
+ * No colors/typography - your content provides those.
+ */
+
+/* =====================================================
+   Overlay (Backdrop)
+   ===================================================== */
+
+.modal-shell-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--ds-z-shell, 51);
+  
+  /* Backdrop */
+  background: var(--ds-scrim-bg, rgba(0, 0, 0, 0.5));
+  
+  /* Centered layout */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  /* Padding for mobile */
+  padding: var(--ds-space-4, 16px);
+  
+  /* Smooth appearance */
+  animation: modal-fade-in var(--motion-duration-2, 200ms) var(--motion-ease-decelerate, cubic-bezier(0.0, 0.0, 0.2, 1));
+}
+
+@keyframes modal-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* =====================================================
+   Modal Container
+   ===================================================== */
+
+.modal-shell {
+  /* Layout */
+  display: flex;
+  flex-direction: column;
+  
+  /* Sizing (token-driven) */
+  width: 100%;
+  max-height: calc(100vh - var(--ds-space-8, 32px));
+  
+  /* Background (flat by default) */
+  background: var(--ds-surface-base, #fff);
+  
+  /* Border (subtle separation) */
+  border: 1px solid var(--ds-border-subtle, #e5e7eb);
+  border-radius: var(--ds-radius-lg, 8px);
+  
+  /* Shadow (overlay needs elevation) */
+  box-shadow: var(--ds-shadow-overlay-lg, 0 20px 25px -5px rgba(0, 0, 0, 0.1));
+  
+  /* Smooth appearance */
+  animation: modal-scale-in var(--motion-duration-2, 200ms) var(--motion-spring-sheet, cubic-bezier(0.2, 0.8, 0.2, 1));
+}
+
+@keyframes modal-scale-in {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Size variants (token-driven widths) */
+.modal-shell[data-size="sm"] {
+  max-width: 400px;
+}
+
+.modal-shell[data-size="md"] {
+  max-width: 600px;
+}
+
+.modal-shell[data-size="lg"] {
+  max-width: 800px;
+}
+
+.modal-shell[data-size="xl"] {
+  max-width: 1200px;
+}
+
+/* Mobile: Full-screen */
+.modal-shell[data-shell-mode="mobile"] {
+  max-width: 100%;
+  max-height: 100vh;
+  border-radius: 0;
+  padding: 0;
+}
+
+/* =====================================================
+   Slots (Zero Padding)
+   ===================================================== */
+
+[data-slot="header"] {
+  flex-shrink: 0;
+  border-block-end: 1px solid var(--ds-border-subtle, #e5e7eb);
+  min-height: var(--ds-touch-target, 44px);
+}
+
+[data-slot="body"] {
+  flex: 1;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  
+  /* Full-bleed by default (your content provides padding) */
+}
+
+[data-slot="actions"] {
+  flex-shrink: 0;
+  border-block-start: 1px solid var(--ds-border-subtle, #e5e7eb);
+  min-height: var(--ds-touch-target, 44px);
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-2, 8px);
+}
+
+/* =====================================================
+   Pointer Modality
+   ===================================================== */
+
+/* Touch: Larger tap targets */
+:root[data-pointer="coarse"] .modal-shell [data-slot="header"],
+:root[data-pointer="coarse"] .modal-shell [data-slot="actions"] {
+  min-height: 56px;
+}
+
+/* =====================================================
+   Reduced Motion
+   ===================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .modal-shell-overlay,
+  .modal-shell {
+    animation: none !important;
+  }
+}
+
+/* =====================================================
+   RTL Support
+   ===================================================== */
+
+[dir="rtl"] .modal-shell [data-slot="actions"] {
+  flex-direction: row-reverse;
+}
+
+/* =====================================================
+   Safe Area Support
+   ===================================================== */
+
+.modal-shell[data-shell-mode="mobile"] {
+  padding-top: var(--shell-safe-top, 0px);
+  padding-bottom: var(--shell-safe-bottom, 0px);
+}

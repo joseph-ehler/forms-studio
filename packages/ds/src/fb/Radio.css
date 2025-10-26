@@ -1,0 +1,52 @@
+/**
+ * Radio styles - Token-driven, automagic
+ * 
+ * Reads only --radio-* variables (set by SKIN in Radio.tsx)
+ * Never references design tokens/roles directly
+ * 
+ * Result: Universal styling that adapts to any theme
+ */
+
+@layer ds-interactions {
+  /* Base styles */
+  :where([data-component="radio"]) {
+    color: var(--radio-fg);
+    background: var(--radio-bg);
+    border: 1px solid var(--radio-border);
+    border-radius: var(--ds-radius-control);
+    padding-inline: var(--ds-space-3);
+    padding-block: var(--ds-space-2);
+    font-family: var(--ds-font-sans);
+    font-size: var(--ds-text-sm);
+    transition: 
+      border-color var(--ds-transition-fast),
+      background-color var(--ds-transition-fast),
+      box-shadow var(--ds-transition-fast);
+  }
+
+  /* Hover state */
+  :where([data-component="radio"]:hover:not(:disabled)) {
+    border-color: var(--radio-hover-border, var(--radio-border));
+    background: var(--radio-hover-bg, var(--radio-bg));
+  }
+
+  /* Focus state */
+  :where([data-component="radio"]:focus-visible) {
+    outline: none;
+    box-shadow:
+      0 0 0 var(--ds-focus-offset) var(--ds-role-bg),
+      0 0 0 calc(var(--ds-focus-offset) + var(--ds-focus-ring)) var(--radio-focus-ring);
+  }
+
+  /* Disabled state */
+  :where([data-component="radio"]:disabled) {
+    opacity: var(--ds-disabled-opacity, 0.5);
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  /* Invalid state */
+  :where([data-component="radio"][aria-invalid="true"]) {
+    border-color: var(--ds-role-danger-hover);
+  }
+}

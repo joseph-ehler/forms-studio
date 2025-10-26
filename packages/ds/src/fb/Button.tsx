@@ -179,5 +179,4 @@ export function Button({
   );
 }
 
-// Re-export types (for barrel index.ts)
-export type { ButtonSize as Size, ButtonVariantType as Variant };
+// Component-specific types exported above as ButtonVariant and ButtonSize

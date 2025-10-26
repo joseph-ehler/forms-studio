@@ -1,0 +1,17 @@
+/**
+ * Popover Styling
+ * 
+ * Visuals from SKIN tokens only.
+ * Floating UI handles positioning; CSS handles appearance.
+ */
+
+.ds-popover {
+  background: var(--ds-role-surface);
+  color: var(--ds-role-text);
+  border: 1px solid var(--ds-role-border);
+  border-radius: var(--ds-radius-lg);
+  box-shadow: var(--ds-shadow-overlay-md);
+  padding: var(--ds-space-3);
+  min-inline-size: 200px;
+  z-index: var(--ds-z-popover);
+}

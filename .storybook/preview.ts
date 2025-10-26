@@ -1,6 +1,7 @@
 import type { Preview } from '@storybook/react';
 import { createElement } from 'react';
 import { Flowbite } from 'flowbite-react';
+import { dsFlowbiteTheme } from '../packages/ds/src/primitives/Sheet/flowbiteTheme';
 
 // 1) Tokens (CSS vars) - single source of truth
 import '../packages/tokens/src/tokens.css';
@@ -8,24 +9,28 @@ import '../packages/tokens/src/tokens.css';
 // 2) Flowbite base styles
 import 'flowbite/dist/flowbite.css';
 
-// 3) Tailwind utilities (if you have a shared entry point, use it here)
-// For now, relying on Flowbite's base + your tokens
+// 3) Vaul drawer styles (for Sheet primitive)
+import '../node_modules/vaul/style.css';
+
+// 4) DS styles (includes Sheet.css with backdrop fix)
+import '../packages/ds/src/primitives/Sheet/Sheet.css';
 
 /**
  * Global decorator: wraps all stories in Flowbite theme provider
- * Ensures consistent styling with real app
+ * Uses dsFlowbiteTheme for DS token parity
  */
 export const decorators = [
-  (Story: any) =>
-    createElement(
+  (Story: any) => {
+    return createElement(
       Flowbite,
-      {},
+      { theme: { theme: dsFlowbiteTheme } },
       createElement(
         'div',
         { className: 'min-h-screen bg-white text-gray-900 dark:bg-gray-900 dark:text-white' },
-        createElement(Story)
+        createElement(Story, null)
       )
-    ),
+    );
+  },
 ];
 
 const preview: Preview = {

@@ -1,0 +1,168 @@
+/**
+ * PageShell - Structural CSS (Zero Skin)
+ * 
+ * Provides page-level layout frame with slots.
+ * No colors/typography - your content provides those.
+ */
+
+/* =====================================================
+   Container
+   ===================================================== */
+
+.page-shell {
+  --page-header-h: 80px;
+  --page-toolbar-h: 48px;
+  --page-gutter: 24px;
+  --page-aside-w: 280px;
+  --page-footer-h: auto;
+
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;
+  grid-template-columns: 1fr;
+  min-height: 100%;
+  container-type: inline-size;
+  container-name: page;
+}
+
+/* Layout variants */
+.page-shell[data-page-layout="narrow"] {
+  --page-max-w: 768px;
+}
+
+.page-shell[data-page-layout="default"] {
+  --page-max-w: 1280px;
+}
+
+.page-shell[data-page-layout="wide"] {
+  --page-max-w: none;
+}
+
+/* With aside (two-column) */
+.page-shell:has([data-slot="page-aside"]) {
+  grid-template-columns: 1fr var(--page-aside-w);
+}
+
+/* =====================================================
+   Slots (Zero Padding)
+   ===================================================== */
+
+[data-slot="page-header"] {
+  min-height: var(--page-header-h);
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-4, 16px);
+}
+
+[data-slot="toolbar"] {
+  min-height: var(--page-toolbar-h);
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-3, 12px);
+}
+
+/* Sticky toolbar */
+.page-shell[data-toolbar-sticky="true"] [data-slot="toolbar"] {
+  position: sticky;
+  top: 0;
+  z-index: var(--ds-z-sticky, 10);
+  background: var(--ds-surface-base, #fff);
+  border-block-end: 1px solid var(--ds-border-subtle, #e5e7eb);
+}
+
+/* Scrolled state (for styling sticky toolbar) */
+.page-shell[data-scrolled="true"][data-toolbar-sticky="true"] [data-slot="toolbar"] {
+  box-shadow: var(--ds-shadow-sm, 0 1px 2px rgba(0, 0, 0, 0.05));
+}
+
+[data-slot="content"] {
+  /* Full-bleed by default; your content provides padding */
+  display: flex;
+  flex-direction: column;
+  min-height: 0; /* Allow scrolling */
+}
+
+[data-slot="page-aside"] {
+  border-inline-start: 1px solid var(--ds-border-subtle, #e5e7eb);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+[data-slot="page-footer"] {
+  min-height: var(--page-footer-h);
+  border-block-start: 1px solid var(--ds-border-subtle, #e5e7eb);
+}
+
+/* =====================================================
+   Responsive Adaptations
+   ===================================================== */
+
+/* Tablet: Aside becomes drawer (handled by parent shell) */
+@media (max-width: 1023px) {
+  .page-shell {
+    --page-gutter: 20px;
+  }
+
+  .page-shell:has([data-slot="page-aside"]) {
+    grid-template-columns: 1fr;
+  }
+
+  [data-slot="page-aside"] {
+    display: none; /* Controlled by drawer state */
+  }
+}
+
+/* Mobile: Compact spacing */
+@media (max-width: 767px) {
+  .page-shell {
+    --page-header-h: 64px;
+    --page-toolbar-h: 44px;
+    --page-gutter: 16px;
+  }
+
+  [data-slot="toolbar"] {
+    flex-wrap: wrap;
+    gap: var(--ds-space-2, 8px);
+  }
+}
+
+/* =====================================================
+   Pointer Modality
+   ===================================================== */
+
+/* Touch: Larger tap targets */
+:root[data-pointer="coarse"] .page-shell [data-slot="toolbar"] {
+  min-height: 56px;
+  gap: var(--ds-space-4, 16px);
+}
+
+/* =====================================================
+   Reduced Motion
+   ===================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .page-shell * {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+/* =====================================================
+   RTL Support
+   ===================================================== */
+
+[dir="rtl"] [data-slot="page-aside"] {
+  border-inline-start: none;
+  border-inline-end: 1px solid var(--ds-border-subtle, #e5e7eb);
+}
+
+/* =====================================================
+   Container Queries (Advanced)
+   ===================================================== */
+
+/* When page container is narrow, stack toolbar items */
+@container page (max-width: 600px) {
+  [data-slot="toolbar"] {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

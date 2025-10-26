@@ -1,0 +1,70 @@
+/**
+ * DS Token Bridge - Expose design tokens as reusable utilities
+ * 
+ * Small, stable utilities that map DS tokens to Tailwind-style classes.
+ * Used by Flowbite theming to achieve visual parity without overrides.
+ * 
+ * @layer utilities ensures these integrate cleanly with Tailwind.
+ */
+
+@layer utilities {
+  /* Backgrounds */
+  .bg-surface-base {
+    background: var(--ds-color-surface-base, var(--ds-neutral-1));
+  }
+  
+  .bg-surface-raised {
+    background: var(--ds-color-surface-raised, var(--ds-neutral-2));
+  }
+
+  /* Border Radius */
+  .rounded-ds-3 {
+    border-radius: var(--ds-radius-3, 16px);
+  }
+
+  /* Borders */
+  .border-subtle {
+    border-color: var(--ds-color-border-subtle, var(--ds-neutral-5));
+  }
+
+  /* Shadows */
+  .shadow-ds-sheet {
+    box-shadow: var(--ds-elevation-sheet);
+  }
+
+  .shadow-ds-sheet-peek {
+    box-shadow: var(--ds-elevation-sheet-peek, var(--ds-elevation-sheet));
+  }
+
+  .shadow-ds-sheet-work {
+    box-shadow: var(--ds-elevation-sheet-work, var(--ds-elevation-sheet));
+  }
+
+  .shadow-ds-sheet-owned {
+    box-shadow: var(--ds-elevation-sheet-owned, var(--ds-elevation-sheet));
+  }
+
+  /* Spacing (padding) */
+  .px-ds-6 {
+    padding-left: var(--ds-space-6, 24px);
+    padding-right: var(--ds-space-6, 24px);
+  }
+
+  .py-ds-4 {
+    padding-top: var(--ds-space-4, 16px);
+    padding-bottom: var(--ds-space-4, 16px);
+  }
+
+  .py-ds-6 {
+    padding-top: var(--ds-space-6, 24px);
+    padding-bottom: var(--ds-space-6, 24px);
+  }
+
+  .p-ds-4 {
+    padding: var(--ds-space-4, 16px);
+  }
+
+  .p-ds-6 {
+    padding: var(--ds-space-6, 24px);
+  }
+}

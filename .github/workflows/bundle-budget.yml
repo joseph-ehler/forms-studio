@@ -1,0 +1,64 @@
+name: Bundle Budget
+
+on:
+  pull_request:
+    paths:
+      - 'packages/ds/**'
+  push:
+    branches: [main]
+
+jobs:
+  budget:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build DS package
+        run: pnpm --filter @intstudio/ds build
+
+      - name: Check bundle size (with analyzer)
+        run: node scripts/check-bundle-analyzer.mjs
+
+      - name: Comment PR with bundle size
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const stat = fs.statSync('packages/ds/dist/index.js');
+            const size = stat.size;
+            const budget = 550000;
+            const percent = ((size / budget) * 100).toFixed(1);
+            
+            const body = `## 📦 Bundle Size Report
+            
+            **Main bundle:** ${(size / 1024).toFixed(2)} KB
+            **Budget:** ${(budget / 1024).toFixed(2)} KB
+            **Usage:** ${percent}%
+            ${size > budget ? '❌ **Over budget**' : '✅ **Within budget**'}
+            `;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body
+            });

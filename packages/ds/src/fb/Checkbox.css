@@ -1,0 +1,52 @@
+/**
+ * Checkbox styles - Token-driven, automagic
+ * 
+ * Reads only --checkbox-* variables (set by SKIN in Checkbox.tsx)
+ * Never references design tokens/roles directly
+ * 
+ * Result: Universal styling that adapts to any theme
+ */
+
+@layer ds-interactions {
+  /* Base styles */
+  :where([data-component="checkbox"]) {
+    color: var(--checkbox-fg);
+    background: var(--checkbox-bg);
+    border: 1px solid var(--checkbox-border);
+    border-radius: var(--ds-radius-control);
+    padding-inline: var(--ds-space-3);
+    padding-block: var(--ds-space-2);
+    font-family: var(--ds-font-sans);
+    font-size: var(--ds-text-sm);
+    transition: 
+      border-color var(--ds-transition-fast),
+      background-color var(--ds-transition-fast),
+      box-shadow var(--ds-transition-fast);
+  }
+
+  /* Hover state */
+  :where([data-component="checkbox"]:hover:not(:disabled)) {
+    border-color: var(--checkbox-hover-border, var(--checkbox-border));
+    background: var(--checkbox-hover-bg, var(--checkbox-bg));
+  }
+
+  /* Focus state */
+  :where([data-component="checkbox"]:focus-visible) {
+    outline: none;
+    box-shadow:
+      0 0 0 var(--ds-focus-offset) var(--ds-role-bg),
+      0 0 0 calc(var(--ds-focus-offset) + var(--ds-focus-ring)) var(--checkbox-focus-ring);
+  }
+
+  /* Disabled state */
+  :where([data-component="checkbox"]:disabled) {
+    opacity: var(--ds-disabled-opacity, 0.5);
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  /* Invalid state */
+  :where([data-component="checkbox"][aria-invalid="true"]) {
+    border-color: var(--ds-role-danger-hover);
+  }
+}

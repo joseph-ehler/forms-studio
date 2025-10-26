@@ -1,0 +1,175 @@
+/**
+ * DrawerShell - Structural CSS (Zero Skin)
+ * 
+ * Provides side panel structure with slots.
+ * No colors/typography - your content provides those.
+ */
+
+/* =====================================================
+   Backdrop (Overlay Mode Only)
+   ===================================================== */
+
+.drawer-shell-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: var(--ds-z-scrim, 50);
+  background: var(--overlay-scrim-bg, var(--ds-scrim-bg, rgba(0, 0, 0, 0.5)));
+  animation: drawer-fade-in var(--motion-duration-2, 200ms) var(--motion-ease-decelerate, cubic-bezier(0.0, 0.0, 0.2, 1));
+}
+
+@keyframes drawer-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* =====================================================
+   Drawer Container
+   ===================================================== */
+
+.drawer-shell {
+  /* Layout */
+  display: flex;
+  flex-direction: column;
+  
+  /* Sizing (token-driven) */
+  width: var(--drawer-width, 400px);
+  height: 100vh;
+  max-width: 100vw;
+  
+  /* Background (flat by default) */
+  background: var(--ds-surface-base, #fff);
+  
+  /* Border (subtle separation) */
+  border-inline-start: 1px solid var(--ds-border-subtle, #e5e7eb);
+  
+  /* Shadow (overlay needs elevation) */
+  box-shadow: var(--ds-shadow-overlay-lg, 0 20px 25px -5px rgba(0, 0, 0, 0.1));
+  
+  /* Positioning */
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  z-index: var(--ds-z-shell, 51);
+  
+  /* Initial state (off-screen) */
+  transition: transform var(--motion-duration-2, 200ms) var(--motion-ease-standard, cubic-bezier(0.4, 0.0, 0.2, 1));
+}
+
+/* Left side */
+.drawer-shell[data-side="left"] {
+  inset-inline-start: 0;
+  border-inline-start: none;
+  border-inline-end: 1px solid var(--ds-border-subtle, #e5e7eb);
+  transform: translateX(-100%);
+}
+
+/* Right side */
+.drawer-shell[data-side="right"] {
+  inset-inline-end: 0;
+  transform: translateX(100%);
+}
+
+/* Open state */
+.drawer-shell {
+  transform: translateX(0);
+}
+
+/* RTL adjustments */
+[dir="rtl"] .drawer-shell[data-side="left"] {
+  transform: translateX(100%);
+}
+
+[dir="rtl"] .drawer-shell[data-side="right"] {
+  transform: translateX(-100%);
+}
+
+[dir="rtl"] .drawer-shell {
+  transform: translateX(0);
+}
+
+/* =====================================================
+   Push Behavior (Desktop Only)
+   ===================================================== */
+
+.drawer-shell[data-behavior="push"] {
+  position: relative;
+  box-shadow: none;
+  border-inline-start: 1px solid var(--ds-border-subtle, #e5e7eb);
+}
+
+.drawer-shell[data-behavior="push"][data-side="left"] {
+  border-inline-start: none;
+  border-inline-end: 1px solid var(--ds-border-subtle, #e5e7eb);
+}
+
+/* No transform animation for push mode */
+.drawer-shell[data-behavior="push"] {
+  transform: none;
+  transition: width var(--motion-duration-2, 200ms) var(--motion-ease-standard, cubic-bezier(0.4, 0.0, 0.2, 1));
+}
+
+/* =====================================================
+   Slots (Zero Padding)
+   ===================================================== */
+
+[data-slot="header"] {
+  flex-shrink: 0;
+  border-block-end: 1px solid var(--ds-border-subtle, #e5e7eb);
+  min-height: var(--ds-touch-target, 44px);
+}
+
+[data-slot="body"] {
+  flex: 1;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  
+  /* Full-bleed by default (your content provides padding) */
+}
+
+[data-slot="footer"] {
+  flex-shrink: 0;
+  border-block-start: 1px solid var(--ds-border-subtle, #e5e7eb);
+  min-height: var(--ds-touch-target, 44px);
+}
+
+/* =====================================================
+   Pointer Modality
+   ===================================================== */
+
+/* Touch: Larger tap targets */
+:root[data-pointer="coarse"] .drawer-shell [data-slot="header"],
+:root[data-pointer="coarse"] .drawer-shell [data-slot="footer"] {
+  min-height: 56px;
+}
+
+/* =====================================================
+   Reduced Motion
+   ===================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .drawer-shell-backdrop,
+  .drawer-shell {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* =====================================================
+   Safe Area Support
+   ===================================================== */
+
+.drawer-shell {
+  padding-top: var(--shell-safe-top, 0px);
+  padding-bottom: var(--shell-safe-bottom, 0px);
+}
+
+/* Left side safe area */
+.drawer-shell[data-side="left"] {
+  padding-inline-start: var(--shell-safe-left, 0px);
+}
+
+/* Right side safe area */
+.drawer-shell[data-side="right"] {
+  padding-inline-end: var(--shell-safe-right, 0px);
+}

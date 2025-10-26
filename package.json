@@ -37,14 +37,26 @@
     "prebuild": "pnpm barrels",
     "guard": "pnpm fix:imports && pnpm typecheck",
     "versions:check": "node scripts/check-versions.mjs",
-    "doctor": "pnpm barrels && pnpm lint:prod && pnpm typecheck && pnpm -r --filter './packages/**' build && pnpm api:check",
+    "validate:generated": "node scripts/validate-generated.mjs",
+    "verify:infra": "node scripts/verify-infrastructure.mjs",
+    "doctor": "pnpm barrels && pnpm lint:prod && pnpm typecheck && pnpm -r --filter './packages/**' build && pnpm api:check && pnpm validate:generated",
     "doctor:rename": "node scripts/validate-renames.mjs && pnpm typecheck",
     "ds:doctor": "pnpm doctor",
-    "ds:new": "echo '🚧 Component generator coming soon! For now, use Input.template.tsx as reference.'",
+    "ds:research": "bash scripts/research-flowbite.sh",
+    "ds:classmap:validate": "node scripts/validate-classmap.mjs",
+    "ds:new": "node scripts/ds-new.mjs",
+    "forms:new": "node scripts/forms-new.mjs",
     "refactor:rename": "tsx scripts/refactor-rename.mts",
     "metrics:adoption": "node scripts/metrics/adoption.mjs",
     "metrics:ci": "node scripts/metrics/ci.mjs",
     "metrics:all": "pnpm metrics:adoption && pnpm metrics:ci",
+    "validate:bundle": "node scripts/check-bundle-analyzer.mjs",
+    "test:canaries": "vitest run packages/ds/__tests__/canaries",
+    "test:canaries:input": "vitest run packages/ds/__tests__/canaries/input.canary.test.tsx",
+    "test:canaries:dialog": "vitest run packages/ds/__tests__/canaries/dialog.canary.test.tsx",
+    "test:canaries:sheet": "vitest run packages/ds/__tests__/canaries/sheet.canary.test.tsx",
+    "validate:canaries": "pnpm test:canaries",
+    "validate:smoke": "playwright test capabilities-smoke",
     "api:build": "pnpm -r --filter './packages/**' build",
     "api:check": "pnpm -r --filter '@intstudio/ds' api:check",
     "api:update": "pnpm -r --filter '@intstudio/ds' api:update",
@@ -106,7 +118,16 @@
       "@storybook/addon-a11y": "8.6.14",
       "@storybook/addon-interactions": "8.6.14",
       "@storybook/addon-viewport": "8.6.14",
-      "@storybook/test": "8.6.14"
+      "@storybook/test": "8.6.14",
+      "react-spring": "8.0.27"
     }
+  },
+  "dependencies": {
+    "@capacitor/haptics": "^7.0.2",
+    "@capacitor/keyboard": "^7.0.3",
+    "@floating-ui/react": "^0.27.16",
+    "@use-gesture/react": "^10.3.1",
+    "react-virtuoso": "^4.14.1",
+    "vaul": "^1.1.2"
   }
 }
